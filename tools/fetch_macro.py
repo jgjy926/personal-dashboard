@@ -41,6 +41,7 @@ OUT = os.path.join(ROOT, "data", "macro.json")
 SERIES = {
     "DGS10":     {"ids": ["DGS10"],     "label": "10Y Nominal Yield",     "unit": "%", "freq": "daily"},
     "DFII10":    {"ids": ["DFII10"],    "label": "Real 10Y Yield (TIPS)", "unit": "%", "freq": "daily"},
+    "DFII30":    {"ids": ["DFII30"],    "label": "Real 30Y Yield (TIPS)", "unit": "%", "freq": "daily"},
     "T10YIE":    {"ids": ["T10YIE"],    "label": "Breakeven Inflation",   "unit": "%", "freq": "daily"},
     "SP500":     {"ids": ["SP500"],     "label": "S&P 500",               "unit": "",  "freq": "daily"},
     "GOLD":      {"ids": ["GOLDPMGBD228NLBM", "GOLDAMGBD228NLBM"],
