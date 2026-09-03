@@ -1,11 +1,13 @@
 {
   "meta": {
-    "generated_at": "2026-09-03T16:13:16+00:00",
+    "generated_at": "2026-09-03T23:58:40+00:00",
     "sample": false,
     "source": "FRED (keyless CSV)",
     "data_note": "Live FRED data. Freshness shows the DATA date, not the fetch date.",
     "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
-    "missing_series": []
+    "missing_series": [
+      "JP30Y"
+    ]
   },
   "snapshot": [
     {
@@ -13,17 +15,17 @@
       "label": "10Y Nominal Yield",
       "value": 4.79,
       "unit": "%",
-      "change": 0.04,
-      "as_of": "2026-09-01",
+      "change": 0.0,
+      "as_of": "2026-09-02",
       "freq": "daily"
     },
     {
       "id": "DFII10",
       "label": "Real 10Y Yield (TIPS)",
-      "value": 2.44,
+      "value": 2.45,
       "unit": "%",
-      "change": 0.0,
-      "as_of": "2026-09-01",
+      "change": 0.01,
+      "as_of": "2026-09-02",
       "freq": "daily"
     },
     {
@@ -31,17 +33,17 @@
       "label": "Real 30Y Yield (TIPS)",
       "value": 2.98,
       "unit": "%",
-      "change": -0.01,
-      "as_of": "2026-09-01",
+      "change": 0.0,
+      "as_of": "2026-09-02",
       "freq": "daily"
     },
     {
       "id": "T10YIE",
       "label": "Breakeven Inflation",
-      "value": 2.34,
+      "value": 2.35,
       "unit": "%",
-      "change": -0.01,
-      "as_of": "2026-09-02",
+      "change": 0.01,
+      "as_of": "2026-09-03",
       "freq": "daily"
     },
     {
@@ -56,9 +58,9 @@
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4538.1,
+      "value": 4522.5,
       "unit": "$",
-      "change": 171.8,
+      "change": 156.2,
       "as_of": "2026-09-03",
       "freq": "daily"
     },
@@ -86,6 +88,15 @@
       "value": 331.89,
       "unit": "",
       "change": 0.44,
+      "as_of": "2026-06-01",
+      "freq": "monthly"
+    },
+    {
+      "id": "JP10Y",
+      "label": "Japan 10Y Nominal Yield",
+      "value": 2.67,
+      "unit": "%",
+      "change": 0.02,
       "as_of": "2026-06-01",
       "freq": "monthly"
     }
@@ -214,7 +225,7 @@
         2.2,
         2.47,
         2.44,
-        2.44
+        2.45
       ],
       "gold": [
         1783.0,
@@ -276,7 +287,7 @@
         4022.9,
         4049.1,
         4431.1,
-        4538.1
+        4522.5
       ],
       "sp500": [
         4605.4,
