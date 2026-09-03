@@ -46,6 +46,7 @@ def main() -> int:
         if old:
             p["tnc_summary"] = p.get("tnc_summary") or old.get("tnc_summary", "")
             p["period"] = p.get("period") or old.get("period", "")
+            p["tnc_link"] = p.get("tnc_link") or old.get("tnc_link", "")
             p["first_seen"] = old.get("first_seen") or p.get("first_seen") or today
         if not p.get("tnc_summary"):
             pending.append(p.get("id"))
@@ -60,7 +61,9 @@ def main() -> int:
             "today": today,
             "new_today": new_today,
             "count": len(merged),
-            "note": "Live scrape. Summaries are AI-generated — verify official T&C via the source link.",
+            "note": "Live scrape. Most Public Bank promos publish terms only as a linked PDF "
+                    "(tnc_link) — the dashboard links to it directly. Where tnc_summary is set "
+                    "it was written by a human/LLM from that PDF and should still be verified.",
         },
         "promotions": merged,
     }
@@ -68,8 +71,17 @@ def main() -> int:
         json.dump(out, f, indent=2, ensure_ascii=False)
     print(f"[merge] wrote {LIVE} — {len(merged)} promos, {new_today} new today.")
     if pending:
-        print(f"[merge] {len(pending)} need a T&C summary: {', '.join(pending)}")
-        print("        Paste data/campaign_prompt.txt into Claude, then fill these in.")
+        # Not a defect: most promos have no on-page text to summarise (terms are
+        # PDF-only), so they show a plain "see official T&C" link on the dashboard
+        # instead of a summary — that's expected, not a to-do list.
+        prompt_path = os.path.join(DATA, "campaign_prompt.txt")
+        if os.path.exists(prompt_path):
+            print(f"[merge] {len(pending)} have no tnc_summary (fine — dashboard links to "
+                  "tnc_link instead). Optional: paste data/campaign_prompt.txt into Claude "
+                  "for the ones that DO have real page text, then re-run merge.")
+        else:
+            print(f"[merge] {len(pending)} have no tnc_summary — normal for this site "
+                  "(terms are PDF-only). The dashboard shows the 📄 Official T&C link instead.")
     return 0
 
 

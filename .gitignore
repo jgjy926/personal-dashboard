@@ -16,3 +16,6 @@ Thumbs.db
 __pycache__/
 *.pyc
 .venv/
+
+# Local Cloudflare Wrangler state (account id/email, tokens) — never publish
+.wrangler/

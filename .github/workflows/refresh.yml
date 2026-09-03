@@ -51,8 +51,21 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/macro.json data/promotions.json 2>/dev/null || true
-          git commit -m "chore: refresh macro + campaign feeds" || echo "no changes"
-          git push || echo "nothing to push"
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "chore: refresh macro + campaign feeds"
+            # The push can race a concurrent run/commit on main (rejected: fetch
+            # first). Retry with a rebase onto whatever landed, a few times,
+            # instead of silently dropping this run's refreshed data.
+            for i in 1 2 3 4 5; do
+              if git push; then break; fi
+              echo "push rejected, retrying with rebase ($i/5)…"
+              git fetch origin main
+              git rebase origin/main || { git rebase --abort; break; }
+              sleep $((i * 3))
+            done
+          fi
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

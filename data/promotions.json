@@ -2,161 +2,176 @@
   "meta": {
     "generated_at": "2026-09-03T00:00:00+00:00",
     "sample": false,
-    "source": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/?type=cards",
+    "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-03",
     "new_today": 15,
     "count": 15,
-    "note": "Live scrape. Summaries are AI-generated — verify official T&C via the source link."
+    "note": "Live scrape. Most Public Bank promos publish terms only as a linked PDF (tnc_link) — the dashboard links to it directly. Where tnc_summary is set it was written by a human/LLM from that PDF and should still be verified."
   },
   "promotions": [
     {
-      "id": "05927e34b6",
-      "title": "Preferred Redemption Rewards Catalogue",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/preferred-redemption-ecatalogue-2026/",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "d5c7873701",
-      "title": "View All Promotions",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "ba1588b934",
-      "title": "Promotions",
-      "link": "https://www.pbebank.com/en/promotions/",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "0e2f12c82c",
-      "title": "Credit Cards",
-      "link": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "b14f0be482",
-      "title": "Debit Cards",
-      "link": "https://www.pbebank.com/en/promotions/debit-cards-promotions/",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "bbad9c9d99",
-      "title": "Product & Services",
-      "link": "https://www.pbebank.com/en/promotions/product-services-promotions/",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "725abc0660",
-      "title": "Dining",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Dining",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "b9e2521ecf",
-      "title": "Travel & Leisure",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Travel",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "ab14eb1ed8",
-      "title": "Retail",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Retail",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "d91040011d",
-      "title": "Beauty & Wellness",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=beauty",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "f4e7f0fe62",
-      "title": "E-Commerce",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=eCommerce",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "e53ec2e16c",
-      "title": "Flexipay / Balance Transfer",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Flexipay%2FB%2ETransfers",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "040da274af",
-      "title": "Online Redemption",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Online%20Redemption",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "271eda2cac",
-      "title": "Others",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Others",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
-      "category": "Dining",
-      "period": "",
-      "first_seen": "2026-09-03",
-      "tnc_summary": ""
-    },
-    {
-      "id": "1385ea5548",
       "title": "RM25 OFF at Lazada with PB Mastercard Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/rm25-off-at-lazada-with-pb-mastercard-credit-card/",
-      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "image": "https://www.pbebank.com/media/2zfpok0j/rm25-off-lazada_lp.jpg",
+      "id": "1385ea5548",
+      "category": "Online",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/xrpldao4/tc_rm25-off-lazada-with-pb-mastercard-credit-card.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "PB Privileges at Bendang",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-bendang/",
+      "image": "https://www.pbebank.com/media/mlxlb1aa/bendang_s.jpg",
+      "id": "701a706cfc",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/ymbbsoxp/tc_pb-privileges-at-bendang.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "PB Privileges at Kampung Lah",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-kampung-lah/",
+      "image": "https://www.pbebank.com/media/qnid0rk2/pb-kampung-lah_s.jpg",
+      "id": "1a6829ae8d",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/12jfweks/tc_pb-privileges-at-kampung-lah.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "PB Privileges at Tingkap By Kampunglah",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-tingkap-by-kampunglah/",
+      "image": "https://www.pbebank.com/media/st5hpih5/tingkap-by-kampunglah_s.jpg",
+      "id": "521e2d221a",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/gm2bmyfm/tc_pb-privileges-at-tingkap-by-kampunglah.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "PB Privileges at TAPAULAH By Kampunglah",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-tapaulah-by-kampunglah/",
+      "image": "https://www.pbebank.com/media/mlxmt111/tapaulah-by-kampunglah_s.jpg",
+      "id": "5805647ded",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/sq0bbqom/tc_pb-privileges-at-tapaulah-by-kampunglah.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "PB Privileges at Waroeng Sambal Pojok",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-waroeng-sambal-pojok/",
+      "image": "https://www.pbebank.com/media/efknbeh5/waroeng-sambal-pojok_s.jpg",
+      "id": "119aa4b56c",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/sdmnskcy/tc_pb-privileges-at-waroeng-sambal-pojok.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "Exclusive Dining Privileges with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/exclusive-dining-privileges-with-pb-visa-credit-card-1/",
+      "image": "https://www.pbebank.com/media/a0wbkdbw/dining-privileges_s.jpg",
+      "id": "315bf23eee",
       "category": "Dining",
       "period": "",
       "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/hbadovvv/tc_exclusive-dining-privileges-with-pb-visa-credit-card.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "Get up to RM35 When you Register & Activate your PB SecureSign today! [By Invitation]",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/get-up-to-rm35-when-you-register-activate-your-pb-securesign-today-by-invitation/",
+      "image": "https://www.pbebank.com/media/ye2hzrhj/rm35-activate-securesign_s.jpg",
+      "id": "6b38899a22",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/jpbn3skw/tc_rm35-activate-securesign.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "More eWallet Top-Ups, More Rewards with PB Mastercard Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/more-ewallet-top-ups-more-rewards-with-pb-mastercard-credit-card/",
+      "image": "https://www.pbebank.com/media/oyvfugpg/ewallet-top-ups_s.jpg",
+      "id": "2aae914bc3",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/ia4ju12k/tc_ewallet-top-ups.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "Buy 1 Get 1 Air Ticket with PB Mastercard Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/buy-1-get-1-air-ticket-with-pb-mastercard-credit-card/",
+      "image": "https://www.pbebank.com/media/tavlh0sm/travel-china_s.jpg",
+      "id": "91eb38fa18",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/x1egqnmx/tc_travel-china.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "PB Privileges: RM100 OFF on MHflypass purchase with Journify",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-rm100-off-on-mhflypass-purchase-with-journify/",
+      "image": "https://www.pbebank.com/media/m3hpprq1/rm100-mhflypass-journify_s.jpg",
+      "id": "66081623e4",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://shop.myjournify.com/promo/cart/2325/mhfppublicbank",
+      "tnc_summary": ""
+    },
+    {
+      "title": "PB Mid-Autumn Offer @ MIKA",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-mid-autumn-offer-mika-2/",
+      "image": "https://www.pbebank.com/media/5v1pwlqi/mika-mid-autumn26_s.jpg",
+      "id": "571bb2162b",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/zf1jlbdk/tc_mika-mid-autumn26.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "Journey of Rewarding with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/journey-of-rewarding-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/4cvlwuja/journey-of-rewarding_s.jpg",
+      "id": "60cc32fe1f",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/cevktwoh/tc_journey-of-rewarding.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "EcoWorld Home Buyer Programme",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/ecoworld-home-buyer-programme-1/",
+      "image": "https://www.pbebank.com/media/1d1ma0sb/ecoworld-buyer_s.jpg",
+      "id": "edcb1d2301",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/12qlbiml/tc_ecoworld-buyer.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "PB Privileges @ 52 Pilates",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-52-pilates/",
+      "image": "https://www.pbebank.com/media/dv1jllnu/52-pilates_s.jpg",
+      "id": "089b68f757",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/d2tppzim/tc_52-pilates.pdf",
       "tnc_summary": ""
     }
   ]

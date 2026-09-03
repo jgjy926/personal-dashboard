@@ -2,24 +2,31 @@
 """
 scrape_campaign.py — Public Bank card-promo PARSER (no LLM, no API key, $0).
 
-Why this shape: calling an LLM API to summarise every promo costs money. So this
-tool does ONLY the free part — it scrapes each promo's title, image, link, and
-downloads the raw Terms & Conditions text. You then paste the generated prompt
-into Claude (or any chat LLM) for FREE, get the summaries back as JSON, and drop
-the finished promotions.json into data/. No paid API anywhere.
+Scrapes the two card-specific listing pages (credit + debit), each a grid of
+`.grid-item` cards — real title, real thumbnail (lazy-loaded via `data-src`),
+real detail link. On the detail page it also finds the bank's own "Terms and
+Conditions — Click here" link, which is usually a **PDF** (occasionally an
+external campaign site) — this site does NOT publish inline T&C text, so there
+is nothing to paste into an LLM for most promos. `tnc_link` is captured
+separately from the promo `link` so the dashboard can point straight at the
+bank's real terms instead of guessing.
 
-Outputs (into data/):
-  campaign_raw/<id>.txt     raw T&C text per promo (what you feed the LLM)
-  promotions.draft.json     title/image/link/category, tnc_summary left ""
-  campaign_prompt.txt       paste-this-into-Claude block (all raw T&C + instruction)
+For the handful of promos that DO carry real on-page body text, that text is
+still captured to data/campaign_raw/ and folded into campaign_prompt.txt, so
+you can optionally paste it into Claude (or any chat LLM) for a free summary.
+Most cards will simply show "see official T&C" — accurate beats invented.
 
 Usage:
   pip install requests beautifulsoup4
-  python tools/scrape_campaign.py --max 15
+  python tools/scrape_campaign.py --max 20
 
-Then: open campaign_prompt.txt -> paste into Claude -> paste the JSON reply of
-{id: tnc_summary} back, merge into promotions.draft.json, save as promotions.json.
-(A helper to merge is printed at the end.)
+Outputs (into data/):
+  campaign_raw/<id>.txt       raw detail-page text per promo (where non-trivial)
+  promotions.draft.json       title/image/link/tnc_link/category, tnc_summary ""
+  campaign_prompt.txt         paste-ready block for the promos with real body text
+
+Then: python tools/merge_campaign.py   (folds into data/promotions.json, keeping
+any tnc_summary you already wrote for a given id).
 """
 from __future__ import annotations
 
@@ -43,18 +50,23 @@ DATA = os.path.join(ROOT, "data")
 RAW_DIR = os.path.join(DATA, "campaign_raw")
 
 BASE = "https://www.pbebank.com"
-LISTING = f"{BASE}/en/promotions/credit-debit-cards-promotions/?type=cards"
+# Card-specific listings (verified 2026-09: both render real `.grid-item` cards,
+# unlike the generic /credit-debit-cards-promotions/ hub page, which is mostly
+# nav/category links and was the original bug here).
+LISTINGS = [
+    (f"{BASE}/en/promotions/credit-cards-promotions/", "Credit Card"),
+    (f"{BASE}/en/promotions/debit-cards-promotions/", "Debit Card"),
+]
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
 HEADERS = {"User-Agent": UA, "Accept": "text/html,application/xhtml+xml"}
 
-# Cheap category guess from the title/text — the LLM can refine it later.
 CATEGORY_HINTS = [
-    ("Dining", ["dining", "restaurant", "food", "cafe"]),
-    ("Travel", ["travel", "flight", "airline", "lounge", "hotel"]),
+    ("Dining", ["dining", "restaurant", "food", "cafe", "hotpot"]),
+    ("Travel", ["travel", "flight", "airline", "lounge", "hotel", "destination"]),
     ("Fuel", ["fuel", "petrol", "petron", "shell", "petronas"]),
     ("Cashback", ["cashback", "cash back", "rebate"]),
-    ("Instalment", ["instalment", "installment", "0%", "ezy"]),
-    ("Online", ["online", "e-commerce", "contactless", "qr"]),
+    ("Instalment", ["instalment", "installment", "0%", "flexipay"]),
+    ("Online", ["online", "e-commerce", "lazada", "shopee", "contactless", "qr"]),
 ]
 
 
@@ -68,70 +80,101 @@ def _abs(url: str) -> str:
     return url if url.startswith("http") else f"{BASE}{url}"
 
 
-def _guess_category(text: str) -> str:
-    low = text.lower()
+def _guess_category(title: str, default: str) -> str:
+    low = title.lower()
     for cat, keys in CATEGORY_HINTS:
         if any(k in low for k in keys):
             return cat
-    return "Promotion"
+    return default
 
 
-def scrape_listing(session) -> list[dict]:
-    r = session.get(LISTING, headers=HEADERS, timeout=20)
+def scrape_listing(session, url: str) -> list[dict]:
+    """Real cards live in `.grid-item` — a thumbnail <a> (image via data-src,
+    lazy-loaded) + an <h3><a> title + a detail link. This is the fix for the
+    original bug: scraping *every* `<a href*=/promotions/>` on the page picked
+    up top-nav / category-filter links first, which have no image and no body
+    text (that's why promos showed up with a blank picture and no T&C)."""
+    r = session.get(url, headers=HEADERS, timeout=20)
     r.raise_for_status()
     soup = BeautifulSoup(r.text, "html.parser")
-    promos, seen = [], set()
-    for a in soup.find_all("a", href=True):
-        href = a["href"]
-        if "/promotions/" not in href:
+    out = []
+    for card in soup.find_all(class_="grid-item"):
+        h3 = card.find("h3")
+        a_title = h3.find("a", href=True) if h3 else None
+        if not a_title:
             continue
-        title = a.get_text(strip=True)
-        if len(title) < 6:
-            continue
-        link = _abs(href)
-        if link in seen or link.rstrip("/").endswith("credit-debit-cards-promotions"):
-            continue
-        seen.add(link)
-        img = a.find("img")
-        promos.append({
-            "id": _id(link),
-            "title": title,
-            "link": link,
-            "image": _abs(img["src"]) if img and img.get("src") else "",
-        })
-    return promos
+        title = a_title.get_text(strip=True)
+        link = _abs(a_title["href"])
+        img = card.find("img")
+        image = ""
+        if img:
+            image = _abs(img.get("data-src") or img.get("src") or "")
+        out.append({"title": title, "link": link, "image": image})
+    return out
 
 
-def fetch_detail(session, promo: dict) -> str:
-    """Return raw page text; also backfill the image if the card had none."""
+def fetch_detail(session, promo: dict) -> tuple[str, str]:
+    """Return (raw_body_text, tnc_link). The bank's terms live behind a
+    "Terms and Conditions — Click here" link inside `.content` (usually a PDF,
+    sometimes an external campaign site) rather than as inline page text, so
+    tnc_link is captured as its own field — that's what the card should point
+    to for the real terms. og:image backfills the thumbnail when the listing
+    card had none."""
     try:
         r = session.get(promo["link"], headers=HEADERS, timeout=20)
         r.raise_for_status()
     except Exception as e:
-        return f"(could not fetch detail page: {e})"
+        return f"(could not fetch detail page: {e})", ""
     soup = BeautifulSoup(r.text, "html.parser")
-    if not promo["image"]:
-        img = soup.find("img", {"class": "img-responsive"}) or soup.find("img")
-        if img and img.get("src"):
-            promo["image"] = _abs(img["src"])
+
+    if not promo.get("image"):
+        og = soup.find("meta", property="og:image")
+        if og and og.get("content"):
+            promo["image"] = _abs(og["content"])
+
+    tnc_link = ""
+    content = soup.find(class_="content")
+    if content:
+        for a in content.find_all("a", href=True):
+            label = a.get_text(strip=True).lower()
+            if "click here" in label or "terms" in label or a["href"].lower().endswith(".pdf"):
+                tnc_link = _abs(a["href"])
+                break
+
     for tag in soup(["script", "style", "nav", "footer", "header"]):
         tag.decompose()
-    text = re.sub(r"\s+\n", "\n", soup.get_text(separator=" ", strip=True))
-    return text[:6000]
+    main = soup.find(class_="content") or soup.find("main")
+    text = re.sub(r"\s+\n", "\n", main.get_text(separator=" ", strip=True)) if main else ""
+    return text[:4000], tnc_link
+
+
+_BOILERPLATE_RE = re.compile(
+    r"terms\s+and\s+conditions\s*(click here|apply)?", re.I)
+
+
+def has_real_body(title: str, raw: str) -> bool:
+    """Most promos on this site carry NO inline description — the detail page's
+    `.content` block is just the title echoed back + a bare "Terms and
+    Conditions — Click here" link (captured separately as tnc_link). Strip that
+    known boilerplate and the title, and only call it "real body text" if a
+    meaningful amount of *other* content remains — otherwise every promo would
+    falsely qualify for the LLM-summary flow with nothing worth summarising."""
+    if "could not fetch" in raw:
+        return False
+    stripped = _BOILERPLATE_RE.sub("", raw)
+    stripped = stripped.replace(title, "", 1).strip()
+    return len(stripped) > 60
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--max", type=int, default=15, help="Max promos to process")
+    ap.add_argument("--max", type=int, default=20, help="Max promos to process")
     args = ap.parse_args()
 
     os.makedirs(RAW_DIR, exist_ok=True)
     session = requests.Session()
     today = date.today().isoformat()
 
-    # Carry forward first_seen dates from the last published feed so "new today"
-    # is honest — a promo keeps the date it FIRST appeared; only genuinely new
-    # ids get stamped with today.
     prior_first_seen = {}
     prev_path = os.path.join(DATA, "promotions.json")
     if os.path.exists(prev_path):
@@ -143,49 +186,75 @@ def main() -> int:
         except Exception:
             pass
 
-    print(f"[scrape] listing: {LISTING}")
-    promos = scrape_listing(session)[: args.max]
+    seen_links: set[str] = set()
+    promos: list[dict] = []
+    for url, default_cat in LISTINGS:
+        print(f"[scrape] listing: {url}")
+        for card in scrape_listing(session, url):
+            if not card["link"] or card["link"] in seen_links:
+                continue
+            seen_links.add(card["link"])
+            card["id"] = _id(card["link"])
+            card["category"] = _guess_category(card["title"], default_cat)
+            promos.append(card)
+            if len(promos) >= args.max:
+                break
+        if len(promos) >= args.max:
+            break
+
     if not promos:
-        print("[scrape] no promo links found — the page structure may have changed. "
-              "Inspect the listing HTML and adjust the selector in scrape_listing().")
+        print("[scrape] no promo cards found — the page structure may have changed. "
+              "Inspect a listing page's HTML and adjust scrape_listing()'s selector "
+              "(currently `.grid-item`).")
         return 1
-    print(f"[scrape] found {len(promos)} promos, downloading T&C…")
+    print(f"[scrape] found {len(promos)} card promos, fetching detail pages…")
 
     prompt_blocks = []
     for p in promos:
-        raw = fetch_detail(session, p)
-        p["category"] = _guess_category(p["title"] + " " + raw)
-        p["period"] = ""          # LLM fills this from the raw text
-        p["first_seen"] = prior_first_seen.get(p["id"], today)  # new ids => today
-        p["tnc_summary"] = ""     # you fill this via the free LLM step
-        with open(os.path.join(RAW_DIR, f"{p['id']}.txt"), "w", encoding="utf-8") as f:
-            f.write(f"TITLE: {p['title']}\nLINK: {p['link']}\n\n{raw}")
-        prompt_blocks.append(f"### id: {p['id']}\nTITLE: {p['title']}\n{raw[:2500]}\n")
-        print(f"   • {p['id']}  {p['title'][:60]}")
+        raw, tnc_link = fetch_detail(session, p)
+        p["period"] = ""
+        p["first_seen"] = prior_first_seen.get(p["id"], today)
+        p["tnc_link"] = tnc_link
+        p["tnc_summary"] = ""
+        has_body = has_real_body(p["title"], raw)
+        if has_body:
+            with open(os.path.join(RAW_DIR, f"{p['id']}.txt"), "w", encoding="utf-8") as f:
+                f.write(f"TITLE: {p['title']}\nLINK: {p['link']}\nTNC: {tnc_link}\n\n{raw}")
+            prompt_blocks.append(f"### id: {p['id']}\nTITLE: {p['title']}\n{raw[:2000]}\n")
+        tag = "text" if has_body else ("pdf/link only" if tnc_link else "no T&C found")
+        print(f"   • {p['id']}  {p['title'][:55]:<55} [{tag}]")
 
     new_today = sum(1 for p in promos if p["first_seen"] == today)
     draft = {
-        "meta": {"source": LISTING, "sample": False, "count": len(promos),
+        "meta": {"source": LISTINGS[0][0], "sample": False, "count": len(promos),
                  "today": today, "new_today": new_today,
-                 "note": "Draft — tnc_summary/period pending the manual LLM step."},
+                 "note": "Draft — most promos have no inline T&C text (only a linked "
+                         "PDF/page, captured as tnc_link); tnc_summary stays blank unless "
+                         "you fill it from campaign_prompt.txt for the ones that have real text."},
         "promotions": promos,
     }
     with open(os.path.join(DATA, "promotions.draft.json"), "w", encoding="utf-8") as f:
         json.dump(draft, f, indent=2, ensure_ascii=False)
 
-    instruction = (
-        "You are summarising Malaysian credit-card promotions. For EACH id below, "
-        "read the raw text and return STRICT JSON: an object mapping id -> "
-        '{"period": "<campaign period or \'\'>", "tnc_summary": "<=60 words covering the '
-        "main offer, minimum spend/criteria, cap, and expiry>\"}. Do not invent terms "
-        "not present in the text.\n\n"
-    )
-    with open(os.path.join(DATA, "campaign_prompt.txt"), "w", encoding="utf-8") as f:
-        f.write(instruction + "\n".join(prompt_blocks))
+    if prompt_blocks:
+        instruction = (
+            "You are summarising Malaysian credit-card promotions. For EACH id below, "
+            "read the raw text and return STRICT JSON: an object mapping id -> "
+            '{"period": "<campaign period or \'\'>", "tnc_summary": "<=60 words covering the '
+            "main offer, minimum spend/criteria, cap, and expiry>\"}. Do not invent terms "
+            "not present in the text.\n\n"
+        )
+        with open(os.path.join(DATA, "campaign_prompt.txt"), "w", encoding="utf-8") as f:
+            f.write(instruction + "\n".join(prompt_blocks))
+        print(f"\n[scrape] {len(prompt_blocks)}/{len(promos)} promos had real body text -> data/campaign_prompt.txt")
+        print("Optional (free): paste it into Claude for summaries, then merge.")
+    else:
+        print(f"\n[scrape] none of the {len(promos)} promos had usable inline body text — "
+              "this site keeps T&C in linked PDFs. tnc_link is captured per promo instead; "
+              "the dashboard links straight to it.")
 
-    print("\n[scrape] wrote data/promotions.draft.json, data/campaign_prompt.txt, data/campaign_raw/*.txt")
-    print("Next (free): paste data/campaign_prompt.txt into Claude → get {id:{period,tnc_summary}} JSON →")
-    print("merge into promotions.draft.json (fill each promo's period + tnc_summary) → save as data/promotions.json")
+    print("[scrape] wrote data/promotions.draft.json" + (", data/campaign_raw/*.txt" if prompt_blocks else ""))
+    print("Next: python tools/merge_campaign.py")
     return 0
 
 

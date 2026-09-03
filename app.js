@@ -337,7 +337,16 @@ MODS.campaign = async function initCampaign() {
   const cats = ['All', ...[...new Set(list.map(p => p.category).filter(Boolean))].sort()];
   let active = 'All';
 
-  const cardHTML = p => `
+  // Most Public Bank promos carry NO inline description on their own page — the
+  // real terms live only in a linked PDF (captured separately as tnc_link by
+  // tools/scrape_campaign.py). So: show tnc_summary when someone has written one
+  // (via the free manual-LLM step); otherwise point straight at the official PDF
+  // instead of a fake/empty "summary" box.
+  const cardHTML = p => {
+    const tncBlock = p.tnc_summary
+      ? `<div class="tnc">${esc(p.tnc_summary)}</div>`
+      : `<div class="tnc pending">No on-page summary — this promo's terms are only in the bank's PDF. ${p.tnc_link ? '' : 'Check the full promotion page.'}</div>`;
+    return `
     <article class="promo${p._new ? ' is-new' : ''}">
       ${p._new ? '<span class="new-badge">🆕 NEW</span>' : ''}
       <div class="thumb">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" onerror="this.parentNode.textContent='No image'">` : 'No image'}</div>
@@ -345,11 +354,15 @@ MODS.campaign = async function initCampaign() {
         ${p.category ? `<div class="cat">${esc(p.category)}</div>` : ''}
         <h3>${esc(p.title)}</h3>
         ${p.period ? `<div class="period">🗓 Valid: ${esc(p.period)}</div>` : ''}
-        <div class="tnc">${esc(p.tnc_summary || 'No summary yet.')}</div>
+        ${tncBlock}
         ${p.first_seen ? `<div class="seen${p._new ? ' new' : ''}">${p._new ? '🆕 Added today' : '👁 Listed since'} ${fmtDate(p.first_seen)}</div>` : ''}
-        ${p.link ? `<a class="cta" href="${esc(p.link)}" target="_blank" rel="noopener">View full promotion ➔</a>` : ''}
+        <div class="cta-row">
+          ${p.link ? `<a class="cta" href="${esc(p.link)}" target="_blank" rel="noopener">View promotion ➔</a>` : ''}
+          ${p.tnc_link ? `<a class="cta ghost" href="${esc(p.tnc_link)}" target="_blank" rel="noopener">📄 Official T&amp;C</a>` : ''}
+        </div>
       </div>
     </article>`;
+  };
 
   function render() {
     const filtered = active === 'All' ? list : list.filter(p => p.category === active);
@@ -361,7 +374,7 @@ MODS.campaign = async function initCampaign() {
       return `<button class="fchip${c === active ? ' on' : ''}" data-cat="${esc(c)}">${esc(c)} <span class="fn">${n}</span>${newN ? `<span class="fnew">${newN}</span>` : ''}</button>`;
     }).join('');
     root.innerHTML = `
-      <div class="disclaimer">⚠ Summaries are AI-generated for convenience — <b>always verify the official Terms &amp; Conditions</b> on the bank's page before relying on them.${sample ? ' Currently showing <b>sample</b> data.' : ''}</div>
+      <div class="disclaimer">⚠ Public Bank publishes most terms only as a PDF, not on-page — each card links straight to it (📄 Official T&amp;C). Where a plain-language summary is shown, it's AI-generated — <b>always verify the linked T&amp;C</b> before relying on it.${sample ? ' Currently showing <b>sample</b> data.' : ''}</div>
       ${newCount ? `<div class="banner new-banner"><span class="b-ico">🆕</span><div><div class="b-title">${newCount} new promotion${newCount > 1 ? 's' : ''} today</div><div class="b-detail">First detected on the page on ${fmtDate(today)}. Marked 🆕 below.</div></div></div>` : ''}
       <div class="fchips" role="tablist" aria-label="Filter by category">${chips}</div>
       <div class="promo-grid">${filtered.map(cardHTML).join('') || '<div class="emptybox">No promotions in this category.</div>'}</div>
