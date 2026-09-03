@@ -105,12 +105,13 @@ payload = {
         "sample": True,
         "data_note": "SAMPLE data for UI review. Freshness shows the DATA date, not the fetch date.",
         "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
+        "missing_series": [],
     },
     "snapshot": snapshot,
     "overlay": {
         "dates": DATES,
         "series": {"real_yield": real_yield, "gold": gold, "sp500": sp500},
-        "note": "Real yield / gold / S&P 500 indexed to 100 at the window start so co-movement is comparable.",
+        "note": "Real yield / gold / S&P 500 each scaled to its own 0–100 range so co-movement is comparable.",
     },
     "lag": {
         "lead_months": LEAD,

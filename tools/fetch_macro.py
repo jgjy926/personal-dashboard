@@ -33,15 +33,21 @@ ROOT = os.path.dirname(HERE)
 OUT = os.path.join(ROOT, "data", "macro.json")
 
 # FRED series ids (all keyless CSV). label/unit/freq drive the snapshot cards.
+# Keyed by a stable dashboard id; `ids` lists FRED series to try in order (FRED
+# has discontinued/renamed a few series over the years — e.g. the LBMA gold
+# fixings were pulled from FRED's public catalogue, so GOLDPMGBD228NLBM 404s as
+# of this writing; GOLDAMGBD228NLBM is tried as a fallback, kept even though it
+# may also be gone, so a future re-add on FRED's side is picked up for free).
 SERIES = {
-    "DGS10":     {"label": "10Y Nominal Yield",     "unit": "%",  "freq": "daily"},
-    "DFII10":    {"label": "Real 10Y Yield (TIPS)",  "unit": "%",  "freq": "daily"},
-    "T10YIE":    {"label": "Breakeven Inflation",    "unit": "%",  "freq": "daily"},
-    "SP500":     {"label": "S&P 500",                "unit": "",   "freq": "daily"},
-    "GOLDPMGBD228NLBM": {"label": "Gold (LBMA PM)",  "unit": "$",  "freq": "daily"},
-    "UNRATE":    {"label": "Unemployment Rate",      "unit": "%",  "freq": "monthly"},
-    "DTWEXBGS":  {"label": "Dollar Index (broad)",   "unit": "",   "freq": "daily"},
-    "CSUSHPISA": {"label": "Home Price Index",       "unit": "",   "freq": "monthly"},
+    "DGS10":     {"ids": ["DGS10"],     "label": "10Y Nominal Yield",     "unit": "%", "freq": "daily"},
+    "DFII10":    {"ids": ["DFII10"],    "label": "Real 10Y Yield (TIPS)", "unit": "%", "freq": "daily"},
+    "T10YIE":    {"ids": ["T10YIE"],    "label": "Breakeven Inflation",   "unit": "%", "freq": "daily"},
+    "SP500":     {"ids": ["SP500"],     "label": "S&P 500",               "unit": "",  "freq": "daily"},
+    "GOLD":      {"ids": ["GOLDPMGBD228NLBM", "GOLDAMGBD228NLBM"],
+                  "label": "Gold (LBMA)", "unit": "$", "freq": "daily"},
+    "UNRATE":    {"ids": ["UNRATE"],    "label": "Unemployment Rate",     "unit": "%", "freq": "monthly"},
+    "DTWEXBGS":  {"ids": ["DTWEXBGS"],  "label": "Dollar Index (broad)",  "unit": "",  "freq": "daily"},
+    "CSUSHPISA": {"ids": ["CSUSHPISA"], "label": "Home Price Index",      "unit": "",  "freq": "monthly"},
 }
 FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"
 
@@ -112,6 +118,7 @@ def snapshot_card(sid: str, series: list[tuple[str, float]]) -> dict:
 
 def build_payload(raw: dict[str, list[tuple[str, float]]], years: int) -> dict:
     have = {k: v for k, v in raw.items() if v}
+    missing = [sid for sid in SERIES if sid not in have]
     if not have:
         raise SystemExit("[fetch_macro] no series returned — refusing to overwrite.")
     n = years * 12
@@ -122,7 +129,7 @@ def build_payload(raw: dict[str, list[tuple[str, float]]], years: int) -> dict:
     snapshot = [snapshot_card(sid, have[sid]) for sid in SERIES if sid in have]
 
     real_yield = align(monthly(have["DFII10"]), axis, 2) if "DFII10" in have else []
-    gold = align(monthly(have["GOLDPMGBD228NLBM"]), axis, 1) if "GOLDPMGBD228NLBM" in have else []
+    gold = align(monthly(have["GOLD"]), axis, 1) if "GOLD" in have else []
     sp500 = align(monthly(have["SP500"]), axis, 1) if "SP500" in have else []
     unemp = align(monthly(have["UNRATE"]), axis, 2) if "UNRATE" in have else []
 
@@ -150,12 +157,13 @@ def build_payload(raw: dict[str, list[tuple[str, float]]], years: int) -> dict:
             "source": "FRED (keyless CSV)",
             "data_note": "Live FRED data. Freshness shows the DATA date, not the fetch date.",
             "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
+            "missing_series": missing,  # honest, visible gap — e.g. if FRED drops/renames an id
         },
         "snapshot": snapshot,
         "overlay": {
             "dates": axis,
             "series": {"real_yield": real_yield, "gold": gold, "sp500": sp500},
-            "note": "Real yield / gold / S&P 500 indexed to 100 at the window start so co-movement is comparable.",
+            "note": "Real yield / gold / S&P 500 each scaled to its own 0–100 range so co-movement is comparable (min→max of the window, not indexed to the first point — robust to a series like real yield opening the window near/below zero).",
         },
         "lag": {
             "lead_months": LEAD, "dates": lag_axis,
@@ -173,21 +181,30 @@ def main() -> int:
     args = ap.parse_args()
 
     raw: dict[str, list[tuple[str, float]]] = {}
-    for sid in SERIES:
-        try:
-            raw[sid] = parse_fred_csv(fetch_fred_csv(sid))
-            print(f"[fetch_macro] {sid}: {len(raw[sid])} obs"
-                  f"{' (latest ' + raw[sid][-1][0] + ')' if raw[sid] else ''}")
-        except Exception as e:
-            raw[sid] = []
-            print(f"[fetch_macro] {sid}: FAILED {e}", file=sys.stderr)
+    for sid, meta in SERIES.items():
+        raw[sid] = []
+        errors = []
+        for candidate in meta["ids"]:
+            try:
+                raw[sid] = parse_fred_csv(fetch_fred_csv(candidate))
+                if raw[sid]:
+                    tag = f" (via {candidate})" if candidate != sid else ""
+                    print(f"[fetch_macro] {sid}: {len(raw[sid])} obs"
+                          f" (latest {raw[sid][-1][0]}){tag}")
+                    break
+            except Exception as e:
+                errors.append(f"{candidate}: {e}")
+        else:
+            print(f"[fetch_macro] {sid}: FAILED all candidates — {'; '.join(errors)}", file=sys.stderr)
 
     payload = build_payload(raw, args.years)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
+    missing = payload["meta"]["missing_series"]
     print(f"[fetch_macro] wrote {args.out} — {len(payload['snapshot'])} cards, "
-          f"regime={payload['regime']['label']}")
+          f"regime={payload['regime']['label']}"
+          + (f", MISSING: {', '.join(missing)}" if missing else ""))
     return 0
 
 

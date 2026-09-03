@@ -40,13 +40,25 @@ function agoLabel(iso) {
 }
 
 /* Reusable multi-series line chart (inline SVG). series: [{name, values, color}].
- * opts.normalize indexes each series to 100 at its first point (shape comparison). */
+ * opts.normalize scales EACH series independently to its own 0–100 range (min→0,
+ * max→100), so shape/co-movement is comparable regardless of native units. This
+ * is deliberately NOT "index to 100 at the first point ÷ first value" — that
+ * ratio approach breaks (huge, sign-flipped swings) whenever a series' first
+ * value is near zero or negative, e.g. a real yield that opens the window
+ * negative. Min–max is robust to that and still shows the same co-movement. */
 function lineChart(series, dates, opts = {}) {
   const W = opts.w || 860, H = opts.h || 220, padL = 46, padR = 12, padT = 10, padB = 22;
-  const norm = v0 => opts.normalize ? (x => v0 ? (x / v0) * 100 : x) : (x => x);
-  const prepped = series.filter(s => s.values && s.values.length).map(s => ({
-    ...s, plot: s.values.map(norm(s.values.find(v => v != null) ?? 1))
-  }));
+  const scaler = vals => {
+    if (!opts.normalize) return x => x;
+    const valid = vals.filter(v => v != null && Number.isFinite(v));
+    if (!valid.length) return x => x;
+    const lo = Math.min(...valid), hi = Math.max(...valid), rng = (hi - lo) || 1;
+    return x => (x == null ? null : ((x - lo) / rng) * 100);
+  };
+  const prepped = series.filter(s => s.values && s.values.length).map(s => {
+    const f = scaler(s.values);
+    return { ...s, plot: s.values.map(v => (v == null ? null : f(v))) };
+  });
   const all = prepped.flatMap(s => s.plot).filter(Number.isFinite);
   if (!all.length) return '<p class="muted">No data.</p>';
   const n = Math.max(...prepped.map(s => s.plot.length));
@@ -299,8 +311,10 @@ MODS.macro = async function initMacro() {
     { name: `Real yield (led ${lag.lead_months || 15}m)`, values: lag.real_yield_lead, color: cv('--s2') }
   ], lag.dates, { normalize: true, w: 860, h: 190 });
 
+  const missing = (d.meta && d.meta.missing_series) || [];
   root.innerHTML = `
     ${sample ? `<div class="disclaimer">⚠ Showing <b>sample</b> data for UI review — wire the FRED/Stooq feed (Phase B) to go live. ${esc(d.meta.data_note || '')}</div>` : ''}
+    ${missing.length ? `<div class="disclaimer">⚠ Data source gap: <b>${esc(missing.join(', '))}</b> could not be fetched this run (e.g. the upstream series was renamed/discontinued) — shown as missing rather than guessed.</div>` : ''}
     <div class="banner regime-${esc(rg.label || 'Mixed')}">
       <span class="b-ico">🧭</span>
       <div><div class="b-title">Regime: ${esc(rg.label || '—')}</div>
@@ -308,7 +322,7 @@ MODS.macro = async function initMacro() {
         <div class="b-caveat">${esc(rg.caveat || 'Heuristic, not a signal.')}</div></div>
     </div>
     <div class="stat-grid">${cards}</div>
-    <div class="card-block"><h3>Real yield · Gold · S&amp;P 500 <span class="muted">— indexed to 100 at window start</span></h3>${overlayChart}
+    <div class="card-block"><h3>Real yield · Gold · S&amp;P 500 <span class="muted">— each scaled to its own 0–100 range</span></h3>${overlayChart}
       <p class="muted" style="margin-top:6px">${esc(ov.note || '')}</p></div>
     <div class="card-block"><h3>Unemployment vs lagged real yield</h3>${lagChart}
       <p class="muted" style="margin-top:6px">${esc(lag.note || '')}</p></div>
