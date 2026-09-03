@@ -1,10 +1,13 @@
 {
   "meta": {
-    "generated_at": "2026-09-03T14:16:12+00:00",
+    "generated_at": "2026-09-03T14:22:40+00:00",
     "sample": false,
     "source": "FRED (keyless CSV)",
     "data_note": "Live FRED data. Freshness shows the DATA date, not the fetch date.",
-    "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal."
+    "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
+    "missing_series": [
+      "GOLD"
+    ]
   },
   "snapshot": [
     {
@@ -261,7 +264,7 @@
         7666.6
       ]
     },
-    "note": "Real yield / gold / S&P 500 indexed to 100 at the window start so co-movement is comparable."
+    "note": "Real yield / gold / S&P 500 each scaled to its own 0–100 range so co-movement is comparable (min→max of the window, not indexed to the first point — robust to a series like real yield opening the window near/below zero)."
   },
   "lag": {
     "lead_months": 15,
