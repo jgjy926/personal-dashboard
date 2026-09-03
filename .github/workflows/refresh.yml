@@ -1,0 +1,62 @@
+name: Refresh feeds & deploy
+
+# Runs the data fetchers on GitHub's runners (clean egress — FRED/Public Bank work
+# here even where a local sandbox is blocked), commits the refreshed public feeds,
+# and publishes the static dashboard to GitHub Pages. KLSE data is never touched
+# here (it's private and git-ignored). Entirely on free tiers.
+
+on:
+  workflow_dispatch:            # run manually from the Actions tab
+  push:
+    branches: [main]
+  schedule:
+    - cron: "20 6 * * *"        # daily 06:20 UTC (after US markets settle)
+
+permissions:
+  contents: write               # commit refreshed feeds back
+  pages: write                  # deploy to Pages
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install scraper deps
+        run: pip install requests beautifulsoup4
+
+      - name: Fetch macro (FRED, keyless)
+        run: python tools/fetch_macro.py --years 5
+
+      - name: Scrape card promos (best-effort; keep prior feed on failure)
+        continue-on-error: true
+        run: |
+          python tools/scrape_campaign.py --max 15
+          python tools/merge_campaign.py
+
+      - name: Commit refreshed public feeds
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/macro.json data/promotions.json 2>/dev/null || true
+          git commit -m "chore: refresh macro + campaign feeds" || echo "no changes"
+          git push || echo "nothing to push"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .                # index.html is at the repo root; klse.json is git-ignored
+      - id: deploy
+        uses: actions/deploy-pages@v4

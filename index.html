@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Personal Dynamic Dashboard</title>
+  <link rel="stylesheet" href="styles.css?v=5" />
+</head>
+<body>
+  <header class="appbar">
+    <div class="brand">
+      <span class="logo">◧</span>
+      <h1>Personal Dynamic Dashboard</h1>
+    </div>
+    <nav class="tabbar" role="tablist" aria-label="Dashboards">
+      <button class="tab" id="tab-fx"       role="tab" data-tab="fx">💱 <span>FX Rates</span></button>
+      <button class="tab" id="tab-macro"    role="tab" data-tab="macro">📈 <span>Macro</span></button>
+      <button class="tab" id="tab-campaign" role="tab" data-tab="campaign">💳 <span>Card Promos</span></button>
+      <button class="tab" id="tab-klse"     role="tab" data-tab="klse">📊 <span>KLSE Monitor</span></button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ───────────────────────── TAB 1 · FX ───────────────────────── -->
+    <section class="panel-tab" id="panel-fx" role="tabpanel" aria-labelledby="tab-fx" hidden>
+      <div class="tab-head">
+        <div>
+          <h2 class="tab-title">Market vs Visa vs Mastercard</h2>
+          <p class="tab-sub">One lens on the rate you actually pay, refreshed daily. Live from your FX Worker.</p>
+        </div>
+        <div class="controls">
+          <label class="ccy">From <select id="from"></select></label>
+          <button id="swap" title="Swap From / To">⇄</button>
+          <label class="ccy">To <select id="to"></select></label>
+          <button id="refresh" title="Reload from the API">↻</button>
+        </div>
+      </div>
+
+      <p id="fx-refreshbar" class="refreshbar"></p>
+      <p id="fx-status" class="status" hidden></p>
+
+      <section id="cards" class="cards" aria-live="polite"></section>
+
+      <section class="card-block converter">
+        <div class="block-head">
+          <h3>Convert</h3>
+          <label class="amt">
+            <input id="convAmount" type="number" min="0" step="any" value="1000" inputmode="decimal" />
+            <span id="convFrom" class="unit"></span>
+          </label>
+        </div>
+        <div id="convResults" class="conv-results"></div>
+      </section>
+
+      <section class="card-block chartwrap">
+        <h3>Last 30 days <span id="chartpair" class="muted"></span></h3>
+        <div id="chart"></div>
+        <div id="legend" class="legend"></div>
+      </section>
+
+      <section class="card-block travel">
+        <div class="block-head">
+          <h3>Travel quick reference</h3>
+          <div class="travel-controls">
+            <label class="ccy"><span>Locked currency</span><select id="travelCcy"></select></label>
+            <button id="travelToggle" class="toggle" aria-expanded="false" aria-controls="travelBody">Show</button>
+          </div>
+        </div>
+        <div id="travelBody" class="travel-body" hidden></div>
+      </section>
+
+      <footer class="foot">
+        <span id="fx-generated" class="muted"></span>
+        <span class="muted">Card rates are stored one way (MYR per unit spent). Flipping re-expresses the same rate, never a reverse card rate.</span>
+      </footer>
+    </section>
+
+    <!-- ───────────────────────── TAB 2 · MACRO ───────────────────────── -->
+    <section class="panel-tab" id="panel-macro" role="tabpanel" aria-labelledby="tab-macro" hidden>
+      <div class="tab-head">
+        <div>
+          <h2 class="tab-title">Macro Monitor</h2>
+          <p class="tab-sub">Yields, real yield, gold, equities, jobs, dollar &amp; property — and how they move together.</p>
+        </div>
+      </div>
+      <div id="macro-body"><p class="muted loading">Loading macro data…</p></div>
+    </section>
+
+    <!-- ───────────────────────── TAB 3 · CAMPAIGN ───────────────────────── -->
+    <section class="panel-tab" id="panel-campaign" role="tabpanel" aria-labelledby="tab-campaign" hidden>
+      <div class="tab-head">
+        <div>
+          <h2 class="tab-title">Public Bank Card Promotions</h2>
+          <p class="tab-sub">Latest card campaigns with a plain-language T&amp;C summary. Always verify on the official page.</p>
+        </div>
+      </div>
+      <div id="campaign-body"><p class="muted loading">Loading promotions…</p></div>
+    </section>
+
+    <!-- ───────────────────────── TAB 4 · KLSE ───────────────────────── -->
+    <section class="panel-tab" id="panel-klse" role="tabpanel" aria-labelledby="tab-klse" hidden>
+      <div class="tab-head">
+        <div>
+          <h2 class="tab-title">AlphaSpike — KLSE Monitor</h2>
+          <p class="tab-sub">Daily conviction watchlist, signal performance &amp; tracked positions from the Bursa screener.</p>
+        </div>
+      </div>
+      <div id="klse-body"><p class="muted loading">Loading screener data…</p></div>
+    </section>
+  </main>
+
+  <script src="config.js?v=5"></script>
+  <script src="app.js?v=5"></script>
+</body>
+</html>

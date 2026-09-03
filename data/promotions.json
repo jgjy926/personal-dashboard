@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "generated_at": "2026-09-03T00:00:00+00:00",
+    "sample": true,
+    "source": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/",
+    "note": "SAMPLE data for UI review. Real cards come from tools/scrape_campaign.py + a manual LLM summary step (no paid API). Summaries are AI-generated — verify official T&C via the source link.",
+    "count": 5,
+    "today": "2026-09-03"
+  },
+  "promotions": [
+    {
+      "id": "pb-petron-fuel",
+      "title": "Fuel Savings — 8% Rebate at PETRON",
+      "image": "",
+      "link": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/petron-fuel-rebate/",
+      "category": "Fuel",
+      "period": "1 Sep 2026 – 30 Nov 2026",
+      "first_seen": "2026-09-03",
+      "tnc_summary": "8% fuel rebate at PETRON stations nationwide, capped at RM15/month. Rebate applies to the first RM188 fuel spend monthly. Debit and credit cards eligible; rebate posted as statement credit."
+    },
+    {
+      "id": "pb-0pct-instalment",
+      "title": "0% Instalment Plan — Electronics & Home Appliances",
+      "image": "",
+      "link": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/0-instalment-electronics/",
+      "category": "Instalment",
+      "period": "1 Sep 2026 – 31 Dec 2026",
+      "first_seen": "2026-09-03",
+      "tnc_summary": "0% interest instalment over 6, 12, or 24 months on purchases above RM500 at participating merchants. One-time upfront processing fee of 3% may apply for 24-month tenure. Early settlement subject to bank approval."
+    },
+    {
+      "id": "pb-visa-infinite-travel",
+      "title": "Visa Infinite — Complimentary Airport Lounge Access",
+      "image": "",
+      "link": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/visa-infinite-lounge/",
+      "category": "Travel",
+      "period": "Valid through 2026",
+      "first_seen": "2026-08-20",
+      "tnc_summary": "Up to 6 complimentary LoungeKey visits per year for the principal cardholder. Enrolment via the LoungeKey app required. Guest visits charged at USD32 each. Subject to annual income eligibility of RM150,000."
+    },
+    {
+      "id": "pb-visa-signature-dining",
+      "title": "Public Bank Visa Signature — 10% Cashback on Dining",
+      "image": "",
+      "link": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/visa-signature-dining/",
+      "category": "Dining",
+      "period": "1 Jul 2026 – 31 Dec 2026",
+      "first_seen": "2026-07-01",
+      "tnc_summary": "10% cashback on dining spend, capped at RM30/month. Minimum monthly retail spend RM1,500 to qualify. Cashback credited within 60 days. Public Bank Visa Signature principal cards only."
+    },
+    {
+      "id": "pb-quantum-online",
+      "title": "PB Quantum Mastercard — 5% Cashback on Online & Contactless",
+      "image": "",
+      "link": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/quantum-online-contactless/",
+      "category": "Cashback",
+      "period": "Ongoing",
+      "first_seen": "2026-05-15",
+      "tnc_summary": "5% cashback on online and contactless transactions, combined cap RM30/month; 0.5% on other retail. Excludes bill payments, insurance, and government transactions. Requires minimum RM2,500 monthly spend for the full cap."
+    }
+  ]
+}

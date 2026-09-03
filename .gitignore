@@ -1,0 +1,18 @@
+# ── Privacy: NEVER publish your KLSE trading data ───────────────────────────
+# klse.json is your private book. It stays local (feeds the snapshot when you run
+# the dashboard on your own machine) and behind the access-keyed tunnel online —
+# it must never land in a public repo or on a public host.
+data/klse.json
+
+# Campaign working files (raw scrape + draft + the LLM prompt) — only the finished
+# data/promotions.json is published.
+data/campaign_raw/
+data/promotions.draft.json
+data/campaign_prompt.txt
+
+# OS / editor / python cruft
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.venv/
