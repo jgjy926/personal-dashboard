@@ -46,19 +46,39 @@ python tools/export_klse.py --db path\to.db --top 25
 
 Re-run it after each engine run to refresh the tab.
 
-### Campaign — parser + free manual summary (`tools/scrape_campaign.py`)
-No LLM API, no cost. The parser scrapes each Public Bank promo's title/image/link and
-**downloads the raw T&C**, then writes a paste-ready prompt so you summarise for free:
+### Campaign — parser + free enrichment (`tools/scrape_campaign.py`)
+No paid API, $0. Each promo's `image` is the bank's real full campaign poster (not a
+small crop) — the offer, minimum spend, and campaign period are printed on it directly.
+Two ways to turn that into a written `tnc_summary`:
+
+- **Console (recommended)** — Card Promos → 🛠️ Console in the dashboard itself: downloads
+  a bundle of poster images + links, you paste it into a vision-capable AI (Claude,
+  ChatGPT), upload the JSON reply back, download the merged file.
+- **CLI + OCR** — the scraper also runs local OCR (Tesseract, free, offline) on every
+  poster as a fallback text layer, so `campaign_prompt.txt` works with *any* AI, not just
+  a vision-capable one. OCR reads plain text well but often misses large stylized numbers
+  (the RM amount is usually a big decorative graphic) — the prompt tells the AI to flag
+  rather than guess those, and you should spot-check amounts against the image.
 
 ```bash
-pip install requests beautifulsoup4
+pip install requests beautifulsoup4 pytesseract Pillow
+# plus the Tesseract OCR engine itself (optional — skipped gracefully if absent):
+#   Windows:        winget install --id UB-Mannheim.TesseractOCR
+#   Debian/Ubuntu:  sudo apt-get install tesseract-ocr   (already in the Actions workflow)
 python tools/scrape_campaign.py --max 15
 ```
 
 Produces `data/campaign_raw/*.txt`, `data/promotions.draft.json`, and
 `data/campaign_prompt.txt`. Then: paste `campaign_prompt.txt` into Claude → get back
-`{id: {period, tnc_summary}}` JSON → fill those into `promotions.draft.json` → save as
-`data/promotions.json`. Done, $0.
+`{id: {period, tnc_summary}}` JSON → fill those into `promotions.draft.json` (or run
+`tools/merge_campaign.py`, which does this against `data/promotions.json` and preserves
+any summary already written for an id) → save as `data/promotions.json`. Done, $0.
+
+**New promo tomorrow?** It publishes automatically with its real poster (tap/hover shows
+the full image) but no summary yet — `merge_campaign.py` only carries forward summaries
+for ids it already knows. Run the Console or the CLI+OCR path above to add one; nothing
+scripted here writes `tnc_summary` on its own (amounts are too easy to get wrong from
+OCR/PDF text alone), so a human or AI review step is deliberate, not a gap.
 
 ### Macro — seed now (`tools/seed_macro.py`), backend later
 `python tools/seed_macro.py` regenerates the sample `data/macro.json`. The Phase-B

@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 import os
 import re
@@ -45,6 +46,18 @@ try:
     from bs4 import BeautifulSoup
 except ImportError:
     sys.exit("Missing deps. Run:  pip install requests beautifulsoup4")
+
+# OCR is OPTIONAL — the scraper works fine without it (falls back to whatever
+# inline page text exists, usually nothing). Install for best-effort text
+# extraction from each poster: `pip install pytesseract Pillow` + the
+# Tesseract OCR engine itself (Windows: winget install UB-Mannheim.TesseractOCR;
+# Debian/Ubuntu incl. GitHub Actions: apt-get install tesseract-ocr).
+try:
+    import pytesseract
+    from PIL import Image, ImageEnhance, ImageOps
+    HAS_OCR = True
+except ImportError:
+    HAS_OCR = False
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -132,6 +145,43 @@ def _best_poster(soup) -> str:
             continue
         return _abs(src)
     return ""
+
+
+def ocr_poster_text(session, image_url: str) -> str:
+    """Best-effort text extraction from a promo's poster, via local Tesseract
+    OCR — free, no API, runs entirely offline. Real-world tested against the
+    live posters: it reads plain/small text well (body copy, footers, and
+    often the campaign-period line) but FREQUENTLY MISSES large stylized
+    numerals — the actual RM amount or "%" is often a huge decorative graphic,
+    not real text, and OCR just drops it. So this is a supplementary text
+    layer for the free copy-paste-to-any-AI path (campaign_prompt.txt), not a
+    substitute for actually looking at the poster — the Console's primary
+    flow still hands the AI the image itself so amounts are read correctly.
+    Returns "" (never raises) if OCR isn't installed or anything goes wrong."""
+    if not HAS_OCR or not image_url:
+        return ""
+    try:
+        r = session.get(image_url, headers=HEADERS, timeout=20)
+        r.raise_for_status()
+        img = Image.open(io.BytesIO(r.content)).convert("RGB")
+        # Grayscale + contrast boost + 2x upscale measurably improved recall in
+        # testing against these specific posters (low-contrast text over photo/
+        # gradient backgrounds); PSM 11 (sparse text, no layout assumptions)
+        # suits a graphic-design poster better than the default "assume a
+        # uniform block of text" mode.
+        gray = ImageOps.grayscale(img)
+        boosted = ImageEnhance.Contrast(gray).enhance(2.5)
+        w, h = boosted.size
+        upscaled = boosted.resize((w * 2, h * 2))
+        text = pytesseract.image_to_string(upscaled, config="--psm 11")
+    except Exception:
+        return ""
+    # OCR noise cleanup: drop very short "lines" (single stray characters from
+    # misread decorative graphics/icons are the dominant noise source here)
+    # and collapse blank runs.
+    lines = [ln.strip() for ln in text.splitlines()]
+    lines = [ln for ln in lines if len(ln) >= 3]
+    return "\n".join(lines).strip()
 
 
 def fetch_detail(session, promo: dict) -> tuple[str, str]:
@@ -235,30 +285,45 @@ def main() -> int:
         return 1
     print(f"[scrape] found {len(promos)} card promos, fetching detail pages…")
 
+    if not HAS_OCR:
+        print("[scrape] note: pytesseract/Pillow/Tesseract not installed — skipping OCR "
+              "(campaign_prompt.txt will only include the rare promo with real inline text). "
+              "pip install pytesseract Pillow, plus the Tesseract engine itself, to enable it.")
+
     prompt_blocks = []
+    ocr_count = 0
     for p in promos:
         raw, tnc_link = fetch_detail(session, p)
         p["period"] = ""
         p["first_seen"] = prior_first_seen.get(p["id"], today)
         p["tnc_link"] = tnc_link
         p["tnc_summary"] = ""
-        has_body = has_real_body(p["title"], raw)
+
+        ocr_text = ocr_poster_text(session, p.get("image", ""))
+        if ocr_text:
+            ocr_count += 1
+        combined = (raw + "\n\n" + ocr_text).strip() if ocr_text else raw
+        has_body = has_real_body(p["title"], combined)
         if has_body:
             with open(os.path.join(RAW_DIR, f"{p['id']}.txt"), "w", encoding="utf-8") as f:
-                f.write(f"TITLE: {p['title']}\nLINK: {p['link']}\nTNC: {tnc_link}\n\n{raw}")
-            prompt_blocks.append(f"### id: {p['id']}\nTITLE: {p['title']}\n{raw[:2000]}\n")
-        # "poster only" is the normal case (enrich via the Console's vision path);
-        # "+text" means this one ALSO has real inline body text (rare, a bonus).
-        tag = "poster+text" if has_body else ("poster only" if p.get("image") else "no image/T&C found")
-        print(f"   • {p['id']}  {p['title'][:55]:<55} [{tag}]")
+                f.write(f"TITLE: {p['title']}\nLINK: {p['link']}\nTNC: {tnc_link}\n\n"
+                        f"PAGE TEXT:\n{raw}\n\n"
+                        f"OCR OF POSTER (best-effort — often misses large stylized numbers/amounts "
+                        f"drawn as graphics; verify amounts against the image itself):\n{ocr_text}\n")
+            prompt_blocks.append(
+                f"### id: {p['id']}\nTITLE: {p['title']}\nPAGE TEXT: {raw[:1000]}\n"
+                f"OCR OF POSTER (noisy, may miss large numbers — verify against the image): {ocr_text[:1500]}\n")
+        src = "page" if has_real_body(p["title"], raw) else ("ocr" if ocr_text else "none")
+        tag = f"poster+{src}-text" if has_body else ("poster only" if p.get("image") else "no image/T&C found")
+        print(f"   • {p['id']}  {p['title'][:50]:<50} [{tag}]")
 
     new_today = sum(1 for p in promos if p["first_seen"] == today)
     draft = {
         "meta": {"source": LISTINGS[0][0], "sample": False, "count": len(promos),
                  "today": today, "new_today": new_today,
-                 "note": "Draft — most promos have no inline T&C text (only a linked "
-                         "PDF/page, captured as tnc_link); tnc_summary stays blank unless "
-                         "you fill it from campaign_prompt.txt for the ones that have real text."},
+                 "note": "Draft — tnc_summary stays blank until filled via the Console "
+                         "(a vision-capable AI reading each poster image, the reliable path) "
+                         "or from campaign_prompt.txt's OCR/page text for the ones that have it."},
         "promotions": promos,
     }
     with open(os.path.join(DATA, "promotions.draft.json"), "w", encoding="utf-8") as f:
@@ -266,16 +331,21 @@ def main() -> int:
 
     if prompt_blocks:
         instruction = (
-            "You are summarising Malaysian credit-card promotions. For EACH id below, "
-            "read the raw text and return STRICT JSON: an object mapping id -> "
-            '{"period": "<campaign period or \'\'>", "tnc_summary": "<=60 words covering the '
-            "main offer, minimum spend/criteria, cap, and expiry>\"}. Do not invent terms "
-            "not present in the text.\n\n"
+            "You are summarising Malaysian credit-card promotions from a mix of page text and "
+            "OCR'd poster text. The OCR text is NOISY and frequently MISSES large stylized numbers "
+            "(the RM amount or %% is often a big decorative graphic OCR can't read) — if an amount "
+            "is unclear or missing, say so rather than guessing. For EACH id below, return STRICT "
+            "JSON: an object mapping id -> {\"period\": \"<campaign period or ''>\", \"tnc_summary\": "
+            "\"<=60 words covering the main offer, minimum spend/criteria, cap, and expiry>\"}. "
+            "Do not invent terms not present in the text.\n\n"
         )
         with open(os.path.join(DATA, "campaign_prompt.txt"), "w", encoding="utf-8") as f:
             f.write(instruction + "\n".join(prompt_blocks))
-        print(f"\n[scrape] {len(prompt_blocks)}/{len(promos)} promos also had real inline body text -> data/campaign_prompt.txt")
-        print("Optional (free): paste it into Claude for summaries, then merge.")
+        print(f"\n[scrape] {len(prompt_blocks)}/{len(promos)} promos have usable text (page and/or OCR) "
+              "-> data/campaign_prompt.txt")
+        print("Optional (free): paste it into any AI (vision not required for this path) for summaries, then merge.")
+    if ocr_count:
+        print(f"[scrape] OCR extracted text from {ocr_count}/{len(promos)} posters.")
     print(f"[scrape] Every promo's poster image is captured as `image` — enrich via the dashboard's "
           "Card Promos -> Console (view each poster with a vision-capable AI) for the main path.")
 
