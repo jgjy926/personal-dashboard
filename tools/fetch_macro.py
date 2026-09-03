@@ -62,6 +62,43 @@ def fetch_fred_csv(sid: str, timeout: int = 60) -> str:
         return r.read().decode("utf-8", "replace")
 
 
+YAHOO_CHART = "https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?range={rng}&interval=1mo"
+
+
+def fetch_yahoo_chart(symbol: str, rng: str = "5y", timeout: int = 30) -> str:
+    """FRED discontinued its LBMA gold fixings (GOLDPMGBD228NLBM/GOLDAMGBD228NLBM
+    both 404 as of this writing), so gold falls back to Yahoo Finance's public,
+    keyless chart endpoint — no key, no signup, used by many open-source tools.
+    It's unofficial (Yahoo could change/rate-limit it), which is exactly why it's
+    a fallback and not the primary source, and why every call here is wrapped in
+    the same try/except-per-series pattern as the FRED fetchers."""
+    req = urllib.request.Request(
+        YAHOO_CHART.format(symbol=symbol, rng=rng),
+        headers={"User-Agent": "Mozilla/5.0 (macro-dashboard fetcher)", "Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return r.read().decode("utf-8", "replace")
+
+
+def parse_yahoo_chart(text: str) -> list[tuple[str, float]]:
+    """Yahoo's chart JSON: parallel `timestamp` (unix seconds, UTC) and
+    `indicators.quote[0].close` arrays. Returns [(YYYY-MM-DD, value)] ascending,
+    skipping null closes (non-trading days some ranges include)."""
+    data = json.loads(text)
+    result = (data.get("chart") or {}).get("result") or []
+    if not result:
+        return []
+    r0 = result[0]
+    ts = r0.get("timestamp") or []
+    closes = ((r0.get("indicators") or {}).get("quote") or [{}])[0].get("close") or []
+    out = []
+    for t, v in zip(ts, closes):
+        if v is None:
+            continue
+        d = datetime.fromtimestamp(t, tz=timezone.utc).strftime("%Y-%m-%d")
+        out.append((d, float(v)))
+    return out
+
+
 # ── pure helpers ────────────────────────────────────────────────────────────
 def parse_fred_csv(text: str) -> list[tuple[str, float]]:
     """FRED CSV: header row then DATE,VALUE. Missing values are '.'. Returns
@@ -195,7 +232,18 @@ def main() -> int:
             except Exception as e:
                 errors.append(f"{candidate}: {e}")
         else:
-            print(f"[fetch_macro] {sid}: FAILED all candidates — {'; '.join(errors)}", file=sys.stderr)
+            # Every FRED candidate failed. Gold specifically has a free, keyless
+            # non-FRED fallback (Yahoo Finance chart API) — try it before giving up.
+            if sid == "GOLD":
+                try:
+                    raw[sid] = parse_yahoo_chart(fetch_yahoo_chart("GC=F", rng=f"{args.years}y"))
+                    if raw[sid]:
+                        print(f"[fetch_macro] {sid}: {len(raw[sid])} obs "
+                              f"(latest {raw[sid][-1][0]}) (via Yahoo Finance GC=F, FRED unavailable)")
+                except Exception as e:
+                    errors.append(f"yahoo GC=F: {e}")
+            if not raw[sid]:
+                print(f"[fetch_macro] {sid}: FAILED all candidates — {'; '.join(errors)}", file=sys.stderr)
 
     payload = build_payload(raw, args.years)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
