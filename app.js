@@ -30,6 +30,14 @@ function num(n, d = 0) {
   return n == null || !Number.isFinite(+n) ? '—'
     : Number(n).toLocaleString(undefined, { maximumFractionDigits: d, minimumFractionDigits: d });
 }
+function downloadJSON(obj, filename) {
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
 function agoLabel(iso) {
   if (!iso) return 'unknown';
   const then = new Date(iso), now = new Date();
@@ -103,6 +111,10 @@ function showTab(id) {
     document.getElementById('panel-' + t).hidden = t !== id;
     document.getElementById('tab-' + t).classList.toggle('active', t === id);
   });
+  // A hidden thumb never fires mouseleave, so the shared image-zoom overlay
+  // (Card Promos) could otherwise be left showing over an unrelated tab.
+  const zoom = document.getElementById('img-zoom-overlay');
+  if (zoom) zoom.classList.remove('show');
   if (!started[id]) { started[id] = true; try { MODS[id](); } catch (e) { console.error(e); } }
   if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
 }
@@ -330,15 +342,38 @@ MODS.macro = async function initMacro() {
 };
 
 // ════════════════════════════════ TAB 3 · CAMPAIGN ════════════════════════
+// Zoom-on-hover: one reusable full-size preview, shared by every card image.
+// Fixed-position so it always escapes the card's own rounded-corner clipping,
+// regardless of scroll position or which card triggered it.
+function ensureZoomOverlay() {
+  let ov = document.getElementById('img-zoom-overlay');
+  if (ov) return ov;
+  ov = document.createElement('div');
+  ov.id = 'img-zoom-overlay';
+  ov.className = 'zoom-overlay';
+  ov.innerHTML = '<img alt="">';
+  document.body.appendChild(ov);
+  return ov;
+}
+function wireImageZoom(container) {
+  const overlay = ensureZoomOverlay();
+  const img = overlay.querySelector('img');
+  container.querySelectorAll('.thumb img').forEach(el => {
+    el.addEventListener('mouseenter', () => { img.src = el.src; overlay.classList.add('show'); });
+    el.addEventListener('mouseleave', () => overlay.classList.remove('show'));
+  });
+}
+
 MODS.campaign = async function initCampaign() {
   const root = document.getElementById('campaign-body');
+  const consoleRoot = document.getElementById('campaign-console');
   let d;
   try { d = await fetchJSON(CFG.feeds.promotions); }
   catch (e) { root.innerHTML = `<div class="errbox">Couldn't load promotions feed (${esc(e.message)}). Expected at <code>${esc(CFG.feeds.promotions)}</code>.</div>`; return; }
 
   const list = d.promotions || [];
   const sample = d.meta && d.meta.sample;
-  if (!list.length) { root.innerHTML = `<div class="emptybox">No promotions yet. Run <code>tools/scrape_campaign.py</code>, summarise the T&amp;C, then drop <code>promotions.json</code> here.</div>`; return; }
+  if (!list.length) { root.innerHTML = `<div class="emptybox">No promotions yet. Run <code>tools/scrape_campaign.py</code>, then use the 🛠️ Console tab to enrich and publish.</div>`; return; }
 
   // "New today" = first detected on the page today. Use the feed's own `today`
   // (the date the producer ran) if present, else the viewer's local date.
@@ -353,14 +388,12 @@ MODS.campaign = async function initCampaign() {
 
   // Most Public Bank promos carry NO inline description on their own page — the
   // real terms live only in a linked PDF (captured separately as tnc_link by
-  // tools/scrape_campaign.py). So: show tnc_summary when someone has written one
-  // (via the free manual-LLM step); otherwise point straight at the official PDF
-  // instead of a fake/empty "summary" box.
-  const cardHTML = p => {
-    const tncBlock = p.tnc_summary
-      ? `<div class="tnc">${esc(p.tnc_summary)}</div>`
-      : `<div class="tnc pending">No on-page summary — this promo's terms are only in the bank's PDF. ${p.tnc_link ? '' : 'Check the full promotion page.'}</div>`;
-    return `
+  // tools/scrape_campaign.py). The promo banner image is usually self-explanatory
+  // (the offer is printed on it), so it's the star of the card — bigger, and
+  // zoomable to full size on hover — rather than padding out an empty "no
+  // summary" box. A written tnc_summary (via the Console's AI-enrich flow)
+  // still shows when one exists.
+  const cardHTML = p => `
     <article class="promo${p._new ? ' is-new' : ''}">
       ${p._new ? '<span class="new-badge">🆕 NEW</span>' : ''}
       <div class="thumb">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" onerror="this.parentNode.textContent='No image'">` : 'No image'}</div>
@@ -368,7 +401,7 @@ MODS.campaign = async function initCampaign() {
         ${p.category ? `<div class="cat">${esc(p.category)}</div>` : ''}
         <h3>${esc(p.title)}</h3>
         ${p.period ? `<div class="period">🗓 Valid: ${esc(p.period)}</div>` : ''}
-        ${tncBlock}
+        ${p.tnc_summary ? `<div class="tnc">${esc(p.tnc_summary)}</div>` : ''}
         ${p.first_seen ? `<div class="seen${p._new ? ' new' : ''}">${p._new ? '🆕 Added today' : '👁 Listed since'} ${fmtDate(p.first_seen)}</div>` : ''}
         <div class="cta-row">
           ${p.link ? `<a class="cta" href="${esc(p.link)}" target="_blank" rel="noopener">View promotion ➔</a>` : ''}
@@ -376,7 +409,6 @@ MODS.campaign = async function initCampaign() {
         </div>
       </div>
     </article>`;
-  };
 
   function render() {
     const filtered = active === 'All' ? list : list.filter(p => p.category === active);
@@ -388,7 +420,7 @@ MODS.campaign = async function initCampaign() {
       return `<button class="fchip${c === active ? ' on' : ''}" data-cat="${esc(c)}">${esc(c)} <span class="fn">${n}</span>${newN ? `<span class="fnew">${newN}</span>` : ''}</button>`;
     }).join('');
     root.innerHTML = `
-      <div class="disclaimer">⚠ Public Bank publishes most terms only as a PDF, not on-page — each card links straight to it (📄 Official T&amp;C). Where a plain-language summary is shown, it's AI-generated — <b>always verify the linked T&amp;C</b> before relying on it.${sample ? ' Currently showing <b>sample</b> data.' : ''}</div>
+      <div class="disclaimer">⚠ Public Bank publishes most terms only as a PDF, not on-page — hover a banner for the full picture, or use 📄 Official T&amp;C for the real terms. Where a written summary is shown, it's AI-generated — <b>always verify the linked T&amp;C</b>.${sample ? ' Currently showing <b>sample</b> data.' : ''}</div>
       ${newCount ? `<div class="banner new-banner"><span class="b-ico">🆕</span><div><div class="b-title">${newCount} new promotion${newCount > 1 ? 's' : ''} today</div><div class="b-detail">First detected on the page on ${fmtDate(today)}. Marked 🆕 below.</div></div></div>` : ''}
       <div class="fchips" role="tablist" aria-label="Filter by category">${chips}</div>
       <div class="promo-grid">${filtered.map(cardHTML).join('') || '<div class="emptybox">No promotions in this category.</div>'}</div>
@@ -396,8 +428,123 @@ MODS.campaign = async function initCampaign() {
         <span>· Updated <b>${esc((d.meta && d.meta.generated_at || '').slice(0, 10))}</b></span>
         <span>· ${filtered.length}/${list.length} shown</span></div>`;
     root.querySelectorAll('.fchip').forEach(b => b.addEventListener('click', () => { active = b.dataset.cat; render(); }));
+    wireImageZoom(root);
   }
   render();
+
+  // ── 🛠️ Console: export a bundle for AI enrichment, then import the reply ──
+  // Static site, no backend: this is a fully client-side, in-browser workflow.
+  // "Enrich by AI" for THIS site means an AI that can open links (most promos
+  // have no on-page text at all — the terms are a linked PDF), so the exported
+  // bundle is a task list of {id, title, tnc_link}, not raw text to paste into
+  // a plain-text-only chat. The import step re-implements tools/merge_campaign.py's
+  // merge rule in JS (fill tnc_summary/period only where the upload provides
+  // them) and hands back a ready-to-publish promotions.json download — you then
+  // drop that into data/ and commit, same manual-publish model as the CLI tool.
+  function renderConsole() {
+    const missing = list.filter(p => !p.tnc_summary);
+    const bundle = {
+      instructions:
+        "For each item below, open its tnc_link (usually a PDF; some are external campaign pages) "
+        + "and summarise the offer in <=60 words: main offer, minimum spend/criteria, cap, expiry. "
+        + "Reply with STRICT JSON only — an object mapping id -> "
+        + '{"period":"<campaign period or \'\'>","tnc_summary":"<your summary>"}. '
+        + "Do not invent terms not present in the linked document. Use an AI that can open links "
+        + "(e.g. Claude, ChatGPT with browsing) — a plain-text-only chat can't read these PDFs itself.",
+      promos: missing.map(p => ({ id: p.id, title: p.title, tnc_link: p.tnc_link || p.link })),
+    };
+
+    consoleRoot.innerHTML = `
+      <div class="card-block">
+        <h3>1 · Export for AI enrichment</h3>
+        <p class="muted">${missing.length} of ${list.length} promos have no summary yet. Download a bundle of their titles + official T&amp;C links.</p>
+        <div class="console-actions">
+          <button id="btn-dl-bundle" class="cta"${missing.length ? '' : ' disabled'}>📥 Download AI bundle (.json)</button>
+          <button id="btn-copy-prompt" class="cta ghost"${missing.length ? '' : ' disabled'}>📋 Copy prompt to clipboard</button>
+        </div>
+        <p class="muted small">${missing.length ? 'Paste the bundle (or the copied prompt) into an AI that can open links, and ask for the JSON reply described in the instructions.' : 'Every promo already has a summary — nothing to export.'}</p>
+        <p id="copy-status" class="muted small" hidden></p>
+      </div>
+      <div class="card-block">
+        <h3>2 · Import AI summaries</h3>
+        <p class="muted">Upload the JSON the AI replied with — a map of <code>id → {tnc_summary, period}</code>.</p>
+        <input type="file" id="console-upload" accept=".json,application/json" />
+        <div id="console-preview"></div>
+        <button id="btn-dl-merged" class="cta" hidden>⬇ Download merged promotions.json</button>
+        <p class="muted small">After downloading: replace <code>data/promotions.json</code> in the project with this file, then commit &amp; push to publish.</p>
+      </div>`;
+
+    const dlBundleBtn = document.getElementById('btn-dl-bundle');
+    const copyBtn = document.getElementById('btn-copy-prompt');
+    const copyStatus = document.getElementById('copy-status');
+    if (missing.length) {
+      dlBundleBtn.addEventListener('click', () => downloadJSON(bundle, 'card-promos-ai-bundle.json'));
+      copyBtn.addEventListener('click', async () => {
+        const text = bundle.instructions + '\n\n' + JSON.stringify(bundle.promos, null, 2);
+        try {
+          await navigator.clipboard.writeText(text);
+          copyStatus.textContent = '✅ Copied to clipboard.';
+        } catch {
+          copyStatus.textContent = '⚠ Clipboard blocked by the browser — use Download instead.';
+        }
+        copyStatus.hidden = false;
+      });
+    }
+
+    let mergedResult = null;
+    const previewEl = document.getElementById('console-preview');
+    const dlMergedBtn = document.getElementById('btn-dl-merged');
+    document.getElementById('console-upload').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const map = JSON.parse(await file.text());
+        const ids = Object.keys(map);
+        const merged = list.map(p => {
+          const upd = map[p.id];
+          return upd ? { ...p, tnc_summary: upd.tnc_summary || p.tnc_summary, period: upd.period || p.period } : p;
+        });
+        const matched = ids.filter(id => list.some(p => p.id === id)).length;
+        previewEl.innerHTML =
+          `<div class="disclaimer" style="background:var(--green-bg);color:var(--green)">✅ Matched ${matched} of ${ids.length} id(s) in the file.</div>` +
+          `<div class="table-scroll"><table class="data-table"><thead><tr><th class="l">ID</th><th class="l">Title</th><th class="l">New summary</th></tr></thead><tbody>` +
+          ids.map(id => {
+            const p = list.find(x => x.id === id);
+            return `<tr><td class="l">${esc(id)}</td><td class="l">${esc(p ? p.title : '(unknown id)')}</td><td class="l">${esc((map[id].tnc_summary || '').slice(0, 80))}</td></tr>`;
+          }).join('') + `</tbody></table></div>`;
+        mergedResult = merged;
+        dlMergedBtn.hidden = false;
+      } catch (err) {
+        previewEl.innerHTML = `<div class="errbox">Couldn't read that file as JSON: ${esc(err.message)}</div>`;
+        dlMergedBtn.hidden = true;
+        mergedResult = null;
+      }
+    });
+    dlMergedBtn.addEventListener('click', () => {
+      if (!mergedResult) return;
+      const payload = {
+        meta: { ...d.meta, generated_at: new Date().toISOString(), note: 'Merged locally via the Card Promos Console.' },
+        promotions: mergedResult,
+      };
+      downloadJSON(payload, 'promotions.json');
+    });
+  }
+
+  // Sub-tab toggle between the promo grid and the Console (wired once; this
+  // module only initialises the first time the Campaign tab is opened).
+  function showSub(sub) {
+    root.hidden = sub !== 'promos';
+    consoleRoot.hidden = sub !== 'console';
+    document.getElementById('csub-promos').classList.toggle('active', sub === 'promos');
+    document.getElementById('csub-console').classList.toggle('active', sub === 'console');
+    // A hidden thumb never fires mouseleave, so the zoom overlay can be left
+    // showing a now-hidden image behind the Console panel — clear it explicitly.
+    const overlay = document.getElementById('img-zoom-overlay');
+    if (overlay) overlay.classList.remove('show');
+    if (sub === 'console') renderConsole();
+  }
+  document.getElementById('csub-promos').addEventListener('click', () => showSub('promos'));
+  document.getElementById('csub-console').addEventListener('click', () => showSub('console'));
 };
 
 // ════════════════════════════════ TAB 4 · KLSE ════════════════════════════
