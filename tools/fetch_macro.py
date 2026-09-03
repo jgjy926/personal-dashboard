@@ -49,6 +49,17 @@ SERIES = {
     "UNRATE":    {"ids": ["UNRATE"],    "label": "Unemployment Rate",     "unit": "%", "freq": "monthly"},
     "DTWEXBGS":  {"ids": ["DTWEXBGS"],  "label": "Dollar Index (broad)",  "unit": "",  "freq": "daily"},
     "CSUSHPISA": {"ids": ["CSUSHPISA"], "label": "Home Price Index",      "unit": "",  "freq": "monthly"},
+    # Japan yields are NOMINAL (Japan's inflation-indexed JGBi market is thin
+    # and not reliably published on FRED, unlike the US TIPS family above).
+    # Multiple id candidates per series are genuinely UNVERIFIED guesses (FRED's
+    # Japan coverage is much thinner than its US Treasury family) tried via the
+    # same safe fallback chain as everything else here — whatever doesn't
+    # resolve shows up honestly in meta.missing_series, never silently
+    # mislabeled as something it isn't.
+    "JP10Y":     {"ids": ["IRLTLT01JPM156N", "IRLTLT01JPQ156N"],
+                  "label": "Japan 10Y Nominal Yield", "unit": "%", "freq": "monthly"},
+    "JP30Y":     {"ids": ["IRLTLT30JPM156N", "IRLTLT30JPQ156N", "JGBS30Y"],
+                  "label": "Japan 30Y Nominal Yield", "unit": "%", "freq": "monthly"},
 }
 FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"
 
