@@ -310,6 +310,16 @@ MODS.macro = async function initMacro() {
     </div>`;
   }).join('');
 
+  // Daily series can legitimately show DIFFERENT "as of" dates — each is an
+  // independent US government release (Treasury yields, breakeven, equities…)
+  // with its own publish schedule, not all stamped by one clock. Surface that
+  // explicitly whenever it's actually happening, so a 1-day gap between two
+  // "daily" cards reads as expected, not as a stale-fetch bug.
+  const dailyDates = [...new Set((d.snapshot || []).filter(s => s.freq === 'daily').map(s => s.as_of))];
+  const dateSkewNote = dailyDates.length > 1
+    ? `<p class="muted" style="margin:-4px 0 12px">ℹ️ Daily series don't all show the same date (${dailyDates.slice().sort().join(' vs ')}) — each is published independently by its own source on its own schedule (e.g. Treasury yields typically post a day behind); not a stale fetch.</p>`
+    : '';
+
   const ov = d.overlay || {};
   const overlayChart = lineChart([
     { name: 'Real yield', values: ov.series && ov.series.real_yield, color: cv('--s1') },
@@ -333,6 +343,7 @@ MODS.macro = async function initMacro() {
         <div class="b-detail">${esc(rg.detail || '')}</div>
         <div class="b-caveat">${esc(rg.caveat || 'Heuristic, not a signal.')}</div></div>
     </div>
+    ${dateSkewNote}
     <div class="stat-grid">${cards}</div>
     <div class="card-block"><h3>Real yield · Gold · S&amp;P 500 <span class="muted">— each scaled to its own 0–100 range</span></h3>${overlayChart}
       <p class="muted" style="margin-top:6px">${esc(ov.note || '')}</p></div>
@@ -342,25 +353,40 @@ MODS.macro = async function initMacro() {
 };
 
 // ════════════════════════════════ TAB 3 · CAMPAIGN ════════════════════════
-// Zoom-on-hover: one reusable full-size preview, shared by every card image.
+// Full-size image preview: one reusable overlay, shared by every card. The
+// card thumbnail is deliberately cropped (object-fit: cover, fixed height, for
+// a uniform grid) — this overlay is what shows the COMPLETE, uncropped image.
 // Fixed-position so it always escapes the card's own rounded-corner clipping,
 // regardless of scroll position or which card triggered it.
+//
+// Two trigger paths, because "point at it" means different things on
+// different devices: mouseenter/mouseleave give an instant hover preview on
+// desktop, but never fire at all on touch (there is no hover state on a
+// phone/tablet) — a touch-only user would otherwise NEVER see the full image,
+// only the cropped thumbnail. click/tap opens it on every device (a tap
+// synthesizes a click) and stays open until dismissed by tapping the overlay
+// itself or pressing Escape, so it works as a real "view full image" action
+// on mobile, not just a hover-only desktop nicety.
 function ensureZoomOverlay() {
   let ov = document.getElementById('img-zoom-overlay');
   if (ov) return ov;
   ov = document.createElement('div');
   ov.id = 'img-zoom-overlay';
   ov.className = 'zoom-overlay';
-  ov.innerHTML = '<img alt="">';
+  ov.innerHTML = '<img alt=""><span class="zoom-hint">Tap anywhere to close</span>';
   document.body.appendChild(ov);
+  ov.addEventListener('click', () => ov.classList.remove('show'));       // tap/click anywhere to dismiss
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') ov.classList.remove('show'); });
   return ov;
 }
 function wireImageZoom(container) {
   const overlay = ensureZoomOverlay();
   const img = overlay.querySelector('img');
+  const open = src => { img.src = src; overlay.classList.add('show'); };
   container.querySelectorAll('.thumb img').forEach(el => {
-    el.addEventListener('mouseenter', () => { img.src = el.src; overlay.classList.add('show'); });
+    el.addEventListener('mouseenter', () => open(el.src));
     el.addEventListener('mouseleave', () => overlay.classList.remove('show'));
+    el.addEventListener('click', e => { e.preventDefault(); open(el.src); });
   });
 }
 
@@ -420,7 +446,7 @@ MODS.campaign = async function initCampaign() {
       return `<button class="fchip${c === active ? ' on' : ''}" data-cat="${esc(c)}">${esc(c)} <span class="fn">${n}</span>${newN ? `<span class="fnew">${newN}</span>` : ''}</button>`;
     }).join('');
     root.innerHTML = `
-      <div class="disclaimer">⚠ Public Bank publishes most terms only as a PDF, not on-page — hover a banner for the full picture, or use 📄 Official T&amp;C for the real terms. Where a written summary is shown, it's AI-generated — <b>always verify the linked T&amp;C</b>.${sample ? ' Currently showing <b>sample</b> data.' : ''}</div>
+      <div class="disclaimer">⚠ Public Bank publishes most terms only as a PDF, not on-page — tap/hover a banner for the full picture, or use 📄 Official T&amp;C for the real terms. Where a written summary is shown, it's AI-generated — <b>always verify the linked T&amp;C</b>.${sample ? ' Currently showing <b>sample</b> data.' : ''}</div>
       ${newCount ? `<div class="banner new-banner"><span class="b-ico">🆕</span><div><div class="b-title">${newCount} new promotion${newCount > 1 ? 's' : ''} today</div><div class="b-detail">First detected on the page on ${fmtDate(today)}. Marked 🆕 below.</div></div></div>` : ''}
       <div class="fchips" role="tablist" aria-label="Filter by category">${chips}</div>
       <div class="promo-grid">${filtered.map(cardHTML).join('') || '<div class="emptybox">No promotions in this category.</div>'}</div>

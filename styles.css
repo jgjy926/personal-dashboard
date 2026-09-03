@@ -190,12 +190,17 @@ button.toggle[aria-expanded="true"] { background: var(--accent); color: #fff; bo
   border-radius: 8px; padding: 10px; white-space: pre-line; }
 .promo .cta-row { margin-top: auto; display: flex; gap: 8px; }
 
-/* Full-size hover preview — fixed-position so it always escapes the card's own
- * rounded-corner clipping. One shared instance, reused by every card. */
-.zoom-overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
-  background: rgba(0,0,0,.6); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity .15s ease; }
-.zoom-overlay.show { opacity: 1; }
+/* Full-size image preview (tap or hover a thumbnail) — fixed-position so it
+ * always escapes the card's own rounded-corner clipping. One shared instance,
+ * reused by every card. pointer-events must flip to auto in .show, or the
+ * "tap anywhere to dismiss" click handler silently never fires. */
+.zoom-overlay { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 10px; background: rgba(0,0,0,.6); z-index: 1000; opacity: 0;
+  pointer-events: none; transition: opacity .15s ease; cursor: zoom-out;
+  -webkit-user-select: none; user-select: none; /* a tap-drag on the hint text must dismiss, not select it */ }
+.zoom-overlay.show { opacity: 1; pointer-events: auto; }
 .zoom-overlay img { max-width: 90vw; max-height: 85vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.45); }
+.zoom-overlay .zoom-hint { color: #fff; font-size: 12.5px; opacity: .8; }
 .promo .cta { flex: 1; display: inline-block; text-align: center; text-decoration: none;
   background: var(--accent); color: #fff; font-weight: 600; font-size: 13px; padding: 9px; border-radius: 8px; }
 .promo .cta:hover { filter: brightness(1.06); }
