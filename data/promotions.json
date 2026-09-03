@@ -1,62 +1,163 @@
 {
   "meta": {
     "generated_at": "2026-09-03T00:00:00+00:00",
-    "sample": true,
-    "source": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/",
-    "note": "SAMPLE data for UI review. Real cards come from tools/scrape_campaign.py + a manual LLM summary step (no paid API). Summaries are AI-generated — verify official T&C via the source link.",
-    "count": 5,
-    "today": "2026-09-03"
+    "sample": false,
+    "source": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/?type=cards",
+    "today": "2026-09-03",
+    "new_today": 15,
+    "count": 15,
+    "note": "Live scrape. Summaries are AI-generated — verify official T&C via the source link."
   },
   "promotions": [
     {
-      "id": "pb-petron-fuel",
-      "title": "Fuel Savings — 8% Rebate at PETRON",
-      "image": "",
-      "link": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/petron-fuel-rebate/",
-      "category": "Fuel",
-      "period": "1 Sep 2026 – 30 Nov 2026",
-      "first_seen": "2026-09-03",
-      "tnc_summary": "8% fuel rebate at PETRON stations nationwide, capped at RM15/month. Rebate applies to the first RM188 fuel spend monthly. Debit and credit cards eligible; rebate posted as statement credit."
-    },
-    {
-      "id": "pb-0pct-instalment",
-      "title": "0% Instalment Plan — Electronics & Home Appliances",
-      "image": "",
-      "link": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/0-instalment-electronics/",
-      "category": "Instalment",
-      "period": "1 Sep 2026 – 31 Dec 2026",
-      "first_seen": "2026-09-03",
-      "tnc_summary": "0% interest instalment over 6, 12, or 24 months on purchases above RM500 at participating merchants. One-time upfront processing fee of 3% may apply for 24-month tenure. Early settlement subject to bank approval."
-    },
-    {
-      "id": "pb-visa-infinite-travel",
-      "title": "Visa Infinite — Complimentary Airport Lounge Access",
-      "image": "",
-      "link": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/visa-infinite-lounge/",
-      "category": "Travel",
-      "period": "Valid through 2026",
-      "first_seen": "2026-08-20",
-      "tnc_summary": "Up to 6 complimentary LoungeKey visits per year for the principal cardholder. Enrolment via the LoungeKey app required. Guest visits charged at USD32 each. Subject to annual income eligibility of RM150,000."
-    },
-    {
-      "id": "pb-visa-signature-dining",
-      "title": "Public Bank Visa Signature — 10% Cashback on Dining",
-      "image": "",
-      "link": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/visa-signature-dining/",
+      "id": "05927e34b6",
+      "title": "Preferred Redemption Rewards Catalogue",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/preferred-redemption-ecatalogue-2026/",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
       "category": "Dining",
-      "period": "1 Jul 2026 – 31 Dec 2026",
-      "first_seen": "2026-07-01",
-      "tnc_summary": "10% cashback on dining spend, capped at RM30/month. Minimum monthly retail spend RM1,500 to qualify. Cashback credited within 60 days. Public Bank Visa Signature principal cards only."
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
     },
     {
-      "id": "pb-quantum-online",
-      "title": "PB Quantum Mastercard — 5% Cashback on Online & Contactless",
-      "image": "",
-      "link": "https://www.pbebank.com/en/promotions/credit-debit-cards-promotions/quantum-online-contactless/",
-      "category": "Cashback",
-      "period": "Ongoing",
-      "first_seen": "2026-05-15",
-      "tnc_summary": "5% cashback on online and contactless transactions, combined cap RM30/month; 0.5% on other retail. Excludes bill payments, insurance, and government transactions. Requires minimum RM2,500 monthly spend for the full cap."
+      "id": "d5c7873701",
+      "title": "View All Promotions",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "ba1588b934",
+      "title": "Promotions",
+      "link": "https://www.pbebank.com/en/promotions/",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "0e2f12c82c",
+      "title": "Credit Cards",
+      "link": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "b14f0be482",
+      "title": "Debit Cards",
+      "link": "https://www.pbebank.com/en/promotions/debit-cards-promotions/",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "bbad9c9d99",
+      "title": "Product & Services",
+      "link": "https://www.pbebank.com/en/promotions/product-services-promotions/",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "725abc0660",
+      "title": "Dining",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Dining",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "b9e2521ecf",
+      "title": "Travel & Leisure",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Travel",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "ab14eb1ed8",
+      "title": "Retail",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Retail",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "d91040011d",
+      "title": "Beauty & Wellness",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=beauty",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "f4e7f0fe62",
+      "title": "E-Commerce",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=eCommerce",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "e53ec2e16c",
+      "title": "Flexipay / Balance Transfer",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Flexipay%2FB%2ETransfers",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "040da274af",
+      "title": "Online Redemption",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Online%20Redemption",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "271eda2cac",
+      "title": "Others",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/?benefit=Others",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
+    },
+    {
+      "id": "1385ea5548",
+      "title": "RM25 OFF at Lazada with PB Mastercard Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/rm25-off-at-lazada-with-pb-mastercard-credit-card/",
+      "image": "https://www.pbebank.com/media/2p0llgtl/icon-facebook.svg",
+      "category": "Dining",
+      "period": "",
+      "first_seen": "2026-09-03",
+      "tnc_summary": ""
     }
   ]
 }
