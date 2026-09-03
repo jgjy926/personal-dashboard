@@ -460,35 +460,40 @@ MODS.campaign = async function initCampaign() {
 
   // ── 🛠️ Console: export a bundle for AI enrichment, then import the reply ──
   // Static site, no backend: this is a fully client-side, in-browser workflow.
-  // "Enrich by AI" for THIS site means an AI that can open links (most promos
-  // have no on-page text at all — the terms are a linked PDF), so the exported
-  // bundle is a task list of {id, title, tnc_link}, not raw text to paste into
-  // a plain-text-only chat. The import step re-implements tools/merge_campaign.py's
-  // merge rule in JS (fill tnc_summary/period only where the upload provides
-  // them) and hands back a ready-to-publish promotions.json download — you then
-  // drop that into data/ and commit, same manual-publish model as the CLI tool.
+  // "Enrich by AI" for THIS site means VISION, not link-following: every promo's
+  // `image` is the bank's own full campaign poster (not the small listing
+  // thumbnail) with the offer, minimum spend, and campaign period printed
+  // directly on it as a designed graphic — reading that image is far more
+  // reliable than trying to fetch/parse the linked PDF, and works with any
+  // vision-capable chat AI (no browsing needed, just an attached/pasted image).
+  // tnc_link is still included as the authoritative legal document to verify
+  // against — the poster is marketing copy, not the binding terms. The import
+  // step re-implements tools/merge_campaign.py's merge rule in JS (fill
+  // tnc_summary/period only where the upload provides them) and hands back a
+  // ready-to-publish promotions.json download — you then drop that into data/
+  // and commit, same manual-publish model as the CLI tool.
   function renderConsole() {
     const missing = list.filter(p => !p.tnc_summary);
     const bundle = {
       instructions:
-        "For each item below, open its tnc_link (usually a PDF; some are external campaign pages) "
-        + "and summarise the offer in <=60 words: main offer, minimum spend/criteria, cap, expiry. "
+        "For each item below, view its image (the bank's full campaign poster — the offer, "
+        + "minimum spend/criteria, and campaign period are printed on it) and summarise it in "
+        + "<=60 words. Use tnc_link only to double-check anything unclear on the poster. "
         + "Reply with STRICT JSON only — an object mapping id -> "
-        + '{"period":"<campaign period or \'\'>","tnc_summary":"<your summary>"}. '
-        + "Do not invent terms not present in the linked document. Use an AI that can open links "
-        + "(e.g. Claude, ChatGPT with browsing) — a plain-text-only chat can't read these PDFs itself.",
-      promos: missing.map(p => ({ id: p.id, title: p.title, tnc_link: p.tnc_link || p.link })),
+        + '{"period":"<campaign period as printed, or \'\'>","tnc_summary":"<your summary>"}. '
+        + "Do not invent details not visible on the poster or linked document.",
+      promos: missing.map(p => ({ id: p.id, title: p.title, image: p.image, tnc_link: p.tnc_link || p.link })),
     };
 
     consoleRoot.innerHTML = `
       <div class="card-block">
         <h3>1 · Export for AI enrichment</h3>
-        <p class="muted">${missing.length} of ${list.length} promos have no summary yet. Download a bundle of their titles + official T&amp;C links.</p>
+        <p class="muted">${missing.length} of ${list.length} promos have no summary yet. Download a bundle of their titles + poster images + official T&amp;C links.</p>
         <div class="console-actions">
           <button id="btn-dl-bundle" class="cta"${missing.length ? '' : ' disabled'}>📥 Download AI bundle (.json)</button>
           <button id="btn-copy-prompt" class="cta ghost"${missing.length ? '' : ' disabled'}>📋 Copy prompt to clipboard</button>
         </div>
-        <p class="muted small">${missing.length ? 'Paste the bundle (or the copied prompt) into an AI that can open links, and ask for the JSON reply described in the instructions.' : 'Every promo already has a summary — nothing to export.'}</p>
+        <p class="muted small">${missing.length ? 'Paste the bundle (or the copied prompt) into a vision-capable AI (e.g. Claude, ChatGPT) — it can view each poster image directly, which reads far more reliably than the linked PDF. Ask for the JSON reply described in the instructions.' : 'Every promo already has a summary — nothing to export.'}</p>
         <p id="copy-status" class="muted small" hidden></p>
       </div>
       <div class="card-block">

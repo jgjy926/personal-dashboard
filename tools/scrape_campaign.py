@@ -3,18 +3,20 @@
 scrape_campaign.py — Public Bank card-promo PARSER (no LLM, no API key, $0).
 
 Scrapes the two card-specific listing pages (credit + debit), each a grid of
-`.grid-item` cards — real title, real thumbnail (lazy-loaded via `data-src`),
-real detail link. On the detail page it also finds the bank's own "Terms and
-Conditions — Click here" link, which is usually a **PDF** (occasionally an
-external campaign site) — this site does NOT publish inline T&C text, so there
-is nothing to paste into an LLM for most promos. `tnc_link` is captured
-separately from the promo `link` so the dashboard can point straight at the
-bank's real terms instead of guessing.
+`.grid-item` cards — real title, real detail link, and (from the detail page)
+the bank's own full CAMPAIGN POSTER as `image` — not the small landscape crop
+the listing thumbnail uses, but the actual flyer graphic (`..._wb.jpg`,
+~860x1300-1800px) with the offer, minimum spend, and campaign period printed
+on it. That poster is the real source of truth for what a promo actually
+offers, since this site publishes almost no separate inline T&C text.
 
-For the handful of promos that DO carry real on-page body text, that text is
-still captured to data/campaign_raw/ and folded into campaign_prompt.txt, so
-you can optionally paste it into Claude (or any chat LLM) for a free summary.
-Most cards will simply show "see official T&C" — accurate beats invented.
+`tnc_link` is captured separately (usually a PDF, occasionally an external
+campaign site) — that's the AUTHORITATIVE legal document; the poster is
+marketing copy. Enrichment (writing tnc_summary/period) is therefore best done
+by VIEWING the poster (a human, or a vision-capable AI via the dashboard's
+Card Promos -> Console) rather than trying to parse the PDF. The handful of
+promos that DO carry real on-page body text are still captured to
+data/campaign_raw/ and folded into campaign_prompt.txt as a secondary path.
 
 Usage:
   pip install requests beautifulsoup4
@@ -22,7 +24,7 @@ Usage:
 
 Outputs (into data/):
   campaign_raw/<id>.txt       raw detail-page text per promo (where non-trivial)
-  promotions.draft.json       title/image/link/tnc_link/category, tnc_summary ""
+  promotions.draft.json       title/image(poster)/link/tnc_link/category, tnc_summary ""
   campaign_prompt.txt         paste-ready block for the promos with real body text
 
 Then: python tools/merge_campaign.py   (folds into data/promotions.json, keeping
@@ -113,13 +115,34 @@ def scrape_listing(session, url: str) -> list[dict]:
     return out
 
 
+_ICON_HINT_RE = re.compile(r"icon|logo|floater|favicon", re.I)
+
+
+def _best_poster(soup) -> str:
+    """The listing's `.grid-item` thumbnail (data-src, `..._s.jpg`) is a small,
+    cropped landscape preview. Every detail page also lazy-loads a MUCH larger
+    poster (`..._wb.jpg`, verified ~860x1300-1800px) as the first non-icon
+    `<img class="lazy">` in the page — this is the bank's actual campaign
+    flyer, with the offer, minimum spend, and campaign period printed on it as
+    a designed graphic (confirmed across multiple promos). That's the real
+    "full picture" a user expects, not the small crop, so it's preferred here."""
+    for img in soup.find_all("img", class_="lazy"):
+        src = img.get("data-src") or img.get("src") or ""
+        if not src or _ICON_HINT_RE.search(src) or src.lower().endswith(".svg"):
+            continue
+        return _abs(src)
+    return ""
+
+
 def fetch_detail(session, promo: dict) -> tuple[str, str]:
     """Return (raw_body_text, tnc_link). The bank's terms live behind a
     "Terms and Conditions — Click here" link inside `.content` (usually a PDF,
     sometimes an external campaign site) rather than as inline page text, so
     tnc_link is captured as its own field — that's what the card should point
-    to for the real terms. og:image backfills the thumbnail when the listing
-    card had none."""
+    to for the AUTHORITATIVE legal terms (the poster is marketing copy, not
+    the legal document). The poster image itself replaces the small listing
+    thumbnail whenever the detail page has one (see _best_poster); og:image is
+    a last-resort fallback only if neither is found."""
     try:
         r = session.get(promo["link"], headers=HEADERS, timeout=20)
         r.raise_for_status()
@@ -127,7 +150,10 @@ def fetch_detail(session, promo: dict) -> tuple[str, str]:
         return f"(could not fetch detail page: {e})", ""
     soup = BeautifulSoup(r.text, "html.parser")
 
-    if not promo.get("image"):
+    poster = _best_poster(soup)
+    if poster:
+        promo["image"] = poster
+    elif not promo.get("image"):
         og = soup.find("meta", property="og:image")
         if og and og.get("content"):
             promo["image"] = _abs(og["content"])
@@ -221,7 +247,9 @@ def main() -> int:
             with open(os.path.join(RAW_DIR, f"{p['id']}.txt"), "w", encoding="utf-8") as f:
                 f.write(f"TITLE: {p['title']}\nLINK: {p['link']}\nTNC: {tnc_link}\n\n{raw}")
             prompt_blocks.append(f"### id: {p['id']}\nTITLE: {p['title']}\n{raw[:2000]}\n")
-        tag = "text" if has_body else ("pdf/link only" if tnc_link else "no T&C found")
+        # "poster only" is the normal case (enrich via the Console's vision path);
+        # "+text" means this one ALSO has real inline body text (rare, a bonus).
+        tag = "poster+text" if has_body else ("poster only" if p.get("image") else "no image/T&C found")
         print(f"   • {p['id']}  {p['title'][:55]:<55} [{tag}]")
 
     new_today = sum(1 for p in promos if p["first_seen"] == today)
@@ -246,12 +274,10 @@ def main() -> int:
         )
         with open(os.path.join(DATA, "campaign_prompt.txt"), "w", encoding="utf-8") as f:
             f.write(instruction + "\n".join(prompt_blocks))
-        print(f"\n[scrape] {len(prompt_blocks)}/{len(promos)} promos had real body text -> data/campaign_prompt.txt")
+        print(f"\n[scrape] {len(prompt_blocks)}/{len(promos)} promos also had real inline body text -> data/campaign_prompt.txt")
         print("Optional (free): paste it into Claude for summaries, then merge.")
-    else:
-        print(f"\n[scrape] none of the {len(promos)} promos had usable inline body text — "
-              "this site keeps T&C in linked PDFs. tnc_link is captured per promo instead; "
-              "the dashboard links straight to it.")
+    print(f"[scrape] Every promo's poster image is captured as `image` — enrich via the dashboard's "
+          "Card Promos -> Console (view each poster with a vision-capable AI) for the main path.")
 
     print("[scrape] wrote data/promotions.draft.json" + (", data/campaign_raw/*.txt" if prompt_blocks else ""))
     print("Next: python tools/merge_campaign.py")

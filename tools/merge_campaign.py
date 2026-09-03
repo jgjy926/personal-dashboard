@@ -61,9 +61,10 @@ def main() -> int:
             "today": today,
             "new_today": new_today,
             "count": len(merged),
-            "note": "Live scrape. Most Public Bank promos publish terms only as a linked PDF "
-                    "(tnc_link) — the dashboard links to it directly. Where tnc_summary is set "
-                    "it was written by a human/LLM from that PDF and should still be verified.",
+            "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, "
+                    "minimum spend, and campaign period are printed on it) — where tnc_summary/period "
+                    "are set they were read from that poster by a human or vision-capable AI via the "
+                    "Console. tnc_link is the authoritative PDF/terms page for verification.",
         },
         "promotions": merged,
     }
