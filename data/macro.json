@@ -1,13 +1,11 @@
 {
   "meta": {
-    "generated_at": "2026-09-03T23:58:40+00:00",
+    "generated_at": "2026-09-04T00:06:30+00:00",
     "sample": false,
     "source": "FRED (keyless CSV)",
     "data_note": "Live FRED data. Freshness shows the DATA date, not the fetch date.",
     "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
-    "missing_series": [
-      "JP30Y"
-    ]
+    "missing_series": []
   },
   "snapshot": [
     {
@@ -49,18 +47,18 @@
     {
       "id": "SP500",
       "label": "S&P 500",
-      "value": 7666.6,
+      "value": 7747.71,
       "unit": "",
-      "change": 35.13,
-      "as_of": "2026-09-02",
+      "change": 81.11,
+      "as_of": "2026-09-03",
       "freq": "daily"
     },
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4522.5,
+      "value": 4526.2,
       "unit": "$",
-      "change": 156.2,
+      "change": 159.9,
       "as_of": "2026-09-03",
       "freq": "daily"
     },
@@ -94,11 +92,20 @@
     {
       "id": "JP10Y",
       "label": "Japan 10Y Nominal Yield",
-      "value": 2.67,
+      "value": 3.01,
       "unit": "%",
       "change": 0.02,
-      "as_of": "2026-06-01",
-      "freq": "monthly"
+      "as_of": "2026-09-02",
+      "freq": "daily"
+    },
+    {
+      "id": "JP30Y",
+      "label": "Japan 30Y Nominal Yield",
+      "value": 4.12,
+      "unit": "%",
+      "change": -0.01,
+      "as_of": "2026-09-02",
+      "freq": "daily"
     }
   ],
   "overlay": {
@@ -287,7 +294,7 @@
         4022.9,
         4049.1,
         4431.1,
-        4522.5
+        4526.2
       ],
       "sp500": [
         4605.4,
@@ -349,7 +356,7 @@
         7499.4,
         7489.7,
         7686.1,
-        7666.6
+        7747.7
       ]
     },
     "note": "Real yield / gold / S&P 500 each scaled to its own 0–100 range so co-movement is comparable (min→max of the window, not indexed to the first point — robust to a series like real yield opening the window near/below zero)."

@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generated_at": "2026-09-03T00:00:00+00:00",
+    "generated_at": "2026-09-04T00:00:00+00:00",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "today": "2026-09-03",
-    "new_today": 15,
+    "today": "2026-09-04",
+    "new_today": 0,
     "count": 15,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
