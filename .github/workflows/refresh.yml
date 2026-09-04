@@ -42,6 +42,10 @@ jobs:
       - name: Fetch macro (FRED, keyless)
         run: python tools/fetch_macro.py --years 5
 
+      - name: Fetch US Treasury supply (auctions + buybacks, keyless)
+        continue-on-error: true      # a Treasury outage must not block the deploy
+        run: python tools/fetch_treasury.py
+
       - name: Scrape card promos (best-effort; keep prior feed on failure)
         continue-on-error: true
         run: |
@@ -52,7 +56,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/macro.json data/promotions.json 2>/dev/null || true
+          git add data/macro.json data/promotions.json data/treasury.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "no changes"
           else

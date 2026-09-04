@@ -349,8 +349,72 @@ MODS.macro = async function initMacro() {
       <p class="muted" style="margin-top:6px">${esc(ov.note || '')}</p></div>
     <div class="card-block"><h3>Unemployment vs lagged real yield</h3>${lagChart}
       <p class="muted" style="margin-top:6px">${esc(lag.note || '')}</p></div>
+    <div id="treasury-panel"></div>
     <div class="freshline"><span>${esc((d.meta && d.meta.disclaimer) || '')}</span></div>`;
+
+  renderTreasuryPanel(document.getElementById('treasury-panel'));
 };
+
+/* US Treasury supply panel — upcoming auctions (new issuance / reopenings) and
+ * recent buybacks. Loaded separately from the macro feed so a Treasury outage
+ * can never blank the macro tab: on failure the panel just omits itself. */
+async function renderTreasuryPanel(root) {
+  if (!root) return;
+  let t;
+  try { t = await fetchJSON(CFG.feeds.treasury); }
+  catch { return; }   // silently skip — macro cards/charts above still stand
+
+  const fmtDay = s => {
+    const dt = new Date(s + 'T00:00:00');
+    return Number.isNaN(+dt) ? esc(s)
+      : dt.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+  };
+  const daysAway = s => {
+    const dt = new Date(s + 'T00:00:00');
+    if (Number.isNaN(+dt)) return null;
+    const now = new Date(); now.setHours(0, 0, 0, 0);
+    return Math.round((dt - now) / 86400000);
+  };
+  const bn = v => v == null ? '—' : `$${(v / 1e9).toFixed(2)}B`;
+
+  const auctions = t.upcoming_auctions || [];
+  const buybacks = t.recent_buybacks || [];
+  if (!auctions.length && !buybacks.length) return;
+
+  const auctionRows = auctions.map((a, i) => {
+    const d0 = daysAway(a.auction_date);
+    const when = d0 === 0 ? 'today' : d0 === 1 ? 'tomorrow' : d0 > 1 ? `in ${d0}d` : '';
+    return `<tr${i === 0 ? ' class="next-up"' : ''}>
+      <td class="l"><b>${fmtDay(a.auction_date)}</b>${when ? ` <span class="muted">${when}</span>` : ''}</td>
+      <td class="l">${esc(a.security_type)} · ${esc(a.term)}</td>
+      <td class="l">${fmtDay(a.issue_date)}</td>
+      <td>${a.rate ? Number(a.rate).toFixed(3) + '%' : '<span class="muted">at auction</span>'}</td>
+    </tr>`;
+  }).join('');
+
+  const buybackRows = buybacks.map(b => `<tr>
+      <td class="l"><b>${fmtDay(b.operation_date)}</b></td>
+      <td class="l">${esc(b.operation_type)}</td>
+      <td class="l">${esc(b.maturity_bucket)}</td>
+      <td>${bn(b.par_accepted)}</td>
+    </tr>`).join('');
+
+  root.innerHTML = `
+    ${auctions.length ? `<div class="card-block"><h3>🇺🇸 Upcoming Treasury auctions <span class="muted">— new issuance &amp; reopenings</span></h3>
+      <div class="table-scroll"><table class="data-table">
+        <thead><tr><th class="l">Auction</th><th class="l">Security</th><th class="l">Settles</th><th>Coupon</th></tr></thead>
+        <tbody>${auctionRows}</tbody></table></div>
+      <p class="muted small" style="margin-top:8px">Announced but not yet held. “At auction” = price/yield set on the day (bills and new issues); a coupon shown means it's a reopening of an existing bond.</p>
+    </div>` : ''}
+    ${buybacks.length ? `<div class="card-block"><h3>🔁 Recent Treasury buybacks <span class="muted">— completed operations</span></h3>
+      <div class="table-scroll"><table class="data-table">
+        <thead><tr><th class="l">Operation</th><th class="l">Purpose</th><th class="l">Maturity bucket</th><th>Par accepted</th></tr></thead>
+        <tbody>${buybackRows}</tbody></table></div>
+      <p class="muted small" style="margin-top:8px">⚠ These are operations already <b>completed</b>, not a forward schedule — Treasury only publishes upcoming buyback calendars inside quarterly-refunding PDFs, not as a structured feed, so no “next buyback” date is claimed here.</p>
+    </div>` : ''}
+    <div class="freshline"><span>Sources: <b>TreasuryDirect</b> (auctions) · <b>Treasury Fiscal Data</b> (buybacks)</span>
+      <span>· fetched ${esc((t.meta && t.meta.generated_at || '').slice(0, 10))}</span></div>`;
+}
 
 // ════════════════════════════════ TAB 3 · CAMPAIGN ════════════════════════
 // Full-size image preview: one reusable overlay, shared by every card. The

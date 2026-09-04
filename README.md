@@ -84,12 +84,36 @@ OCR/PDF text alone), so a human or AI review step is deliberate, not a gap.
 `python tools/seed_macro.py` regenerates the sample `data/macro.json`. The Phase-B
 backend must emit this same shape (see below).
 
+### US Treasury supply (`tools/fetch_treasury.py`)
+Fully automated, free, keyless — runs in the same daily workflow:
+
+```bash
+python tools/fetch_treasury.py     # -> data/treasury.json
+```
+
+- **Upcoming auctions** (TreasuryDirect) — genuinely forward-looking: auctions
+  announced but not yet held, with auction date, settlement date, security type/term,
+  and the coupon when it's a reopening. This is the "when's the next new bond" answer.
+- **Recent buybacks** (Treasury Fiscal Data) — operation date, purpose
+  (Liquidity Support / Cash Management), maturity bucket, par accepted.
+
+**Deliberate limitation:** the buyback feed contains **completed operations only**.
+Treasury publishes forward buyback calendars solely inside quarterly-refunding PDFs,
+not as a structured feed, so the panel never claims a "next buyback" date it can't know.
+
+**No Japan equivalent:** MoF's JGB auction calendar exists only as per-month HTML
+sub-pages with no CSV/Excel/PDF data files (checked), so there's no clean feed to
+mirror this. Not scraped rather than half-built on fragile markup.
+
 ## JSON contracts (so Phase-B producers are drop-in)
 
 - **`macro.json`** — `meta`, `snapshot[]` (`{id,label,value,unit,change,as_of,freq}`),
   `overlay{dates[], series{real_yield[],gold[],sp500[]}}`, `lag{lead_months,dates[],unemployment[],real_yield_lead[]}`,
   `regime{label,detail,caveat}`.
 - **`promotions.json`** — `meta` (incl. `today`), `promotions[]` (`{id,title,image,link,category,period,first_seen,tnc_summary}`). `first_seen` = the date a promo first appeared on the page; a promo whose `first_seen` equals `meta.today` is flagged **NEW** and surfaced in the "new today" banner. The Card Promos tab filters by `category`.
+- **`treasury.json`** — `meta{sources,note}`, `upcoming_auctions[]`
+  (`{auction_date,issue_date,maturity_date,security_type,term,rate,cusip}`),
+  `recent_buybacks[]` (`{operation_date,settlement_date,operation_type,maturity_bucket,par_accepted}`).
 - **`klse.json`** — `meta`, `funnel{run_date,stages[]}`, `conviction{run_date,rows[]}`,
   `signals{hit_rate,resolved,total,avg_fwd_ret_20,recent[]}`, `trades{count,win_rate,avg_alpha_pct,recent[]}`, `positions[]`.
 

@@ -1,0 +1,116 @@
+{
+  "meta": {
+    "generated_at": "2026-09-04T00:15:18+00:00",
+    "sources": {
+      "auctions": "TreasuryDirect (upcoming auctions)",
+      "buybacks": "Treasury Fiscal Data (buybacks_operations)"
+    },
+    "note": "Upcoming auctions are genuinely forward-looking (announced, not yet held). Buybacks are COMPLETED operations only — Treasury publishes forward buyback schedules solely inside quarterly-refunding PDFs, not as a structured feed, so no 'next buyback date' is claimed here."
+  },
+  "upcoming_auctions": [
+    {
+      "auction_date": "2026-09-08",
+      "issue_date": "2026-09-10",
+      "maturity_date": "2026-12-10",
+      "security_type": "Bill",
+      "term": "13-Week",
+      "rate": "",
+      "cusip": "912797VG9"
+    },
+    {
+      "auction_date": "2026-09-08",
+      "issue_date": "2026-09-10",
+      "maturity_date": "2027-03-11",
+      "security_type": "Bill",
+      "term": "26-Week",
+      "rate": "",
+      "cusip": "912797WK9"
+    },
+    {
+      "auction_date": "2026-09-08",
+      "issue_date": "2026-09-15",
+      "maturity_date": "2029-09-15",
+      "security_type": "Note",
+      "term": "3-Year",
+      "rate": "",
+      "cusip": "91282CRL7"
+    },
+    {
+      "auction_date": "2026-09-08",
+      "issue_date": "2026-09-10",
+      "maturity_date": "2026-10-22",
+      "security_type": "Bill",
+      "term": "6-Week",
+      "rate": "",
+      "cusip": "912797UL9"
+    },
+    {
+      "auction_date": "2026-09-09",
+      "issue_date": "2026-09-15",
+      "maturity_date": "2036-08-15",
+      "security_type": "Note",
+      "term": "9-Year 11-Month",
+      "rate": "4.625000",
+      "cusip": "91282CRF0"
+    },
+    {
+      "auction_date": "2026-09-10",
+      "issue_date": "2026-09-15",
+      "maturity_date": "2056-08-15",
+      "security_type": "Bond",
+      "term": "29-Year 11-Month",
+      "rate": "5.125000",
+      "cusip": "912810UW6"
+    }
+  ],
+  "recent_buybacks": [
+    {
+      "operation_date": "2026-09-03",
+      "settlement_date": "2026-09-04",
+      "operation_type": "Cash Management",
+      "security_type": "Nominal Coupons",
+      "maturity_bucket": "1Mo to 2Y",
+      "par_accepted": 12500000000.0
+    },
+    {
+      "operation_date": "2026-08-25",
+      "settlement_date": "2026-08-26",
+      "operation_type": "Liquidity Support",
+      "security_type": "Nominal Coupons",
+      "maturity_bucket": "5Y to 7Y",
+      "par_accepted": 1191000000.0
+    },
+    {
+      "operation_date": "2026-08-20",
+      "settlement_date": "2026-08-21",
+      "operation_type": "Liquidity Support",
+      "security_type": "Nominal Coupons",
+      "maturity_bucket": "3Y to 5Y",
+      "par_accepted": 1860000000.0
+    },
+    {
+      "operation_date": "2026-08-18",
+      "settlement_date": "2026-08-19",
+      "operation_type": "Liquidity Support",
+      "security_type": "Nominal Coupons",
+      "maturity_bucket": "20Y to 30Y",
+      "par_accepted": 2000000000.0
+    },
+    {
+      "operation_date": "2026-08-11",
+      "settlement_date": "2026-08-12",
+      "operation_type": "Liquidity Support",
+      "security_type": "Nominal Coupons",
+      "maturity_bucket": "10Y to 20Y",
+      "par_accepted": 2000000000.0
+    },
+    {
+      "operation_date": "2026-08-06",
+      "settlement_date": "2026-08-07",
+      "operation_type": "Liquidity Support",
+      "security_type": "Nominal Coupons",
+      "maturity_bucket": "1Mo to 2Y",
+      "par_accepted": 4000000000.0
+    }
+  ]
+}

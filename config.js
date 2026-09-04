@@ -8,6 +8,7 @@ window.DASH_CONFIG = {
   fxApi: (localStorage.getItem('fx_api') || 'https://fx-dashboard.jgjy926.workers.dev'),
   feeds: {
     macro: 'data/macro.json',
+    treasury: 'data/treasury.json',
     promotions: 'data/promotions.json',
     klse: 'data/klse.json'
   },
