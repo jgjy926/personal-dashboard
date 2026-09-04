@@ -24,6 +24,7 @@ import csv
 import io
 import json
 import os
+import re
 import sys
 import urllib.request
 from datetime import datetime, timezone
@@ -49,17 +50,17 @@ SERIES = {
     "UNRATE":    {"ids": ["UNRATE"],    "label": "Unemployment Rate",     "unit": "%", "freq": "monthly"},
     "DTWEXBGS":  {"ids": ["DTWEXBGS"],  "label": "Dollar Index (broad)",  "unit": "",  "freq": "daily"},
     "CSUSHPISA": {"ids": ["CSUSHPISA"], "label": "Home Price Index",      "unit": "",  "freq": "monthly"},
-    # Japan yields are NOMINAL (Japan's inflation-indexed JGBi market is thin
-    # and not reliably published on FRED, unlike the US TIPS family above).
-    # Multiple id candidates per series are genuinely UNVERIFIED guesses (FRED's
-    # Japan coverage is much thinner than its US Treasury family) tried via the
-    # same safe fallback chain as everything else here — whatever doesn't
-    # resolve shows up honestly in meta.missing_series, never silently
-    # mislabeled as something it isn't.
-    "JP10Y":     {"ids": ["IRLTLT01JPM156N", "IRLTLT01JPQ156N"],
-                  "label": "Japan 10Y Nominal Yield", "unit": "%", "freq": "monthly"},
-    "JP30Y":     {"ids": ["IRLTLT30JPM156N", "IRLTLT30JPQ156N", "JGBS30Y"],
-                  "label": "Japan 30Y Nominal Yield", "unit": "%", "freq": "monthly"},
+    # Japan yields are NOMINAL — Japan's inflation-indexed (JGBi) market is thin
+    # and not published on FRED, so there is no true "Japan TIPS" equivalent to
+    # the US DFII series above; these are ordinary JGB yields, labelled as such.
+    # Primary source is Japan's Ministry of Finance (`mof_tenor`): free, keyless,
+    # daily, authoritative, and it carries every tenor. FRED is only a fallback
+    # for 10Y (IRLTLT01JPM156N, an OECD *monthly* series that runs ~3 months
+    # stale); FRED has no 30Y JGB series at all (verified: all candidates 404).
+    "JP10Y":     {"ids": ["IRLTLT01JPM156N"], "mof_tenor": "10年",
+                  "label": "Japan 10Y Nominal Yield", "unit": "%", "freq": "daily"},
+    "JP30Y":     {"ids": [], "mof_tenor": "30年",
+                  "label": "Japan 30Y Nominal Yield", "unit": "%", "freq": "daily"},
 }
 FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}"
 
@@ -89,6 +90,54 @@ def fetch_yahoo_chart(symbol: str, rng: str = "5y", timeout: int = 30) -> str:
         headers={"User-Agent": "Mozilla/5.0 (macro-dashboard fetcher)", "Accept": "application/json"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return r.read().decode("utf-8", "replace")
+
+
+MOF_JGB_CSV = "https://www.mof.go.jp/jgbs/reference/interest_rate/jgbcm.csv"
+
+
+def fetch_mof_jgb(timeout: int = 30) -> str:
+    """Japan's Ministry of Finance publishes the official JGB yield curve as a
+    free, keyless CSV — every tenor from 1Y to 40Y, updated daily. This is the
+    right source for Japan: FRED carries no 30Y JGB series at all (verified —
+    IRLTLT30JP*/JGBS30Y all 404) and its 10Y proxy is an OECD *monthly* series
+    that runs ~3 months stale, while MoF is daily and authoritative. The file
+    is Shift-JIS encoded and dated in Japanese imperial (Reiwa) era format."""
+    req = urllib.request.Request(MOF_JGB_CSV, headers={
+        "User-Agent": "Mozilla/5.0 (macro-dashboard fetcher)", "Accept": "text/csv,*/*"})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return r.read().decode("shift_jis", errors="replace")
+
+
+_REIWA_RE = re.compile(r"R(\d+)\.(\d+)\.(\d+)")
+
+
+def parse_mof_jgb(text: str, tenor: str) -> list[tuple[str, float]]:
+    """Pull one tenor column (e.g. "10年", "30年") out of the MoF JGB CSV.
+    Layout: a title row, then a header row starting with 基準日 (base date),
+    then daily rows dated like "R8.9.1" = Reiwa 8 (2026) Sep 1. Reiwa year N
+    maps to 2018 + N. Rows whose date doesn't parse (footers/notes) are
+    skipped rather than trusted."""
+    rows = list(csv.reader(io.StringIO(text)))
+    hdr_i = next((i for i, row in enumerate(rows) if row and "基準日" in row[0]), None)
+    if hdr_i is None:
+        return []
+    header = rows[hdr_i]
+    if tenor not in header:
+        return []
+    col = header.index(tenor)
+    out: list[tuple[str, float]] = []
+    for row in rows[hdr_i + 1:]:
+        if not row or len(row) <= col:
+            continue
+        m = _REIWA_RE.match(row[0].strip())
+        if not m:
+            continue
+        era_y, mo, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        try:
+            out.append((f"{2018 + era_y:04d}-{mo:02d}-{d:02d}", float(row[col])))
+        except ValueError:
+            continue
+    return out
 
 
 def parse_yahoo_chart(text: str) -> list[tuple[str, float]]:
@@ -230,9 +279,30 @@ def main() -> int:
     args = ap.parse_args()
 
     raw: dict[str, list[tuple[str, float]]] = {}
+    mof_text: str | None = None       # fetched once, reused for every JGB tenor
     for sid, meta in SERIES.items():
         raw[sid] = []
         errors = []
+
+        # Japan: Ministry of Finance first (daily + authoritative + has every
+        # tenor). Only falls through to the FRED ids below if MoF is unreachable.
+        # NOTE: keep the fetch/parse inside try/except but the logging OUTSIDE
+        # it. The tenor label is Japanese ("10年"), and printing that to a
+        # non-UTF-8 console (Windows cp1252) raises UnicodeEncodeError — if that
+        # happened inside the try, a *logging* failure would silently demote us
+        # to the stale monthly FRED series. Log an ASCII-safe label instead.
+        if meta.get("mof_tenor"):
+            try:
+                if mof_text is None:
+                    mof_text = fetch_mof_jgb()
+                raw[sid] = parse_mof_jgb(mof_text, meta["mof_tenor"])
+            except Exception as e:
+                errors.append(f"MoF: {e}")
+            if raw[sid]:
+                print(f"[fetch_macro] {sid}: {len(raw[sid])} obs "
+                      f"(latest {raw[sid][-1][0]}) (via MoF JGB curve)")
+                continue
+
         for candidate in meta["ids"]:
             try:
                 raw[sid] = parse_fred_csv(fetch_fred_csv(candidate))
