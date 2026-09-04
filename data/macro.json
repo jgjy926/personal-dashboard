@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-04T00:19:28+00:00",
+    "generated_at": "2026-09-04T11:26:31+00:00",
     "sample": false,
     "source": "FRED (keyless CSV)",
     "data_note": "Live FRED data. Freshness shows the DATA date, not the fetch date.",
@@ -65,9 +65,9 @@
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4527.3,
+      "value": 4516.0,
       "unit": "$",
-      "change": 161.0,
+      "change": 149.7,
       "as_of": "2026-09-04",
       "freq": "daily"
     },
@@ -101,19 +101,19 @@
     {
       "id": "JP10Y",
       "label": "Japan 10Y Nominal Yield",
-      "value": 3.01,
+      "value": 2.97,
       "unit": "%",
-      "change": 0.02,
-      "as_of": "2026-09-02",
+      "change": -0.04,
+      "as_of": "2026-09-03",
       "freq": "daily"
     },
     {
       "id": "JP30Y",
       "label": "Japan 30Y Nominal Yield",
-      "value": 4.12,
+      "value": 4.05,
       "unit": "%",
-      "change": -0.01,
-      "as_of": "2026-09-02",
+      "change": -0.07,
+      "as_of": "2026-09-03",
       "freq": "daily"
     }
   ],
@@ -303,7 +303,7 @@
         4022.9,
         4049.1,
         4431.1,
-        4527.3
+        4516.0
       ],
       "sp500": [
         4605.4,
