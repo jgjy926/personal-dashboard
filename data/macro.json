@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-04T00:06:30+00:00",
+    "generated_at": "2026-09-04T00:19:28+00:00",
     "sample": false,
     "source": "FRED (keyless CSV)",
     "data_note": "Live FRED data. Freshness shows the DATA date, not the fetch date.",
@@ -12,6 +12,15 @@
       "id": "DGS10",
       "label": "10Y Nominal Yield",
       "value": 4.79,
+      "unit": "%",
+      "change": 0.0,
+      "as_of": "2026-09-02",
+      "freq": "daily"
+    },
+    {
+      "id": "DGS30",
+      "label": "30Y Nominal Yield",
+      "value": 5.27,
       "unit": "%",
       "change": 0.0,
       "as_of": "2026-09-02",
@@ -56,10 +65,10 @@
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4526.2,
+      "value": 4527.3,
       "unit": "$",
-      "change": 159.9,
-      "as_of": "2026-09-03",
+      "change": 161.0,
+      "as_of": "2026-09-04",
       "freq": "daily"
     },
     {
@@ -294,7 +303,7 @@
         4022.9,
         4049.1,
         4431.1,
-        4526.2
+        4527.3
       ],
       "sp500": [
         4605.4,
