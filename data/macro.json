@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-04T11:26:31+00:00",
+    "generated_at": "2026-09-05T10:42:27+00:00",
     "sample": false,
     "source": "FRED (keyless CSV)",
     "data_note": "Live FRED data. Freshness shows the DATA date, not the fetch date.",
@@ -11,37 +11,37 @@
     {
       "id": "DGS10",
       "label": "10Y Nominal Yield",
-      "value": 4.79,
+      "value": 4.77,
       "unit": "%",
-      "change": 0.0,
-      "as_of": "2026-09-02",
+      "change": -0.02,
+      "as_of": "2026-09-03",
       "freq": "daily"
     },
     {
       "id": "DGS30",
       "label": "30Y Nominal Yield",
-      "value": 5.27,
+      "value": 5.25,
       "unit": "%",
-      "change": 0.0,
-      "as_of": "2026-09-02",
+      "change": -0.02,
+      "as_of": "2026-09-03",
       "freq": "daily"
     },
     {
       "id": "DFII10",
       "label": "Real 10Y Yield (TIPS)",
-      "value": 2.45,
+      "value": 2.42,
       "unit": "%",
-      "change": 0.01,
-      "as_of": "2026-09-02",
+      "change": -0.03,
+      "as_of": "2026-09-03",
       "freq": "daily"
     },
     {
       "id": "DFII30",
       "label": "Real 30Y Yield (TIPS)",
-      "value": 2.98,
+      "value": 2.96,
       "unit": "%",
-      "change": 0.0,
-      "as_of": "2026-09-02",
+      "change": -0.02,
+      "as_of": "2026-09-03",
       "freq": "daily"
     },
     {
@@ -49,25 +49,25 @@
       "label": "Breakeven Inflation",
       "value": 2.35,
       "unit": "%",
-      "change": 0.01,
-      "as_of": "2026-09-03",
+      "change": 0.0,
+      "as_of": "2026-09-04",
       "freq": "daily"
     },
     {
       "id": "SP500",
       "label": "S&P 500",
-      "value": 7747.71,
+      "value": 7718.6,
       "unit": "",
-      "change": 81.11,
-      "as_of": "2026-09-03",
+      "change": -29.11,
+      "as_of": "2026-09-04",
       "freq": "daily"
     },
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4516.0,
+      "value": 4476.6,
       "unit": "$",
-      "change": 149.7,
+      "change": -15.1,
       "as_of": "2026-09-04",
       "freq": "daily"
     },
@@ -76,8 +76,8 @@
       "label": "Unemployment Rate",
       "value": 4.1,
       "unit": "%",
-      "change": -0.1,
-      "as_of": "2026-07-01",
+      "change": 0.0,
+      "as_of": "2026-08-01",
       "freq": "monthly"
     },
     {
@@ -241,7 +241,7 @@
         2.2,
         2.47,
         2.44,
-        2.45
+        2.42
       ],
       "gold": [
         1783.0,
@@ -303,7 +303,7 @@
         4022.9,
         4049.1,
         4431.1,
-        4516.0
+        4476.6
       ],
       "sp500": [
         4605.4,
@@ -365,7 +365,7 @@
         7499.4,
         7489.7,
         7686.1,
-        7747.7
+        7718.6
       ]
     },
     "note": "Real yield / gold / S&P 500 each scaled to its own 0–100 range so co-movement is comparable (min→max of the window, not indexed to the first point — robust to a series like real yield opening the window near/below zero)."
@@ -463,7 +463,7 @@
       4.3,
       4.2,
       4.1,
-      null,
+      4.1,
       null
     ],
     "real_yield_lead": [

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-04T11:26:32+00:00",
+    "generated_at": "2026-09-05T10:42:28+00:00",
     "sources": {
       "auctions": "TreasuryDirect (upcoming auctions)",
       "buybacks": "Treasury Fiscal Data (buybacks_operations)"
@@ -47,6 +47,15 @@
     {
       "auction_date": "2026-09-09",
       "issue_date": "2026-09-15",
+      "maturity_date": "",
+      "security_type": "Bill",
+      "term": "17-Week",
+      "rate": "",
+      "cusip": "912797WP8"
+    },
+    {
+      "auction_date": "2026-09-09",
+      "issue_date": "2026-09-15",
       "maturity_date": "2036-08-15",
       "security_type": "Note",
       "term": "9-Year 11-Month",
@@ -61,6 +70,15 @@
       "term": "29-Year 11-Month",
       "rate": "5.125000",
       "cusip": "912810UW6"
+    },
+    {
+      "auction_date": "2026-09-10",
+      "issue_date": "2026-09-15",
+      "maturity_date": "",
+      "security_type": "Bill",
+      "term": "4-Week",
+      "rate": "",
+      "cusip": "912797VL8"
     }
   ],
   "recent_buybacks": [
