@@ -4,11 +4,22 @@
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-06",
-    "new_today": 0,
+    "new_today": 1,
     "count": 15,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
+    {
+      "title": "Lazada Double Date and Pay Day Sales with PB Mastercard Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/lazada-double-date-and-pay-day-sales-with-pb-mastercard-credit-card/",
+      "image": "https://www.pbebank.com/media/olld0vtj/lazada-double-date-payday_wb.jpg",
+      "id": "0f12f47b3d",
+      "category": "Online",
+      "period": "",
+      "first_seen": "2026-09-06",
+      "tnc_link": "https://www.pbebank.com/media/ms2c4g52/tc_lazada-double-date-payday.pdf",
+      "tnc_summary": ""
+    },
     {
       "title": "RM25 OFF at Lazada with PB Mastercard Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/rm25-off-at-lazada-with-pb-mastercard-credit-card/",
@@ -162,17 +173,6 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/12qlbiml/tc_ecoworld-buyer.pdf",
       "tnc_summary": "Cashback on home purchases: RM200 (downpayment RM10,000-39,999), RM400 (RM40,000-99,999), RM1,000 (RM100,000+); also for 0% instalment (36mo ZIIP/ZPIP). Max one redemption per cardmember. Plus a free 16-piece cutlery set (worth RM119) with qualifying spend at EcoWorld townships."
-    },
-    {
-      "title": "PB Privileges @ 52 Pilates",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-52-pilates/",
-      "image": "https://www.pbebank.com/media/yxmj1lsp/52-pilates_wb.jpg",
-      "id": "089b68f757",
-      "category": "Credit Card",
-      "period": "15 August 2026 - 31 January 2027",
-      "first_seen": "2026-09-03",
-      "tnc_link": "https://www.pbebank.com/media/d2tppzim/tc_52-pilates.pdf",
-      "tnc_summary": "Up to 40% off Pilates Group Package at 52 Pilates using code PBCM. Register and redeem via WhatsApp (+6016-662 2887)."
     }
   ]
 }
