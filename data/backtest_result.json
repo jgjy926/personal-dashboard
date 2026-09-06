@@ -1,0 +1,1567 @@
+{
+  "backtest_id": "bt-20260906185923-cfba43",
+  "created_at": "2026-09-06T19:11:58",
+  "start_date": "1992-01-15",
+  "end_date": "2026-07-15",
+  "model": "rule",
+  "points": 695,
+  "metrics": {
+    "by_horizon": {
+      "3": {
+        "n": 138,
+        "base_rate": 0.0217,
+        "auc": 0.721,
+        "auc_calibrated": 0.3235,
+        "brier": 0.02165,
+        "brier_uncalibrated": 0.05383,
+        "brier_skill": -0.0041,
+        "brier_skill_vs_full_sample": -0.018,
+        "brier_skill_uncalibrated": -1.4966,
+        "mean_climatology": 0.0333,
+        "ece": 0.013,
+        "ece_uncalibrated": 0.0565,
+        "precision": null,
+        "recall": 0.0,
+        "false_positive_rate": 0.0,
+        "false_negative_rate": 1.0,
+        "confusion": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 135,
+          "fn": 3
+        },
+        "calibration_curve": [
+          {
+            "bin_lo": 0.0,
+            "bin_hi": 0.1,
+            "n": 137,
+            "mean_predicted": 0.034,
+            "observed_frequency": 0.0219
+          },
+          {
+            "bin_lo": 0.1,
+            "bin_hi": 0.2,
+            "n": 1,
+            "mean_predicted": 0.139,
+            "observed_frequency": 0.0
+          },
+          {
+            "bin_lo": 0.2,
+            "bin_hi": 0.3,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.3,
+            "bin_hi": 0.4,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.4,
+            "bin_hi": 0.5,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.5,
+            "bin_hi": 0.6,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.6,
+            "bin_hi": 0.7,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.7,
+            "bin_hi": 0.8,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.8,
+            "bin_hi": 0.9,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.9,
+            "bin_hi": 1.0,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          }
+        ],
+        "vintage_true_share": 0.632,
+        "skill_basis_note": "brier_skill is measured against the POINT-IN-TIME climatology -- the base rate a naive forecaster could have quoted at each date from the NBER record then available. brier_skill_vs_full_sample uses the conventional reference, the realised frequency of the whole scored window, which is an oracle: it knows how many recessions 1990-2026 contained and the engine did not. The gap between the two is the cost of not knowing the future base rate, which is not a forecasting error.",
+        "ceiling_note": "Near-zero Brier skill is close to the CEILING on this problem, not a shortfall. With three recessions in the scored window, the best possible single shrinkage chosen WITH hindsight scores about +0.01 to +0.02. The model's value here is its ranking (AUC ~0.70) and its lead time, not squared-error superiority over climatology.",
+        "metric_basis_note": "AUC is computed on the RAW score, Brier/ECE on the CALIBRATED probability. The point-in-time calibrator is refitted at every as-of date, so pooling calibrated values across dates would scramble their ranking and make AUC measure calibrator drift instead of discrimination. auc_calibrated is reported alongside to make that drift visible rather than hidden.",
+        "threshold_note": "Precision/recall use a 0.5 threshold. On a rare event that is a demanding cut -- a model can be genuinely useful and still rarely exceed 50%, so AUC and Brier skill are the primary metrics and these are supporting detail. A null precision means the model never crossed 0.5, so no positive call was made to be right or wrong about."
+      },
+      "6": {
+        "n": 137,
+        "base_rate": 0.0438,
+        "auc": 0.7137,
+        "auc_calibrated": 0.3359,
+        "brier": 0.04307,
+        "brier_uncalibrated": 0.08005,
+        "brier_skill": -0.0041,
+        "brier_skill_vs_full_sample": -0.0285,
+        "brier_skill_uncalibrated": -0.8662,
+        "mean_climatology": 0.0644,
+        "ece": 0.0239,
+        "ece_uncalibrated": 0.0633,
+        "precision": null,
+        "recall": 0.0,
+        "false_positive_rate": 0.0,
+        "false_negative_rate": 1.0,
+        "confusion": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 131,
+          "fn": 6
+        },
+        "calibration_curve": [
+          {
+            "bin_lo": 0.0,
+            "bin_hi": 0.1,
+            "n": 133,
+            "mean_predicted": 0.0648,
+            "observed_frequency": 0.0451
+          },
+          {
+            "bin_lo": 0.1,
+            "bin_hi": 0.2,
+            "n": 2,
+            "mean_predicted": 0.1145,
+            "observed_frequency": 0.0
+          },
+          {
+            "bin_lo": 0.2,
+            "bin_hi": 0.3,
+            "n": 2,
+            "mean_predicted": 0.2095,
+            "observed_frequency": 0.0
+          },
+          {
+            "bin_lo": 0.3,
+            "bin_hi": 0.4,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.4,
+            "bin_hi": 0.5,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.5,
+            "bin_hi": 0.6,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.6,
+            "bin_hi": 0.7,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.7,
+            "bin_hi": 0.8,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.8,
+            "bin_hi": 0.9,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.9,
+            "bin_hi": 1.0,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          }
+        ],
+        "vintage_true_share": 0.6314,
+        "skill_basis_note": "brier_skill is measured against the POINT-IN-TIME climatology -- the base rate a naive forecaster could have quoted at each date from the NBER record then available. brier_skill_vs_full_sample uses the conventional reference, the realised frequency of the whole scored window, which is an oracle: it knows how many recessions 1990-2026 contained and the engine did not. The gap between the two is the cost of not knowing the future base rate, which is not a forecasting error.",
+        "ceiling_note": "Near-zero Brier skill is close to the CEILING on this problem, not a shortfall. With three recessions in the scored window, the best possible single shrinkage chosen WITH hindsight scores about +0.01 to +0.02. The model's value here is its ranking (AUC ~0.70) and its lead time, not squared-error superiority over climatology.",
+        "metric_basis_note": "AUC is computed on the RAW score, Brier/ECE on the CALIBRATED probability. The point-in-time calibrator is refitted at every as-of date, so pooling calibrated values across dates would scramble their ranking and make AUC measure calibrator drift instead of discrimination. auc_calibrated is reported alongside to make that drift visible rather than hidden.",
+        "threshold_note": "Precision/recall use a 0.5 threshold. On a rare event that is a demanding cut -- a model can be genuinely useful and still rarely exceed 50%, so AUC and Brier skill are the primary metrics and these are supporting detail. A null precision means the model never crossed 0.5, so no positive call was made to be right or wrong about."
+      },
+      "9": {
+        "n": 136,
+        "base_rate": 0.0662,
+        "auc": 0.7095,
+        "auc_calibrated": 0.374,
+        "brier": 0.0647,
+        "brier_uncalibrated": 0.09639,
+        "brier_skill": -0.0042,
+        "brier_skill_vs_full_sample": -0.047,
+        "brier_skill_uncalibrated": -0.4961,
+        "mean_climatology": 0.1022,
+        "ece": 0.0471,
+        "ece_uncalibrated": 0.0715,
+        "precision": null,
+        "recall": 0.0,
+        "false_positive_rate": 0.0,
+        "false_negative_rate": 1.0,
+        "confusion": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 127,
+          "fn": 9
+        },
+        "calibration_curve": [
+          {
+            "bin_lo": 0.0,
+            "bin_hi": 0.1,
+            "n": 66,
+            "mean_predicted": 0.094,
+            "observed_frequency": 0.0909
+          },
+          {
+            "bin_lo": 0.1,
+            "bin_hi": 0.2,
+            "n": 66,
+            "mean_predicted": 0.1149,
+            "observed_frequency": 0.0303
+          },
+          {
+            "bin_lo": 0.2,
+            "bin_hi": 0.3,
+            "n": 3,
+            "mean_predicted": 0.2413,
+            "observed_frequency": 0.3333
+          },
+          {
+            "bin_lo": 0.3,
+            "bin_hi": 0.4,
+            "n": 1,
+            "mean_predicted": 0.3348,
+            "observed_frequency": 0.0
+          },
+          {
+            "bin_lo": 0.4,
+            "bin_hi": 0.5,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.5,
+            "bin_hi": 0.6,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.6,
+            "bin_hi": 0.7,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.7,
+            "bin_hi": 0.8,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.8,
+            "bin_hi": 0.9,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.9,
+            "bin_hi": 1.0,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          }
+        ],
+        "vintage_true_share": 0.6308,
+        "skill_basis_note": "brier_skill is measured against the POINT-IN-TIME climatology -- the base rate a naive forecaster could have quoted at each date from the NBER record then available. brier_skill_vs_full_sample uses the conventional reference, the realised frequency of the whole scored window, which is an oracle: it knows how many recessions 1990-2026 contained and the engine did not. The gap between the two is the cost of not knowing the future base rate, which is not a forecasting error.",
+        "ceiling_note": "Near-zero Brier skill is close to the CEILING on this problem, not a shortfall. With three recessions in the scored window, the best possible single shrinkage chosen WITH hindsight scores about +0.01 to +0.02. The model's value here is its ranking (AUC ~0.70) and its lead time, not squared-error superiority over climatology.",
+        "metric_basis_note": "AUC is computed on the RAW score, Brier/ECE on the CALIBRATED probability. The point-in-time calibrator is refitted at every as-of date, so pooling calibrated values across dates would scramble their ranking and make AUC measure calibrator drift instead of discrimination. auc_calibrated is reported alongside to make that drift visible rather than hidden.",
+        "threshold_note": "Precision/recall use a 0.5 threshold. On a rare event that is a demanding cut -- a model can be genuinely useful and still rarely exceed 50%, so AUC and Brier skill are the primary metrics and these are supporting detail. A null precision means the model never crossed 0.5, so no positive call was made to be right or wrong about."
+      },
+      "12": {
+        "n": 135,
+        "base_rate": 0.0889,
+        "auc": 0.6843,
+        "auc_calibrated": 0.333,
+        "brier": 0.08715,
+        "brier_uncalibrated": 0.1128,
+        "brier_skill": -0.009,
+        "brier_skill_vs_full_sample": -0.0761,
+        "brier_skill_uncalibrated": -0.3059,
+        "mean_climatology": 0.1426,
+        "ece": 0.064,
+        "ece_uncalibrated": 0.0869,
+        "precision": null,
+        "recall": 0.0,
+        "false_positive_rate": 0.0,
+        "false_negative_rate": 1.0,
+        "confusion": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 123,
+          "fn": 12
+        },
+        "calibration_curve": [
+          {
+            "bin_lo": 0.0,
+            "bin_hi": 0.1,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.1,
+            "bin_hi": 0.2,
+            "n": 126,
+            "mean_predicted": 0.1442,
+            "observed_frequency": 0.0873
+          },
+          {
+            "bin_lo": 0.2,
+            "bin_hi": 0.3,
+            "n": 7,
+            "mean_predicted": 0.2453,
+            "observed_frequency": 0.1429
+          },
+          {
+            "bin_lo": 0.3,
+            "bin_hi": 0.4,
+            "n": 1,
+            "mean_predicted": 0.3402,
+            "observed_frequency": 0.0
+          },
+          {
+            "bin_lo": 0.4,
+            "bin_hi": 0.5,
+            "n": 1,
+            "mean_predicted": 0.4087,
+            "observed_frequency": 0.0
+          },
+          {
+            "bin_lo": 0.5,
+            "bin_hi": 0.6,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.6,
+            "bin_hi": 0.7,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.7,
+            "bin_hi": 0.8,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.8,
+            "bin_hi": 0.9,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.9,
+            "bin_hi": 1.0,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          }
+        ],
+        "vintage_true_share": 0.6302,
+        "skill_basis_note": "brier_skill is measured against the POINT-IN-TIME climatology -- the base rate a naive forecaster could have quoted at each date from the NBER record then available. brier_skill_vs_full_sample uses the conventional reference, the realised frequency of the whole scored window, which is an oracle: it knows how many recessions 1990-2026 contained and the engine did not. The gap between the two is the cost of not knowing the future base rate, which is not a forecasting error.",
+        "ceiling_note": "Near-zero Brier skill is close to the CEILING on this problem, not a shortfall. With three recessions in the scored window, the best possible single shrinkage chosen WITH hindsight scores about +0.01 to +0.02. The model's value here is its ranking (AUC ~0.70) and its lead time, not squared-error superiority over climatology.",
+        "metric_basis_note": "AUC is computed on the RAW score, Brier/ECE on the CALIBRATED probability. The point-in-time calibrator is refitted at every as-of date, so pooling calibrated values across dates would scramble their ranking and make AUC measure calibrator drift instead of discrimination. auc_calibrated is reported alongside to make that drift visible rather than hidden.",
+        "threshold_note": "Precision/recall use a 0.5 threshold. On a rare event that is a demanding cut -- a model can be genuinely useful and still rarely exceed 50%, so AUC and Brier skill are the primary metrics and these are supporting detail. A null precision means the model never crossed 0.5, so no positive call was made to be right or wrong about."
+      },
+      "18": {
+        "n": 133,
+        "base_rate": 0.1353,
+        "auc": 0.622,
+        "auc_calibrated": 0.4128,
+        "brier": 0.12768,
+        "brier_uncalibrated": 0.13539,
+        "brier_skill": 0.0041,
+        "brier_skill_vs_full_sample": -0.0911,
+        "brier_skill_uncalibrated": -0.0561,
+        "mean_climatology": 0.2127,
+        "ece": 0.1154,
+        "ece_uncalibrated": 0.1059,
+        "precision": null,
+        "recall": 0.0,
+        "false_positive_rate": 0.0,
+        "false_negative_rate": 1.0,
+        "confusion": {
+          "tp": 0,
+          "fp": 0,
+          "tn": 115,
+          "fn": 18
+        },
+        "calibration_curve": [
+          {
+            "bin_lo": 0.0,
+            "bin_hi": 0.1,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.1,
+            "bin_hi": 0.2,
+            "n": 40,
+            "mean_predicted": 0.1873,
+            "observed_frequency": 0.225
+          },
+          {
+            "bin_lo": 0.2,
+            "bin_hi": 0.3,
+            "n": 82,
+            "mean_predicted": 0.2277,
+            "observed_frequency": 0.0732
+          },
+          {
+            "bin_lo": 0.3,
+            "bin_hi": 0.4,
+            "n": 7,
+            "mean_predicted": 0.3507,
+            "observed_frequency": 0.2857
+          },
+          {
+            "bin_lo": 0.4,
+            "bin_hi": 0.5,
+            "n": 4,
+            "mean_predicted": 0.4286,
+            "observed_frequency": 0.25
+          },
+          {
+            "bin_lo": 0.5,
+            "bin_hi": 0.6,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.6,
+            "bin_hi": 0.7,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.7,
+            "bin_hi": 0.8,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.8,
+            "bin_hi": 0.9,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          },
+          {
+            "bin_lo": 0.9,
+            "bin_hi": 1.0,
+            "n": 0,
+            "mean_predicted": null,
+            "observed_frequency": null
+          }
+        ],
+        "vintage_true_share": 0.6289,
+        "skill_basis_note": "brier_skill is measured against the POINT-IN-TIME climatology -- the base rate a naive forecaster could have quoted at each date from the NBER record then available. brier_skill_vs_full_sample uses the conventional reference, the realised frequency of the whole scored window, which is an oracle: it knows how many recessions 1990-2026 contained and the engine did not. The gap between the two is the cost of not knowing the future base rate, which is not a forecasting error.",
+        "ceiling_note": "Near-zero Brier skill is close to the CEILING on this problem, not a shortfall. With three recessions in the scored window, the best possible single shrinkage chosen WITH hindsight scores about +0.01 to +0.02. The model's value here is its ranking (AUC ~0.70) and its lead time, not squared-error superiority over climatology.",
+        "metric_basis_note": "AUC is computed on the RAW score, Brier/ECE on the CALIBRATED probability. The point-in-time calibrator is refitted at every as-of date, so pooling calibrated values across dates would scramble their ranking and make AUC measure calibrator drift instead of discrimination. auc_calibrated is reported alongside to make that drift visible rather than hidden.",
+        "threshold_note": "Precision/recall use a 0.5 threshold. On a rare event that is a demanding cut -- a model can be genuinely useful and still rarely exceed 50%, so AUC and Brier skill are the primary metrics and these are supporting detail. A null precision means the model never crossed 0.5, so no positive call was made to be right or wrong about."
+      }
+    },
+    "model": "rule",
+    "lead_time": {
+      "threshold": 0.1778,
+      "base_rate": 0.0889,
+      "multiple": 2.0,
+      "episodes": [
+        {
+          "recession_start": "2001-04-01",
+          "first_signal": "2001-01-15",
+          "lead_months": 2.5,
+          "score_at_signal": 0.2535,
+          "probability_at_signal": 0.13056
+        },
+        {
+          "recession_start": "2008-01-01",
+          "first_signal": "2006-07-15",
+          "lead_months": 17.6,
+          "score_at_signal": 0.356,
+          "probability_at_signal": 0.1559
+        },
+        {
+          "recession_start": "2020-03-01",
+          "first_signal": "2019-10-15",
+          "lead_months": 4.5,
+          "score_at_signal": 0.196,
+          "probability_at_signal": 0.12848
+        }
+      ],
+      "detected": 3,
+      "missed": 0,
+      "median_months": 4.5,
+      "note": "Measured on the RAW 12-month score (not the calibrated probability, whose mapping is refitted at every as-of date), triggering at 2x the realised base rate of 8.9% = 17.8%, and looking back at most 24 months so a leftover signal from the prior cycle is not credited to this recession."
+    },
+    "vintage_coverage": {
+      "points": 695,
+      "fully_vintage_true_points": 0,
+      "vintage_true_share": 0.6326,
+      "series_by_tier": {},
+      "model_feature_tiers": {
+        "T10Y3M": "final",
+        "T10Y2Y": "final",
+        "BAA10Y": "final",
+        "AAA10Y": "final",
+        "ICSA": "final",
+        "CCSA": "final",
+        "TEMPHELPS": "alfred",
+        "PERMIT": "alfred",
+        "HSN1F": "alfred",
+        "NEWORDER": "alfred",
+        "ISRATIO": "lag",
+        "UMCSENT": "lag",
+        "ALTSALES": "lag",
+        "NFCI": "lag"
+      },
+      "lag_adjusted_model_features": [
+        "ALTSALES",
+        "ISRATIO",
+        "NFCI",
+        "UMCSENT"
+      ],
+      "leaks_detected": 0,
+      "note": "vintage_true is judged over the model's OWN INPUTS, not all 82 catalogue series: a point is vintage-true when every feature the forecast consumed reproduces revisions correctly (tier A real ALFRED vintages, or tier B never-revised market data). These model features are tier C -- publication timing is respected but revisions are NOT reproduced, so results are optimistic by an unknown margin: ALTSALES, ISRATIO, NFCI, UMCSENT. ALFRED holds no vintages before roughly 1997-2000 for most series, so the earliest as-of dates are necessarily tier C regardless."
+    },
+    "sanity": [
+      "h=3m Brier skill -0.004 is at the practical ceiling: indistinguishable from climatology on squared error, which is expected with three recessions in the window. The usable signal is in the ranking (AUC 0.721) and lead time.",
+      "h=3m calibration is doing real work: Brier skill improves from -1.497 raw to -0.004 calibrated.",
+      "h=6m Brier skill -0.004 is at the practical ceiling: indistinguishable from climatology on squared error, which is expected with three recessions in the window. The usable signal is in the ranking (AUC 0.7137) and lead time.",
+      "h=6m calibration is doing real work: Brier skill improves from -0.866 raw to -0.004 calibrated.",
+      "h=9m Brier skill -0.004 is at the practical ceiling: indistinguishable from climatology on squared error, which is expected with three recessions in the window. The usable signal is in the ranking (AUC 0.7095) and lead time.",
+      "h=9m calibration is doing real work: Brier skill improves from -0.496 raw to -0.004 calibrated.",
+      "h=12m Brier skill -0.009 is at the practical ceiling: indistinguishable from climatology on squared error, which is expected with three recessions in the window. The usable signal is in the ranking (AUC 0.6843) and lead time.",
+      "h=12m calibration is doing real work: Brier skill improves from -0.306 raw to -0.009 calibrated.",
+      "h=18m Brier skill +0.004 is at the practical ceiling: indistinguishable from climatology on squared error, which is expected with three recessions in the window. The usable signal is in the ranking (AUC 0.622) and lead time.",
+      "h=18m calibration is doing real work: Brier skill improves from -0.056 raw to 0.004 calibrated."
+    ]
+  },
+  "probability_history": [
+    {
+      "date": "1992-01-15",
+      "probability": 0.18651,
+      "score": 0.17889,
+      "climatology": 0.18651,
+      "actual": 0
+    },
+    {
+      "date": "1992-04-15",
+      "probability": 0.18431,
+      "score": 0.09233,
+      "climatology": 0.18431,
+      "actual": 0
+    },
+    {
+      "date": "1992-07-15",
+      "probability": 0.18217,
+      "score": 0.13191,
+      "climatology": 0.18217,
+      "actual": 0
+    },
+    {
+      "date": "1992-10-15",
+      "probability": 0.18008,
+      "score": 0.11155,
+      "climatology": 0.18008,
+      "actual": 0
+    },
+    {
+      "date": "1993-01-15",
+      "probability": 0.17803,
+      "score": 0.0735,
+      "climatology": 0.17803,
+      "actual": 0
+    },
+    {
+      "date": "1993-04-15",
+      "probability": 0.17603,
+      "score": 0.07985,
+      "climatology": 0.17603,
+      "actual": 0
+    },
+    {
+      "date": "1993-07-15",
+      "probability": 0.17407,
+      "score": 0.07474,
+      "climatology": 0.17407,
+      "actual": 0
+    },
+    {
+      "date": "1993-10-15",
+      "probability": 0.17216,
+      "score": 0.07992,
+      "climatology": 0.17216,
+      "actual": 0
+    },
+    {
+      "date": "1994-01-15",
+      "probability": 0.17029,
+      "score": 0.07941,
+      "climatology": 0.17029,
+      "actual": 0
+    },
+    {
+      "date": "1994-04-15",
+      "probability": 0.16846,
+      "score": 0.07976,
+      "climatology": 0.16846,
+      "actual": 0
+    },
+    {
+      "date": "1994-07-15",
+      "probability": 0.16667,
+      "score": 0.08787,
+      "climatology": 0.16667,
+      "actual": 0
+    },
+    {
+      "date": "1994-10-15",
+      "probability": 0.16491,
+      "score": 0.10344,
+      "climatology": 0.16491,
+      "actual": 0
+    },
+    {
+      "date": "1995-01-15",
+      "probability": 0.16319,
+      "score": 0.14038,
+      "climatology": 0.16319,
+      "actual": 0
+    },
+    {
+      "date": "1995-04-15",
+      "probability": 0.16151,
+      "score": 0.21546,
+      "climatology": 0.16151,
+      "actual": 0
+    },
+    {
+      "date": "1995-07-15",
+      "probability": 0.15986,
+      "score": 0.23378,
+      "climatology": 0.15986,
+      "actual": 0
+    },
+    {
+      "date": "1995-10-15",
+      "probability": 0.15825,
+      "score": 0.12948,
+      "climatology": 0.15825,
+      "actual": 0
+    },
+    {
+      "date": "1996-01-15",
+      "probability": 0.15667,
+      "score": 0.1883,
+      "climatology": 0.15667,
+      "actual": 0
+    },
+    {
+      "date": "1996-04-15",
+      "probability": 0.15512,
+      "score": 0.13051,
+      "climatology": 0.15512,
+      "actual": 0
+    },
+    {
+      "date": "1996-07-15",
+      "probability": 0.15359,
+      "score": 0.07652,
+      "climatology": 0.15359,
+      "actual": 0
+    },
+    {
+      "date": "1996-10-15",
+      "probability": 0.1521,
+      "score": 0.09803,
+      "climatology": 0.1521,
+      "actual": 0
+    },
+    {
+      "date": "1997-01-15",
+      "probability": 0.15064,
+      "score": 0.10728,
+      "climatology": 0.15064,
+      "actual": 0
+    },
+    {
+      "date": "1997-04-15",
+      "probability": 0.14921,
+      "score": 0.06457,
+      "climatology": 0.14921,
+      "actual": 0
+    },
+    {
+      "date": "1997-07-15",
+      "probability": 0.1478,
+      "score": 0.07491,
+      "climatology": 0.1478,
+      "actual": 0
+    },
+    {
+      "date": "1997-10-15",
+      "probability": 0.14642,
+      "score": 0.06991,
+      "climatology": 0.14642,
+      "actual": 0
+    },
+    {
+      "date": "1998-01-15",
+      "probability": 0.14506,
+      "score": 0.06042,
+      "climatology": 0.14506,
+      "actual": 0
+    },
+    {
+      "date": "1998-04-15",
+      "probability": 0.14373,
+      "score": 0.06009,
+      "climatology": 0.14373,
+      "actual": 0
+    },
+    {
+      "date": "1998-07-15",
+      "probability": 0.14242,
+      "score": 0.07869,
+      "climatology": 0.14242,
+      "actual": 0
+    },
+    {
+      "date": "1998-10-15",
+      "probability": 0.14114,
+      "score": 0.06477,
+      "climatology": 0.14114,
+      "actual": 0
+    },
+    {
+      "date": "1999-01-15",
+      "probability": 0.13988,
+      "score": 0.08843,
+      "climatology": 0.13988,
+      "actual": 0
+    },
+    {
+      "date": "1999-04-15",
+      "probability": 0.13864,
+      "score": 0.06389,
+      "climatology": 0.13864,
+      "actual": 0
+    },
+    {
+      "date": "1999-07-15",
+      "probability": 0.13743,
+      "score": 0.0553,
+      "climatology": 0.13743,
+      "actual": 0
+    },
+    {
+      "date": "1999-10-15",
+      "probability": 0.13623,
+      "score": 0.07841,
+      "climatology": 0.13623,
+      "actual": 0
+    },
+    {
+      "date": "2000-01-15",
+      "probability": 0.13506,
+      "score": 0.06031,
+      "climatology": 0.13506,
+      "actual": 0
+    },
+    {
+      "date": "2000-04-15",
+      "probability": 0.1339,
+      "score": 0.0603,
+      "climatology": 0.1339,
+      "actual": 1
+    },
+    {
+      "date": "2000-07-15",
+      "probability": 0.12856,
+      "score": 0.08168,
+      "climatology": 0.13277,
+      "actual": 1
+    },
+    {
+      "date": "2000-10-15",
+      "probability": 0.12836,
+      "score": 0.07405,
+      "climatology": 0.13165,
+      "actual": 1
+    },
+    {
+      "date": "2001-01-15",
+      "probability": 0.13056,
+      "score": 0.2535,
+      "climatology": 0.13056,
+      "actual": 1
+    },
+    {
+      "date": "2001-04-15",
+      "probability": 0.206,
+      "score": 0.46521,
+      "climatology": 0.12948,
+      "actual": 0
+    },
+    {
+      "date": "2001-07-15",
+      "probability": 0.14889,
+      "score": 0.30971,
+      "climatology": 0.13661,
+      "actual": 0
+    },
+    {
+      "date": "2001-10-15",
+      "probability": 0.16314,
+      "score": 0.51679,
+      "climatology": 0.14363,
+      "actual": 0
+    },
+    {
+      "date": "2002-01-15",
+      "probability": 0.15053,
+      "score": 0.14996,
+      "climatology": 0.15054,
+      "actual": 0
+    },
+    {
+      "date": "2002-04-15",
+      "probability": 0.15964,
+      "score": 0.25144,
+      "climatology": 0.15733,
+      "actual": 0
+    },
+    {
+      "date": "2002-07-15",
+      "probability": 0.15544,
+      "score": 0.09231,
+      "climatology": 0.15608,
+      "actual": 0
+    },
+    {
+      "date": "2002-10-15",
+      "probability": 0.15356,
+      "score": 0.06134,
+      "climatology": 0.15486,
+      "actual": 0
+    },
+    {
+      "date": "2003-01-15",
+      "probability": 0.15167,
+      "score": 0.05778,
+      "climatology": 0.15365,
+      "actual": 0
+    },
+    {
+      "date": "2003-04-15",
+      "probability": 0.14993,
+      "score": 0.05984,
+      "climatology": 0.15245,
+      "actual": 0
+    },
+    {
+      "date": "2003-07-15",
+      "probability": 0.14812,
+      "score": 0.05659,
+      "climatology": 0.15128,
+      "actual": 0
+    },
+    {
+      "date": "2003-10-15",
+      "probability": 0.14634,
+      "score": 0.05384,
+      "climatology": 0.15013,
+      "actual": 0
+    },
+    {
+      "date": "2004-01-15",
+      "probability": 0.14467,
+      "score": 0.05345,
+      "climatology": 0.14899,
+      "actual": 0
+    },
+    {
+      "date": "2004-04-15",
+      "probability": 0.14306,
+      "score": 0.05305,
+      "climatology": 0.14787,
+      "actual": 0
+    },
+    {
+      "date": "2004-07-15",
+      "probability": 0.1415,
+      "score": 0.05267,
+      "climatology": 0.14677,
+      "actual": 0
+    },
+    {
+      "date": "2004-10-15",
+      "probability": 0.14001,
+      "score": 0.05255,
+      "climatology": 0.14568,
+      "actual": 0
+    },
+    {
+      "date": "2005-01-15",
+      "probability": 0.13853,
+      "score": 0.05191,
+      "climatology": 0.14461,
+      "actual": 0
+    },
+    {
+      "date": "2005-04-15",
+      "probability": 0.13734,
+      "score": 0.05474,
+      "climatology": 0.14355,
+      "actual": 0
+    },
+    {
+      "date": "2005-07-15",
+      "probability": 0.13616,
+      "score": 0.05671,
+      "climatology": 0.14251,
+      "actual": 0
+    },
+    {
+      "date": "2005-10-15",
+      "probability": 0.13803,
+      "score": 0.09695,
+      "climatology": 0.14149,
+      "actual": 0
+    },
+    {
+      "date": "2006-01-15",
+      "probability": 0.13762,
+      "score": 0.10405,
+      "climatology": 0.14048,
+      "actual": 0
+    },
+    {
+      "date": "2006-04-15",
+      "probability": 0.13482,
+      "score": 0.07997,
+      "climatology": 0.13948,
+      "actual": 0
+    },
+    {
+      "date": "2006-07-15",
+      "probability": 0.1559,
+      "score": 0.35596,
+      "climatology": 0.1385,
+      "actual": 0
+    },
+    {
+      "date": "2006-10-15",
+      "probability": 0.15036,
+      "score": 0.3794,
+      "climatology": 0.13753,
+      "actual": 0
+    },
+    {
+      "date": "2007-01-15",
+      "probability": 0.14096,
+      "score": 0.29373,
+      "climatology": 0.13657,
+      "actual": 1
+    },
+    {
+      "date": "2007-04-15",
+      "probability": 0.17227,
+      "score": 0.4714,
+      "climatology": 0.13563,
+      "actual": 1
+    },
+    {
+      "date": "2007-07-15",
+      "probability": 0.18127,
+      "score": 0.31007,
+      "climatology": 0.1347,
+      "actual": 1
+    },
+    {
+      "date": "2007-10-15",
+      "probability": 0.28696,
+      "score": 0.55169,
+      "climatology": 0.13379,
+      "actual": 1
+    },
+    {
+      "date": "2008-01-15",
+      "probability": 0.4087,
+      "score": 0.68451,
+      "climatology": 0.13288,
+      "actual": 0
+    },
+    {
+      "date": "2008-04-15",
+      "probability": 0.34017,
+      "score": 0.69725,
+      "climatology": 0.1387,
+      "actual": 0
+    },
+    {
+      "date": "2008-07-15",
+      "probability": 0.29271,
+      "score": 0.69926,
+      "climatology": 0.14444,
+      "actual": 0
+    },
+    {
+      "date": "2008-10-15",
+      "probability": 0.26278,
+      "score": 0.70124,
+      "climatology": 0.15011,
+      "actual": 0
+    },
+    {
+      "date": "2009-01-15",
+      "probability": 0.24283,
+      "score": 0.7032,
+      "climatology": 0.1557,
+      "actual": 0
+    },
+    {
+      "date": "2009-04-15",
+      "probability": 0.22149,
+      "score": 0.70284,
+      "climatology": 0.15468,
+      "actual": 0
+    },
+    {
+      "date": "2009-07-15",
+      "probability": 0.20468,
+      "score": 0.70249,
+      "climatology": 0.15368,
+      "actual": 0
+    },
+    {
+      "date": "2009-10-15",
+      "probability": 0.18886,
+      "score": 0.67044,
+      "climatology": 0.15269,
+      "actual": 0
+    },
+    {
+      "date": "2010-01-15",
+      "probability": 0.14735,
+      "score": 0.06844,
+      "climatology": 0.15171,
+      "actual": 0
+    },
+    {
+      "date": "2010-04-15",
+      "probability": 0.14551,
+      "score": 0.05406,
+      "climatology": 0.15074,
+      "actual": 0
+    },
+    {
+      "date": "2010-07-15",
+      "probability": 0.14441,
+      "score": 0.05373,
+      "climatology": 0.14979,
+      "actual": 0
+    },
+    {
+      "date": "2010-10-15",
+      "probability": 0.15022,
+      "score": 0.17262,
+      "climatology": 0.14885,
+      "actual": 0
+    },
+    {
+      "date": "2011-01-15",
+      "probability": 0.14297,
+      "score": 0.06169,
+      "climatology": 0.14792,
+      "actual": 0
+    },
+    {
+      "date": "2011-04-15",
+      "probability": 0.14188,
+      "score": 0.06022,
+      "climatology": 0.147,
+      "actual": 0
+    },
+    {
+      "date": "2011-07-15",
+      "probability": 0.1418,
+      "score": 0.07537,
+      "climatology": 0.14609,
+      "actual": 0
+    },
+    {
+      "date": "2011-10-15",
+      "probability": 0.14486,
+      "score": 0.13975,
+      "climatology": 0.14519,
+      "actual": 0
+    },
+    {
+      "date": "2012-01-15",
+      "probability": 0.14085,
+      "score": 0.08851,
+      "climatology": 0.14431,
+      "actual": 0
+    },
+    {
+      "date": "2012-04-15",
+      "probability": 0.13815,
+      "score": 0.05945,
+      "climatology": 0.14343,
+      "actual": 0
+    },
+    {
+      "date": "2012-07-15",
+      "probability": 0.13772,
+      "score": 0.06729,
+      "climatology": 0.14257,
+      "actual": 0
+    },
+    {
+      "date": "2012-10-15",
+      "probability": 0.13609,
+      "score": 0.05609,
+      "climatology": 0.14172,
+      "actual": 0
+    },
+    {
+      "date": "2013-01-15",
+      "probability": 0.1353,
+      "score": 0.0578,
+      "climatology": 0.14087,
+      "actual": 0
+    },
+    {
+      "date": "2013-04-15",
+      "probability": 0.13465,
+      "score": 0.0614,
+      "climatology": 0.14004,
+      "actual": 0
+    },
+    {
+      "date": "2013-07-15",
+      "probability": 0.13299,
+      "score": 0.05003,
+      "climatology": 0.13922,
+      "actual": 0
+    },
+    {
+      "date": "2013-10-15",
+      "probability": 0.13218,
+      "score": 0.05107,
+      "climatology": 0.1384,
+      "actual": 0
+    },
+    {
+      "date": "2014-01-15",
+      "probability": 0.13122,
+      "score": 0.04979,
+      "climatology": 0.1376,
+      "actual": 0
+    },
+    {
+      "date": "2014-04-15",
+      "probability": 0.13059,
+      "score": 0.05277,
+      "climatology": 0.1368,
+      "actual": 0
+    },
+    {
+      "date": "2014-07-15",
+      "probability": 0.12971,
+      "score": 0.05212,
+      "climatology": 0.13602,
+      "actual": 0
+    },
+    {
+      "date": "2014-10-15",
+      "probability": 0.12871,
+      "score": 0.04981,
+      "climatology": 0.13524,
+      "actual": 0
+    },
+    {
+      "date": "2015-01-15",
+      "probability": 0.12861,
+      "score": 0.05906,
+      "climatology": 0.13447,
+      "actual": 0
+    },
+    {
+      "date": "2015-04-15",
+      "probability": 0.12802,
+      "score": 0.06138,
+      "climatology": 0.13371,
+      "actual": 0
+    },
+    {
+      "date": "2015-07-15",
+      "probability": 0.12722,
+      "score": 0.06095,
+      "climatology": 0.13296,
+      "actual": 0
+    },
+    {
+      "date": "2015-10-15",
+      "probability": 0.12974,
+      "score": 0.10152,
+      "climatology": 0.13222,
+      "actual": 0
+    },
+    {
+      "date": "2016-01-15",
+      "probability": 0.13277,
+      "score": 0.14737,
+      "climatology": 0.13148,
+      "actual": 0
+    },
+    {
+      "date": "2016-04-15",
+      "probability": 0.14043,
+      "score": 0.25102,
+      "climatology": 0.13076,
+      "actual": 0
+    },
+    {
+      "date": "2016-07-15",
+      "probability": 0.14113,
+      "score": 0.27267,
+      "climatology": 0.13004,
+      "actual": 0
+    },
+    {
+      "date": "2016-10-15",
+      "probability": 0.13377,
+      "score": 0.18894,
+      "climatology": 0.12933,
+      "actual": 0
+    },
+    {
+      "date": "2017-01-15",
+      "probability": 0.12515,
+      "score": 0.08126,
+      "climatology": 0.12862,
+      "actual": 0
+    },
+    {
+      "date": "2017-04-15",
+      "probability": 0.12409,
+      "score": 0.07604,
+      "climatology": 0.12793,
+      "actual": 0
+    },
+    {
+      "date": "2017-07-15",
+      "probability": 0.12334,
+      "score": 0.07496,
+      "climatology": 0.12724,
+      "actual": 0
+    },
+    {
+      "date": "2017-10-15",
+      "probability": 0.12371,
+      "score": 0.08865,
+      "climatology": 0.12656,
+      "actual": 0
+    },
+    {
+      "date": "2018-01-15",
+      "probability": 0.12081,
+      "score": 0.05866,
+      "climatology": 0.12589,
+      "actual": 0
+    },
+    {
+      "date": "2018-04-15",
+      "probability": 0.12063,
+      "score": 0.0652,
+      "climatology": 0.12522,
+      "actual": 0
+    },
+    {
+      "date": "2018-07-15",
+      "probability": 0.11917,
+      "score": 0.05468,
+      "climatology": 0.12456,
+      "actual": 0
+    },
+    {
+      "date": "2018-10-15",
+      "probability": 0.11839,
+      "score": 0.05313,
+      "climatology": 0.12391,
+      "actual": 0
+    },
+    {
+      "date": "2019-01-15",
+      "probability": 0.1243,
+      "score": 0.13643,
+      "climatology": 0.12326,
+      "actual": 0
+    },
+    {
+      "date": "2019-04-15",
+      "probability": 0.12365,
+      "score": 0.13573,
+      "climatology": 0.12263,
+      "actual": 1
+    },
+    {
+      "date": "2019-07-15",
+      "probability": 0.12639,
+      "score": 0.17397,
+      "climatology": 0.12199,
+      "actual": 1
+    },
+    {
+      "date": "2019-10-15",
+      "probability": 0.12848,
+      "score": 0.19595,
+      "climatology": 0.12137,
+      "actual": 1
+    },
+    {
+      "date": "2020-01-15",
+      "probability": 0.11907,
+      "score": 0.1054,
+      "climatology": 0.12075,
+      "actual": 1
+    },
+    {
+      "date": "2020-04-15",
+      "probability": 0.18165,
+      "score": 0.66148,
+      "climatology": 0.12183,
+      "actual": 0
+    },
+    {
+      "date": "2020-07-15",
+      "probability": 0.17855,
+      "score": 0.69175,
+      "climatology": 0.12626,
+      "actual": 0
+    },
+    {
+      "date": "2020-10-15",
+      "probability": 0.16737,
+      "score": 0.61835,
+      "climatology": 0.13065,
+      "actual": 0
+    },
+    {
+      "date": "2021-01-15",
+      "probability": 0.14629,
+      "score": 0.31504,
+      "climatology": 0.135,
+      "actual": 0
+    },
+    {
+      "date": "2021-04-15",
+      "probability": 0.13257,
+      "score": 0.05178,
+      "climatology": 0.13765,
+      "actual": 0
+    },
+    {
+      "date": "2021-07-15",
+      "probability": 0.13165,
+      "score": 0.04924,
+      "climatology": 0.13696,
+      "actual": 0
+    },
+    {
+      "date": "2021-10-15",
+      "probability": 0.13242,
+      "score": 0.07387,
+      "climatology": 0.13629,
+      "actual": 0
+    },
+    {
+      "date": "2022-01-15",
+      "probability": 0.13386,
+      "score": 0.10767,
+      "climatology": 0.13562,
+      "actual": 0
+    },
+    {
+      "date": "2022-04-15",
+      "probability": 0.13378,
+      "score": 0.1163,
+      "climatology": 0.13496,
+      "actual": 0
+    },
+    {
+      "date": "2022-07-15",
+      "probability": 0.13852,
+      "score": 0.20064,
+      "climatology": 0.1343,
+      "actual": 0
+    },
+    {
+      "date": "2022-10-15",
+      "probability": 0.13721,
+      "score": 0.19077,
+      "climatology": 0.13366,
+      "actual": 0
+    },
+    {
+      "date": "2023-01-15",
+      "probability": 0.1417,
+      "score": 0.27488,
+      "climatology": 0.13301,
+      "actual": 0
+    },
+    {
+      "date": "2023-04-15",
+      "probability": 0.14807,
+      "score": 0.40101,
+      "climatology": 0.13238,
+      "actual": 0
+    },
+    {
+      "date": "2023-07-15",
+      "probability": 0.13922,
+      "score": 0.27285,
+      "climatology": 0.13175,
+      "actual": 0
+    },
+    {
+      "date": "2023-10-15",
+      "probability": 0.13411,
+      "score": 0.19043,
+      "climatology": 0.13112,
+      "actual": 0
+    },
+    {
+      "date": "2024-01-15",
+      "probability": 0.13279,
+      "score": 0.17694,
+      "climatology": 0.1305,
+      "actual": 0
+    },
+    {
+      "date": "2024-04-15",
+      "probability": 0.13165,
+      "score": 0.16616,
+      "climatology": 0.12989,
+      "actual": 0
+    },
+    {
+      "date": "2024-07-15",
+      "probability": 0.1347,
+      "score": 0.2422,
+      "climatology": 0.12928,
+      "actual": 0
+    },
+    {
+      "date": "2024-10-15",
+      "probability": 0.1318,
+      "score": 0.19642,
+      "climatology": 0.12868,
+      "actual": 0
+    },
+    {
+      "date": "2025-01-15",
+      "probability": 0.12836,
+      "score": 0.13423,
+      "climatology": 0.12809,
+      "actual": 0
+    },
+    {
+      "date": "2025-04-15",
+      "probability": 0.12977,
+      "score": 0.17821,
+      "climatology": 0.1275,
+      "actual": 0
+    },
+    {
+      "date": "2025-07-15",
+      "probability": 0.12886,
+      "score": 0.17127,
+      "climatology": 0.12691,
+      "actual": 0
+    },
+    {
+      "date": "2025-10-15",
+      "probability": 0.12695,
+      "score": 0.14054,
+      "climatology": 0.12633,
+      "actual": null
+    },
+    {
+      "date": "2026-01-15",
+      "probability": 0.1267,
+      "score": 0.14741,
+      "climatology": 0.12576,
+      "actual": null
+    },
+    {
+      "date": "2026-04-15",
+      "probability": 0.12631,
+      "score": 0.15098,
+      "climatology": 0.12519,
+      "actual": null
+    },
+    {
+      "date": "2026-07-15",
+      "probability": 0.12379,
+      "score": 0.10538,
+      "climatology": 0.12462,
+      "actual": null
+    }
+  ]
+}

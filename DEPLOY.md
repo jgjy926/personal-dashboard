@@ -6,13 +6,50 @@ hosting those files somewhere public — with **two rules**:
 1. **The data fetchers must run where egress is clean** (GitHub Actions runners, or
    your own machine). A restricted sandbox can't reach FRED/Public Bank; GitHub
    Actions can. The included workflow does this for you.
-2. **KLSE stays private.** `data/klse.json` is git-ignored, so it is never committed
-   or published. Online, the KLSE tab shows a locked hand-off to your access-keyed
-   AlphaSpike tunnel (see `KLSE_Monitor/deploy/ONLINE_SETUP.md`); the rich snapshot
-   only appears when you run the dashboard locally (where the file exists).
+2. **Nothing private is published.** The KLSE Monitor tab was removed when the Macro
+   tab became the full forecasting engine, so there is no longer a private trading
+   feed in this repo at all. The Macro Engine's `data/macro_engine.json` is public
+   economic data plus this model's own output — safe to publish.
 
 FX is live from your Worker; Macro and Card Promos become **real** as soon as the
 workflow runs (FRED works from Actions).
+
+---
+
+## The Macro Engine in CI
+
+The Macro tab is driven by the sibling **macro forecasting engine**, which the
+workflow checks out and runs daily. Two settings make it work:
+
+| Where | Name | Value |
+|---|---|---|
+| Settings → Secrets and variables → Actions → **Variables** | `MACRO_ENGINE_REPO` | `your-user/macro-dashboard` |
+| Settings → Secrets and variables → Actions → **Secrets** | `MACRO_ENGINE_TOKEN` | a PAT with `repo` scope — only if the engine repo is private |
+
+If the engine lives inside *this* repo instead, delete the "Check out the macro
+engine" step and point the later steps at its directory.
+
+### Why the database is not committed
+
+The full engine database is ~214MB, and 160MB of that is the ALFRED vintage store
+(1.2M rows) used to run look-ahead-free backtests. That store is needed to
+**produce** a backtest, never to **display** one. So:
+
+- CI keeps a **light** database (observations only, ~55MB) in the Actions cache.
+  A cache miss just costs a ~2-minute full pull from FRED.
+- The **backtest runs on your machine** when you want it refreshed:
+
+  ```bash
+  cd "macro dashboard" && python main.py monthly
+  ```
+
+  That writes a ~25KB `data/backtest_result.json` into this repo, which you
+  commit. The engine reads it whenever the database has no backtest summary, so
+  the published Model Performance page stays complete without the big database
+  ever leaving your machine.
+
+The daily CI job therefore runs in a few minutes and the repository carries no
+binary blob.
 
 ---
 

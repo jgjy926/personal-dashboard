@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Personal Dynamic Dashboard</title>
-  <link rel="stylesheet" href="styles.css?v=13" />
+  <link rel="stylesheet" href="styles.css?v=18" />
 </head>
 <body>
   <header class="appbar">
@@ -14,9 +14,8 @@
     </div>
     <nav class="tabbar" role="tablist" aria-label="Dashboards">
       <button class="tab" id="tab-fx"       role="tab" data-tab="fx">💱 <span>FX Rates</span></button>
-      <button class="tab" id="tab-macro"    role="tab" data-tab="macro">📈 <span>Macro</span></button>
+      <button class="tab" id="tab-macro"    role="tab" data-tab="macro">📈 <span>Macro Engine</span></button>
       <button class="tab" id="tab-campaign" role="tab" data-tab="campaign">💳 <span>Card Promos</span></button>
-      <button class="tab" id="tab-klse"     role="tab" data-tab="klse">📊 <span>KLSE Monitor</span></button>
     </nav>
   </header>
 
@@ -79,8 +78,9 @@
     <section class="panel-tab" id="panel-macro" role="tabpanel" aria-labelledby="tab-macro" hidden>
       <div class="tab-head">
         <div>
-          <h2 class="tab-title">Macro Monitor</h2>
-          <p class="tab-sub">Yields, real yield, gold, equities, jobs, dollar &amp; property — and how they move together.</p>
+          <h2 class="tab-title">Macro Forecasting Engine</h2>
+          <p class="tab-sub">US macro regime, recession probability, factors, scenarios &amp; market implications —
+             from free public data (FRED / ALFRED / BLS), with no look-ahead bias.</p>
         </div>
       </div>
       <div id="macro-body"><p class="muted loading">Loading macro data…</p></div>
@@ -102,19 +102,12 @@
       <div id="campaign-console" hidden></div>
     </section>
 
-    <!-- ───────────────────────── TAB 4 · KLSE ───────────────────────── -->
-    <section class="panel-tab" id="panel-klse" role="tabpanel" aria-labelledby="tab-klse" hidden>
-      <div class="tab-head">
-        <div>
-          <h2 class="tab-title">AlphaSpike — KLSE Monitor</h2>
-          <p class="tab-sub">Daily conviction watchlist, signal performance &amp; tracked positions from the Bursa screener.</p>
-        </div>
-      </div>
-      <div id="klse-body"><p class="muted loading">Loading screener data…</p></div>
-    </section>
   </main>
 
-  <script src="config.js?v=13"></script>
-  <script src="app.js?v=13"></script>
+  <script src="config.js?v=18"></script>
+  <!-- The Macro tab is a ten-page application of its own; kept in its own file
+       so app.js stays readable. Must load BEFORE app.js, which calls it. -->
+  <script src="macro-engine.js?v=18"></script>
+  <script src="app.js?v=18"></script>
 </body>
 </html>

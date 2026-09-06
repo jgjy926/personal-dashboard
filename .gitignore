@@ -19,3 +19,6 @@ __pycache__/
 
 # Local Cloudflare Wrangler state (account id/email, tokens) — never publish
 .wrangler/
+
+# Editor/tooling backups
+*.bak

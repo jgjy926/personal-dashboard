@@ -2,8 +2,21 @@ name: Refresh feeds & deploy
 
 # Runs the data fetchers on GitHub's runners (clean egress — FRED/Public Bank work
 # here even where a local sandbox is blocked), commits the refreshed public feeds,
-# and publishes the static dashboard to GitHub Pages. KLSE data is never touched
-# here (it's private and git-ignored). Entirely on free tiers.
+# and publishes the static dashboard to GitHub Pages. Entirely on free tiers.
+#
+# The Macro tab is driven by the sibling macro forecasting engine, which is
+# checked out alongside this repo and run here daily. Two things make that cheap:
+#
+#   * The runner keeps a LIGHT database — observations only, ~55MB — in the
+#     Actions cache. The 1.2M-row ALFRED vintage store (160MB of a 214MB full
+#     database) is needed only to PRODUCE a backtest, never to display one, so it
+#     is deliberately absent here.
+#   * The backtest itself runs on your own machine when you want it
+#     (`python main.py monthly`), and exports a ~25KB data/backtest_result.json
+#     that IS committed. The engine reads that when the database has no summary,
+#     so the published Model Performance page stays complete.
+#
+# Net effect: the daily job is a few minutes and the repo carries no binary blob.
 
 on:
   workflow_dispatch:            # run manually from the Actions tab
@@ -52,15 +65,66 @@ jobs:
           python tools/scrape_campaign.py --max 15
           python tools/merge_campaign.py
 
+      # ── Macro forecasting engine ────────────────────────────────────────
+      # MACRO_ENGINE_REPO may be an org/name for a separate private repo; if the
+      # engine lives in this same repo under "macro-engine/", drop this step and
+      # point MACRO_DIR at it instead.
+      - name: Check out the macro engine
+        uses: actions/checkout@v4
+        if: ${{ vars.MACRO_ENGINE_REPO != '' }}
+        continue-on-error: true
+        with:
+          repository: ${{ vars.MACRO_ENGINE_REPO }}
+          path: macro-engine
+          token: ${{ secrets.MACRO_ENGINE_TOKEN || github.token }}
+
+      - name: Cache the engine database (observations only, no vintage store)
+        uses: actions/cache@v4
+        # Skips harmlessly until MACRO_ENGINE_REPO is set and the checkout above
+        # has actually produced a macro-engine/ directory.
+        if: ${{ vars.MACRO_ENGINE_REPO != '' }}
+        continue-on-error: true
+        with:
+          path: macro-engine/macro_engine.db
+          # Rolls monthly so the cache cannot drift stale indefinitely; a miss
+          # just means the next step does a full pull instead of an incremental
+          # one, which costs about two minutes.
+          key: macro-engine-db-${{ hashFiles('macro-engine/config/series.py') }}-${{ github.run_id }}
+          restore-keys: |
+            macro-engine-db-${{ hashFiles('macro-engine/config/series.py') }}-
+            macro-engine-db-
+
+      - name: Run the macro engine (keyless FRED/ALFRED/BLS)
+        # Until MACRO_ENGINE_REPO is set this is skipped entirely and the site
+        # deploys with the last COMMITTED data/macro_engine.json -- a working
+        # dashboard on a frozen snapshot, rather than a broken deploy.
+        if: ${{ vars.MACRO_ENGINE_REPO != '' }}
+        continue-on-error: true      # a FRED outage must not block the deploy
+        working-directory: macro-engine
+        env:
+          # Write the feed straight into this repo's data/ directory.
+          MACRO_DASHBOARD_DIR: ${{ github.workspace }}
+        run: |
+          pip install -r requirements.txt
+          # Incremental when the cache restored a database; a full first-time
+          # pull otherwise. Either way this is observations only — the vintage
+          # backfill is never run here.
+          python tools/backfill.py --observations
+          python main.py daily
+          python main.py report | tail -40
+
       - name: Commit refreshed public feeds
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/macro.json data/promotions.json data/treasury.json 2>/dev/null || true
+          # backtest_result.json is committed from your local `main.py monthly`
+          # run, not produced here — `git add` is harmless when it is unchanged.
+          git add data/macro.json data/promotions.json data/treasury.json \
+                  data/macro_engine.json data/backtest_result.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "no changes"
           else
-            git commit -m "chore: refresh macro + campaign feeds"
+            git commit -m "chore: refresh macro engine + campaign feeds"
             # The push can race a concurrent run/commit on main (rejected: fetch
             # first). Retry with a rebase onto whatever landed, a few times,
             # instead of silently dropping this run's refreshed data.

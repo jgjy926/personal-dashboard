@@ -1,6 +1,10 @@
-/* Personal Dynamic Dashboard — tab router + four tab modules.
+/* Personal Dynamic Dashboard — tab router + three tab modules.
  * Each tab renders from a JSON feed and lazy-initialises on first view.
- * Zero dependencies; charts are hand-rolled inline SVG. */
+ * Zero dependencies; charts are hand-rolled inline SVG.
+ *
+ * The Macro tab is the front end for the sibling macro forecasting engine and
+ * lives in macro-engine.js (ten sub-pages); this file keeps the original series
+ * monitor, which the engine shows as its "Series Monitor" sub-page. */
 'use strict';
 const CFG = window.DASH_CONFIG;
 const COLOR = getComputedStyle(document.documentElement);
@@ -101,8 +105,12 @@ function lineChart(series, dates, opts = {}) {
           <div class="legend">${legend}</div>`;
 }
 
+// macro-engine.js reuses this chart so both the engine pages and the series
+// monitor draw identically rather than each rolling their own axes.
+window.lineChart = lineChart;
+
 // ── tab controller ────────────────────────────────────────────────────────
-const TABS = ['fx', 'macro', 'campaign', 'klse'];
+const TABS = ['fx', 'macro', 'campaign'];
 const started = {};
 const MODS = {}; // id -> init fn, registered below
 function showTab(id) {
@@ -289,11 +297,29 @@ MODS.fx = function initFX() {
 };
 
 // ════════════════════════════════ TAB 2 · MACRO ═══════════════════════════
+/* The Macro tab is now the forecasting engine's shell. macro-engine.js renders
+ * the ten spec pages from data/macro_engine.json; the original series monitor
+ * below is handed to it as one more sub-page, so nothing that already worked
+ * was thrown away — the overlay chart, the lagged-unemployment panel and the
+ * Treasury supply panel all still render, one click away. */
 MODS.macro = async function initMacro() {
   const root = document.getElementById('macro-body');
+  if (!window.MACRO_ENGINE) {
+    root.innerHTML = `<div class="errbox">macro-engine.js did not load — check the script tag order in index.html (it must come before app.js).</div>`;
+    return;
+  }
+  return window.MACRO_ENGINE.render(root, CFG.feeds.macroEngine, renderSeriesMonitor);
+};
+
+/* The original Macro Monitor: raw series cards, the real-yield/gold/S&P overlay,
+ * the lagged-unemployment panel and Treasury supply. Spec 27 says the main
+ * dashboard should not be buried in raw economic series and that they belong in
+ * a drill-down — this is that drill-down. */
+async function renderSeriesMonitor(root) {
+  root.innerHTML = '<p class="muted loading">Loading series monitor…</p>';
   let d;
   try { d = await fetchJSON(CFG.feeds.macro); }
-  catch (e) { root.innerHTML = `<div class="errbox">Couldn't load macro feed (${esc(e.message)}). Expected at <code>${esc(CFG.feeds.macro)}</code>.</div>`; return; }
+  catch (e) { root.innerHTML = `<div class="errbox">Couldn't load the series feed (${esc(e.message)}). Expected at <code>${esc(CFG.feeds.macro)}</code>. Generate it with <code>python tools/fetch_macro.py</code>.</div>`; return; }
 
   const sample = d.meta && d.meta.sample;
   const rg = d.regime || {};
@@ -352,8 +378,8 @@ MODS.macro = async function initMacro() {
     <div id="treasury-panel"></div>
     <div class="freshline"><span>${esc((d.meta && d.meta.disclaimer) || '')}</span></div>`;
 
-  renderTreasuryPanel(document.getElementById('treasury-panel'));
-};
+  renderTreasuryPanel(root.querySelector('#treasury-panel'));
+}
 
 /* US Treasury supply panel — upcoming auctions (new issuance / reopenings) and
  * recent buybacks. Loaded separately from the macro feed so a Treasury outage
@@ -642,105 +668,10 @@ MODS.campaign = async function initCampaign() {
   document.getElementById('csub-console').addEventListener('click', () => showSub('console'));
 };
 
-// ════════════════════════════════ TAB 4 · KLSE ════════════════════════════
-MODS.klse = async function initKLSE() {
-  const root = document.getElementById('klse-body');
-  // Privacy by design: the snapshot feed (data/klse.json) is your private trading
-  // data and is NOT published to a public host (it's git-ignored). When it's
-  // absent — i.e. online — show a protected hand-off to the key-gated live app
-  // instead of an error. Locally the file exists, so the full snapshot renders.
-  const handoff = (why) => {
-    const btn = CFG.klseDashboardUrl
-      ? `<a class="live-link" href="${esc(CFG.klseDashboardUrl)}" target="_blank" rel="noopener" style="height:40px">Open the private AlphaSpike dashboard ↗</a>`
-      : `<p class="muted">Set the tunnel URL in <code>config.js</code> (<code>klseDashboardUrl</code>) or run <code>localStorage.setItem('klse_url','https://…')</code> to show the launch button here. Setup: <code>KLSE_Monitor/deploy/ONLINE_SETUP.md</code>.</p>`;
-    root.innerHTML = `
-      <div class="emptybox" style="text-align:left">
-        <div style="font-size:15px;font-weight:650;color:var(--ink)">🔒 KLSE data is private</div>
-        <p class="muted" style="margin:6px 0 12px">${esc(why)} Your trading book isn't published to this public dashboard. The full 3-tab AlphaSpike app (Conviction · Exit Advisor · Signal ledger) lives behind an access key on your Cloudflare Tunnel.</p>
-        ${btn}
-      </div>`;
-  };
-  let d;
-  try { d = await fetchJSON(CFG.feeds.klse); }
-  catch (e) { handoff('The read-only snapshot feed is not available here.'); return; }
-
-  const conv = d.conviction || {}, sig = d.signals || {}, tr = d.trades || {}, fn = d.funnel || {};
-  const kpi = (k, v, sub, cls) => `<div class="stat"><span class="k">${k}</span><div class="v ${cls || ''}">${v}</div><div class="meta">${sub || ''}</div></div>`;
-
-  // KPI row
-  const kpis = [
-    kpi('Signal hit rate', sig.hit_rate == null ? '—' : sig.hit_rate + '%', `${sig.resolved || 0} resolved of ${sig.total || 0}`),
-    kpi('Avg fwd return (20d)', sig.avg_fwd_ret_20 == null ? '—' : (sig.avg_fwd_ret_20 > 0 ? '+' : '') + sig.avg_fwd_ret_20 + '%', 'on resolved signals', sig.avg_fwd_ret_20 >= 0 ? 'pos' : 'neg'),
-    kpi('Closed-trade win rate', tr.win_rate == null ? '—' : tr.win_rate + '%', `${tr.count || 0} closed trades`),
-    kpi('Avg alpha vs KLCI', tr.avg_alpha_pct == null ? '—' : (tr.avg_alpha_pct > 0 ? '+' : '') + tr.avg_alpha_pct + '%', 'per closed trade', tr.avg_alpha_pct >= 0 ? 'pos' : 'neg')
-  ].join('');
-
-  // Funnel
-  const stages = fn.stages || [];
-  const fmax = Math.max(1, ...stages.map(s => s.count || 0));
-  const funnel = stages.map(s => `
-    <div class="funnel-row"><span class="fl">${esc(s.label)}</span>
-      <span class="fbar" style="width:${Math.max(2, (s.count / fmax) * 100).toFixed(1)}%"></span>
-      <span class="fn">${num(s.count)}</span></div>`).join('');
-
-  // Conviction watchlist
-  const rows = (conv.rows || []).map(r => {
-    const tags = `${r.gate6 ? '<span class="tag gate6">GATE6</span>' : ''}${r.cold_eye ? '<span class="tag cold">COLD-EYE</span>' : ''}`;
-    const reasons = (r.reasons || []).slice(0, 2).map(esc).join(' · ');
-    return `<tr>
-      <td>${num(r.rank)}</td>
-      <td class="l"><b>${esc(r.name || r.ticker)}</b> <span class="muted">${esc(r.ticker)}</span>${tags}<div class="reasons">${reasons}</div></td>
-      <td>${fmt(r.conviction)}</td>
-      <td>${r.last_close == null ? '—' : fmt(r.last_close)}</td>
-      <td>${r.rel_volume == null ? '—' : r.rel_volume + '×'}</td>
-      <td>${r.liquidity_myr == null ? '—' : 'RM' + num(r.liquidity_myr)}</td>
-    </tr>`;
-  }).join('');
-  const watchlist = rows ? `<div class="table-scroll"><table class="data-table">
-    <thead><tr><th>#</th><th class="l">Counter</th><th>Conviction</th><th>Close</th><th>Rel vol</th><th>Liquidity</th></tr></thead>
-    <tbody>${rows}</tbody></table></div>` : '<div class="emptybox">No conviction rows in the latest run.</div>';
-
-  // Positions
-  const pos = (d.positions || []).map(p => `<tr>
-    <td class="l"><b>${esc(p.ticker)}</b></td>
-    <td>${fmt(p.entry_price)}</td>
-    <td>${esc(p.entry_date)}</td>
-    <td><span class="pill ${p.status === 'hold' ? 'hold' : 'sold'}">${esc(p.status)}</span></td>
-    <td class="${(p.realised_pct || 0) >= 0 ? 'pos' : 'neg'}">${p.realised_pct == null ? '—' : (p.realised_pct > 0 ? '+' : '') + p.realised_pct + '%'}</td>
-  </tr>`).join('');
-  const positions = pos ? `<div class="table-scroll"><table class="data-table">
-    <thead><tr><th class="l">Ticker</th><th>Entry</th><th>Entry date</th><th>Status</th><th>Realised</th></tr></thead>
-    <tbody>${pos}</tbody></table></div>` : '<div class="emptybox">No tracked positions.</div>';
-
-  // Recent closed trades
-  const trades = (tr.recent || []).map(t => `<tr>
-    <td class="l"><b>${esc(t.ticker)}</b></td>
-    <td>${esc(t.exit_date)}</td>
-    <td>${esc(t.exit_reason || '')}</td>
-    <td class="${(t.return_pct || 0) >= 0 ? 'pos' : 'neg'}">${t.return_pct == null ? '—' : (t.return_pct > 0 ? '+' : '') + t.return_pct + '%'}</td>
-    <td class="${(t.alpha_pct || 0) >= 0 ? 'pos' : 'neg'}">${t.alpha_pct == null ? '—' : (t.alpha_pct > 0 ? '+' : '') + t.alpha_pct + '%'}</td>
-  </tr>`).join('');
-  const tradeTable = trades ? `<div class="table-scroll"><table class="data-table">
-    <thead><tr><th class="l">Ticker</th><th>Exit</th><th>Reason</th><th>Return</th><th>Alpha</th></tr></thead>
-    <tbody>${trades}</tbody></table></div>` : '<div class="emptybox">No closed trades yet.</div>';
-
-  const gen = d.meta && d.meta.generated_at;
-  const liveBtn = CFG.klseDashboardUrl
-    ? `<a class="live-link" href="${esc(CFG.klseDashboardUrl)}" target="_blank" rel="noopener">Open full interactive dashboard ↗</a>`
-    : '';
-  root.innerHTML = `
-    <div class="klse-topbar"><div class="disclaimer" style="margin:0;flex:1">⚠ ${esc((d.meta && d.meta.disclaimer) || 'Screener output, not trade advice.')} This is a read-only snapshot — the live 3-tab app (Conviction · Exit Advisor · Ledger) is where you enter positions & run ad-hoc lookups.</div>${liveBtn}</div>
-    <div class="kpi-row">${kpis}</div>
-    <div class="card-block"><h3>Today's conviction watchlist <span class="muted">— run ${esc(conv.run_date || '?')}, top ${(conv.rows || []).length}</span></h3>${watchlist}</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px" class="klse-two">
-      <div class="card-block" style="margin-top:0"><h3>Screening funnel <span class="muted">— ${esc(fn.run_date || '')}</span></h3><div class="funnel">${funnel || '<p class="muted">No funnel data.</p>'}</div></div>
-      <div class="card-block" style="margin-top:0"><h3>Tracked positions</h3>${positions}</div>
-    </div>
-    <div class="card-block"><h3>Recent closed trades <span class="muted">— return &amp; alpha vs FBMKLCI</span></h3>${tradeTable}</div>
-    <div class="freshline"><span>Exported <b>${esc((gen || '').slice(0, 16).replace('T', ' '))} UTC</b> (${agoLabel(gen)})</span>
-      <span>· from ${esc((d.meta && d.meta.source) || 'local DB')}</span>
-      <span>· local snapshot — refresh by re-running the exporter</span></div>`;
-};
+/* The KLSE Monitor tab was removed when the Macro tab became the full
+ * forecasting engine. AlphaSpike keeps its own Streamlit dashboard; its
+ * exporter (tools/export_klse.py) and data/klse.json are left in place so the
+ * tab can be restored by re-adding the panel to index.html and the module here. */
 
 // ── boot ────────────────────────────────────────────────────────────────────
 showTab((location.hash || '#fx').slice(1));
