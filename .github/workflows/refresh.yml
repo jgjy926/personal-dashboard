@@ -85,7 +85,12 @@ jobs:
         if: ${{ vars.MACRO_ENGINE_REPO != '' }}
         continue-on-error: true
         with:
-          path: macro-engine/macro_engine.db
+          # The database AND the fitted-model cache. Without the latter, every
+          # run pays a full five-model walk-forward; with it, only the first run
+          # of each calendar month does.
+          path: |
+            macro-engine/macro_engine.db
+            macro-engine/data_cache
           # Rolls monthly so the cache cannot drift stale indefinitely; a miss
           # just means the next step does a full pull instead of an incremental
           # one, which costs about two minutes.
