@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-05T10:42:27+00:00",
+    "generated_at": "2026-09-06T11:04:43+00:00",
     "sample": false,
     "source": "FRED (keyless CSV)",
     "data_note": "Live FRED data. Freshness shows the DATA date, not the fetch date.",
@@ -67,7 +67,7 @@
       "label": "Gold (LBMA)",
       "value": 4476.6,
       "unit": "$",
-      "change": -15.1,
+      "change": 46.8,
       "as_of": "2026-09-04",
       "freq": "daily"
     },
