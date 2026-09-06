@@ -395,7 +395,9 @@
       <div class="card-block">
         <div class="block-head"><h3>Historical Probability — 12-Month Horizon</h3>
           <span class="muted small">vintage-true backtest, not today\'s model replayed</span></div>
-        ${probabilityHistory(d.recession_history || (d.backtest && d.backtest.probability_history))}
+        ${probabilityHistory((d.recession_history && d.recession_history.length)
+            ? d.recession_history
+            : (d.backtest && d.backtest.probability_history) || [])}
         ${noteBox('This is what the engine WOULD have said at each date using only data '
           + 'available then. Redrawing it by running today\'s model over revised history '
           + 'would show a far better forecaster than ever existed.')}
