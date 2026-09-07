@@ -559,9 +559,10 @@ MODS.campaign = async function initCampaign() {
   // tnc_link is still included as the authoritative legal document to verify
   // against — the poster is marketing copy, not the binding terms. The import
   // step re-implements tools/merge_campaign.py's merge rule in JS (fill
-  // tnc_summary/period only where the upload provides them) and hands back a
-  // ready-to-publish promotions.json download — you then drop that into data/
-  // and commit, same manual-publish model as the CLI tool.
+  // tnc_summary/period only where the upload provides them) to preview what
+  // will change; Publish then sends the summaries to the promo-sync Worker,
+  // which re-reads the live feed and commits it. The download remains as the
+  // no-Worker fallback.
   function renderConsole() {
     const missing = list.filter(p => !p.tnc_summary);
     const bundle = {
@@ -588,11 +589,23 @@ MODS.campaign = async function initCampaign() {
       </div>
       <div class="card-block">
         <h3>2 · Import AI summaries</h3>
-        <p class="muted">Upload the JSON the AI replied with — a map of <code>id → {tnc_summary, period}</code>.</p>
+        <p class="muted">Paste the JSON the AI replied with — a map of <code>id → {tnc_summary, period}</code> — or upload it as a file.</p>
+        <textarea id="console-paste" rows="6" spellcheck="false"
+          placeholder='{&quot;0f12f47b3d&quot;: {&quot;period&quot;: &quot;8 September - 27 December 2026&quot;, &quot;tnc_summary&quot;: &quot;RM50 off with minimum spend RM500…&quot;}}'></textarea>
         <input type="file" id="console-upload" accept=".json,application/json" />
         <div id="console-preview"></div>
-        <button id="btn-dl-merged" class="cta" hidden>⬇ Download merged promotions.json</button>
-        <p class="muted small">After downloading: replace <code>data/promotions.json</code> in the project with this file, then commit &amp; push to publish.</p>
+      </div>
+      <div class="card-block" id="console-publish" hidden>
+        <h3>3 · Publish</h3>
+        <div class="console-actions">
+          <button id="btn-publish" class="cta">🚀 Publish to the live site</button>
+          <button id="btn-dl-merged" class="cta ghost">⬇ Download merged promotions.json</button>
+        </div>
+        <p id="publish-status" class="muted small" hidden></p>
+        <p class="muted small">Publish sends just the summaries to your <code>promo-sync</code> Worker, which commits
+          <code>data/promotions.json</code> for you — the site redeploys on its own. It re-reads the live file first, so
+          publishing from a tab you left open yesterday can't overwrite promos the daily scrape has added since.
+          The download is the offline fallback: drop it into <code>data/</code> and commit by hand.</p>
       </div>`;
 
     const dlBundleBtn = document.getElementById('btn-dl-bundle');
@@ -612,35 +625,69 @@ MODS.campaign = async function initCampaign() {
       });
     }
 
-    let mergedResult = null;
+    let mergedResult = null;      // the whole feed, for the download fallback
+    let uploadedMap = null;       // just the summaries, for the Publish call
     const previewEl = document.getElementById('console-preview');
+    const publishBlock = document.getElementById('console-publish');
     const dlMergedBtn = document.getElementById('btn-dl-merged');
+    const publishBtn = document.getElementById('btn-publish');
+    const publishStatus = document.getElementById('publish-status');
+
+    // One ingest path for both the paste box and the file picker.
+    function ingest(text, { quiet = false } = {}) {
+      if (!text.trim()) {
+        previewEl.innerHTML = '';
+        publishBlock.hidden = true;
+        mergedResult = uploadedMap = null;
+        return;
+      }
+      let map;
+      try {
+        map = JSON.parse(text);
+      } catch (err) {
+        // While someone is still typing/pasting, half-written JSON isn't an
+        // error worth shouting about — only the file picker reports it.
+        if (!quiet) previewEl.innerHTML = `<div class="errbox">Couldn't read that as JSON: ${esc(err.message)}</div>`;
+        publishBlock.hidden = true;
+        mergedResult = uploadedMap = null;
+        return;
+      }
+      if (!map || typeof map !== 'object' || Array.isArray(map)) {
+        if (!quiet) previewEl.innerHTML = `<div class="errbox">Expected an object mapping id → {period, tnc_summary}.</div>`;
+        publishBlock.hidden = true;
+        return;
+      }
+      const ids = Object.keys(map);
+      const merged = list.map(p => {
+        const upd = map[p.id];
+        return upd ? { ...p, tnc_summary: upd.tnc_summary || p.tnc_summary, period: upd.period || p.period } : p;
+      });
+      const matched = ids.filter(id => list.some(p => p.id === id)).length;
+      previewEl.innerHTML =
+        `<div class="disclaimer" style="background:var(--green-bg);color:var(--green)">✅ Matched ${matched} of ${ids.length} id(s) in this feed.</div>` +
+        `<div class="table-scroll"><table class="data-table"><thead><tr><th class="l">ID</th><th class="l">Title</th><th class="l">New summary</th></tr></thead><tbody>` +
+        ids.map(id => {
+          const p = list.find(x => x.id === id);
+          return `<tr><td class="l">${esc(id)}</td><td class="l">${esc(p ? p.title : '(unknown id)')}</td><td class="l">${esc((map[id] && map[id].tnc_summary || '').slice(0, 80))}</td></tr>`;
+        }).join('') + `</tbody></table></div>`;
+      mergedResult = merged;
+      uploadedMap = map;
+      publishBlock.hidden = false;
+      publishStatus.hidden = true;
+    }
+
+    const pasteEl = document.getElementById('console-paste');
+    pasteEl.addEventListener('input', () => ingest(pasteEl.value, { quiet: true }));
+    // A finished paste deserves a real error if it's malformed.
+    pasteEl.addEventListener('blur', () => ingest(pasteEl.value));
     document.getElementById('console-upload').addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      try {
-        const map = JSON.parse(await file.text());
-        const ids = Object.keys(map);
-        const merged = list.map(p => {
-          const upd = map[p.id];
-          return upd ? { ...p, tnc_summary: upd.tnc_summary || p.tnc_summary, period: upd.period || p.period } : p;
-        });
-        const matched = ids.filter(id => list.some(p => p.id === id)).length;
-        previewEl.innerHTML =
-          `<div class="disclaimer" style="background:var(--green-bg);color:var(--green)">✅ Matched ${matched} of ${ids.length} id(s) in the file.</div>` +
-          `<div class="table-scroll"><table class="data-table"><thead><tr><th class="l">ID</th><th class="l">Title</th><th class="l">New summary</th></tr></thead><tbody>` +
-          ids.map(id => {
-            const p = list.find(x => x.id === id);
-            return `<tr><td class="l">${esc(id)}</td><td class="l">${esc(p ? p.title : '(unknown id)')}</td><td class="l">${esc((map[id].tnc_summary || '').slice(0, 80))}</td></tr>`;
-          }).join('') + `</tbody></table></div>`;
-        mergedResult = merged;
-        dlMergedBtn.hidden = false;
-      } catch (err) {
-        previewEl.innerHTML = `<div class="errbox">Couldn't read that file as JSON: ${esc(err.message)}</div>`;
-        dlMergedBtn.hidden = true;
-        mergedResult = null;
-      }
+      const text = await file.text();
+      pasteEl.value = text;
+      ingest(text);
     });
+
     dlMergedBtn.addEventListener('click', () => {
       if (!mergedResult) return;
       const payload = {
@@ -648,6 +695,57 @@ MODS.campaign = async function initCampaign() {
         promotions: mergedResult,
       };
       downloadJSON(payload, 'promotions.json');
+    });
+
+    // ── Publish: hand the summaries to the promo-sync Worker, which holds the
+    // GitHub token and does the commit. The browser never sees that token; it
+    // only holds the sync key, which is useless for anything but this one file.
+    publishBtn.addEventListener('click', async () => {
+      if (!uploadedMap) return;
+      const base = ((window.DASH_CONFIG && window.DASH_CONFIG.promoSyncApi) || '').replace(/\/+$/, '');
+      const say = (msg, kind) => {
+        publishStatus.hidden = false;
+        publishStatus.textContent = msg;
+        publishStatus.style.color = kind === 'err' ? 'var(--red)' : kind === 'ok' ? 'var(--green)' : '';
+      };
+      if (!base) {
+        say('No sync endpoint configured. Deploy worker/promo-sync, then run: '
+          + "localStorage.setItem('promo_sync_api','https://promo-sync.<you>.workers.dev') and reload. "
+          + 'Until then, use the download button.', 'err');
+        return;
+      }
+      let key = localStorage.getItem('promo_sync_key');
+      if (!key) {
+        key = window.prompt('Sync key for promo-sync (stored in this browser for next time):');
+        if (!key) return;
+        localStorage.setItem('promo_sync_key', key);
+      }
+      publishBtn.disabled = true;
+      say('Publishing…');
+      try {
+        const res = await fetch(base + '/publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Sync-Key': key },
+          body: JSON.stringify({ summaries: uploadedMap }),
+        });
+        const out = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+          // A wrong key shouldn't be sticky — clear it so the next click re-asks.
+          localStorage.removeItem('promo_sync_key');
+          say('Sync key rejected. Click Publish again to re-enter it.', 'err');
+        } else if (!res.ok) {
+          say('Publish failed: ' + (out.error || res.status), 'err');
+        } else if (!out.committed) {
+          say(out.message || 'Nothing to write — those promos already have summaries.', '');
+        } else {
+          say(`✅ Published ${out.applied.length} summary/ies — committed. The site rebuilds in a minute or two.`
+            + (out.unknown && out.unknown.length ? ` (${out.unknown.length} unknown id(s) ignored.)` : ''), 'ok');
+        }
+      } catch (err) {
+        say('Publish failed: ' + err.message + ' — check the Worker URL and that this origin is in ALLOWED_ORIGINS.', 'err');
+      } finally {
+        publishBtn.disabled = false;
+      }
     });
   }
 

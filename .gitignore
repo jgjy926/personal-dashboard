@@ -22,3 +22,6 @@ __pycache__/
 
 # Editor/tooling backups
 *.bak
+
+# Worker deps, if you ever npm-install locally
+worker/**/node_modules/

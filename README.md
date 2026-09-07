@@ -8,7 +8,7 @@ live independently without touching the UI.
 |---|---|---|
 | 💱 **FX Rates** | live Worker API (`config.js → fxApi`) | ✅ live |
 | 📈 **Macro** | `data/macro.json` | 🌱 seeded sample → Phase B backend |
-| 💳 **Card Promos** | `data/promotions.json` | 🌱 seeded sample → parser + manual LLM |
+| 💳 **Card Promos** | `data/promotions.json` | ✅ live — daily scrape + AI summary |
 | 📊 **KLSE Monitor** | `data/klse.json` | ✅ real export from your SQLite |
 
 ## Run it locally
@@ -30,6 +30,7 @@ styles.css      shared, theme-aware design tokens
 config.js       where each tab gets its data
 data/*.json     the four feeds
 tools/          data producers (below)
+worker/         promo-sync — the Console's publish endpoint (below)
 ```
 
 ## Data producers
@@ -49,11 +50,16 @@ Re-run it after each engine run to refresh the tab.
 ### Campaign — parser + free enrichment (`tools/scrape_campaign.py`)
 No paid API, $0. Each promo's `image` is the bank's real full campaign poster (not a
 small crop) — the offer, minimum spend, and campaign period are printed on it directly.
-Two ways to turn that into a written `tnc_summary`:
+Three ways to turn that into a written `tnc_summary`:
 
-- **Console (recommended)** — Card Promos → 🛠️ Console in the dashboard itself: downloads
-  a bundle of poster images + links, you paste it into a vision-capable AI (Claude,
-  ChatGPT), upload the JSON reply back, download the merged file.
+- **Console + Publish (recommended)** — Card Promos → 🛠️ Console in the dashboard itself:
+  downloads a bundle of poster images + links, you paste it into a vision-capable AI
+  (Claude, ChatGPT), paste or upload the JSON reply back, then hit **Publish** and the
+  summaries are committed for you. See *Publishing from the Console* below.
+- **Fully automatic** — `tools/summarize_campaign.py` reads each new promo's poster and
+  official T&C with the Anthropic API and writes the summary itself. It runs in the daily
+  workflow, so a promo that appears overnight is already summarised by morning. Needs an
+  `ANTHROPIC_API_KEY` repo secret; skips itself cleanly without one.
 - **CLI + OCR** — the scraper also runs local OCR (Tesseract, free, offline) on every
   poster as a fallback text layer, so `campaign_prompt.txt` works with *any* AI, not just
   a vision-capable one. OCR reads plain text well but often misses large stylized numbers
@@ -74,11 +80,52 @@ Produces `data/campaign_raw/*.txt`, `data/promotions.draft.json`, and
 `tools/merge_campaign.py`, which does this against `data/promotions.json` and preserves
 any summary already written for an id) → save as `data/promotions.json`. Done, $0.
 
+To skip the paste entirely, let the summariser read the posters itself:
+
+```bash
+pip install anthropic
+export ANTHROPIC_API_KEY=sk-ant-...
+python tools/summarize_campaign.py                    # summarise every promo missing one
+python tools/summarize_campaign.py --dry-run          # show what it would write
+python tools/summarize_campaign.py --apply reply.json # or apply an AI's JSON reply, no key needed
+```
+
 **New promo tomorrow?** It publishes automatically with its real poster (tap/hover shows
-the full image) but no summary yet — `merge_campaign.py` only carries forward summaries
-for ids it already knows. Run the Console or the CLI+OCR path above to add one; nothing
-scripted here writes `tnc_summary` on its own (amounts are too easy to get wrong from
-OCR/PDF text alone), so a human or AI review step is deliberate, not a gap.
+the full image). `merge_campaign.py` only carries forward summaries for ids it already
+knows, so the summary comes from one of the three paths above — `summarize_campaign.py`
+in the workflow if you've set `ANTHROPIC_API_KEY`, otherwise the Console. Amounts are
+easy to get wrong from OCR or PDF text alone, so the automatic path is deliberately
+allowed to decline: told to flag rather than guess, it leaves the summary blank and
+names the promo in the job log, and the card falls back to the 📄 Official T&C link.
+
+#### Publishing from the Console (`worker/promo-sync`)
+
+The Console used to end in a download you had to drop into `data/` and commit yourself.
+That wasn't a design choice — a page served from GitHub Pages is a static file with no
+write endpoint, so it had no way to persist anything. `worker/promo-sync` is that
+endpoint: a Cloudflare Worker that holds a GitHub token as a **Worker secret** and
+commits `data/promotions.json` on the Console's behalf. The browser only ever holds the
+sync passphrase, which is good for nothing but this one file.
+
+```bash
+cd worker/promo-sync
+# edit wrangler.jsonc: GITHUB_REPO, ALLOWED_ORIGINS
+npx wrangler secret put GITHUB_TOKEN   # fine-grained PAT · contents:write · this repo only
+npx wrangler secret put SYNC_KEY       # any long passphrase; the Console asks for it once
+npx wrangler deploy
+```
+
+Then point the dashboard at it — `promoSyncApi` in `config.js`, or at runtime
+`localStorage.setItem('promo_sync_api','https://promo-sync.<you>.workers.dev')`.
+
+The Console sends **only the summaries**, never the whole file: the Worker re-reads the
+live `promotions.json` from GitHub and applies them to that. So publishing from a tab you
+left open yesterday can't wipe promos the daily scrape has added since. It also refuses to
+overwrite a summary that already exists (unless asked), reports unknown ids instead of
+failing, and treats a repeated publish as a no-op.
+
+`node worker/promo-sync/test.mjs` exercises all of that offline against a stubbed GitHub —
+no deploy, no token, no network.
 
 ### Macro — seed now (`tools/seed_macro.py`), backend later
 `python tools/seed_macro.py` regenerates the sample `data/macro.json`. The Phase-B
@@ -126,8 +173,11 @@ serves `/api/*` or writes a `macro.json` in this shape. **You** register the FRE
 and deploy (`wrangler`).
 
 ### Campaign
-Schedule `scrape_campaign.py` (GitHub Actions cron), do the free LLM summary step, commit
-`promotions.json`. No paid API.
+Done — `.github/workflows/refresh.yml` runs `scrape_campaign.py` → `merge_campaign.py` →
+`summarize_campaign.py` daily and commits `promotions.json`. The scrape and merge stay
+$0; only the optional auto-summary step costs anything (cents per *new* promo, and only
+when `ANTHROPIC_API_KEY` is set). Without that secret the pipeline is still fully
+automatic apart from the summary itself, which you write via the Console's Publish button.
 
 ### KLSE → online (chosen: publish the full Streamlit app)
 

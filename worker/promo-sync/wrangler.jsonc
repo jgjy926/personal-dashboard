@@ -1,0 +1,23 @@
+{
+  // Deploy from this directory:
+  //   cd worker/promo-sync
+  //   npx wrangler secret put GITHUB_TOKEN     # fine-grained PAT, contents:write, this repo only
+  //   npx wrangler secret put SYNC_KEY         # any long passphrase you'll paste into the Console once
+  //   npx wrangler deploy
+  //
+  // Then put the printed URL into config.js (promoSyncApi), or at runtime:
+  //   localStorage.setItem('promo_sync_api', 'https://promo-sync.<you>.workers.dev')
+  "name": "promo-sync",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-01",
+  "vars": {
+    // ── EDIT THESE ────────────────────────────────────────────────────────
+    "GITHUB_REPO": "jgjy926/personal-dashboard",
+    "GITHUB_BRANCH": "main",
+    "FILE_PATH": "data/promotions.json",
+    // Lock the endpoint to the sites that may call it. Leave "" to allow any
+    // origin — the SYNC_KEY is still required, but pinning this means a random
+    // page you visit can't quietly spend your key from your browser.
+    "ALLOWED_ORIGINS": "https://jgjy926.github.io,http://localhost:8099"
+  }
+}

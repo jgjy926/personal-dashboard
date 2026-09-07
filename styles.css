@@ -222,6 +222,17 @@ button.toggle[aria-expanded="true"] { background: var(--accent); color: #fff; bo
 .console-actions .cta { flex: none; padding: 9px 16px; }
 .muted.small { font-size: 11.5px; }
 button.cta[disabled] { opacity: .5; cursor: not-allowed; filter: none; }
+/* The Console's buttons live outside .promo, so they need the CTA look here. */
+#campaign-console .cta { background: var(--accent); color: #fff; border: 1px solid transparent;
+  font: inherit; font-weight: 600; font-size: 13px; border-radius: 8px; cursor: pointer; }
+#campaign-console .cta:hover:not([disabled]) { filter: brightness(1.06); }
+#campaign-console .cta.ghost { background: none; color: var(--accent); border-color: var(--line); }
+#campaign-console .cta.ghost:hover:not([disabled]) { border-color: var(--accent); filter: none; }
+#console-paste { width: 100%; box-sizing: border-box; resize: vertical; margin: 8px 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; line-height: 1.5;
+  color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+#console-paste:focus { outline: none; border-color: var(--accent); }
+#publish-status { margin-top: 4px; }
 #console-upload { font: inherit; font-size: 13px; color: var(--ink); margin: 8px 0 12px; }
 #console-preview { margin: 10px 0; }
 #console-preview .disclaimer { margin-bottom: 10px; }

@@ -65,6 +65,19 @@ jobs:
           python tools/scrape_campaign.py --max 15
           python tools/merge_campaign.py
 
+      # Reads the poster + official T&C of any promo that arrived without a summary
+      # and writes one straight into data/promotions.json — the step that used to be
+      # the manual Console round-trip. Skips itself cleanly when ANTHROPIC_API_KEY
+      # is not configured (the cards then just show the T&C link, as before), so the
+      # deploy never depends on it.
+      - name: Summarise new promos (skipped without ANTHROPIC_API_KEY)
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          pip install anthropic
+          python tools/summarize_campaign.py
+
       # ── Macro forecasting engine ────────────────────────────────────────
       # MACRO_ENGINE_REPO may be an org/name for a separate private repo; if the
       # engine lives in this same repo under "macro-engine/", drop this step and

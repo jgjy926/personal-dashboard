@@ -8,6 +8,12 @@
  */
 window.DASH_CONFIG = {
   fxApi: (localStorage.getItem('fx_api') || 'https://fx-dashboard.jgjy926.workers.dev'),
+  // Write endpoint for the Card Promos Console's "Publish" button — the
+  // worker/promo-sync Worker, which commits data/promotions.json on your behalf
+  // (it holds the GitHub token; the browser only ever holds the sync key).
+  // Empty until you deploy it; the Console then falls back to the download flow.
+  //   localStorage.setItem('promo_sync_api', 'https://promo-sync.<you>.workers.dev')
+  promoSyncApi: (localStorage.getItem('promo_sync_api') || ''),
   feeds: {
     // The forecasting engine's full snapshot: regime, recession probabilities,
     // factors, scenarios, market implications, model performance, data health.
