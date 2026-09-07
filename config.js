@@ -11,9 +11,10 @@ window.DASH_CONFIG = {
   // Write endpoint for the Card Promos Console's "Publish" button — the
   // worker/promo-sync Worker, which commits data/promotions.json on your behalf
   // (it holds the GitHub token; the browser only ever holds the sync key).
-  // Empty until you deploy it; the Console then falls back to the download flow.
+  // Deployed and live; override per-browser the same way as fxApi:
   //   localStorage.setItem('promo_sync_api', 'https://promo-sync.<you>.workers.dev')
-  promoSyncApi: (localStorage.getItem('promo_sync_api') || ''),
+  // Leaving this blank makes Publish fall back to the download-and-commit flow.
+  promoSyncApi: (localStorage.getItem('promo_sync_api') || 'https://promo-sync.jgjy926.workers.dev'),
   feeds: {
     // The forecasting engine's full snapshot: regime, recession probabilities,
     // factors, scenarios, market implications, model performance, data health.
