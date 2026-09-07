@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-07T00:00:00+00:00",
+    "generated_at": "2026-09-07T16:25:25.186Z",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-07",
     "new_today": 3,
     "count": 15,
-    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
+    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification. Summaries published from the Card Promos Console."
   },
   "promotions": [
     {
@@ -15,10 +15,10 @@
       "image": "https://www.pbebank.com/media/enodskho/visa-lazada-double-digit_wb.jpg",
       "id": "3694a7ccdc",
       "category": "Online",
-      "period": "",
+      "period": "8th (8PM) – 11th (11:59PM) Sep 2026; 9th–12th Oct 2026; 10th–13th Nov 2026; 11th–14th Dec 2026; 1st–4th Feb 2027; 2nd–5th Mar 2027; 3rd–6th Apr 2027",
       "first_seen": "2026-09-07",
       "tnc_link": "https://www.pbebank.com/media/sdrozdd4/tc_visa-lazada-double-digit.pdf",
-      "tnc_summary": ""
+      "tnc_summary": "RM20 instant off with minimum single-transaction spend of RM180, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Offer repeats monthly on the dates listed in the promotion period, spanning September 2026 through April 2027."
     },
     {
       "title": "Lazada PayDay with PB Visa Credit Card",
@@ -26,10 +26,10 @@
       "image": "https://www.pbebank.com/media/zfef5zne/visa-lazada-payday_wb.jpg",
       "id": "c3f22053bf",
       "category": "Online",
-      "period": "",
+      "period": "24th (8PM) – 27th (11:59PM) monthly, from September 2026 to April 2027",
       "first_seen": "2026-09-07",
       "tnc_link": "https://www.pbebank.com/media/cc4olm1r/tc_visa-lazada-payday.pdf",
-      "tnc_summary": ""
+      "tnc_summary": "RM20 off with minimum single-transaction spend of RM180, redeemed by collecting a voucher, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Recurs monthly on the 24th–27th each month across the campaign period."
     },
     {
       "title": "PB Privileges at Grand Millennium Kuala Lumpur",
@@ -37,10 +37,10 @@
       "image": "https://www.pbebank.com/media/4ejcwked/gmkl_wb.jpg",
       "id": "cb5bc1fa40",
       "category": "Credit Card",
-      "period": "",
+      "period": "Now until 30 June 2027",
       "first_seen": "2026-09-07",
       "tnc_link": "https://www.pbebank.com/media/omzhvulz/tc_gmkl.pdf",
-      "tnc_summary": ""
+      "tnc_summary": "15% off food only at Grand Millennium Kuala Lumpur, valid at three participating outlets: The Mill Café, Lai Ching Yuen, and Bistro 160."
     },
     {
       "title": "Lazada Double Date and Pay Day Sales with PB Mastercard Credit Card",
