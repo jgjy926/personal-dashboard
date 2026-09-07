@@ -155,8 +155,11 @@ mirror this. Not scraped rather than half-built on fragile markup.
 ## JSON contracts (so Phase-B producers are drop-in)
 
 - **`macro.json`** — `meta`, `snapshot[]` (`{id,label,value,unit,change,as_of,freq}`),
-  `overlay{dates[], series{real_yield[],gold[],sp500[]}}`, `lag{lead_months,dates[],unemployment[],real_yield_lead[]}`,
-  `regime{label,detail,caveat}`.
+  `overlay{dates[], series{real_yield[],gold[],sp500[]}}`, `oil{dates[],series{brent[],wti[]},unit,note}`,
+  `fx{dates[],series{usdjpy[]},unit,note}`, `lag{lead_months,dates[],unemployment[],real_yield_lead[]}`,
+  `regime{label,detail,caveat}`. `oil` and `fx` are each single-unit, so the frontend plots them on a
+  real axis rather than the 0-100 rescale `overlay` needs; both blocks are optional and the monitor
+  omits the chart if absent.
 - **`promotions.json`** — `meta` (incl. `today`), `promotions[]` (`{id,title,image,link,category,period,first_seen,tnc_summary}`). `first_seen` = the date a promo first appeared on the page; a promo whose `first_seen` equals `meta.today` is flagged **NEW** and surfaced in the "new today" banner. The Card Promos tab filters by `category`.
 - **`treasury.json`** — `meta{sources,note}`, `upcoming_auctions[]`
   (`{auction_date,issue_date,maturity_date,security_type,term,rate,cusip}`),

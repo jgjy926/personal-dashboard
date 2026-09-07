@@ -5,9 +5,9 @@ fetch_macro.py — REAL macro data from FRED's keyless CSV endpoint -> data/macr
 No API key, no cost. FRED publishes every series as a public CSV at
     https://fred.stlouisfed.org/graph/fredgraph.csv?id=<SERIES>
 so we pull nominal & real yields, breakeven, unemployment, home prices, the dollar
-index, the S&P 500 and gold — all from one keyless source (no Stooq, which
-bot-challenges datacenter IPs). Output matches the exact contract the dashboard's
-Macro tab reads, so nothing on the frontend changes.
+index, the S&P 500, gold, both crude benchmarks (Brent and WTI) and the USD/JPY
+rate — all from one keyless source (no Stooq, which bot-challenges datacenter
+IPs). Japan's JGB curve comes from Japan's MoF, which FRED doesn't carry.
 
 Run locally or (recommended) in GitHub Actions, whose runners have clean egress:
     python tools/fetch_macro.py
@@ -46,10 +46,22 @@ SERIES = {
     "DFII30":    {"ids": ["DFII30"],    "label": "Real 30Y Yield (TIPS)", "unit": "%", "freq": "daily"},
     "T10YIE":    {"ids": ["T10YIE"],    "label": "Breakeven Inflation",   "unit": "%", "freq": "daily"},
     "SP500":     {"ids": ["SP500"],     "label": "S&P 500",               "unit": "",  "freq": "daily"},
-    "GOLD":      {"ids": ["GOLDPMGBD228NLBM", "GOLDAMGBD228NLBM"],
+    "GOLD":      {"ids": ["GOLDPMGBD228NLBM", "GOLDAMGBD228NLBM"], "yahoo": "GC=F",
                   "label": "Gold (LBMA)", "unit": "$", "freq": "daily"},
+    # Both crude benchmarks, so the Brent–WTI spread (the transatlantic freight /
+    # quality gap that widens when US supply is landlocked) is readable off one
+    # shared $/bbl axis rather than inferred from a single price.
+    "BRENT":     {"ids": ["DCOILBRENTEU"], "yahoo": "BZ=F",
+                  "label": "Brent Crude", "unit": "$", "freq": "daily"},
+    "WTI":       {"ids": ["DCOILWTICO"],   "yahoo": "CL=F",
+                  "label": "WTI Crude",    "unit": "$", "freq": "daily"},
     "UNRATE":    {"ids": ["UNRATE"],    "label": "Unemployment Rate",     "unit": "%", "freq": "monthly"},
     "DTWEXBGS":  {"ids": ["DTWEXBGS"],  "label": "Dollar Index (broad)",  "unit": "",  "freq": "daily"},
+    # Yen per one US dollar (FRED's DEXJPUS quotes it that way round, so a RISING
+    # number is a WEAKER yen). Sits next to the broad dollar index deliberately:
+    # the pair is the single most reactive leg of it to the JGB yields below.
+    "USDJPY":    {"ids": ["DEXJPUS"], "yahoo": "JPY=X",
+                  "label": "USD/JPY", "unit": "¥", "freq": "daily"},
     "CSUSHPISA": {"ids": ["CSUSHPISA"], "label": "Home Price Index",      "unit": "",  "freq": "monthly"},
     # Japan yields are NOMINAL — Japan's inflation-indexed (JGBi) market is thin
     # and not published on FRED, so there is no true "Japan TIPS" equivalent to
@@ -231,6 +243,9 @@ def build_payload(raw: dict[str, list[tuple[str, float]]], years: int) -> dict:
     gold = align(monthly(have["GOLD"]), axis, 1) if "GOLD" in have else []
     sp500 = align(monthly(have["SP500"]), axis, 1) if "SP500" in have else []
     unemp = align(monthly(have["UNRATE"]), axis, 2) if "UNRATE" in have else []
+    brent = align(monthly(have["BRENT"]), axis, 2) if "BRENT" in have else []
+    wti = align(monthly(have["WTI"]), axis, 2) if "WTI" in have else []
+    usdjpy = align(monthly(have["USDJPY"]), axis, 2) if "USDJPY" in have else []
 
     LEAD = 15
     lag_axis = axis[LEAD:]
@@ -263,6 +278,21 @@ def build_payload(raw: dict[str, list[tuple[str, float]]], years: int) -> dict:
             "dates": axis,
             "series": {"real_yield": real_yield, "gold": gold, "sp500": sp500},
             "note": "Real yield / gold / S&P 500 each scaled to its own 0–100 range so co-movement is comparable (min→max of the window, not indexed to the first point — robust to a series like real yield opening the window near/below zero).",
+        },
+        # Both benchmarks are quoted in $/bbl, so these plot on a SHARED, un-normalised
+        # axis — the gap between the two lines is the Brent-WTI spread itself, which a
+        # per-series 0-100 rescale (as used by the overlay above) would destroy.
+        "oil": {
+            "dates": axis,
+            "series": {"brent": brent, "wti": wti},
+            "unit": "$/bbl",
+            "note": "Brent (waterborne, the global marginal barrel) vs WTI (Cushing, Oklahoma, landlocked). Same $/bbl axis, so the vertical gap between the lines is the Brent-WTI spread.",
+        },
+        "fx": {
+            "dates": axis,
+            "series": {"usdjpy": usdjpy},
+            "unit": "JPY per USD",
+            "note": "Yen per one US dollar, so a RISING line is a WEAKER yen. Month-end observations of a daily series.",
         },
         "lag": {
             "lead_months": LEAD, "dates": lag_axis,
@@ -315,16 +345,19 @@ def main() -> int:
             except Exception as e:
                 errors.append(f"{candidate}: {e}")
         else:
-            # Every FRED candidate failed. Gold specifically has a free, keyless
-            # non-FRED fallback (Yahoo Finance chart API) — try it before giving up.
-            if sid == "GOLD":
+            # Every FRED candidate failed. Series that name a `yahoo` symbol have a
+            # free, keyless non-FRED fallback (Yahoo Finance chart API) — gold needs
+            # it permanently (FRED dropped the LBMA fixings), and the oil/FX series
+            # carry one so a single FRED outage can't blank them either.
+            if meta.get("yahoo"):
+                sym = meta["yahoo"]
                 try:
-                    raw[sid] = parse_yahoo_chart(fetch_yahoo_chart("GC=F", rng=f"{args.years}y"))
+                    raw[sid] = parse_yahoo_chart(fetch_yahoo_chart(sym, rng=f"{args.years}y"))
                     if raw[sid]:
                         print(f"[fetch_macro] {sid}: {len(raw[sid])} obs "
-                              f"(latest {raw[sid][-1][0]}) (via Yahoo Finance GC=F, FRED unavailable)")
+                              f"(latest {raw[sid][-1][0]}) (via Yahoo Finance {sym}, FRED unavailable)")
                 except Exception as e:
-                    errors.append(f"yahoo GC=F: {e}")
+                    errors.append(f"yahoo {sym}: {e}")
             if not raw[sid]:
                 print(f"[fetch_macro] {sid}: FAILED all candidates — {'; '.join(errors)}", file=sys.stderr)
 

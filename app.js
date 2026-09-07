@@ -326,8 +326,8 @@ async function renderSeriesMonitor(root) {
   const cards = (d.snapshot || []).map(s => {
     const dir = s.change == null ? '' : (s.change >= 0 ? 'up' : 'down');
     const arrow = s.change == null ? '' : (s.change >= 0 ? '▲' : '▼');
-    const unit = s.unit === '%' ? '%' : (s.unit === '$' ? '' : '');
-    const pre = s.unit === '$' ? '$' : '';
+    const unit = s.unit === '%' ? '%' : '';
+    const pre = (s.unit === '$' || s.unit === '¥') ? s.unit : '';
     return `<div class="stat">
       <span class="k">${esc(s.label)} <span class="chip freq">${esc(s.freq || '')}</span></span>
       <div class="v">${pre}${fmt(s.value)}${unit}</div>
@@ -353,6 +353,29 @@ async function renderSeriesMonitor(root) {
     { name: 'S&P 500', values: ov.series && ov.series.sp500, color: cv('--s3') }
   ], ov.dates, { normalize: true, w: 860 });
 
+  // Oil and FX get their own blocks rather than extra lines on the overlay above:
+  // each block is single-unit, so it plots on a REAL axis (normalize:false) and the
+  // actual $/bbl and yen levels stay readable — the overlay's 0-100 rescale exists
+  // only because real yield / gold / S&P have no common scale.
+  const has = o => o && o.series && Object.values(o.series).some(v => v && v.length);
+
+  const oil = d.oil || {};
+  const oilBlock = !has(oil) ? '' : `<div class="card-block">
+    <h3>Crude oil <span class="muted">— Brent vs WTI, $/bbl</span></h3>
+    ${lineChart([
+      { name: 'Brent', values: oil.series.brent, color: cv('--s1') },
+      { name: 'WTI', values: oil.series.wti, color: cv('--s2') }
+    ], oil.dates, { w: 860, h: 190 })}
+    <p class="muted" style="margin-top:6px">${esc(oil.note || '')}</p></div>`;
+
+  const fx = d.fx || {};
+  const fxBlock = !has(fx) ? '' : `<div class="card-block">
+    <h3>USD/JPY <span class="muted">— yen per US dollar</span></h3>
+    ${lineChart([
+      { name: 'USD/JPY', values: fx.series.usdjpy, color: cv('--s3') }
+    ], fx.dates, { w: 860, h: 190 })}
+    <p class="muted" style="margin-top:6px">${esc(fx.note || '')}</p></div>`;
+
   const lag = d.lag || {};
   const lagChart = lineChart([
     { name: 'Unemployment', values: lag.unemployment, color: cv('--s1') },
@@ -373,6 +396,8 @@ async function renderSeriesMonitor(root) {
     <div class="stat-grid">${cards}</div>
     <div class="card-block"><h3>Real yield · Gold · S&amp;P 500 <span class="muted">— each scaled to its own 0–100 range</span></h3>${overlayChart}
       <p class="muted" style="margin-top:6px">${esc(ov.note || '')}</p></div>
+    ${oilBlock}
+    ${fxBlock}
     <div class="card-block"><h3>Unemployment vs lagged real yield</h3>${lagChart}
       <p class="muted" style="margin-top:6px">${esc(lag.note || '')}</p></div>
     <div id="treasury-panel"></div>
