@@ -4,11 +4,44 @@
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-07",
-    "new_today": 0,
+    "new_today": 3,
     "count": 15,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
+    {
+      "title": "Lazada Double-Digit Days with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/lazada-double-digit-days-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/enodskho/visa-lazada-double-digit_wb.jpg",
+      "id": "3694a7ccdc",
+      "category": "Online",
+      "period": "",
+      "first_seen": "2026-09-07",
+      "tnc_link": "https://www.pbebank.com/media/sdrozdd4/tc_visa-lazada-double-digit.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "Lazada PayDay with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/lazada-payday-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/zfef5zne/visa-lazada-payday_wb.jpg",
+      "id": "c3f22053bf",
+      "category": "Online",
+      "period": "",
+      "first_seen": "2026-09-07",
+      "tnc_link": "https://www.pbebank.com/media/cc4olm1r/tc_visa-lazada-payday.pdf",
+      "tnc_summary": ""
+    },
+    {
+      "title": "PB Privileges at Grand Millennium Kuala Lumpur",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-grand-millennium-kuala-lumpur/",
+      "image": "https://www.pbebank.com/media/4ejcwked/gmkl_wb.jpg",
+      "id": "cb5bc1fa40",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-07",
+      "tnc_link": "https://www.pbebank.com/media/omzhvulz/tc_gmkl.pdf",
+      "tnc_summary": ""
+    },
     {
       "title": "Lazada Double Date and Pay Day Sales with PB Mastercard Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/lazada-double-date-and-pay-day-sales-with-pb-mastercard-credit-card/",
@@ -140,39 +173,6 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://shop.myjournify.com/promo/cart/2325/mhfppublicbank",
       "tnc_summary": "MYR100 off MHflypass (1 pass, 3 return trips, Malaysia/ASEAN) using code PUBLIC100, exclusively for PB credit & debit cardmembers. Valid for all passes except Malaysia Zone 1."
-    },
-    {
-      "title": "PB Mid-Autumn Offer @ MIKA",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-mid-autumn-offer-mika-2/",
-      "image": "https://www.pbebank.com/media/4uxhexbr/mika-mid-autumn26_wb.jpg",
-      "id": "571bb2162b",
-      "category": "Credit Card",
-      "period": "15 August - 25 September 2026",
-      "first_seen": "2026-09-03",
-      "tnc_link": "https://www.pbebank.com/media/zf1jlbdk/tc_mika-mid-autumn26.pdf",
-      "tnc_summary": "RM30 off with minimum spend RM100 on Mid-Autumn products at MIKA, using promo code MKPBM26 at www.mika.com.my."
-    },
-    {
-      "title": "Journey of Rewarding with PB Visa Credit Card",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/journey-of-rewarding-with-pb-visa-credit-card/",
-      "image": "https://www.pbebank.com/media/izvfnx0i/journey-of-rewarding_wb.jpg",
-      "id": "60cc32fe1f",
-      "category": "Credit Card",
-      "period": "15 August - 30 September 2026",
-      "first_seen": "2026-09-03",
-      "tnc_link": "https://www.pbebank.com/media/cevktwoh/tc_journey-of-rewarding.pdf",
-      "tnc_summary": "RM88 cashback (min accumulative spend RM5,000) or 100,000 Enrich Points (min spend RM10,000, Top Spender Contest x5) on travel-related merchant categories. Convertible to 6-month 0% Flexipay. Register via PBe (keyword PBM) or SMS PBM to 68333."
-    },
-    {
-      "title": "EcoWorld Home Buyer Programme",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/ecoworld-home-buyer-programme-1/",
-      "image": "https://www.pbebank.com/media/jjcl4x1n/ecoworld-buyer_wb.jpg",
-      "id": "edcb1d2301",
-      "category": "Credit Card",
-      "period": "15 August - 31 October 2026",
-      "first_seen": "2026-09-03",
-      "tnc_link": "https://www.pbebank.com/media/12qlbiml/tc_ecoworld-buyer.pdf",
-      "tnc_summary": "Cashback on home purchases: RM200 (downpayment RM10,000-39,999), RM400 (RM40,000-99,999), RM1,000 (RM100,000+); also for 0% instalment (36mo ZIIP/ZPIP). Max one redemption per cardmember. Plus a free 16-piece cutlery set (worth RM119) with qualifying spend at EcoWorld townships."
     }
   ]
 }
