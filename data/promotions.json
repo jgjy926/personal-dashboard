@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generated_at": "2026-09-07T00:00:00+00:00",
+    "generated_at": "2026-09-08T00:00:00+00:00",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "today": "2026-09-07",
-    "new_today": 3,
+    "today": "2026-09-08",
+    "new_today": 1,
     "count": 15,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
@@ -131,17 +131,6 @@
       "tnc_summary": "RM50 cashback with spending of RM688 in a single receipt at participating restaurants (Fish Market, Hee Lai Ton, Oriental Group, Grand Imperial Group, and others). Register via PBe (keyword PBCB) or SMS PBCB to 68333."
     },
     {
-      "title": "Get up to RM35 When you Register & Activate your PB SecureSign today! [By Invitation]",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/get-up-to-rm35-when-you-register-activate-your-pb-securesign-today-by-invitation/",
-      "image": "https://www.pbebank.com/media/1gcpuckb/rm35-activate-securesign_wb.jpg",
-      "id": "6b38899a22",
-      "category": "Credit Card",
-      "period": "1 September - 31 December 2026",
-      "first_seen": "2026-09-03",
-      "tnc_link": "https://www.pbebank.com/media/jpbn3skw/tc_rm35-activate-securesign.pdf",
-      "tnc_summary": "By invitation: get up to RM35 when you download MyPB app, register and activate PB SecureSign, then spend 2x (any amount) online. Requires app registration and ATM/branch activation."
-    },
-    {
       "title": "More eWallet Top-Ups, More Rewards with PB Mastercard Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/more-ewallet-top-ups-more-rewards-with-pb-mastercard-credit-card/",
       "image": "https://www.pbebank.com/media/nm0bk1ks/ewallet-top-ups_wb.jpg",
@@ -173,6 +162,17 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://shop.myjournify.com/promo/cart/2325/mhfppublicbank",
       "tnc_summary": "MYR100 off MHflypass (1 pass, 3 return trips, Malaysia/ASEAN) using code PUBLIC100, exclusively for PB credit & debit cardmembers. Valid for all passes except Malaysia Zone 1."
+    },
+    {
+      "title": "PB Mid-Autumn Offer @ MIKA",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-mid-autumn-offer-mika-2/",
+      "image": "https://www.pbebank.com/media/4uxhexbr/mika-mid-autumn26_wb.jpg",
+      "id": "571bb2162b",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-08",
+      "tnc_link": "https://www.pbebank.com/media/zf1jlbdk/tc_mika-mid-autumn26.pdf",
+      "tnc_summary": ""
     }
   ]
 }
