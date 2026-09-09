@@ -168,7 +168,12 @@ button.toggle[aria-expanded="true"] { background: var(--accent); color: #fff; bo
 .stat .v { font-size: 24px; font-weight: 650; margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
 .stat .d { font-size: 12px; font-variant-numeric: tabular-nums; }
 .stat .d.up { color: var(--green); } .stat .d.down { color: var(--red); }
-.stat .meta { font-size: 11px; color: var(--muted); }
+.stat .meta { font-size: 11px; color: var(--muted); line-height: 1.35; }
+/* A daily observation that has fallen behind its own release cadence: amber, so
+   a genuinely late card is distinguishable at a glance from the ordinary
+   one-business-day publication lag every government series carries. */
+.stat .meta.stale { color: var(--amber); }
+.stat .meta .ago { font-variant-numeric: tabular-nums; }
 .chip { display: inline-block; font-size: 10.5px; font-weight: 600; padding: 2px 7px;
   border-radius: 999px; background: var(--accent-soft); color: var(--accent); vertical-align: middle; }
 .chip.freq { background: var(--bg); color: var(--muted); }

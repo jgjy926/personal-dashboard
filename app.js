@@ -323,28 +323,64 @@ async function renderSeriesMonitor(root) {
 
   const sample = d.meta && d.meta.sample;
   const rg = d.regime || {};
+
+  // Age is computed HERE, against the reader's clock, never baked into the feed.
+  // A baked "3 days old" would itself go stale the moment the refresh job stops
+  // — which is precisely the failure this is meant to expose.
+  const DAY = 86400000;
+  const ageDays = iso => {
+    const t = Date.parse(iso);
+    return Number.isNaN(t) ? null : Math.floor((Date.now() - t) / DAY);
+  };
+  // What counts as "old" depends on the release cadence: a daily market series
+  // more than ~4 days behind is worth a second look (a long weekend plus a
+  // public holiday is 4), a monthly one only past ~45 days.
+  const staleAfter = freq => (freq === 'monthly' ? 45 : 4);
+
   const cards = (d.snapshot || []).map(s => {
     const dir = s.change == null ? '' : (s.change >= 0 ? 'up' : 'down');
     const arrow = s.change == null ? '' : (s.change >= 0 ? '▲' : '▼');
     const unit = s.unit === '%' ? '%' : '';
     const pre = (s.unit === '$' || s.unit === '¥') ? s.unit : '';
-    return `<div class="stat">
-      <span class="k">${esc(s.label)} <span class="chip freq">${esc(s.freq || '')}</span></span>
+    const age = ageDays(s.as_of);
+    const stale = age != null && age > staleAfter(s.freq);
+    const agoTxt = age == null ? '' : age <= 0 ? 'today' : age === 1 ? '1d ago' : `${age}d ago`;
+    // The source is on the card, not just in the JSON: "why is this number from
+    // last Friday" is only answerable if you can see which release produced it.
+    const src = s.source ? ` · ${esc(s.source)}` : '';
+    return `<div class="stat" title="${esc(s.label)} — latest observation ${esc(s.as_of)}${
+        s.source ? `, from ${esc(s.source)}` : ''}">
+      <span class="k">${esc(s.label)} <span class="chip freq">${esc(s.freq || '')}</span>${
+        s.provisional ? ' <span class="chip ok">live</span>' : ''}</span>
       <div class="v">${pre}${fmt(s.value)}${unit}</div>
       <div class="d ${dir}">${arrow} ${s.change == null ? '' : fmt(Math.abs(s.change))}</div>
-      <div class="meta">as of ${esc(s.as_of)}</div>
+      <div class="meta${stale ? ' stale' : ''}">as of ${esc(s.as_of)}${
+        agoTxt ? ` <span class="ago">(${agoTxt})</span>` : ''}${src}</div>
     </div>`;
   }).join('');
 
   // Daily series can legitimately show DIFFERENT "as of" dates — each is an
-  // independent US government release (Treasury yields, breakeven, equities…)
-  // with its own publish schedule, not all stamped by one clock. Surface that
-  // explicitly whenever it's actually happening, so a 1-day gap between two
-  // "daily" cards reads as expected, not as a stale-fetch bug.
+  // independent release (Treasury yields, breakeven, equities…) with its own
+  // publish schedule, not all stamped by one clock. Surface that explicitly
+  // whenever it's actually happening, so a 1-day gap between two "daily" cards
+  // reads as expected, not as a stale-fetch bug.
   const dailyDates = [...new Set((d.snapshot || []).filter(s => s.freq === 'daily').map(s => s.as_of))];
   const dateSkewNote = dailyDates.length > 1
-    ? `<p class="muted" style="margin:-4px 0 12px">ℹ️ Daily series don't all show the same date (${dailyDates.slice().sort().join(' vs ')}) — each is published independently by its own source on its own schedule (e.g. Treasury yields typically post a day behind); not a stale fetch.</p>`
+    ? `<p class="muted" style="margin:-4px 0 12px">ℹ️ Daily series don't all show the same date (${dailyDates.slice().sort().join(' vs ')}) — each is published independently by its own source on its own schedule (e.g. Treasury yields post a business day behind, and the Fed's H.10 dollar/yen release is <em>weekly</em>); not a stale fetch.</p>`
     : '';
+
+  // The stale-card question the individual "as of" dates cannot answer: is the
+  // FETCHER still running at all? An old observation on a feed rebuilt an hour
+  // ago is an upstream publication lag; an old observation on a feed that itself
+  // hasn't been rebuilt in days is a broken job. Separating those two is the
+  // whole point, so the age of the feed is stated outright rather than inferred.
+  const feedAgeH = d.meta && d.meta.generated_at
+    ? Math.floor((Date.now() - Date.parse(d.meta.generated_at)) / 3600000) : null;
+  const feedNote = feedAgeH == null ? ''
+    : feedAgeH > 36
+      ? `<div class="disclaimer">⚠ This feed was last rebuilt <b>${Math.floor(feedAgeH / 24)} days ago</b> (${esc(d.meta.generated_at)}). The daily refresh job looks like it has stopped — check the "Refresh feeds &amp; deploy" workflow in GitHub Actions. Every figure below is frozen at that date.</div>`
+      : `<p class="muted" style="margin:-4px 0 12px">🔄 Feed rebuilt ${feedAgeH < 1 ? 'less than an hour' : feedAgeH === 1 ? '1 hour' : `${feedAgeH} hours`} ago${
+          d.meta.latest_observation ? `; newest market observation ${esc(d.meta.latest_observation)}` : ''}. Cards dated further back are waiting on their publisher, not on this job.</p>`;
 
   const ov = d.overlay || {};
   const overlayChart = lineChart([
@@ -392,6 +428,7 @@ async function renderSeriesMonitor(root) {
         <div class="b-detail">${esc(rg.detail || '')}</div>
         <div class="b-caveat">${esc(rg.caveat || 'Heuristic, not a signal.')}</div></div>
     </div>
+    ${feedNote}
     ${dateSkewNote}
     <div class="stat-grid">${cards}</div>
     <div class="card-block"><h3>Real yield · Gold · S&amp;P 500 <span class="muted">— each scaled to its own 0–100 range</span></h3>${overlayChart}

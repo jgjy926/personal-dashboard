@@ -35,6 +35,25 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Deliberately a SEPARATE job, and deliberately not a dependency of the deploy
+  # below. It guards the parse/merge layer the macro cards are built from — no
+  # network, ~1s — and it is where the staleness bugs lived (UTC-vs-exchange
+  # dating, the Reiwa-only era pattern, splicing a fast source onto a slow one).
+  #
+  # It does not gate the deploy for the same reason every step below carries
+  # continue-on-error: one broken source must never stop the other feeds from
+  # refreshing or the site from publishing. A red X here is a clear signal to fix
+  # the parser; meanwhile fetch_macro.py's own "no series returned — refusing to
+  # overwrite" guard is what actually protects the published feed from garbage.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python tools/test_fetch_macro.py
+
   build-and-deploy:
     runs-on: ubuntu-latest
     environment:
@@ -52,7 +71,7 @@ jobs:
           pip install requests beautifulsoup4 pytesseract Pillow
           sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr
 
-      - name: Fetch macro (FRED, keyless)
+      - name: Fetch macro (FRED + Yahoo extension + Japan MoF, all keyless)
         run: python tools/fetch_macro.py --years 5
 
       - name: Fetch US Treasury supply (auctions + buybacks, keyless)
