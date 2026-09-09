@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-08T11:26:43+00:00",
+    "generated_at": "2026-09-09T00:40:21+00:00",
     "sources": {
       "auctions": "TreasuryDirect (upcoming auctions)",
       "buybacks": "Treasury Fiscal Data (buybacks_operations)"
@@ -9,45 +9,9 @@
   },
   "upcoming_auctions": [
     {
-      "auction_date": "2026-09-08",
-      "issue_date": "2026-09-10",
-      "maturity_date": "2026-12-10",
-      "security_type": "Bill",
-      "term": "13-Week",
-      "rate": "",
-      "cusip": "912797VG9"
-    },
-    {
-      "auction_date": "2026-09-08",
-      "issue_date": "2026-09-10",
-      "maturity_date": "2027-03-11",
-      "security_type": "Bill",
-      "term": "26-Week",
-      "rate": "",
-      "cusip": "912797WK9"
-    },
-    {
-      "auction_date": "2026-09-08",
-      "issue_date": "2026-09-15",
-      "maturity_date": "2029-09-15",
-      "security_type": "Note",
-      "term": "3-Year",
-      "rate": "",
-      "cusip": "91282CRL7"
-    },
-    {
-      "auction_date": "2026-09-08",
-      "issue_date": "2026-09-10",
-      "maturity_date": "2026-10-22",
-      "security_type": "Bill",
-      "term": "6-Week",
-      "rate": "",
-      "cusip": "912797UL9"
-    },
-    {
       "auction_date": "2026-09-09",
       "issue_date": "2026-09-15",
-      "maturity_date": "",
+      "maturity_date": "2027-01-12",
       "security_type": "Bill",
       "term": "17-Week",
       "rate": "",
@@ -74,14 +38,58 @@
     {
       "auction_date": "2026-09-10",
       "issue_date": "2026-09-15",
-      "maturity_date": "",
+      "maturity_date": "2026-10-13",
       "security_type": "Bill",
       "term": "4-Week",
       "rate": "",
       "cusip": "912797VL8"
+    },
+    {
+      "auction_date": "2026-09-10",
+      "issue_date": "2026-09-15",
+      "maturity_date": "2026-11-10",
+      "security_type": "Bill",
+      "term": "8-Week",
+      "rate": "",
+      "cusip": "912797VW4"
+    },
+    {
+      "auction_date": "2026-09-14",
+      "issue_date": "2026-09-17",
+      "maturity_date": "",
+      "security_type": "Bill",
+      "term": "13-Week",
+      "rate": "",
+      "cusip": "912797VH7"
+    },
+    {
+      "auction_date": "2026-09-14",
+      "issue_date": "2026-09-17",
+      "maturity_date": "",
+      "security_type": "Bill",
+      "term": "26-Week",
+      "rate": "",
+      "cusip": "912797UD7"
+    },
+    {
+      "auction_date": "2026-09-15",
+      "issue_date": "2026-09-18",
+      "maturity_date": "",
+      "security_type": "Bond",
+      "term": "19-Year 11-Month",
+      "rate": "",
+      "cusip": "912810UX4"
     }
   ],
   "recent_buybacks": [
+    {
+      "operation_date": "2026-09-09",
+      "settlement_date": "2026-09-10",
+      "operation_type": "Cash Management",
+      "security_type": "Nominal Coupons",
+      "maturity_bucket": "1Mo to 2Y",
+      "par_accepted": null
+    },
     {
       "operation_date": "2026-09-03",
       "settlement_date": "2026-09-04",
@@ -121,14 +129,6 @@
       "security_type": "Nominal Coupons",
       "maturity_bucket": "10Y to 20Y",
       "par_accepted": 2000000000.0
-    },
-    {
-      "operation_date": "2026-08-06",
-      "settlement_date": "2026-08-07",
-      "operation_type": "Liquidity Support",
-      "security_type": "Nominal Coupons",
-      "maturity_bucket": "1Mo to 2Y",
-      "par_accepted": 4000000000.0
     }
   ]
 }
