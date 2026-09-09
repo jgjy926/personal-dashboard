@@ -4,11 +4,22 @@
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-09",
-    "new_today": 0,
+    "new_today": 1,
     "count": 15,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
+    {
+      "title": "PB Privileges @ Just Pets Megastore",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-just-pets-megastore-1/",
+      "image": "https://www.pbebank.com/media/jhdpo3ni/megastore-pets_wb.jpg",
+      "id": "b628abf67f",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-09",
+      "tnc_link": "https://www.pbebank.com/media/av4hqra5/tc_megastore-pets.pdf",
+      "tnc_summary": ""
+    },
     {
       "title": "Lazada Double-Digit Days with PB Visa Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/lazada-double-digit-days-with-pb-visa-credit-card/",
@@ -162,17 +173,6 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://shop.myjournify.com/promo/cart/2325/mhfppublicbank",
       "tnc_summary": "MYR100 off MHflypass (1 pass, 3 return trips, Malaysia/ASEAN) using code PUBLIC100, exclusively for PB credit & debit cardmembers. Valid for all passes except Malaysia Zone 1."
-    },
-    {
-      "title": "PB Mid-Autumn Offer @ MIKA",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-mid-autumn-offer-mika-2/",
-      "image": "https://www.pbebank.com/media/4uxhexbr/mika-mid-autumn26_wb.jpg",
-      "id": "571bb2162b",
-      "category": "Credit Card",
-      "period": "15 August to 25 September 2026",
-      "first_seen": "2026-09-08",
-      "tnc_link": "https://www.pbebank.com/media/zf1jlbdk/tc_mika-mid-autumn26.pdf",
-      "tnc_summary": "Enjoy RM30 off with a minimum spend of RM100 on Mid-Autumn products from mika. Use promo code MKPBM26 at checkout. Valid only at www.mika.com.my. Terms and conditions apply; PB Debit Card protected by PIDM up to RM250,000 per depositor."
     }
   ]
 }

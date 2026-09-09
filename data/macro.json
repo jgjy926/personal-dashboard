@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-09T01:01:19+00:00",
+    "generated_at": "2026-09-09T11:32:07+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; Yahoo Finance extends the market-traded ones over the days FRED has not published yet (the Fed's H.10 dollar/yen release is weekly, the EIA crude series are batched), so every card names the source behind its latest point.",
@@ -72,10 +72,10 @@
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4399.4,
+      "value": 4446.6,
       "unit": "$",
-      "change": -30.4,
-      "as_of": "2026-09-08",
+      "change": 52.7,
+      "as_of": "2026-09-09",
       "freq": "daily",
       "source": "Yahoo GC=F",
       "provisional": true
@@ -83,10 +83,10 @@
     {
       "id": "BRENT",
       "label": "Brent Crude",
-      "value": 99.46,
+      "value": 100.8,
       "unit": "$",
-      "change": 3.18,
-      "as_of": "2026-09-08",
+      "change": 2.88,
+      "as_of": "2026-09-09",
       "freq": "daily",
       "source": "FRED DCOILBRENTEU + Yahoo BZ=F",
       "provisional": true
@@ -94,10 +94,10 @@
     {
       "id": "WTI",
       "label": "WTI Crude",
-      "value": 94.62,
+      "value": 95.31,
       "unit": "$",
-      "change": 3.14,
-      "as_of": "2026-09-08",
+      "change": 2.28,
+      "as_of": "2026-09-09",
       "freq": "daily",
       "source": "FRED DCOILWTICO + Yahoo CL=F",
       "provisional": true
@@ -125,9 +125,9 @@
     {
       "id": "USDJPY",
       "label": "USD/JPY",
-      "value": 153.59,
+      "value": 153.38,
       "unit": "¥",
-      "change": -0.27,
+      "change": -0.47,
       "as_of": "2026-09-09",
       "freq": "daily",
       "source": "FRED DEXJPUS + Yahoo JPY=X",
@@ -350,7 +350,7 @@
         4022.9,
         4049.1,
         4431.1,
-        4399.4
+        4446.6
       ],
       "sp500": [
         4605.4,
@@ -541,7 +541,7 @@
         70.46,
         96.95,
         89.75,
-        99.46
+        100.8
       ],
       "wti": [
         83.5,
@@ -603,7 +603,7 @@
         70.56,
         86.16,
         87.03,
-        94.62
+        95.31
       ]
     },
     "unit": "$/bbl",
@@ -733,7 +733,7 @@
         162.61,
         159.16,
         159.74,
-        153.59
+        153.38
       ]
     },
     "unit": "JPY per USD",
