@@ -480,12 +480,48 @@ async function renderTreasuryPanel(root) {
     </tr>`;
   }).join('');
 
-  const buybackRows = buybacks.map(b => `<tr>
+  // Auction RESULTS — what the rows in the table above became once they were
+  // actually held. Two percentages, kept visually distinct because they answer
+  // different questions and are easy to conflate (see the footnote).
+  const results = t.recent_results || [];
+  const pc = v => v == null ? '—' : `${v.toFixed(1)}%`;
+  const rate = v => v == null ? '—' : `${v.toFixed(3)}%`;
+  const share = (part, whole) => (part == null || !whole) ? '—'
+    : `${Math.round(part / whole * 100)}%`;
+
+  const resultRows = results.map(r => {
+    // Bills clear on a discount rate; their comparable annualised figure is the
+    // separate investment rate. Showing the headline alone would understate a
+    // bill against a note sitting in the same column.
+    const stop = rate(r.stop_rate) + (r.investment_rate != null
+      ? ` <span class="muted">/ ${rate(r.investment_rate)}</span>` : '');
+    return `<tr>
+      <td class="l"><b>${fmtDay(r.auction_date)}</b></td>
+      <td class="l">${esc(r.security_type)} · ${esc(r.term)}</td>
+      <td class="num">${stop}</td>
+      <td class="num">${r.bid_to_cover == null ? '—' : r.bid_to_cover.toFixed(2)}</td>
+      <td class="num"><b>${pc(r.allotted_at_high)}</b></td>
+      <td class="num">${bn(r.accepted)}<span class="muted"> / ${bn(r.tendered)}</span></td>
+      <td class="num">${share(r.indirect_accepted, r.accepted)}<span class="muted"> · ${
+        share(r.dealer_accepted, r.accepted)}</span></td>
+    </tr>`;
+  }).join('');
+
+  const buybackRows = buybacks.map(b => {
+    // A low hit rate against a filled cap is a CAPPED operation, not refused
+    // offers. Marking the capped ones stops the two reading the same.
+    const capped = b.par_cap != null && b.par_accepted != null
+      && b.par_accepted >= b.par_cap - 1;
+    return `<tr>
       <td class="l"><b>${fmtDay(b.operation_date)}</b></td>
       <td class="l">${esc(b.operation_type)}</td>
       <td class="l">${esc(b.maturity_bucket)}</td>
-      <td>${bn(b.par_accepted)}</td>
-    </tr>`).join('');
+      <td class="num">${bn(b.par_offered)}</td>
+      <td class="num">${bn(b.par_accepted)}${
+        capped ? ' <span class="chip freq">at cap</span>' : ''}</td>
+      <td class="num">${share(b.par_accepted, b.par_offered)}</td>
+    </tr>`;
+  }).join('');
 
   root.innerHTML = `
     ${auctions.length ? `<div class="card-block"><h3>🇺🇸 Upcoming Treasury auctions <span class="muted">— new issuance &amp; reopenings</span></h3>
@@ -494,13 +530,24 @@ async function renderTreasuryPanel(root) {
         <tbody>${auctionRows}</tbody></table></div>
       <p class="muted small" style="margin-top:8px">Announced but not yet held. “At auction” = price/yield set on the day (bills and new issues); a coupon shown means it's a reopening of an existing bond.</p>
     </div>` : ''}
+    ${results.length ? `<div class="card-block"><h3>📊 Recent auction results <span class="muted">— what they cleared at</span></h3>
+      <div class="table-scroll"><table class="data-table">
+        <thead><tr><th class="l">Auction</th><th class="l">Security</th>
+          <th class="num">Stop-out<span class="muted"> / inv.</span></th>
+          <th class="num">Bid/cover</th><th class="num">Allot @ high</th>
+          <th class="num">Accepted<span class="muted"> / tendered</span></th>
+          <th class="num">Indirect<span class="muted"> · dealer</span></th></tr></thead>
+        <tbody>${resultRows}</tbody></table></div>
+      <p class="muted small" style="margin-top:8px">Every winner pays the same <b>stop-out</b> rate (bills show discount rate / investment rate — the second is the comparable annualised figure). <b>Allot @ high</b> is the share of bids <em>at</em> that rate which were filled: the number that actually moves, and the one to read. <b>Accepted / tendered</b> sits near 35% by construction — Treasury fixes the size in advance and bidders over-bid about 3×, so it is not a demand signal. A rising <b>dealer</b> share means the auction had to be absorbed rather than bought. The <em>tail</em> (stop-out vs when-issued) isn't published in this feed and is deliberately not estimated.</p>
+    </div>` : ''}
     ${buybacks.length ? `<div class="card-block"><h3>🔁 Recent Treasury buybacks <span class="muted">— completed operations</span></h3>
       <div class="table-scroll"><table class="data-table">
-        <thead><tr><th class="l">Operation</th><th class="l">Purpose</th><th class="l">Maturity bucket</th><th>Par accepted</th></tr></thead>
+        <thead><tr><th class="l">Operation</th><th class="l">Purpose</th><th class="l">Maturity bucket</th>
+          <th class="num">Offered</th><th class="num">Accepted</th><th class="num">Hit rate</th></tr></thead>
         <tbody>${buybackRows}</tbody></table></div>
       <p class="muted small" style="margin-top:8px">⚠ These are operations already <b>completed</b>, not a forward schedule — Treasury only publishes upcoming buyback calendars inside quarterly-refunding PDFs, not as a structured feed, so no “next buyback” date is claimed here.</p>
     </div>` : ''}
-    <div class="freshline"><span>Sources: <b>TreasuryDirect</b> (auctions) · <b>Treasury Fiscal Data</b> (buybacks)</span>
+    <div class="freshline"><span>Sources: <b>TreasuryDirect</b> (auctions &amp; results) · <b>Treasury Fiscal Data</b> (buybacks)</span>
       <span>· fetched ${esc((t.meta && t.meta.generated_at || '').slice(0, 10))}</span></div>`;
 }
 
