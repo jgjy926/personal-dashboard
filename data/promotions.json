@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-09T00:00:00+00:00",
+    "generated_at": "2026-09-09T00:50:32.097Z",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-09",
     "new_today": 0,
     "count": 15,
-    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
+    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification. Summaries published from the Card Promos Console."
   },
   "promotions": [
     {
@@ -169,10 +169,10 @@
       "image": "https://www.pbebank.com/media/4uxhexbr/mika-mid-autumn26_wb.jpg",
       "id": "571bb2162b",
       "category": "Credit Card",
-      "period": "",
+      "period": "15 August to 25 September 2026",
       "first_seen": "2026-09-08",
       "tnc_link": "https://www.pbebank.com/media/zf1jlbdk/tc_mika-mid-autumn26.pdf",
-      "tnc_summary": ""
+      "tnc_summary": "Enjoy RM30 off with a minimum spend of RM100 on Mid-Autumn products from mika. Use promo code MKPBM26 at checkout. Valid only at www.mika.com.my. Terms and conditions apply; PB Debit Card protected by PIDM up to RM250,000 per depositor."
     }
   ]
 }
