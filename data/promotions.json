@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-10T00:00:00+00:00",
+    "generated_at": "2026-09-10T00:55:09.653Z",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-10",
     "new_today": 0,
     "count": 15,
-    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
+    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification. Summaries published from the Card Promos Console."
   },
   "promotions": [
     {
@@ -15,10 +15,10 @@
       "image": "https://www.pbebank.com/media/jhdpo3ni/megastore-pets_wb.jpg",
       "id": "b628abf67f",
       "category": "Credit Card",
-      "period": "",
+      "period": "10 September - 31 December 2026",
       "first_seen": "2026-09-09",
       "tnc_link": "https://www.pbebank.com/media/av4hqra5/tc_megastore-pets.pdf",
-      "tnc_summary": ""
+      "tnc_summary": "20% off entrance ticket to Just Pets Megastore (Just Farm, Just Cats, Just Dogs) using promo code PBJP20 for PB cardholders. Book via shop.justpets.asia. Terms and conditions apply; full details not accessible from linked PDF."
     },
     {
       "title": "Lazada Double-Digit Days with PB Visa Credit Card",
