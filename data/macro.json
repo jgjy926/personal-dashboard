@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-10T00:11:05+00:00",
+    "generated_at": "2026-09-10T00:12:33+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; the US Treasury's own daily curve extends the nominal and TIPS yields, and Yahoo Finance extends the market-traded series, over the days FRED has not published yet (FRED batches the curve series, the Fed's H.10 dollar release is weekly, the EIA crude series are batched). Every card names the source behind its latest point, and the ones with no faster publisher carry their release cadence instead.",
@@ -72,9 +72,9 @@
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4435.6,
+      "value": 4433.6,
       "unit": "$",
-      "change": 41.7,
+      "change": 39.7,
       "as_of": "2026-09-09",
       "freq": "daily",
       "source": "Yahoo GC=F",
@@ -83,9 +83,9 @@
     {
       "id": "BRENT",
       "label": "Brent Crude",
-      "value": 101.92,
+      "value": 101.85,
       "unit": "$",
-      "change": 4.0,
+      "change": 3.93,
       "as_of": "2026-09-09",
       "freq": "daily",
       "source": "FRED DCOILBRENTEU + Yahoo BZ=F",
@@ -94,9 +94,9 @@
     {
       "id": "WTI",
       "label": "WTI Crude",
-      "value": 97.06,
+      "value": 97.03,
       "unit": "$",
-      "change": 4.03,
+      "change": 4.0,
       "as_of": "2026-09-09",
       "freq": "daily",
       "source": "FRED DCOILWTICO + Yahoo CL=F",
@@ -131,7 +131,7 @@
       "label": "Dollar Index (ICE DXY)",
       "value": 98.79,
       "unit": "",
-      "change": -0.05,
+      "change": -0.04,
       "as_of": "2026-09-09",
       "freq": "daily",
       "source": "Yahoo DX-Y.NYB",
@@ -368,7 +368,7 @@
         4022.9,
         4049.1,
         4431.1,
-        4435.6
+        4433.6
       ],
       "sp500": [
         4605.4,
@@ -559,7 +559,7 @@
         70.46,
         96.95,
         89.75,
-        101.92
+        101.85
       ],
       "wti": [
         83.5,
@@ -621,7 +621,7 @@
         70.56,
         86.16,
         87.03,
-        97.06
+        97.03
       ]
     },
     "unit": "$/bbl",

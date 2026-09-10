@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-09T11:32:08+00:00",
+    "generated_at": "2026-09-10T00:12:34+00:00",
     "sources": {
       "auctions": "TreasuryDirect (upcoming auctions)",
       "results": "TreasuryDirect (auction results)",
@@ -10,24 +10,6 @@
     "results_note": "Every winning bidder pays the same stop-out rate. 'Allotted at high' is the share of bids AT that rate which were filled — the informative number, since accepted/tendered sits near 35% by construction (Treasury fixes the size; bidders over-bid ~3x). The tail (stop-out vs when-issued) is not published in this feed and is deliberately not estimated."
   },
   "upcoming_auctions": [
-    {
-      "auction_date": "2026-09-09",
-      "issue_date": "2026-09-15",
-      "maturity_date": "2027-01-12",
-      "security_type": "Bill",
-      "term": "17-Week",
-      "rate": "",
-      "cusip": "912797WP8"
-    },
-    {
-      "auction_date": "2026-09-09",
-      "issue_date": "2026-09-15",
-      "maturity_date": "2036-08-15",
-      "security_type": "Note",
-      "term": "9-Year 11-Month",
-      "rate": "4.625000",
-      "cusip": "91282CRF0"
-    },
     {
       "auction_date": "2026-09-10",
       "issue_date": "2026-09-15",
@@ -81,9 +63,63 @@
       "term": "19-Year 11-Month",
       "rate": "",
       "cusip": "912810UX4"
+    },
+    {
+      "auction_date": "2026-09-15",
+      "issue_date": "2026-09-17",
+      "maturity_date": "",
+      "security_type": "Bill",
+      "term": "6-Week",
+      "rate": "",
+      "cusip": "912797SK4"
+    },
+    {
+      "auction_date": "2026-09-17",
+      "issue_date": "2026-09-30",
+      "maturity_date": "",
+      "security_type": "Note",
+      "term": "9-Year 10-Month",
+      "rate": "",
+      "cusip": "91282CRE3"
     }
   ],
   "recent_results": [
+    {
+      "auction_date": "2026-09-09",
+      "issue_date": "2026-09-15",
+      "security_type": "Note",
+      "term": "9-Year 11-Month",
+      "cusip": "91282CRF0",
+      "stop_rate": 4.834,
+      "investment_rate": null,
+      "coupon": 4.625,
+      "median_rate": 4.769,
+      "bid_to_cover": 2.71,
+      "allotted_at_high": 89.25,
+      "tendered": 105812590000.0,
+      "accepted": 39000040000.0,
+      "indirect_accepted": 30804090000.0,
+      "direct_accepted": 6420800000.0,
+      "dealer_accepted": 1677000000.0
+    },
+    {
+      "auction_date": "2026-09-09",
+      "issue_date": "2026-09-15",
+      "security_type": "Bill",
+      "term": "17-Week",
+      "cusip": "912797WP8",
+      "stop_rate": 3.895,
+      "investment_rate": 4.001,
+      "coupon": null,
+      "median_rate": 3.865,
+      "bid_to_cover": 2.73,
+      "allotted_at_high": 37.41,
+      "tendered": 202209305500.0,
+      "accepted": 77647610500.0,
+      "indirect_accepted": 31190783400.0,
+      "direct_accepted": 5862410000.0,
+      "dealer_accepted": 34316825000.0
+    },
     {
       "auction_date": "2026-09-08",
       "issue_date": "2026-09-10",
@@ -191,45 +227,19 @@
       "indirect_accepted": 55571291900.0,
       "direct_accepted": 2775320000.0,
       "dealer_accepted": 23875680000.0
-    },
-    {
-      "auction_date": "2026-09-02",
-      "issue_date": "2026-09-08",
-      "security_type": "Bill",
-      "term": "17-Week",
-      "cusip": "912797WN3",
-      "stop_rate": 3.855,
-      "investment_rate": 3.959,
-      "coupon": null,
-      "median_rate": 3.83,
-      "bid_to_cover": 2.78,
-      "allotted_at_high": 76.38,
-      "tendered": 204402759900.0,
-      "accepted": 76307819900.0,
-      "indirect_accepted": 36341744500.0,
-      "direct_accepted": 4726380000.0,
-      "dealer_accepted": 29870080000.0
-    },
-    {
-      "auction_date": "2026-09-01",
-      "issue_date": "2026-09-03",
-      "security_type": "Bill",
-      "term": "6-Week",
-      "cusip": "912797UK1",
-      "stop_rate": 3.735,
-      "investment_rate": 3.803,
-      "coupon": null,
-      "median_rate": 3.7,
-      "bid_to_cover": 2.85,
-      "allotted_at_high": 52.35,
-      "tendered": 247263363500.0,
-      "accepted": 90124268500.0,
-      "indirect_accepted": 55362701000.0,
-      "direct_accepted": 2800000000.0,
-      "dealer_accepted": 23614350000.0
     }
   ],
   "recent_buybacks": [
+    {
+      "operation_date": "2026-09-09",
+      "settlement_date": "2026-09-10",
+      "operation_type": "Cash Management",
+      "security_type": "Nominal Coupons",
+      "maturity_bucket": "1Mo to 2Y",
+      "par_offered": 28027000000.0,
+      "par_accepted": 12500000000.0,
+      "par_cap": 12500000000.0
+    },
     {
       "operation_date": "2026-09-03",
       "settlement_date": "2026-09-04",
@@ -279,16 +289,6 @@
       "par_offered": 7399000000.0,
       "par_accepted": 2000000000.0,
       "par_cap": 2000000000.0
-    },
-    {
-      "operation_date": "2026-08-06",
-      "settlement_date": "2026-08-07",
-      "operation_type": "Liquidity Support",
-      "security_type": "Nominal Coupons",
-      "maturity_bucket": "1Mo to 2Y",
-      "par_offered": 35786000000.0,
-      "par_accepted": 4000000000.0,
-      "par_cap": 4000000000.0
     }
   ]
 }
