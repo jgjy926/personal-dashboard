@@ -332,10 +332,16 @@ async function renderSeriesMonitor(root) {
     const t = Date.parse(iso);
     return Number.isNaN(t) ? null : Math.floor((Date.now() - t) / DAY);
   };
-  // What counts as "old" depends on the release cadence: a daily market series
-  // more than ~4 days behind is worth a second look (a long weekend plus a
-  // public holiday is 4), a monthly one only past ~45 days.
-  const staleAfter = freq => (freq === 'monthly' ? 45 : 4);
+  // What counts as "old" depends on the release cadence, and the cadence is a
+  // property of the PUBLISHER, not of the word "daily". The Fed's broad dollar
+  // index is a daily series shipped weekly in the H.10; Case-Shiller reports the
+  // month before last. Both were being painted amber for running exactly on
+  // schedule, which is how a staleness warning stops being believed. So the feed
+  // now carries `stale_after` for any series whose cadence isn't the generic
+  // case, and only falls back to the blanket rule when it doesn't: a daily
+  // series more than ~4 days behind is worth a second look (a long weekend plus
+  // a public holiday is 4), a monthly one only past ~45.
+  const staleAfter = s => (s.stale_after != null ? s.stale_after : s.freq === 'monthly' ? 45 : 4);
 
   const cards = (d.snapshot || []).map(s => {
     const dir = s.change == null ? '' : (s.change >= 0 ? 'up' : 'down');
@@ -343,19 +349,23 @@ async function renderSeriesMonitor(root) {
     const unit = s.unit === '%' ? '%' : '';
     const pre = (s.unit === '$' || s.unit === '¥') ? s.unit : '';
     const age = ageDays(s.as_of);
-    const stale = age != null && age > staleAfter(s.freq);
+    const stale = age != null && age > staleAfter(s);
     const agoTxt = age == null ? '' : age <= 0 ? 'today' : age === 1 ? '1d ago' : `${age}d ago`;
     // The source is on the card, not just in the JSON: "why is this number from
     // last Friday" is only answerable if you can see which release produced it.
     const src = s.source ? ` · ${esc(s.source)}` : '';
+    // …and for the series with no faster publisher, the schedule it runs on,
+    // which is the actual answer to that question rather than a hint towards it.
+    const rel = s.release ? ` · ${esc(s.release)}` : '';
     return `<div class="stat" title="${esc(s.label)} — latest observation ${esc(s.as_of)}${
-        s.source ? `, from ${esc(s.source)}` : ''}">
+        s.source ? `, from ${esc(s.source)}` : ''}${
+        s.release ? `; published ${esc(s.release)}` : ''}">
       <span class="k">${esc(s.label)} <span class="chip freq">${esc(s.freq || '')}</span>${
         s.provisional ? ' <span class="chip ok">live</span>' : ''}</span>
       <div class="v">${pre}${fmt(s.value)}${unit}</div>
       <div class="d ${dir}">${arrow} ${s.change == null ? '' : fmt(Math.abs(s.change))}</div>
       <div class="meta${stale ? ' stale' : ''}">as of ${esc(s.as_of)}${
-        agoTxt ? ` <span class="ago">(${agoTxt})</span>` : ''}${src}</div>
+        agoTxt ? ` <span class="ago">(${agoTxt})</span>` : ''}${src}${rel}</div>
     </div>`;
   }).join('');
 
@@ -366,7 +376,7 @@ async function renderSeriesMonitor(root) {
   // reads as expected, not as a stale-fetch bug.
   const dailyDates = [...new Set((d.snapshot || []).filter(s => s.freq === 'daily').map(s => s.as_of))];
   const dateSkewNote = dailyDates.length > 1
-    ? `<p class="muted" style="margin:-4px 0 12px">ℹ️ Daily series don't all show the same date (${dailyDates.slice().sort().join(' vs ')}) — each is published independently by its own source on its own schedule (e.g. Treasury yields post a business day behind, and the Fed's H.10 dollar/yen release is <em>weekly</em>); not a stale fetch.</p>`
+    ? `<p class="muted" style="margin:-4px 0 12px">ℹ️ Daily series don't all show the same date (${dailyDates.slice().sort().join(' vs ')}) — each is published independently by its own source on its own schedule (the Treasury curve posts the same afternoon, US equities settle overnight, and the Fed's H.10 broad dollar index is a daily series released <em>weekly</em>, on Mondays); not a stale fetch. Each card names its own cadence.</p>`
     : '';
 
   // The stale-card question the individual "as of" dates cannot answer: is the

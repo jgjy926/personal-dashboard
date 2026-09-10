@@ -12,6 +12,9 @@ staleness bugs actually lived:
   * A Reiwa-only date pattern that discarded every pre-2019 row of the MoF history.
   * No way to extend a slow FRED series with a faster source without clobbering
     the settled history behind it (`splice`).
+  * Treasury's own curve CSV read as if it shared FRED's conventions — it is
+    newest-first, dated MM/DD/YYYY, and spells the tenor "10 Yr" on one file and
+    "10 YR" on the other, any of which silently yields a stale or empty series.
 """
 from __future__ import annotations
 
@@ -104,6 +107,90 @@ class TestParseYahooChart(unittest.TestCase):
 
     def test_empty_result_is_not_an_error(self):
         self.assertEqual(fm.parse_yahoo_chart('{"chart":{"result":[]}}'), ([], None))
+
+
+class TestParseTreasuryCurve(unittest.TestCase):
+    """Treasury's daily curve is the same data FRED redistributes as DGS*/DFII*,
+    but published same-day — it is what unsticks the four yield cards. Its CSV
+    conventions are the opposite of FRED's in three separate ways, so each one
+    gets a test rather than a comment."""
+
+    NOMINAL = ('Date,"1 Mo","3 Mo","1 Yr","10 Yr","20 Yr","30 Yr"\n'
+               '09/09/2026,3.81,3.95,4.17,4.83,5.28,5.28\n'
+               '09/08/2026,3.80,3.94,4.15,4.80,5.25,5.25\n'
+               '09/04/2026,3.79,3.92,4.14,4.76,5.21,5.20\n')
+    REAL = ('Date,"5 YR","10 YR","30 YR"\n'
+            '09/09/2026,2.20,2.46,2.98\n'
+            '09/08/2026,2.18,2.43,2.96\n')
+
+    def test_rows_come_back_ascending_not_newest_first(self):
+        # splice() treats the LAST point as the cutoff, so a newest-first read
+        # would take 09/04 as the newest and append nothing at all.
+        got = fm.parse_treasury_curve(self.NOMINAL, "10 Yr")
+        self.assertEqual([d for d, _ in got],
+                         ["2026-09-04", "2026-09-08", "2026-09-09"])
+        self.assertEqual(got[-1], ("2026-09-09", 4.83))
+
+    def test_tenor_match_is_case_insensitive_across_the_two_files(self):
+        # The nominal file says "10 Yr", the real file "10 YR". One SERIES table
+        # feeds both; an exact match would return [] for whichever it got wrong
+        # — and an empty extra is a silent no-op inside splice().
+        self.assertTrue(fm.parse_treasury_curve(self.REAL, "10 YR"))
+        self.assertEqual(fm.parse_treasury_curve(self.REAL, "10 yr"),
+                         fm.parse_treasury_curve(self.REAL, "10 YR"))
+        self.assertEqual(fm.parse_treasury_curve(self.NOMINAL, "30 YR")[-1],
+                         ("2026-09-09", 5.28))
+
+    def test_us_dates_are_month_first(self):
+        # 09/04/2026 is 4 September, not 9 April. Read the other way round every
+        # September row lands five months early and sorts to the front.
+        self.assertEqual(fm.parse_treasury_curve(
+            'Date,"10 Yr"\n12/01/2026,4.10\n', "10 Yr"), [("2026-12-01", 4.10)])
+
+    def test_blank_cells_are_gaps_not_zeros(self):
+        # The 30Y was not issued 2002-2006; those rows carry an empty cell.
+        got = fm.parse_treasury_curve(
+            'Date,"10 Yr","30 Yr"\n09/09/2026,4.83,\n09/08/2026,4.80,5.25\n', "30 Yr")
+        self.assertEqual(got, [("2026-09-08", 5.25)])
+
+    def test_unknown_column_and_empty_input_are_not_errors(self):
+        # A renamed header must degrade to "no extension", leaving FRED's series
+        # intact, rather than raise and take the whole run down.
+        self.assertEqual(fm.parse_treasury_curve(self.NOMINAL, "7 Yr"), [])
+        self.assertEqual(fm.parse_treasury_curve("", "10 Yr"), [])
+
+    def test_treasury_extends_fred_without_rewriting_it(self):
+        # The end-to-end shape of the fix: FRED stops at 09-04, Treasury already
+        # has 09-08 and 09-09, and FRED's settled 09-04 value is not overwritten.
+        fred = [("2026-09-03", 4.70), ("2026-09-04", 4.76)]
+        merged, added = fm.splice(fred, fm.parse_treasury_curve(self.NOMINAL, "10 Yr"))
+        self.assertEqual(added, 2)
+        self.assertEqual(merged[1], ("2026-09-04", 4.76))
+        self.assertEqual(merged[-1], ("2026-09-09", 4.83))
+
+
+class TestReleaseCadence(unittest.TestCase):
+    """A daily series can be published weekly (the Fed's H.10) or report the
+    month before last (Case-Shiller). Those cards were amber for running exactly
+    on time, so the cadence and its own stale threshold ride on the card."""
+
+    def test_cadence_rides_on_the_card_when_declared(self):
+        card = fm.snapshot_card("DTWEXBGS", [("2026-08-28", 117.9), ("2026-09-04", 118.07)])
+        self.assertEqual(card["stale_after"], fm.SERIES["DTWEXBGS"]["stale_after"])
+        self.assertEqual(card["release"], "Fed H.10, weekly (Mon)")
+
+    def test_ordinary_series_declare_nothing_and_keep_the_blanket_rule(self):
+        card = fm.snapshot_card("DGS10", [("2026-09-08", 4.80), ("2026-09-09", 4.83)])
+        self.assertNotIn("stale_after", card)
+        self.assertNotIn("release", card)
+
+    def test_dxy_is_a_separate_card_never_spliced_onto_the_broad_index(self):
+        # ICE's six-currency index and the Fed's 26-currency one are different
+        # numbers on different bases; welding one onto the other would publish a
+        # level neither the Fed nor ICE ever printed.
+        self.assertNotIn("yahoo", fm.SERIES["DTWEXBGS"])
+        self.assertEqual(fm.SERIES["DXY"]["yahoo"], "DX-Y.NYB")
+        self.assertEqual(fm.SERIES["DXY"]["ids"], [])
 
 
 class TestParseMofJgb(unittest.TestCase):

@@ -9,15 +9,28 @@ index, the S&P 500, gold, both crude benchmarks (Brent and WTI) and the USD/JPY
 rate. Japan's JGB curve comes from Japan's MoF, which FRED doesn't carry.
 
 FRESHNESS. FRED is authoritative but *slow* for a daily dashboard: DEXJPUS and
-DTWEXBGS come off the Fed's H.10 release, which lands ONCE A WEEK (Mondays), and
-the EIA oil series are similarly batched — so a card sourced purely from FRED can
-legitimately sit 7-11 days behind the market while the fetch job runs perfectly
-every day. That looked exactly like a broken refresh. It isn't fixed by fetching
-harder; it needs a faster source. So for the market-traded series (gold, Brent,
-WTI, USD/JPY, S&P 500) we now keep FRED's long, authoritative history AND splice
-Yahoo Finance's daily bars on top of it for the days FRED hasn't published yet
-(`splice()`). Yahoo is the *extension*, never a replacement, and every card
-carries the `source` that produced its latest point so the UI can show it.
+DTWEXBGS come off the Fed's H.10 release, which lands ONCE A WEEK (Mondays), the
+EIA oil series are similarly batched, and even the Treasury curve series
+(DGS10/DGS30/DFII10/DFII30) arrive in multi-day batches — measured 2026-09-09,
+FRED's newest DGS10 was 2026-09-04 while Treasury itself had already published
+2026-09-09. So a card sourced purely from FRED can legitimately sit 5-11 days
+behind the market while the fetch job runs perfectly every day. That looked
+exactly like a broken refresh. It isn't fixed by fetching harder; it needs a
+faster source. So we keep FRED's long, authoritative history AND splice a faster
+publisher on top of it for the days FRED hasn't got yet (`splice()`):
+
+  * `treasury`: the US Treasury's OWN daily par yield curve — the primary source
+    FRED is redistributing, keyless, posted the same afternoon (~3:30pm ET).
+  * `yahoo`: daily bars for the market-traded series (gold, Brent, WTI, USD/JPY,
+    S&P 500, DXY), whose official series is a weekly or batched statistical release.
+
+The splice is always an *extension*, never a replacement, and every card carries
+the `source` that produced its latest point so the UI can show it.
+
+Two series have no faster source and are therefore LABELLED rather than "fixed":
+DTWEXBGS (the Fed is the only publisher of its broad index) and CSUSHPISA
+(Case-Shiller reports month M-2). Both carry a `release` cadence and their own
+`stale_after` threshold so the UI stops flagging a scheduled lag as a dead fetch.
 
 Run locally or (recommended) in GitHub Actions, whose runners have clean egress:
     python tools/fetch_macro.py
@@ -43,6 +56,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 OUT = os.path.join(ROOT, "data", "macro.json")
 
+# Treasury's two daily curve files. `type=` selects which one; both are keyless
+# CSV, one calendar year per request, newest row first.
+TSY_NOMINAL = "daily_treasury_yield_curve"        # par yields: 1 Mo .. 30 Yr
+TSY_REAL = "daily_treasury_real_yield_curve"      # TIPS real yields: 5 YR .. 30 YR
+
 # FRED series ids (all keyless CSV). label/unit/freq drive the snapshot cards.
 # Keyed by a stable dashboard id; `ids` lists FRED series to try in order (FRED
 # has discontinued/renamed a few series over the years — e.g. the LBMA gold
@@ -50,10 +68,23 @@ OUT = os.path.join(ROOT, "data", "macro.json")
 # of this writing; GOLDAMGBD228NLBM is tried as a fallback, kept even though it
 # may also be gone, so a future re-add on FRED's side is picked up for free).
 SERIES = {
-    "DGS10":     {"ids": ["DGS10"],     "label": "10Y Nominal Yield",     "unit": "%", "freq": "daily"},
-    "DGS30":     {"ids": ["DGS30"],     "label": "30Y Nominal Yield",     "unit": "%", "freq": "daily"},
-    "DFII10":    {"ids": ["DFII10"],    "label": "Real 10Y Yield (TIPS)", "unit": "%", "freq": "daily"},
-    "DFII30":    {"ids": ["DFII30"],    "label": "Real 30Y Yield (TIPS)", "unit": "%", "freq": "daily"},
+    # FRED's DGS*/DFII* are a redistribution of the curve Treasury publishes
+    # itself, and FRED posts them in multi-day batches — which is the whole
+    # reason these four cards sat five days behind while the breakeven card
+    # right next to them was current. `treasury` names the (curve file, column)
+    # to splice on top, exactly the way `yahoo` does for the market series
+    # below. The column spelling differs between the two files ("10 Yr" vs
+    # "10 YR"), so the parser matches case-insensitively rather than trust either.
+    "DGS10":     {"ids": ["DGS10"],  "treasury": (TSY_NOMINAL, "10 Yr"),
+                  "label": "10Y Nominal Yield",     "unit": "%", "freq": "daily"},
+    "DGS30":     {"ids": ["DGS30"],  "treasury": (TSY_NOMINAL, "30 Yr"),
+                  "label": "30Y Nominal Yield",     "unit": "%", "freq": "daily"},
+    "DFII10":    {"ids": ["DFII10"], "treasury": (TSY_REAL, "10 YR"),
+                  "label": "Real 10Y Yield (TIPS)", "unit": "%", "freq": "daily"},
+    "DFII30":    {"ids": ["DFII30"], "treasury": (TSY_REAL, "30 YR"),
+                  "label": "Real 30Y Yield (TIPS)", "unit": "%", "freq": "daily"},
+    # Breakeven = nominal - real, but FRED publishes it on its own (faster)
+    # schedule than either leg, so it needs no splice.
     "T10YIE":    {"ids": ["T10YIE"],    "label": "Breakeven Inflation",   "unit": "%", "freq": "daily"},
     # ^GSPC is the same index FRED's SP500 series tracks (spot-checked equal to
     # the cent on overlapping closes), so it extends rather than contradicts it.
@@ -68,14 +99,42 @@ SERIES = {
                   "label": "Brent Crude", "unit": "$", "freq": "daily"},
     "WTI":       {"ids": ["DCOILWTICO"],   "yahoo": "CL=F",
                   "label": "WTI Crude",    "unit": "$", "freq": "daily"},
-    "UNRATE":    {"ids": ["UNRATE"],    "label": "Unemployment Rate",     "unit": "%", "freq": "monthly"},
-    "DTWEXBGS":  {"ids": ["DTWEXBGS"],  "label": "Dollar Index (broad)",  "unit": "",  "freq": "daily"},
+    # Month M is dated M-01 and released the first Friday of M+1, so the newest
+    # print reaches 67 days old just before the next one lands (Aug data, out
+    # 4 Sep, is still the newest on 2 Oct). The generic 45-day monthly rule
+    # flagged it amber for the back half of every month.
+    "UNRATE":    {"ids": ["UNRATE"],    "label": "Unemployment Rate",     "unit": "%", "freq": "monthly",
+                  "release": "BLS, first Friday", "stale_after": 70},
+    # The Fed's broad trade-weighted index: 26 currencies, Jan 2006 = 100. It is
+    # a DAILY series published WEEKLY — H.10 lands on Mondays carrying the whole
+    # prior week — and the Fed is its only publisher, so there is nothing faster
+    # to splice. What was actually wrong was calling it stale after 4 days: a
+    # card dated last Friday is exactly on schedule. `stale_after` says so: the
+    # Monday release covers through the prior Friday, so the newest value hits
+    # 10 days old the following Monday morning, 11 if that Monday is a holiday.
+    "DTWEXBGS":  {"ids": ["DTWEXBGS"],  "label": "Dollar Index (broad)",  "unit": "",  "freq": "daily",
+                  "release": "Fed H.10, weekly (Mon)", "stale_after": 12},
+    # ICE's dollar index — a DIFFERENT index (six currencies, euro ~58%, 1973 =
+    # 100), deliberately NOT spliced onto the broad one: the two disagree by
+    # construction, and welding a live DXY tail onto a Fed series would publish
+    # a number neither publisher ever printed. It earns its own card because it
+    # answers the same question live — futures trade nearly around the clock.
+    "DXY":       {"ids": [], "yahoo": "DX-Y.NYB",
+                  "label": "Dollar Index (ICE DXY)", "unit": "", "freq": "daily",
+                  "release": "ICE futures, continuous"},
     # Yen per one US dollar (FRED's DEXJPUS quotes it that way round, so a RISING
     # number is a WEAKER yen). Sits next to the broad dollar index deliberately:
     # the pair is the single most reactive leg of it to the JGB yields below.
     "USDJPY":    {"ids": ["DEXJPUS"], "yahoo": "JPY=X",
                   "label": "USD/JPY", "unit": "¥", "freq": "daily"},
-    "CSUSHPISA": {"ids": ["CSUSHPISA"], "label": "Home Price Index",      "unit": "",  "freq": "monthly"},
+    # S&P CoreLogic Case-Shiller reports month M-2 on the last Tuesday of month
+    # M, and each print is itself a 3-month moving average. A card dated ~3
+    # months back is the publisher's schedule, not a broken fetch, and there is
+    # no faster version of THIS index at any price — so it is labelled, and its
+    # stale threshold is its release cadence rather than the generic 45 days:
+    # worst case the newest print is 121 days old just before the next one.
+    "CSUSHPISA": {"ids": ["CSUSHPISA"], "label": "Home Price Index",      "unit": "",  "freq": "monthly",
+                  "release": "Case-Shiller, reports M-2", "stale_after": 125},
     # Japan yields are NOMINAL — Japan's inflation-indexed (JGBi) market is thin
     # and not published on FRED, so there is no true "Japan TIPS" equivalent to
     # the US DFII series above; these are ordinary JGB yields, labelled as such.
@@ -124,6 +183,72 @@ def fetch_yahoo_chart(symbol: str, rng: str = "5y", interval: str = "1d",
         headers={"User-Agent": "Mozilla/5.0 (macro-dashboard fetcher)", "Accept": "application/json"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return r.read().decode("utf-8", "replace")
+
+
+# ── US Treasury: the ORIGINAL daily yield curve ─────────────────────────────
+# One CSV per calendar year per curve type, keyless, newest row first, posted
+# the same afternoon (~3:30pm ET). This is the primary source FRED redistributes
+# as DGS*/DFII*, so splicing it on is not mixing in a third-party estimate — it
+# is reading the same numbers from the publisher instead of the aggregator.
+TREASURY_CURVE_CSV = (
+    "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/"
+    "daily-treasury-rates.csv/{year}/all"
+    "?type={typ}&field_tdr_date_value={year}&page&_format=csv")
+
+
+def fetch_treasury_curve(year: int, typ: str, timeout: int = 30) -> str:
+    """One year of Treasury's daily par yield curve (`typ` = TSY_NOMINAL) or
+    daily real yield curve (TSY_REAL). Decoded utf-8-sig: the file ships with a
+    BOM, which would otherwise glue itself to the "Date" header and break the
+    column lookup."""
+    req = urllib.request.Request(
+        TREASURY_CURVE_CSV.format(year=year, typ=typ),
+        headers={"User-Agent": "Mozilla/5.0 (macro-dashboard fetcher)",
+                 "Accept": "text/csv,*/*"})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return r.read().decode("utf-8-sig", "replace")
+
+
+_TSY_DATE_RE = re.compile(r"(\d{1,2})/(\d{1,2})/(\d{4})$")
+
+
+def parse_treasury_curve(text: str, column: str) -> list[tuple[str, float]]:
+    """Pull one tenor out of a Treasury daily-rates CSV as [(YYYY-MM-DD, value)]
+    ascending — the same shape every other source here returns.
+
+    Three things this must not get wrong:
+
+    * The header spells the tenor differently in the two files ("10 Yr" on the
+      nominal curve, "10 YR" on the real one), so the match is case-insensitive
+      rather than an exact string that silently returns [] on the wrong file.
+    * Rows are dated MM/DD/YYYY and ordered NEWEST FIRST, the opposite of FRED —
+      so the result is sorted before returning, or splice()'s "last point is the
+      cutoff" contract would read the oldest row as the newest.
+    * Cells are blank for a tenor not published that day (the 30Y was absent
+      2002-2006, the 20Y 1987-1993); those are gaps, never zeros.
+    """
+    rows = list(csv.reader(io.StringIO(text)))
+    if not rows:
+        return []
+    header = [h.strip().lower() for h in rows[0]]
+    want = column.strip().lower()
+    if want not in header:
+        return []
+    col = header.index(want)
+    out: list[tuple[str, float]] = []
+    for row in rows[1:]:
+        if len(row) <= col:
+            continue
+        m = _TSY_DATE_RE.match(row[0].strip())
+        if not m or not row[col].strip():
+            continue
+        try:
+            value = float(row[col].strip())
+        except ValueError:
+            continue
+        out.append((f"{int(m.group(3)):04d}-{int(m.group(1)):02d}-{int(m.group(2)):02d}", value))
+    out.sort()
+    return out
 
 
 # MoF publishes the curve as TWO files and you need both: jgbcm.csv holds only
@@ -315,6 +440,13 @@ def snapshot_card(sid: str, series: list[tuple[str, float]],
         card["source"] = origin["source"]
     if origin.get("provisional") == last_d:
         card["provisional"] = True
+    # The publisher's cadence and the age at which THAT cadence is genuinely
+    # late. Without these the UI applies one rule to every daily card and paints
+    # a weekly release amber three days after it lands — crying wolf on the
+    # exact cards it most needs to be believed about.
+    for key in ("release", "stale_after"):
+        if meta.get(key) is not None:
+            card[key] = meta[key]
     return card
 
 
@@ -364,10 +496,13 @@ def build_payload(raw: dict[str, list[tuple[str, float]]], years: int,
             "sample": False,
             "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF",
             "data_note": ("Live data. Freshness shows the DATA date, not the fetch date. "
-                          "FRED supplies each series' settled history; Yahoo Finance extends "
-                          "the market-traded ones over the days FRED has not published yet "
-                          "(the Fed's H.10 dollar/yen release is weekly, the EIA crude series "
-                          "are batched), so every card names the source behind its latest point."),
+                          "FRED supplies each series' settled history; the US Treasury's own "
+                          "daily curve extends the nominal and TIPS yields, and Yahoo Finance "
+                          "extends the market-traded series, over the days FRED has not "
+                          "published yet (FRED batches the curve series, the Fed's H.10 dollar "
+                          "release is weekly, the EIA crude series are batched). Every card "
+                          "names the source behind its latest point, and the ones with no "
+                          "faster publisher carry their release cadence instead."),
             "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
             "missing_series": missing,  # honest, visible gap — e.g. if FRED drops/renames an id
             # The newest observation across every daily series. The UI compares
@@ -416,6 +551,7 @@ def main() -> int:
     raw: dict[str, list[tuple[str, float]]] = {}
     origins: dict[str, dict] = {}     # sid -> {"source", "provisional"}
     mof_cache: dict[str, str] = {}    # url -> text, so both JGB tenors share a fetch
+    tsy_cache: dict[tuple[int, str], str] = {}   # (year, curve) -> text; 4 series, 2 fetches
     for sid, meta in SERIES.items():
         points: list[tuple[str, float]] = []
         source: str | None = None
@@ -457,6 +593,36 @@ def main() -> int:
                     print(f"[fetch_macro] {sid}: {len(points)} obs"
                           f" (latest {points[-1][0]}){tag}")
                     break
+
+        # US Treasury: the same curve FRED redistributes as DGS*/DFII*, but from
+        # the publisher and same-day. FRED keeps the history back to 1962;
+        # splice() appends only the sessions FRED has not batched out yet.
+        if meta.get("treasury"):
+            typ, column = meta["treasury"]
+            # Treasury serves ONE CALENDAR YEAR per request, so the years to
+            # pull run from the year FRED stopped in through the current one.
+            # Usually that is a single year. It is two every early January, when
+            # FRED's last point is still in December — and it must be the whole
+            # RANGE rather than just the two endpoints, because skipping the
+            # years between would splice a fresh tail onto an old series and
+            # leave a silent hole where the middle should be.
+            this_year = datetime.now(timezone.utc).year
+            start = int(points[-1][0][:4]) if points else this_year
+            years = list(range(min(start, this_year), this_year + 1))
+            for yr in years:
+                key = (yr, typ)
+                try:
+                    if key not in tsy_cache:
+                        tsy_cache[key] = fetch_treasury_curve(yr, typ)
+                except Exception as e:
+                    errors.append(f"treasury {typ} {yr}: {e}")
+                    continue
+                points, added = splice(points, parse_treasury_curve(tsy_cache[key], column))
+                if added:
+                    source = ("US Treasury daily curve" if source is None
+                              else f"{source} + US Treasury")
+                    print(f"[fetch_macro] {sid}: +{added} obs from Treasury {typ} "
+                          f"({yr}) -> latest {points[-1][0]}")
 
         # Yahoo Finance: attempted for every series that names a symbol, not just
         # on total FRED failure. Several FRED series are published in WEEKLY
