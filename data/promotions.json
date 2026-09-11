@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-11T00:00:00+00:00",
+    "generated_at": "2026-09-11T16:02:41.452Z",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-11",
     "new_today": 1,
     "count": 20,
-    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
+    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification. Summaries published from the Card Promos Console."
   },
   "promotions": [
     {
@@ -15,11 +15,11 @@
       "image": "https://www.pbebank.com/media/h41p35mm/jom-rasa-penang_wb.jpg",
       "id": "7d8282b253",
       "category": "Credit Card",
-      "period": "",
+      "period": "Now - 30 June 2027 (varies by outlet)",
       "first_seen": "2026-09-11",
       "tnc_link": "",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "PB Cards dining promo across Penang outlets: 20%/15% off at G Hotel Gurney & Kelawai (to 30 Dec 2026); 10-15% off at Sood by Chef Ton, Hut Dining Buffet, Yakiniku Tenshin, Christoph's, Wagyu and Rice, Tsukiji Sushi, Norm, Peninsula House, The Pinn, Sifu Nyonya Cuisine; some require minimum spend (RM80-RM800) or complimentary items; validity periods vary by outlet.",
+      "end_date": "2027-06-30"
     },
     {
       "title": "PB Privileges @ Just Pets Megastore",
