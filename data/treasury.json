@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-09-11T11:31:09+00:00",
+    "generated_at": "2026-09-11T15:54:45+00:00",
     "sources": {
       "auctions": "TreasuryDirect (upcoming auctions)",
       "results": "TreasuryDirect (auction results)",
@@ -45,6 +45,33 @@
       "term": "6-Week",
       "rate": "",
       "cusip": "912797SK4"
+    },
+    {
+      "auction_date": "2026-09-16",
+      "issue_date": "2026-09-22",
+      "maturity_date": "",
+      "security_type": "Bill",
+      "term": "17-Week",
+      "rate": "",
+      "cusip": "912797WQ6"
+    },
+    {
+      "auction_date": "2026-09-17",
+      "issue_date": "2026-09-22",
+      "maturity_date": "",
+      "security_type": "Bill",
+      "term": "4-Week",
+      "rate": "",
+      "cusip": "912797VM6"
+    },
+    {
+      "auction_date": "2026-09-17",
+      "issue_date": "2026-09-22",
+      "maturity_date": "",
+      "security_type": "Bill",
+      "term": "8-Week",
+      "rate": "",
+      "cusip": "912797VX2"
     },
     {
       "auction_date": "2026-09-17",
