@@ -1,14 +1,25 @@
 {
   "meta": {
-    "generated_at": "2026-09-10T00:00:00+00:00",
+    "generated_at": "2026-09-11T00:00:00+00:00",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "today": "2026-09-10",
-    "new_today": 0,
+    "today": "2026-09-11",
+    "new_today": 1,
     "count": 15,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
+    {
+      "title": "JOM RASA PENANG with PB Cards",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/jom-rasa-penang-with-pb-cards/",
+      "image": "https://www.pbebank.com/media/h41p35mm/jom-rasa-penang_wb.jpg",
+      "id": "7d8282b253",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-11",
+      "tnc_link": "",
+      "tnc_summary": ""
+    },
     {
       "title": "PB Privileges @ Just Pets Megastore",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-just-pets-megastore-1/",
@@ -162,17 +173,6 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/x1egqnmx/tc_travel-china.pdf",
       "tnc_summary": "Buy 1 get 1 air ticket to China on Malaysia Airlines with minimum accumulative spend RM20,000. Plus Alipay/Trip.com China travel deals (coupon, discount, hotel promo) running to 31 December 2026. Call Holiday Tours & Travel to book."
-    },
-    {
-      "title": "PB Privileges: RM100 OFF on MHflypass purchase with Journify",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-rm100-off-on-mhflypass-purchase-with-journify/",
-      "image": "https://www.pbebank.com/media/amhd405j/rm100-mhflypass-journify_wb.jpg",
-      "id": "66081623e4",
-      "category": "Credit Card",
-      "period": "Now - 14 December 2026",
-      "first_seen": "2026-09-03",
-      "tnc_link": "https://shop.myjournify.com/promo/cart/2325/mhfppublicbank",
-      "tnc_summary": "MYR100 off MHflypass (1 pass, 3 return trips, Malaysia/ASEAN) using code PUBLIC100, exclusively for PB credit & debit cardmembers. Valid for all passes except Malaysia Zone 1."
     }
   ]
 }

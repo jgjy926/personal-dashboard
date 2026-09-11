@@ -1,81 +1,81 @@
 {
   "meta": {
-    "generated_at": "2026-09-10T11:29:30+00:00",
+    "generated_at": "2026-09-11T11:31:07+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; the US Treasury's own daily curve extends the nominal and TIPS yields, and Yahoo Finance extends the market-traded series, over the days FRED has not published yet (FRED batches the curve series, the Fed's H.10 dollar release is weekly, the EIA crude series are batched). Every card names the source behind its latest point, and the ones with no faster publisher carry their release cadence instead.",
     "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
     "missing_series": [],
-    "latest_observation": "2026-09-10"
+    "latest_observation": "2026-09-11"
   },
   "snapshot": [
     {
       "id": "DGS10",
       "label": "10Y Nominal Yield",
-      "value": 4.83,
+      "value": 4.95,
       "unit": "%",
-      "change": 0.03,
-      "as_of": "2026-09-09",
+      "change": 0.12,
+      "as_of": "2026-09-10",
       "freq": "daily",
       "source": "FRED DGS10 + US Treasury"
     },
     {
       "id": "DGS30",
       "label": "30Y Nominal Yield",
-      "value": 5.28,
+      "value": 5.37,
       "unit": "%",
-      "change": 0.03,
-      "as_of": "2026-09-09",
+      "change": 0.09,
+      "as_of": "2026-09-10",
       "freq": "daily",
       "source": "FRED DGS30 + US Treasury"
     },
     {
       "id": "DFII10",
       "label": "Real 10Y Yield (TIPS)",
-      "value": 2.46,
+      "value": 2.55,
       "unit": "%",
-      "change": 0.03,
-      "as_of": "2026-09-09",
+      "change": 0.09,
+      "as_of": "2026-09-10",
       "freq": "daily",
       "source": "FRED DFII10 + US Treasury"
     },
     {
       "id": "DFII30",
       "label": "Real 30Y Yield (TIPS)",
-      "value": 2.98,
+      "value": 3.05,
       "unit": "%",
-      "change": 0.02,
-      "as_of": "2026-09-09",
+      "change": 0.07,
+      "as_of": "2026-09-10",
       "freq": "daily",
       "source": "FRED DFII30 + US Treasury"
     },
     {
       "id": "T10YIE",
       "label": "Breakeven Inflation",
-      "value": 2.37,
+      "value": 2.4,
       "unit": "%",
-      "change": 0.0,
-      "as_of": "2026-09-09",
+      "change": 0.03,
+      "as_of": "2026-09-10",
       "freq": "daily",
       "source": "FRED T10YIE"
     },
     {
       "id": "SP500",
       "label": "S&P 500",
-      "value": 7636.36,
+      "value": 7591.7,
       "unit": "",
-      "change": -37.16,
-      "as_of": "2026-09-09",
+      "change": -44.66,
+      "as_of": "2026-09-10",
       "freq": "daily",
       "source": "FRED SP500"
     },
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4424.7,
+      "value": 4379.8,
       "unit": "$",
-      "change": 8.7,
-      "as_of": "2026-09-10",
+      "change": 15.3,
+      "as_of": "2026-09-11",
       "freq": "daily",
       "source": "Yahoo GC=F",
       "provisional": true
@@ -83,10 +83,10 @@
     {
       "id": "BRENT",
       "label": "Brent Crude",
-      "value": 102.23,
+      "value": 103.85,
       "unit": "$",
-      "change": 1.02,
-      "as_of": "2026-09-10",
+      "change": -3.78,
+      "as_of": "2026-09-11",
       "freq": "daily",
       "source": "FRED DCOILBRENTEU + Yahoo BZ=F",
       "provisional": true
@@ -94,10 +94,10 @@
     {
       "id": "WTI",
       "label": "WTI Crude",
-      "value": 97.49,
+      "value": 99.25,
       "unit": "$",
-      "change": 1.44,
-      "as_of": "2026-09-10",
+      "change": -3.23,
+      "as_of": "2026-09-11",
       "freq": "daily",
       "source": "FRED DCOILWTICO + Yahoo CL=F",
       "provisional": true
@@ -129,10 +129,10 @@
     {
       "id": "DXY",
       "label": "Dollar Index (ICE DXY)",
-      "value": 98.92,
+      "value": 99.17,
       "unit": "",
-      "change": 0.15,
-      "as_of": "2026-09-10",
+      "change": 0.08,
+      "as_of": "2026-09-11",
       "freq": "daily",
       "source": "Yahoo DX-Y.NYB",
       "provisional": true,
@@ -141,10 +141,10 @@
     {
       "id": "USDJPY",
       "label": "USD/JPY",
-      "value": 154.1,
+      "value": 154.03,
       "unit": "¥",
-      "change": 0.62,
-      "as_of": "2026-09-10",
+      "change": 0.46,
+      "as_of": "2026-09-11",
       "freq": "daily",
       "source": "FRED DEXJPUS + Yahoo JPY=X",
       "provisional": true
@@ -164,20 +164,20 @@
     {
       "id": "JP10Y",
       "label": "Japan 10Y Nominal Yield",
-      "value": 2.89,
+      "value": 2.92,
       "unit": "%",
-      "change": -0.0,
-      "as_of": "2026-09-09",
+      "change": 0.03,
+      "as_of": "2026-09-10",
       "freq": "daily",
       "source": "MoF JGB curve"
     },
     {
       "id": "JP30Y",
       "label": "Japan 30Y Nominal Yield",
-      "value": 3.96,
+      "value": 4.0,
       "unit": "%",
-      "change": -0.0,
-      "as_of": "2026-09-09",
+      "change": 0.04,
+      "as_of": "2026-09-10",
       "freq": "daily",
       "source": "MoF JGB curve"
     }
@@ -306,7 +306,7 @@
         2.2,
         2.47,
         2.44,
-        2.46
+        2.55
       ],
       "gold": [
         1783.0,
@@ -368,7 +368,7 @@
         4022.9,
         4049.1,
         4431.1,
-        4424.7
+        4379.8
       ],
       "sp500": [
         4605.4,
@@ -430,7 +430,7 @@
         7499.4,
         7489.7,
         7686.1,
-        7636.4
+        7591.7
       ]
     },
     "note": "Real yield / gold / S&P 500 each scaled to its own 0–100 range so co-movement is comparable (min→max of the window, not indexed to the first point — robust to a series like real yield opening the window near/below zero)."
@@ -559,7 +559,7 @@
         70.46,
         96.95,
         89.75,
-        102.23
+        103.85
       ],
       "wti": [
         83.5,
@@ -621,7 +621,7 @@
         70.56,
         86.16,
         87.03,
-        97.49
+        99.25
       ]
     },
     "unit": "$/bbl",
@@ -751,7 +751,7 @@
         162.61,
         159.16,
         159.74,
-        154.1
+        154.03
       ]
     },
     "unit": "JPY per USD",
