@@ -136,5 +136,22 @@ check("refuses CORS to an unlisted origin", r.headers.get("Access-Control-Allow-
 r = await worker.fetch(req({ summaries: { bbb: { tnc_summary: "x" } } }), { ...ENV, GITHUB_TOKEN: "" });
 check("says so when the Worker is unconfigured", r.status === 500);
 
+// 11 — end_date: only YYYY-MM-DD is accepted, and it never outlives its period.
+resetRepo();
+await worker.fetch(req({ summaries: { bbb: { tnc_summary: "s", period: "8 Sep - 27 Dec 2026", end_date: "2026-12-27" } } }), ENV);
+check("writes a valid end_date", lastWrite?.decoded.promotions[1].end_date === "2026-12-27");
+resetRepo();
+await worker.fetch(req({ summaries: { bbb: { tnc_summary: "s", end_date: "27 Dec 2026" } } }), ENV);
+check("ignores an end_date that isn't YYYY-MM-DD", lastWrite?.decoded.promotions[1].end_date === undefined,
+  lastWrite?.decoded.promotions[1]);
+resetRepo();
+repoFile.promotions[0].end_date = "2026-01-31";
+await worker.fetch(req({ summaries: { aaa: { tnc_summary: "rewrite", period: "1 - 28 Feb 2026" } }, force: true }), ENV);
+check("a changed period without an end_date clears the stale one", lastWrite?.decoded.promotions[0].end_date === "");
+resetRepo();
+repoFile.promotions[0].end_date = "2026-01-31";
+await worker.fetch(req({ summaries: { aaa: { tnc_summary: "rewrite", period: "1 Jan 2026" } }, force: true }), ENV);
+check("the same period keeps its end_date", lastWrite?.decoded.promotions[0].end_date === "2026-01-31");
+
 console.log(failures ? `\n${failures} FAILED` : "\nall passed");
 process.exit(failures ? 1 : 0);

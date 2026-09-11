@@ -242,9 +242,26 @@ def has_real_body(title: str, raw: str) -> bool:
     return len(stripped) > 60
 
 
+def select_promos(listed: list[dict], window: int, summarised_ids: set[str]) -> list[dict]:
+    """The first `window` cards in the bank's listing order, PLUS every card that
+    already has a summary in the live feed, wherever it now sits (window <= 0 = all).
+
+    The window alone used to be the whole rule, and it silently deleted work: the
+    bank adds new promos at the TOP of the listing, so each one pushed the oldest
+    card out of the window, and merge_campaign.py then dropped it — summary and
+    all — even though the promo was still live. A summary is the one expensive
+    field (a human or vision AI reading the poster), so a summarised promo now
+    stays for as long as the bank still lists it. The window only bounds how many
+    NOT-yet-summarised promos the feed carries."""
+    return [c for i, c in enumerate(listed)
+            if window <= 0 or i < window or c["id"] in summarised_ids]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--max", type=int, default=20, help="Max promos to process")
+    ap.add_argument("--max", type=int, default=20,
+                    help="Listing window for promos without a summary (0 = all). Promos "
+                         "already summarised in promotions.json are kept wherever they sit.")
     args = ap.parse_args()
 
     os.makedirs(RAW_DIR, exist_ok=True)
@@ -252,6 +269,7 @@ def main() -> int:
     today = date.today().isoformat()
 
     prior_first_seen = {}
+    summarised_ids: set[str] = set()
     prev_path = os.path.join(DATA, "promotions.json")
     if os.path.exists(prev_path):
         try:
@@ -259,11 +277,16 @@ def main() -> int:
             for p in prev.get("promotions", []):
                 if p.get("id") and p.get("first_seen"):
                     prior_first_seen[p["id"]] = p["first_seen"]
+                if p.get("id") and p.get("tnc_summary"):
+                    summarised_ids.add(p["id"])
         except Exception:
             pass
 
+    # Read the WHOLE listing (two page loads, cheap) so a summarised promo that has
+    # slid past the window is still recognised as live; the per-promo detail fetch
+    # and OCR below are the expensive part, and only run for the selection.
     seen_links: set[str] = set()
-    promos: list[dict] = []
+    listed: list[dict] = []
     for url, default_cat in LISTINGS:
         print(f"[scrape] listing: {url}")
         for card in scrape_listing(session, url):
@@ -272,18 +295,17 @@ def main() -> int:
             seen_links.add(card["link"])
             card["id"] = _id(card["link"])
             card["category"] = _guess_category(card["title"], default_cat)
-            promos.append(card)
-            if len(promos) >= args.max:
-                break
-        if len(promos) >= args.max:
-            break
+            listed.append(card)
 
+    promos = select_promos(listed, args.max, summarised_ids)
     if not promos:
         print("[scrape] no promo cards found — the page structure may have changed. "
               "Inspect a listing page's HTML and adjust scrape_listing()'s selector "
               "(currently `.grid-item`).")
         return 1
-    print(f"[scrape] found {len(promos)} card promos, fetching detail pages…")
+    beyond = sum(1 for i, c in enumerate(listed) if c in promos and args.max > 0 and i >= args.max)
+    print(f"[scrape] {len(listed)} cards listed; keeping {len(promos)} "
+          f"(top {args.max} + {beyond} already summarised further down), fetching detail pages…")
 
     if not HAS_OCR:
         print("[scrape] note: pytesseract/Pillow/Tesseract not installed — skipping OCR "
@@ -299,7 +321,8 @@ def main() -> int:
         p["tnc_link"] = tnc_link
         p["tnc_summary"] = ""
 
-        ocr_text = ocr_poster_text(session, p.get("image", ""))
+        # OCR only feeds the summary prompt, so skip it for promos that have one.
+        ocr_text = "" if p["id"] in summarised_ids else ocr_poster_text(session, p.get("image", ""))
         if ocr_text:
             ocr_count += 1
         combined = (raw + "\n\n" + ocr_text).strip() if ocr_text else raw

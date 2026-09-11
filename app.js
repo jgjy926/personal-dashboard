@@ -617,6 +617,26 @@ MODS.campaign = async function initCampaign() {
   list.forEach(p => p._new = p.first_seen && p.first_seen === today);
   const newCount = list.filter(p => p._new).length;
 
+  // Expiry runs on the VIEWER's date, not the feed's `today`: a failed scrape leaves
+  // an older feed up, and an offer that has ended should read as ended whatever day
+  // the data was built. `end_date` (YYYY-MM-DD) is written with the summary or
+  // derived from the period text by tools/merge_campaign.py; a promo without one
+  // never gets a badge and is never hidden. Computed on demand rather than stored
+  // on the promo, so it can't leak into the Console's exported JSON.
+  const localToday = new Date().toLocaleDateString('en-CA');
+  const daysLeft = p => /^\d{4}-\d{2}-\d{2}$/.test(p.end_date || '')
+    ? Math.round((Date.parse(p.end_date) - Date.parse(localToday)) / 864e5) : null;
+  const isExpired = p => (daysLeft(p) ?? 0) < 0;
+  const expiredCount = list.filter(isExpired).length;
+  let showExpired = false;
+  const fmtIso = s => new Date(s).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  const endNote = p => {
+    const n = daysLeft(p);
+    if (n === null || n > 7) return '';
+    if (n < 0) return `<div class="ends expired">⌛ Ended ${fmtIso(p.end_date)}</div>`;
+    return `<div class="ends soon">⏳ ${n === 0 ? 'Ends today' : n === 1 ? 'Ends tomorrow' : `Ends in ${n} days`}</div>`;
+  };
+
   // Category filter values, newest-flagged first for visibility.
   const cats = ['All', ...[...new Set(list.map(p => p.category).filter(Boolean))].sort()];
   let active = 'All';
@@ -629,13 +649,14 @@ MODS.campaign = async function initCampaign() {
   // summary" box. A written tnc_summary (via the Console's AI-enrich flow)
   // still shows when one exists.
   const cardHTML = p => `
-    <article class="promo${p._new ? ' is-new' : ''}">
+    <article class="promo${p._new ? ' is-new' : ''}${isExpired(p) ? ' is-expired' : ''}">
       ${p._new ? '<span class="new-badge">🆕 NEW</span>' : ''}
       <div class="thumb">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" onerror="this.parentNode.textContent='No image'">` : 'No image'}</div>
       <div class="body">
         ${p.category ? `<div class="cat">${esc(p.category)}</div>` : ''}
         <h3>${esc(p.title)}</h3>
         ${p.period ? `<div class="period">🗓 Valid: ${esc(p.period)}</div>` : ''}
+        ${endNote(p)}
         ${p.tnc_summary ? `<div class="tnc">${esc(p.tnc_summary)}</div>` : ''}
         ${p.first_seen ? `<div class="seen${p._new ? ' new' : ''}">${p._new ? '🆕 Added today' : '👁 Listed since'} ${fmtDate(p.first_seen)}</div>` : ''}
         <div class="cta-row">
@@ -645,26 +666,54 @@ MODS.campaign = async function initCampaign() {
       </div>
     </article>`;
 
+  // Free-text search over what a card shows (title, category, period, summary).
+  // Every term must match somewhere, so "lazada rm25" narrows rather than widens.
+  // It composes with the category chips, whose counts follow the search. The
+  // haystack lives in a Map, not on the promo objects, so it can never leak into
+  // the Console's exported/published JSON.
+  let query = '';
+  const hay = new Map(list.map(p => [p, [p.title, p.category, p.period, p.tnc_summary].filter(Boolean).join(' ').toLowerCase()]));
+  const matches = p => query.split(/\s+/).filter(Boolean).every(t => hay.get(p).includes(t));
+
+  // The shell (incl. the search box) renders once and only the results beneath it
+  // re-render, so typing never loses focus or the caret.
+  root.innerHTML = `
+    <div class="disclaimer">⚠ Public Bank publishes most terms only as a PDF, not on-page — tap/hover a banner for the full picture, or use 📄 Official T&amp;C for the real terms. Where a written summary is shown, it's AI-generated — <b>always verify the linked T&amp;C</b>.${sample ? ' Currently showing <b>sample</b> data.' : ''}</div>
+    ${newCount ? `<div class="banner new-banner"><span class="b-ico">🆕</span><div><div class="b-title">${newCount} new promotion${newCount > 1 ? 's' : ''} today</div><div class="b-detail">First detected on the page on ${fmtDate(today)}. Marked 🆕 below.</div></div></div>` : ''}
+    <div class="promo-search"><input type="search" id="promo-q" placeholder="Search promotions — merchant, card, offer, RM amount…" aria-label="Search promotions" autocomplete="off" spellcheck="false"></div>
+    <div id="promo-results"></div>`;
+  const results = root.querySelector('#promo-results');
+  const qEl = root.querySelector('#promo-q');
+
   function render() {
-    const filtered = active === 'All' ? list : list.filter(p => p.category === active);
-    // new-today items first, then by first_seen desc
-    filtered.sort((a, b) => (b._new - a._new) || String(b.first_seen || '').localeCompare(String(a.first_seen || '')));
+    const pool = showExpired ? list : list.filter(p => !isExpired(p));
+    const hits = pool.filter(matches);
+    const filtered = active === 'All' ? hits : hits.filter(p => p.category === active);
+    // live before expired, then new-today first, then by first_seen desc
+    filtered.sort((a, b) => (isExpired(a) - isExpired(b)) || (b._new - a._new) || String(b.first_seen || '').localeCompare(String(a.first_seen || '')));
+    const expiredToggle = expiredCount
+      ? `<button class="fchip toggle${showExpired ? ' on' : ''}" id="promo-expired" aria-pressed="${showExpired}">⌛ ${showExpired ? 'Hide' : 'Show'} expired <span class="fn">${expiredCount}</span></button>`
+      : '';
     const chips = cats.map(c => {
-      const n = c === 'All' ? list.length : list.filter(p => p.category === c).length;
-      const newN = (c === 'All' ? list : list.filter(p => p.category === c)).filter(p => p._new).length;
-      return `<button class="fchip${c === active ? ' on' : ''}" data-cat="${esc(c)}">${esc(c)} <span class="fn">${n}</span>${newN ? `<span class="fnew">${newN}</span>` : ''}</button>`;
+      const inCat = c === 'All' ? hits : hits.filter(p => p.category === c);
+      const newN = inCat.filter(p => p._new).length;
+      return `<button class="fchip${c === active ? ' on' : ''}" data-cat="${esc(c)}">${esc(c)} <span class="fn">${inCat.length}</span>${newN ? `<span class="fnew">${newN}</span>` : ''}</button>`;
     }).join('');
-    root.innerHTML = `
-      <div class="disclaimer">⚠ Public Bank publishes most terms only as a PDF, not on-page — tap/hover a banner for the full picture, or use 📄 Official T&amp;C for the real terms. Where a written summary is shown, it's AI-generated — <b>always verify the linked T&amp;C</b>.${sample ? ' Currently showing <b>sample</b> data.' : ''}</div>
-      ${newCount ? `<div class="banner new-banner"><span class="b-ico">🆕</span><div><div class="b-title">${newCount} new promotion${newCount > 1 ? 's' : ''} today</div><div class="b-detail">First detected on the page on ${fmtDate(today)}. Marked 🆕 below.</div></div></div>` : ''}
-      <div class="fchips" role="tablist" aria-label="Filter by category">${chips}</div>
-      <div class="promo-grid">${filtered.map(cardHTML).join('') || '<div class="emptybox">No promotions in this category.</div>'}</div>
+    const empty = query
+      ? `No promotions match “${esc(query)}”${active !== 'All' ? ` in ${esc(active)}` : ''}.`
+      : 'No promotions in this category.';
+    results.innerHTML = `
+      <div class="fchips" role="tablist" aria-label="Filter by category">${chips}${expiredToggle}</div>
+      <div class="promo-grid">${filtered.map(cardHTML).join('') || `<div class="emptybox">${empty}</div>`}</div>
       <div class="freshline"><span>Source: <a href="${esc((d.meta && d.meta.source) || '#')}" target="_blank" rel="noopener">Public Bank promotions</a></span>
         <span>· Updated <b>${esc((d.meta && d.meta.generated_at || '').slice(0, 10))}</b></span>
-        <span>· ${filtered.length}/${list.length} shown</span></div>`;
-    root.querySelectorAll('.fchip').forEach(b => b.addEventListener('click', () => { active = b.dataset.cat; render(); }));
-    wireImageZoom(root);
+        <span>· ${filtered.length}/${list.length} shown${!showExpired && expiredCount ? ` (${expiredCount} expired hidden)` : ''}</span></div>`;
+    results.querySelectorAll('.fchip[data-cat]').forEach(b => b.addEventListener('click', () => { active = b.dataset.cat; render(); }));
+    const toggle = results.querySelector('#promo-expired');
+    if (toggle) toggle.addEventListener('click', () => { showExpired = !showExpired; render(); });
+    wireImageZoom(results);
   }
+  qEl.addEventListener('input', () => { query = qEl.value.trim().toLowerCase(); render(); });
   render();
 
   // ── 🛠️ Console: export a bundle for AI enrichment, then import the reply ──
@@ -690,7 +739,8 @@ MODS.campaign = async function initCampaign() {
         + "minimum spend/criteria, and campaign period are printed on it) and summarise it in "
         + "<=60 words. Use tnc_link only to double-check anything unclear on the poster. "
         + "Reply with STRICT JSON only — an object mapping id -> "
-        + '{"period":"<campaign period as printed, or \'\'>","tnc_summary":"<your summary>"}. '
+        + '{"period":"<campaign period as printed, or \'\'>","end_date":"<last day the offer can be used, YYYY-MM-DD, or \'\'>","tnc_summary":"<your summary>"}. '
+        + "For recurring windows (e.g. a monthly sale) end_date is the last day of the final window. "
         + "Do not invent details not visible on the poster or linked document.",
       promos: missing.map(p => ({ id: p.id, title: p.title, image: p.image, tnc_link: p.tnc_link || p.link })),
     };
@@ -779,7 +829,9 @@ MODS.campaign = async function initCampaign() {
       const ids = Object.keys(map);
       const merged = list.map(p => {
         const upd = map[p.id];
-        return upd ? { ...p, tnc_summary: upd.tnc_summary || p.tnc_summary, period: upd.period || p.period } : p;
+        if (!upd) return p;
+        const end = /^\d{4}-\d{2}-\d{2}$/.test(upd.end_date || '') ? upd.end_date : (upd.period && upd.period !== p.period ? '' : p.end_date);
+        return { ...p, tnc_summary: upd.tnc_summary || p.tnc_summary, period: upd.period || p.period, end_date: end || '' };
       });
       const matched = ids.filter(id => list.some(p => p.id === id)).length;
       previewEl.innerHTML =

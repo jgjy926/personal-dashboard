@@ -86,6 +86,8 @@ jobs:
 
       - name: Scrape card promos (best-effort; keep prior feed on failure)
         continue-on-error: true
+        # --max bounds only the promos still WITHOUT a summary (the bank lists 130+).
+        # Any promo already summarised stays in the feed while the bank lists it.
         run: |
           python tools/scrape_campaign.py --max 15
           python tools/merge_campaign.py

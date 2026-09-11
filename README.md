@@ -74,6 +74,10 @@ pip install requests beautifulsoup4 pytesseract Pillow
 python tools/scrape_campaign.py --max 15
 ```
 
+`--max` is the listing window for promos that have **no summary yet** (the bank lists
+130+). A promo you've already summarised stays in the feed for as long as the bank still
+lists it, however far down new promos push it.
+
 Produces `data/campaign_raw/*.txt`, `data/promotions.draft.json`, and
 `data/campaign_prompt.txt`. Then: paste `campaign_prompt.txt` into Claude → get back
 `{id: {period, tnc_summary}}` JSON → fill those into `promotions.draft.json` (or run
@@ -160,7 +164,7 @@ mirror this. Not scraped rather than half-built on fragile markup.
   `regime{label,detail,caveat}`. `oil` and `fx` are each single-unit, so the frontend plots them on a
   real axis rather than the 0-100 rescale `overlay` needs; both blocks are optional and the monitor
   omits the chart if absent.
-- **`promotions.json`** — `meta` (incl. `today`), `promotions[]` (`{id,title,image,link,category,period,first_seen,tnc_summary}`). `first_seen` = the date a promo first appeared on the page; a promo whose `first_seen` equals `meta.today` is flagged **NEW** and surfaced in the "new today" banner. The Card Promos tab filters by `category`.
+- **`promotions.json`** — `meta` (incl. `today`), `promotions[]` (`{id,title,image,link,category,period,end_date,first_seen,tnc_summary}`). `end_date` (YYYY-MM-DD, or empty when unknown) is the last day the offer can be used — written with the summary, or derived from `period` by `merge_campaign.py`. Within 7 days the card shows ⏳ *Ends in N days*; once it has passed, the promo is hidden behind a **Show expired** toggle rather than deleted (only the bank delisting a promo removes it from the feed). `first_seen` = the date a promo first appeared on the page; a promo whose `first_seen` equals `meta.today` is flagged **NEW** and surfaced in the "new today" banner. The Card Promos tab filters by `category`.
 - **`treasury.json`** — `meta{sources,note}`, `upcoming_auctions[]`
   (`{auction_date,issue_date,maturity_date,security_type,term,rate,cusip}`),
   `recent_buybacks[]` (`{operation_date,settlement_date,operation_type,maturity_bucket,par_accepted}`).

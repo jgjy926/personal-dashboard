@@ -43,9 +43,14 @@ import base64
 import json
 import os
 
+import re
+
 import requests
 
+from merge_campaign import end_date_from_period
+
 HERE = os.path.dirname(os.path.abspath(__file__))
+ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 ROOT = os.path.dirname(HERE)
 LIVE = os.path.join(ROOT, "data", "promotions.json")
 
@@ -61,6 +66,8 @@ minimum spend, and the card or channel it is restricted to.
 quotas, per-user caps, registration requirements, notable exclusions.
 - 1-3 sentences. No marketing language, no "Terms and conditions apply", no invented detail.
 - `period` is the overall campaign period, styled like "8 September - 27 December 2026".
+- `end_date` is the last day the offer can be used, as YYYY-MM-DD. For recurring windows \
+(e.g. a monthly sale) use the last day of the final window. Use "" if no end is stated.
 - Amounts printed as large stylised graphics on the poster are the ones most often misread. \
 If the poster and the T&C disagree, trust the T&C. If you cannot read an amount, a minimum \
 spend, or the period with confidence, set needs_review=true and say what was unclear in \
@@ -73,10 +80,11 @@ SCHEMA = {
         "properties": {
             "period": {"type": "string"},
             "tnc_summary": {"type": "string"},
+            "end_date": {"type": "string"},
             "needs_review": {"type": "boolean"},
             "note": {"type": "string"},
         },
-        "required": ["period", "tnc_summary", "needs_review", "note"],
+        "required": ["period", "end_date", "tnc_summary", "needs_review", "note"],
         "additionalProperties": False,
     },
 }
@@ -150,8 +158,17 @@ def apply_map(doc, mapping, force=False):
         if not summary:
             continue
         p["tnc_summary"] = summary
+        old_period = p.get("period", "")
         if got.get("period"):
             p["period"] = got["period"].strip()
+        # Same rule as the promo-sync Worker: only a real YYYY-MM-DD is taken. Without
+        # one, derive it from the period text — unless the period is unchanged and a
+        # date (possibly hand-set) is already there.
+        end = (got.get("end_date") or "").strip()
+        if ISO_DATE.match(end):
+            p["end_date"] = end
+        elif p.get("period", "") != old_period or not p.get("end_date"):
+            p["end_date"] = end_date_from_period(p.get("period", ""))
         written.append(p["id"])
     return written
 

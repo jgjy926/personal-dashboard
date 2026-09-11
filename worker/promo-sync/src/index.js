@@ -27,6 +27,7 @@
 
 const GH = "https://api.github.com";
 const MAX_SUMMARY = 2000;
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 // ── small helpers ──────────────────────────────────────────────────────────
 // GitHub hands back base64 of UTF-8 bytes; JSON.parse needs a string. atob/btoa
@@ -133,8 +134,15 @@ function applySummaries(doc, summaries, force) {
     if (!summary) { skipped.push(id); continue; }
     if (p.tnc_summary && !force) { skipped.push(id); continue; }
     p.tnc_summary = summary.slice(0, MAX_SUMMARY);
-    const period = String(val?.period ?? "").trim();
-    if (period) p.period = period.slice(0, 200);
+    const oldPeriod = p.period || "";
+    const period = String(val?.period ?? "").trim().slice(0, 200);
+    if (period) p.period = period;
+    // end_date hides the card once it passes, so only a real YYYY-MM-DD is taken.
+    // A changed period without one clears the old date instead of leaving it
+    // describing another campaign; the daily merge re-derives it from the text.
+    const end = String(val?.end_date ?? "").trim();
+    if (ISO_DATE.test(end)) p.end_date = end;
+    else if (period && period !== oldPeriod && p.end_date) p.end_date = "";
     applied.push(id);
   }
   return { applied, skipped, unknown };

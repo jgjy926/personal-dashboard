@@ -5,7 +5,7 @@
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-11",
     "new_today": 1,
-    "count": 15,
+    "count": 20,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
@@ -18,7 +18,8 @@
       "period": "",
       "first_seen": "2026-09-11",
       "tnc_link": "",
-      "tnc_summary": ""
+      "tnc_summary": "",
+      "end_date": ""
     },
     {
       "title": "PB Privileges @ Just Pets Megastore",
@@ -29,7 +30,8 @@
       "period": "10 September - 31 December 2026",
       "first_seen": "2026-09-09",
       "tnc_link": "https://www.pbebank.com/media/av4hqra5/tc_megastore-pets.pdf",
-      "tnc_summary": "20% off entrance ticket to Just Pets Megastore (Just Farm, Just Cats, Just Dogs) using promo code PBJP20 for PB cardholders. Book via shop.justpets.asia. Terms and conditions apply; full details not accessible from linked PDF."
+      "tnc_summary": "20% off entrance ticket to Just Pets Megastore (Just Farm, Just Cats, Just Dogs) using promo code PBJP20 for PB cardholders. Book via shop.justpets.asia. Terms and conditions apply; full details not accessible from linked PDF.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "Lazada Double-Digit Days with PB Visa Credit Card",
@@ -40,7 +42,8 @@
       "period": "8th (8PM) – 11th (11:59PM) Sep 2026; 9th–12th Oct 2026; 10th–13th Nov 2026; 11th–14th Dec 2026; 1st–4th Feb 2027; 2nd–5th Mar 2027; 3rd–6th Apr 2027",
       "first_seen": "2026-09-07",
       "tnc_link": "https://www.pbebank.com/media/sdrozdd4/tc_visa-lazada-double-digit.pdf",
-      "tnc_summary": "RM20 instant off with minimum single-transaction spend of RM180, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Offer repeats monthly on the dates listed in the promotion period, spanning September 2026 through April 2027."
+      "tnc_summary": "RM20 instant off with minimum single-transaction spend of RM180, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Offer repeats monthly on the dates listed in the promotion period, spanning September 2026 through April 2027.",
+      "end_date": "2027-04-06"
     },
     {
       "title": "Lazada PayDay with PB Visa Credit Card",
@@ -51,7 +54,8 @@
       "period": "24th (8PM) – 27th (11:59PM) monthly, from September 2026 to April 2027",
       "first_seen": "2026-09-07",
       "tnc_link": "https://www.pbebank.com/media/cc4olm1r/tc_visa-lazada-payday.pdf",
-      "tnc_summary": "RM20 off with minimum single-transaction spend of RM180, redeemed by collecting a voucher, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Recurs monthly on the 24th–27th each month across the campaign period."
+      "tnc_summary": "RM20 off with minimum single-transaction spend of RM180, redeemed by collecting a voucher, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Recurs monthly on the 24th–27th each month across the campaign period.",
+      "end_date": "2027-04-27"
     },
     {
       "title": "PB Privileges at Grand Millennium Kuala Lumpur",
@@ -62,7 +66,8 @@
       "period": "Now until 30 June 2027",
       "first_seen": "2026-09-07",
       "tnc_link": "https://www.pbebank.com/media/omzhvulz/tc_gmkl.pdf",
-      "tnc_summary": "15% off food only at Grand Millennium Kuala Lumpur, valid at three participating outlets: The Mill Café, Lai Ching Yuen, and Bistro 160."
+      "tnc_summary": "15% off food only at Grand Millennium Kuala Lumpur, valid at three participating outlets: The Mill Café, Lai Ching Yuen, and Bistro 160.",
+      "end_date": "2027-06-30"
     },
     {
       "title": "Lazada Double Date and Pay Day Sales with PB Mastercard Credit Card",
@@ -73,7 +78,8 @@
       "period": "8 September - 27 December 2026",
       "first_seen": "2026-09-06",
       "tnc_link": "https://www.pbebank.com/media/ms2c4g52/tc_lazada-double-date-payday.pdf",
-      "tnc_summary": "RM50 off with minimum spend RM500, or RM100 off with minimum spend RM1,000, in a single transaction (excluding shipping/courier) on the Lazada mobile app with a PB/PIB Mastercard credit card. Discount applies automatically at checkout, limited to one use per Lazada ID per month, and is first-come first-served on fixed quotas within eight windows: Double Date 8-11 Sep, 9-12 Oct, 10-13 Nov, 11-14 Dec (8pm start) and Pay Day 24-27 Sep, 24-27 Oct, 24-27 Nov, 24-27 Dec 2026. Product exclusions apply."
+      "tnc_summary": "RM50 off with minimum spend RM500, or RM100 off with minimum spend RM1,000, in a single transaction (excluding shipping/courier) on the Lazada mobile app with a PB/PIB Mastercard credit card. Discount applies automatically at checkout, limited to one use per Lazada ID per month, and is first-come first-served on fixed quotas within eight windows: Double Date 8-11 Sep, 9-12 Oct, 10-13 Nov, 11-14 Dec (8pm start) and Pay Day 24-27 Sep, 24-27 Oct, 24-27 Nov, 24-27 Dec 2026. Product exclusions apply.",
+      "end_date": "2026-12-27"
     },
     {
       "title": "RM25 OFF at Lazada with PB Mastercard Credit Card",
@@ -84,7 +90,8 @@
       "period": "1 September - 31 December 2026",
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/xrpldao4/tc_rm25-off-lazada-with-pb-mastercard-credit-card.pdf",
-      "tnc_summary": "RM25 off with minimum spend RM200 in a single transaction, only with PB Mastercard Credit Card, applicable to Lazada mobile app purchases only."
+      "tnc_summary": "RM25 off with minimum spend RM200 in a single transaction, only with PB Mastercard Credit Card, applicable to Lazada mobile app purchases only.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "PB Privileges at Bendang",
@@ -95,7 +102,8 @@
       "period": "1 September 2026 - 28 February 2027",
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/ymbbsoxp/tc_pb-privileges-at-bendang.pdf",
-      "tnc_summary": "10% off Siakap (sea bass) with minimum spending of RM300 in a single receipt at Bendang. Picture for illustration purposes only."
+      "tnc_summary": "10% off Siakap (sea bass) with minimum spending of RM300 in a single receipt at Bendang. Picture for illustration purposes only.",
+      "end_date": "2027-02-28"
     },
     {
       "title": "PB Privileges at Kampung Lah",
@@ -106,7 +114,8 @@
       "period": "1 September 2026 - 28 February 2027",
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/12jfweks/tc_pb-privileges-at-kampung-lah.pdf",
-      "tnc_summary": "1 complimentary vegetable dish of choice with minimum spending of RM300 in a single receipt at Kampung Lah."
+      "tnc_summary": "1 complimentary vegetable dish of choice with minimum spending of RM300 in a single receipt at Kampung Lah.",
+      "end_date": "2027-02-28"
     },
     {
       "title": "PB Privileges at Tingkap By Kampunglah",
@@ -117,7 +126,8 @@
       "period": "1 September 2026 - 28 February 2027",
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/gm2bmyfm/tc_pb-privileges-at-tingkap-by-kampunglah.pdf",
-      "tnc_summary": "10% off total bill from 2:00pm to 5:00pm at Tingkap by Kampunglah."
+      "tnc_summary": "10% off total bill from 2:00pm to 5:00pm at Tingkap by Kampunglah.",
+      "end_date": "2027-02-28"
     },
     {
       "title": "PB Privileges at TAPAULAH By Kampunglah",
@@ -128,7 +138,8 @@
       "period": "1 September 2026 - 28 February 2027",
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/sq0bbqom/tc_pb-privileges-at-tapaulah-by-kampunglah.pdf",
-      "tnc_summary": "1 complimentary Sirap with purchase of 2 Bun Bun Mak, or 1 complimentary drink with purchase of 1 drink, at Tapaulah by Kampunglah."
+      "tnc_summary": "1 complimentary Sirap with purchase of 2 Bun Bun Mak, or 1 complimentary drink with purchase of 1 drink, at Tapaulah by Kampunglah.",
+      "end_date": "2027-02-28"
     },
     {
       "title": "PB Privileges at Waroeng Sambal Pojok",
@@ -139,7 +150,8 @@
       "period": "1 September 2026 - 28 February 2027",
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/sdmnskcy/tc_pb-privileges-at-waroeng-sambal-pojok.pdf",
-      "tnc_summary": "10% off Iga Bakar (grilled beef ribs) at Waroeng Sambal Pojok."
+      "tnc_summary": "10% off Iga Bakar (grilled beef ribs) at Waroeng Sambal Pojok.",
+      "end_date": "2027-02-28"
     },
     {
       "title": "Exclusive Dining Privileges with PB Visa Credit Card",
@@ -150,7 +162,8 @@
       "period": "1 September - 31 December 2026",
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/hbadovvv/tc_exclusive-dining-privileges-with-pb-visa-credit-card.pdf",
-      "tnc_summary": "RM50 cashback with spending of RM688 in a single receipt at participating restaurants (Fish Market, Hee Lai Ton, Oriental Group, Grand Imperial Group, and others). Register via PBe (keyword PBCB) or SMS PBCB to 68333."
+      "tnc_summary": "RM50 cashback with spending of RM688 in a single receipt at participating restaurants (Fish Market, Hee Lai Ton, Oriental Group, Grand Imperial Group, and others). Register via PBe (keyword PBCB) or SMS PBCB to 68333.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "More eWallet Top-Ups, More Rewards with PB Mastercard Credit Card",
@@ -161,7 +174,8 @@
       "period": "1 September - 31 December 2026",
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/ia4ju12k/tc_ewallet-top-ups.pdf",
-      "tnc_summary": "RM40 eVoucher for min RM2,000 top-up, or RM100 eVoucher for min RM4,000 top-up per transaction, on Boost, GrabPay, Lazada, ShopeePay or Touch 'n Go. Register via PBe (keyword PBVHR) or SMS PBVHR to 68333."
+      "tnc_summary": "RM40 eVoucher for min RM2,000 top-up, or RM100 eVoucher for min RM4,000 top-up per transaction, on Boost, GrabPay, Lazada, ShopeePay or Touch 'n Go. Register via PBe (keyword PBVHR) or SMS PBVHR to 68333.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "Buy 1 Get 1 Air Ticket with PB Mastercard Credit Card",
@@ -172,7 +186,68 @@
       "period": "24 August - 23 November 2026",
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/x1egqnmx/tc_travel-china.pdf",
-      "tnc_summary": "Buy 1 get 1 air ticket to China on Malaysia Airlines with minimum accumulative spend RM20,000. Plus Alipay/Trip.com China travel deals (coupon, discount, hotel promo) running to 31 December 2026. Call Holiday Tours & Travel to book."
+      "tnc_summary": "Buy 1 get 1 air ticket to China on Malaysia Airlines with minimum accumulative spend RM20,000. Plus Alipay/Trip.com China travel deals (coupon, discount, hotel promo) running to 31 December 2026. Call Holiday Tours & Travel to book.",
+      "end_date": "2026-11-23"
+    },
+    {
+      "title": "PB Privileges: RM100 OFF on MHflypass purchase with Journify",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-rm100-off-on-mhflypass-purchase-with-journify/",
+      "image": "https://www.pbebank.com/media/amhd405j/rm100-mhflypass-journify_wb.jpg",
+      "id": "66081623e4",
+      "category": "Credit Card",
+      "period": "Now - 14 December 2026",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://shop.myjournify.com/promo/cart/2325/mhfppublicbank",
+      "tnc_summary": "MYR100 off MHflypass (1 pass, 3 return trips, Malaysia/ASEAN) using code PUBLIC100, exclusively for PB credit & debit cardmembers. Valid for all passes except Malaysia Zone 1.",
+      "end_date": "2026-12-14"
+    },
+    {
+      "title": "PB Mid-Autumn Offer @ MIKA",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-mid-autumn-offer-mika-2/",
+      "image": "https://www.pbebank.com/media/4uxhexbr/mika-mid-autumn26_wb.jpg",
+      "id": "571bb2162b",
+      "category": "Credit Card",
+      "period": "15 August to 25 September 2026",
+      "first_seen": "2026-09-08",
+      "tnc_link": "https://www.pbebank.com/media/zf1jlbdk/tc_mika-mid-autumn26.pdf",
+      "tnc_summary": "Enjoy RM30 off with a minimum spend of RM100 on Mid-Autumn products from mika. Use promo code MKPBM26 at checkout. Valid only at www.mika.com.my. Terms and conditions apply; PB Debit Card protected by PIDM up to RM250,000 per depositor.",
+      "end_date": "2026-09-25"
+    },
+    {
+      "title": "Journey of Rewarding with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/journey-of-rewarding-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/izvfnx0i/journey-of-rewarding_wb.jpg",
+      "id": "60cc32fe1f",
+      "category": "Credit Card",
+      "period": "15 August - 30 September 2026",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/cevktwoh/tc_journey-of-rewarding.pdf",
+      "tnc_summary": "RM88 cashback (min accumulative spend RM5,000) or 100,000 Enrich Points (min spend RM10,000, Top Spender Contest x5) on travel-related merchant categories. Convertible to 6-month 0% Flexipay. Register via PBe (keyword PBM) or SMS PBM to 68333.",
+      "end_date": "2026-09-30"
+    },
+    {
+      "title": "EcoWorld Home Buyer Programme",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/ecoworld-home-buyer-programme-1/",
+      "image": "https://www.pbebank.com/media/jjcl4x1n/ecoworld-buyer_wb.jpg",
+      "id": "edcb1d2301",
+      "category": "Credit Card",
+      "period": "15 August - 31 October 2026",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/12qlbiml/tc_ecoworld-buyer.pdf",
+      "tnc_summary": "Cashback on home purchases: RM200 (downpayment RM10,000-39,999), RM400 (RM40,000-99,999), RM1,000 (RM100,000+); also for 0% instalment (36mo ZIIP/ZPIP). Max one redemption per cardmember. Plus a free 16-piece cutlery set (worth RM119) with qualifying spend at EcoWorld townships.",
+      "end_date": "2026-10-31"
+    },
+    {
+      "title": "PB Privileges @ 52 Pilates",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-52-pilates/",
+      "image": "https://www.pbebank.com/media/yxmj1lsp/52-pilates_wb.jpg",
+      "id": "089b68f757",
+      "category": "Credit Card",
+      "period": "15 August 2026 - 31 January 2027",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/d2tppzim/tc_52-pilates.pdf",
+      "tnc_summary": "Up to 40% off Pilates Group Package at 52 Pilates using code PBCM. Register and redeem via WhatsApp (+6016-662 2887).",
+      "end_date": "2027-01-31"
     }
   ]
 }
