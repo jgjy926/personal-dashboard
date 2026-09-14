@@ -1,14 +1,26 @@
 {
   "meta": {
-    "generated_at": "2026-09-13T00:00:00+00:00",
+    "generated_at": "2026-09-14T00:00:00+00:00",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "today": "2026-09-13",
-    "new_today": 0,
-    "count": 20,
+    "today": "2026-09-14",
+    "new_today": 1,
+    "count": 21,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
+    {
+      "title": "PB Privileges @ Cengild G. I. Medical Centre",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-cengild-g-i-medical-centre-1/",
+      "image": "https://www.pbebank.com/media/lxeegmu1/cengild-g-i-medical-centre_wb.jpg",
+      "id": "52681d29b3",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-14",
+      "tnc_link": "https://www.pbebank.com/media/qo5ng3z4/tc_pb-privileges-cengild-g-i-medical-centre.pdf",
+      "tnc_summary": "",
+      "end_date": ""
+    },
     {
       "title": "JOM RASA PENANG with PB Cards",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/jom-rasa-penang-with-pb-cards/",
