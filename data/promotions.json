@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-14T00:00:00+00:00",
+    "generated_at": "2026-09-14T14:42:49.771Z",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-14",
     "new_today": 1,
     "count": 21,
-    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
+    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification. Summaries published from the Card Promos Console."
   },
   "promotions": [
     {
@@ -15,11 +15,11 @@
       "image": "https://www.pbebank.com/media/lxeegmu1/cengild-g-i-medical-centre_wb.jpg",
       "id": "52681d29b3",
       "category": "Credit Card",
-      "period": "",
+      "period": "15 September 2026 to 31 August 2027",
       "first_seen": "2026-09-14",
       "tnc_link": "https://www.pbebank.com/media/qo5ng3z4/tc_pb-privileges-cengild-g-i-medical-centre.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "PB Privileges offers discounted health screening packages at Cengild G.I. Medical Centre, Bangsar South: Urban Heart Health Screening RM548 (normal RM638), Essential Cancer Screening RM555 (normal RM638), Heart & Cancer Screening RM799, and Cancer & Gastric Screening RM799 (both normal RM938). Each includes blood tests, cardiac/cancer markers, BCA, doctor consultation, refreshment, plus a free RM30 GrabCar code.",
+      "end_date": "2027-08-31"
     },
     {
       "title": "JOM RASA PENANG with PB Cards",
