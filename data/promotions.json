@@ -1,14 +1,38 @@
 {
   "meta": {
-    "generated_at": "2026-09-14T00:00:00+00:00",
+    "generated_at": "2026-09-15T00:00:00+00:00",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "today": "2026-09-14",
-    "new_today": 1,
-    "count": 21,
+    "today": "2026-09-15",
+    "new_today": 2,
+    "count": 23,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
+    {
+      "title": "PB Privileges @ Artaflow",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-artaflow/",
+      "image": "https://www.pbebank.com/media/0fgnfldd/artaflow_wb.jpg",
+      "id": "c97f493ed4",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-15",
+      "tnc_link": "https://www.pbebank.com/media/5iwidarm/tc_pb-privileges-artaflow.pdf",
+      "tnc_summary": "",
+      "end_date": ""
+    },
+    {
+      "title": "Spend & Be Rewarded at vivo",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/spend-be-rewarded-at-vivo-6/",
+      "image": "https://www.pbebank.com/media/wz5ldttu/vivo-v80-lite_wb.jpg",
+      "id": "b6c164fb7e",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-15",
+      "tnc_link": "https://www.pbebank.com/media/4xgfz4o2/tc_vivo-v80-lite.pdf",
+      "tnc_summary": "",
+      "end_date": ""
+    },
     {
       "title": "PB Privileges @ Cengild G. I. Medical Centre",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-cengild-g-i-medical-centre-1/",
