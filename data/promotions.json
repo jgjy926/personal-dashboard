@@ -1,14 +1,26 @@
 {
   "meta": {
-    "generated_at": "2026-09-17T00:00:00+00:00",
+    "generated_at": "2026-09-18T00:00:00+00:00",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "today": "2026-09-17",
+    "today": "2026-09-18",
     "new_today": 1,
-    "count": 24,
+    "count": 25,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
+    {
+      "title": "WATATIME Sunway Pyramid Renovation Sale",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/watatime-sunway-pyramid-renovation-sale/",
+      "image": "https://www.pbebank.com/media/5ehd5iuo/watatime-sp-renovation-sale_wb.jpg",
+      "id": "929f03bad4",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-18",
+      "tnc_link": "https://www.pbebank.com/media/plpju4a4/tc_watatime-sp-renovation-sale.pdf",
+      "tnc_summary": "",
+      "end_date": ""
+    },
     {
       "title": "PB Privileges @ Pak Nik Burger",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-pak-nik-burger/",
