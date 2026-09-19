@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-19T04:08:27+00:00",
+    "generated_at": "2026-09-19T11:09:32+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; the US Treasury's own daily curve extends the nominal and TIPS yields, and Yahoo Finance extends the market-traded series, over the days FRED has not published yet (FRED batches the curve series, the Fed's H.10 dollar release is weekly, the EIA crude series are batched). Every card names the source behind its latest point, and the ones with no faster publisher carry their release cadence instead.",
     "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
     "missing_series": [],
-    "latest_observation": "2026-09-18"
+    "latest_observation": "2026-09-19"
   },
   "snapshot": [
     {
@@ -144,10 +144,9 @@
       "value": 156.85,
       "unit": "¥",
       "change": 0.73,
-      "as_of": "2026-09-18",
+      "as_of": "2026-09-19",
       "freq": "daily",
-      "source": "FRED DEXJPUS + Yahoo JPY=X",
-      "provisional": true
+      "source": "FRED DEXJPUS + Yahoo JPY=X"
     },
     {
       "id": "CSUSHPISA",
