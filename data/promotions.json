@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-18T00:00:00+00:00",
+    "generated_at": "2026-09-19T04:07:09.983Z",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-18",
     "new_today": 1,
     "count": 25,
-    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
+    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification. Summaries published from the Card Promos Console."
   },
   "promotions": [
     {
@@ -15,11 +15,11 @@
       "image": "https://www.pbebank.com/media/5ehd5iuo/watatime-sp-renovation-sale_wb.jpg",
       "id": "929f03bad4",
       "category": "Credit Card",
-      "period": "",
+      "period": "18 September - 12 October 2026",
       "first_seen": "2026-09-18",
       "tnc_link": "https://www.pbebank.com/media/plpju4a4/tc_watatime-sp-renovation-sale.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "WATATIME Renovation Sale at Sunway Pyramid (G1.61), 10am-10pm daily. Enjoy up to 85% off, plus an additional 5% off already-discounted items. Applicable at the Sunway Pyramid outlet only. Pictures shown are for illustration purposes only; actual watch models and discounts may vary by item.",
+      "end_date": "2026-10-12"
     },
     {
       "title": "PB Privileges @ Pak Nik Burger",
@@ -27,11 +27,11 @@
       "image": "https://www.pbebank.com/media/3dxbhnrf/pak-nik-burger_wb.jpg",
       "id": "a0b1005d46",
       "category": "Credit Card",
-      "period": "",
+      "period": "15 September 2026 to 14 September 2027",
       "first_seen": "2026-09-17",
       "tnc_link": "https://www.pbebank.com/media/0kyjpm1p/tc_pak-nik-burger.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "PB Cards holders enjoy 20% off every Specialty Combo Burger Set (Camden, Sizzle Pepper, Beef Meatball) at Pak Nik Burger, Level 4 (L4-48), Selera Street, Sunway Putra Mall. Offer applicable at the Sunway Putra Mall outlet only; general terms and conditions apply as per the bank's promo policy.",
+      "end_date": "2027-09-14"
     },
     {
       "title": "PB Privileges @ Artaflow",
