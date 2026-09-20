@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-19T11:09:32+00:00",
+    "generated_at": "2026-09-20T11:33:52+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; the US Treasury's own daily curve extends the nominal and TIPS yields, and Yahoo Finance extends the market-traded series, over the days FRED has not published yet (FRED batches the curve series, the Fed's H.10 dollar release is weekly, the EIA crude series are batched). Every card names the source behind its latest point, and the ones with no faster publisher carry their release cadence instead.",
     "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
     "missing_series": [],
-    "latest_observation": "2026-09-19"
+    "latest_observation": "2026-09-20"
   },
   "snapshot": [
     {
@@ -77,30 +77,27 @@
       "change": 25.2,
       "as_of": "2026-09-18",
       "freq": "daily",
-      "source": "Yahoo GC=F",
-      "provisional": true
+      "source": "Yahoo GC=F"
     },
     {
       "id": "BRENT",
       "label": "Brent Crude",
-      "value": 103.87,
+      "value": 99.29,
       "unit": "$",
-      "change": -0.95,
+      "change": -5.53,
       "as_of": "2026-09-18",
       "freq": "daily",
-      "source": "FRED DCOILBRENTEU + Yahoo BZ=F",
-      "provisional": true
+      "source": "FRED DCOILBRENTEU + Yahoo BZ=F"
     },
     {
       "id": "WTI",
       "label": "WTI Crude",
-      "value": 100.3,
+      "value": 96.08,
       "unit": "$",
-      "change": -1.61,
+      "change": -5.83,
       "as_of": "2026-09-18",
       "freq": "daily",
-      "source": "FRED DCOILWTICO + Yahoo CL=F",
-      "provisional": true
+      "source": "FRED DCOILWTICO + Yahoo CL=F"
     },
     {
       "id": "UNRATE",
@@ -135,7 +132,6 @@
       "as_of": "2026-09-18",
       "freq": "daily",
       "source": "Yahoo DX-Y.NYB",
-      "provisional": true,
       "release": "ICE futures, continuous"
     },
     {
@@ -144,7 +140,7 @@
       "value": 156.85,
       "unit": "¥",
       "change": 0.73,
-      "as_of": "2026-09-19",
+      "as_of": "2026-09-20",
       "freq": "daily",
       "source": "FRED DEXJPUS + Yahoo JPY=X"
     },
@@ -558,7 +554,7 @@
         70.46,
         96.95,
         89.75,
-        103.87
+        99.29
       ],
       "wti": [
         83.5,
@@ -620,7 +616,7 @@
         70.56,
         86.16,
         87.03,
-        100.3
+        96.08
       ]
     },
     "unit": "$/bbl",
