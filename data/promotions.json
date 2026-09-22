@@ -1,14 +1,26 @@
 {
   "meta": {
-    "generated_at": "2026-09-21T00:00:00+00:00",
+    "generated_at": "2026-09-22T00:00:00+00:00",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "today": "2026-09-21",
+    "today": "2026-09-22",
     "new_today": 1,
-    "count": 26,
+    "count": 27,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
+    {
+      "title": "PB Privileges at Braun Buffel",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-braun-buffel-1/",
+      "image": "https://www.pbebank.com/media/yenpev44/braun-buffel-10off_wb.jpg",
+      "id": "96163afaa4",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-22",
+      "tnc_link": "https://www.pbebank.com/media/r4apwglz/tc_braun-buffel-10off.pdf",
+      "tnc_summary": "",
+      "end_date": ""
+    },
     {
       "title": "Get RM35 When you Register & Activate your PB SecureSign today!",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/get-rm35-when-you-register-activate-your-pb-securesign-today/",
