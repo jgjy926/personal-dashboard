@@ -29,8 +29,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import scrape_campaign as sc  # noqa: E402
 
 
-def cards(n):
-    return [{"id": f"p{i}", "title": f"Promo {i}"} for i in range(n)]
+def cards(n, prefix="p"):
+    return [{"id": f"{prefix}{i}", "title": f"Promo {i}", "rank": i} for i in range(n)]
+
+
+def ranked(ids):
+    return [{"id": pid, "rank": i} for i, pid in enumerate(ids)]
 
 
 class TestSelectPromos(unittest.TestCase):
@@ -40,7 +44,7 @@ class TestSelectPromos(unittest.TestCase):
 
     def test_summarised_promo_pushed_past_the_window_is_kept(self):
         # Two new promos land on top; the summarised p13/p14 slide to 15/16.
-        listed = [{"id": "new1"}, {"id": "new2"}] + cards(20)
+        listed = ranked(["new1", "new2"] + [f"p{i}" for i in range(20)])
         got = [c["id"] for c in sc.select_promos(listed, 15, {"p13", "p14", "p19"})]
         self.assertEqual(len(got), 18)
         for pid in ("new1", "new2", "p13", "p14", "p19"):
@@ -57,6 +61,15 @@ class TestSelectPromos(unittest.TestCase):
 
     def test_zero_window_means_everything(self):
         self.assertEqual(len(sc.select_promos(cards(40), 0, set())), 40)
+
+    def test_window_applies_to_each_listing_not_the_joined_list(self):
+        # The credit listing runs 130+ cards; a window over credit + debit joined end
+        # to end never reached the debit listing, so debit-only promos were never
+        # scraped. main() interleaves the two by rank; each keeps its own top N.
+        listed = sorted(cards(130, "c") + cards(90, "d"), key=lambda c: c["rank"])
+        got = {c["id"] for c in sc.select_promos(listed, 15, set())}
+        self.assertIn("d3", got, "a debit-only promo near the top is kept")
+        self.assertEqual(got, {f"c{i}" for i in range(15)} | {f"d{i}" for i in range(15)})
 
 
 if __name__ == "__main__":

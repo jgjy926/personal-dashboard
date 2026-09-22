@@ -74,9 +74,10 @@ pip install requests beautifulsoup4 pytesseract Pillow
 python tools/scrape_campaign.py --max 15
 ```
 
-`--max` is the listing window for promos that have **no summary yet** (the bank lists
-130+). A promo you've already summarised stays in the feed for as long as the bank still
-lists it, however far down new promos push it.
+`--max` is the window for promos that have **no summary yet**, applied to the credit and
+debit listings **each** (the credit one alone lists 130+, so a single window over both
+never reached debit-only promos). A promo you've already summarised stays in the feed for
+as long as the bank still lists it, however far down new promos push it.
 
 Produces `data/campaign_raw/*.txt`, `data/promotions.draft.json`, and
 `data/campaign_prompt.txt`. Then: paste `campaign_prompt.txt` into Claude → get back

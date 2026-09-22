@@ -243,8 +243,9 @@ def has_real_body(title: str, raw: str) -> bool:
 
 
 def select_promos(listed: list[dict], window: int, summarised_ids: set[str]) -> list[dict]:
-    """The first `window` cards in the bank's listing order, PLUS every card that
-    already has a summary in the live feed, wherever it now sits (window <= 0 = all).
+    """The top `window` cards of EACH listing (by `rank`, a card's position in the
+    listing it sits highest in), PLUS every card that already has a summary in the
+    live feed, wherever it now sits (window <= 0 = all).
 
     The window alone used to be the whole rule, and it silently deleted work: the
     bank adds new promos at the TOP of the listing, so each one pushed the oldest
@@ -252,16 +253,22 @@ def select_promos(listed: list[dict], window: int, summarised_ids: set[str]) -> 
     all — even though the promo was still live. A summary is the one expensive
     field (a human or vision AI reading the poster), so a summarised promo now
     stays for as long as the bank still lists it. The window only bounds how many
-    NOT-yet-summarised promos the feed carries."""
-    return [c for i, c in enumerate(listed)
-            if window <= 0 or i < window or c["id"] in summarised_ids]
+    NOT-yet-summarised promos the feed carries.
+
+    The window is per listing, not over the credit + debit listings joined end to
+    end: the credit listing alone runs 130+ cards, so a joined window never got
+    past it and a debit-only promo (e.g. "RM80 Cash Back on Online Transactions
+    with PB Visa Debit Card", 4th on the debit listing) was never scraped."""
+    return [c for c in listed
+            if window <= 0 or c["rank"] < window or c["id"] in summarised_ids]
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--max", type=int, default=20,
-                    help="Listing window for promos without a summary (0 = all). Promos "
-                         "already summarised in promotions.json are kept wherever they sit.")
+                    help="Per-listing window (credit and debit each) for promos without a "
+                         "summary (0 = all). Promos already summarised in promotions.json "
+                         "are kept wherever they sit.")
     args = ap.parse_args()
 
     os.makedirs(RAW_DIR, exist_ok=True)
@@ -285,17 +292,21 @@ def main() -> int:
     # Read the WHOLE listing (two page loads, cheap) so a summarised promo that has
     # slid past the window is still recognised as live; the per-promo detail fetch
     # and OCR below are the expensive part, and only run for the selection.
-    seen_links: set[str] = set()
-    listed: list[dict] = []
+    by_link: dict[str, dict] = {}
     for url, default_cat in LISTINGS:
         print(f"[scrape] listing: {url}")
-        for card in scrape_listing(session, url):
-            if not card["link"] or card["link"] in seen_links:
+        for rank, card in enumerate(scrape_listing(session, url)):
+            if not card["link"]:
                 continue
-            seen_links.add(card["link"])
+            if card["link"] in by_link:  # on both listings: keep its higher position
+                by_link[card["link"]]["rank"] = min(by_link[card["link"]]["rank"], rank)
+                continue
             card["id"] = _id(card["link"])
             card["category"] = _guess_category(card["title"], default_cat)
-            listed.append(card)
+            card["rank"] = rank
+            by_link[card["link"]] = card
+    # Newest first across both listings — the feed's order is the dashboard's order.
+    listed = sorted(by_link.values(), key=lambda c: c["rank"])
 
     promos = select_promos(listed, args.max, summarised_ids)
     if not promos:
@@ -303,9 +314,12 @@ def main() -> int:
               "Inspect a listing page's HTML and adjust scrape_listing()'s selector "
               "(currently `.grid-item`).")
         return 1
-    beyond = sum(1 for i, c in enumerate(listed) if c in promos and args.max > 0 and i >= args.max)
+    beyond = sum(1 for c in promos if args.max > 0 and c["rank"] >= args.max)
     print(f"[scrape] {len(listed)} cards listed; keeping {len(promos)} "
-          f"(top {args.max} + {beyond} already summarised further down), fetching detail pages…")
+          f"(top {args.max} of each listing + {beyond} already summarised further down), "
+          "fetching detail pages…")
+    for p in promos:
+        del p["rank"]  # selection-only; shifts daily, so keep it out of the feed
 
     if not HAS_OCR:
         print("[scrape] note: pytesseract/Pillow/Tesseract not installed — skipping OCR "
