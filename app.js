@@ -34,13 +34,20 @@ function num(n, d = 0) {
   return n == null || !Number.isFinite(+n) ? '—'
     : Number(n).toLocaleString(undefined, { maximumFractionDigits: d, minimumFractionDigits: d });
 }
-function downloadJSON(obj, filename) {
-  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+function saveBlob(blob, filename) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = filename;
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
+}
+function downloadJSON(obj, filename) {
+  saveBlob(new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' }), filename);
+}
+/** Filename-safe slug: ASCII, lower case, dash-separated, length-capped. */
+function slugify(s, max = 40) {
+  return String(s == null ? '' : s).toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, max).replace(/-+$/, '') || 'promo';
 }
 function agoLabel(iso) {
   if (!iso) return 'unknown';
@@ -733,27 +740,41 @@ MODS.campaign = async function initCampaign() {
   // no-Worker fallback.
   function renderConsole() {
     const missing = list.filter(p => !p.tnc_summary);
-    const bundle = {
-      instructions:
-        "For each item below, view its image (the bank's full campaign poster — the offer, "
-        + "minimum spend/criteria, and campaign period are printed on it) and summarise it in "
-        + "<=60 words. Use tnc_link only to double-check anything unclear on the poster. "
-        + "Reply with STRICT JSON only — an object mapping id -> "
-        + '{"period":"<campaign period as printed, or \'\'>","end_date":"<last day the offer can be used, YYYY-MM-DD, or \'\'>","tnc_summary":"<your summary>"}. '
-        + "For recurring windows (e.g. a monthly sale) end_date is the last day of the final window. "
-        + "Do not invent details not visible on the poster or linked document.",
-      promos: missing.map(p => ({ id: p.id, title: p.title, image: p.image, tnc_link: p.tnc_link || p.link })),
-    };
+
+    // `posterNames` maps id -> the image filename saved next to the JSON, so the
+    // AI can tie each attached picture to the id it must key its reply by. Empty
+    // for the clipboard path, which can only hand over URLs.
+    function bundleFor(posterNames) {
+      const withFiles = posterNames && posterNames.size;
+      return {
+        instructions:
+          "For each item below, view its campaign poster (the offer, minimum spend/criteria, and "
+          + "campaign period are printed on it) and summarise it in <=60 words. "
+          + (withFiles
+            ? "The posters are attached as image files — match each one to its promo by `poster_file`. "
+            : "Each promo's poster is at its `image` URL. ")
+          + "Use tnc_link only to double-check anything unclear on the poster. "
+          + "Reply with STRICT JSON only — an object mapping id -> "
+          + '{"period":"<campaign period as printed, or \'\'>","end_date":"<last day the offer can be used, YYYY-MM-DD, or \'\'>","tnc_summary":"<your summary>"}. '
+          + "For recurring windows (e.g. a monthly sale) end_date is the last day of the final window. "
+          + "Do not invent details not visible on the poster or linked document.",
+        promos: missing.map(p => {
+          const item = { id: p.id, title: p.title, image: p.image, tnc_link: p.tnc_link || p.link };
+          if (posterNames && posterNames.has(p.id)) item.poster_file = posterNames.get(p.id);
+          return item;
+        }),
+      };
+    }
 
     consoleRoot.innerHTML = `
       <div class="card-block">
         <h3>1 · Export for AI enrichment</h3>
-        <p class="muted">${missing.length} of ${list.length} promos have no summary yet. Download a bundle of their titles + poster images + official T&amp;C links.</p>
+        <p class="muted">${missing.length} of ${list.length} promos have no summary yet. Download <code>card-promos-ai-bundle.json</code> plus each promo's poster as an image file, ready to attach to a chat.</p>
         <div class="console-actions">
-          <button id="btn-dl-bundle" class="cta"${missing.length ? '' : ' disabled'}>📥 Download AI bundle (.json)</button>
+          <button id="btn-dl-bundle" class="cta"${missing.length ? '' : ' disabled'}>📥 Download AI bundle (.json + ${missing.length} poster${missing.length === 1 ? '' : 's'})</button>
           <button id="btn-copy-prompt" class="cta ghost"${missing.length ? '' : ' disabled'}>📋 Copy prompt to clipboard</button>
         </div>
-        <p class="muted small">${missing.length ? 'Paste the bundle (or the copied prompt) into a vision-capable AI (e.g. Claude, ChatGPT) — it can view each poster image directly, which reads far more reliably than the linked PDF. Ask for the JSON reply described in the instructions.' : 'Every promo already has a summary — nothing to export.'}</p>
+        <p class="muted small">${missing.length ? 'Saves the JSON and one .jpg per promo — attach them all to a vision-capable AI (e.g. Claude, ChatGPT) and ask for the JSON reply described in the instructions. Reading the poster is far more reliable than the linked PDF. Your browser may ask once to allow multiple downloads; the clipboard button is the URLs-only fallback.' : 'Every promo already has a summary — nothing to export.'}</p>
         <p id="copy-status" class="muted small" hidden></p>
       </div>
       <div class="card-block">
@@ -780,17 +801,80 @@ MODS.campaign = async function initCampaign() {
     const dlBundleBtn = document.getElementById('btn-dl-bundle');
     const copyBtn = document.getElementById('btn-copy-prompt');
     const copyStatus = document.getElementById('copy-status');
+    const say = (msg, kind) => {
+      copyStatus.hidden = false;
+      copyStatus.textContent = msg;
+      copyStatus.style.color = kind === 'err' ? 'var(--red)' : kind === 'ok' ? 'var(--green)' : '';
+    };
+    const EXT_BY_TYPE = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif' };
+
     if (missing.length) {
-      dlBundleBtn.addEventListener('click', () => downloadJSON(bundle, 'card-promos-ai-bundle.json'));
+      // The posters come through the Worker's /poster route, not straight from the
+      // bank: its image server sends no Access-Control-Allow-Origin, so a direct
+      // fetch() here is blocked and the page can only ever <img> them. Each poster
+      // is saved as its own .jpg rather than zipped, because a chat AI reads
+      // attached images and is hit-and-miss with archives.
+      dlBundleBtn.addEventListener('click', async () => {
+        const base = ((window.DASH_CONFIG && window.DASH_CONFIG.promoSyncApi) || '').replace(/\/+$/, '');
+        if (!base) {
+          downloadJSON(bundleFor(null), 'card-promos-ai-bundle.json');
+          say("Saved the JSON alone — posters need the promo-sync Worker's /poster route, because the "
+            + "bank's image server refuses direct browser reads. Deploy worker/promo-sync, then run "
+            + "localStorage.setItem('promo_sync_api','https://promo-sync.<you>.workers.dev') and reload.", 'err');
+          return;
+        }
+        dlBundleBtn.disabled = true;
+        const names = new Map();
+        const failed = [];
+        try {
+          for (let i = 0; i < missing.length; i++) {
+            const p = missing[i];
+            say(`Fetching posters… ${i + 1}/${missing.length}`);
+            try {
+              if (!p.image) throw new Error('no poster image in the feed');
+              const res = await fetch(base + '/poster?url=' + encodeURIComponent(p.image));
+              if (!res.ok) {
+                const body = await res.json().catch(() => ({}));
+                throw new Error(body.error || `HTTP ${res.status}`);
+              }
+              const blob = await res.blob();
+              const urlExt = (String(p.image).match(/\.(jpe?g|png|webp|gif)(?:$|[?#])/i) || [, 'jpg'])[1];
+              const ext = (EXT_BY_TYPE[blob.type] || urlExt).toLowerCase().replace('jpeg', 'jpg');
+              // Numbered so the files sort in the JSON's order; id kept so a reply
+              // can always be traced back to a promo.
+              const name = `${String(i + 1).padStart(2, '0')}-${slugify(p.title)}-${p.id}.${ext}`;
+              saveBlob(blob, name);
+              names.set(p.id, name);
+              // Saves fired back-to-back are dropped by some browsers.
+              await new Promise(r => setTimeout(r, 150));
+            } catch (err) {
+              failed.push(`${p.id} (${err.message})`);
+            }
+          }
+          downloadJSON(bundleFor(names), 'card-promos-ai-bundle.json');
+          if (!names.size) {
+            say(`Saved the JSON, but no poster could be fetched — ${failed[0]}. Check the Worker URL, `
+              + 'that it has the /poster route deployed, and that this origin is in ALLOWED_ORIGINS.', 'err');
+          } else if (failed.length) {
+            say(`✅ Saved the JSON + ${names.size} poster(s). ${failed.length} failed: ${failed.join(', ')} `
+              + '— for those, give the AI the image URL from the JSON instead.', '');
+          } else {
+            say(`✅ Saved card-promos-ai-bundle.json + ${names.size} poster(s) to your downloads. `
+              + 'Attach the images and the JSON to your AI together.', 'ok');
+          }
+        } finally {
+          dlBundleBtn.disabled = false;
+        }
+      });
       copyBtn.addEventListener('click', async () => {
+        const bundle = bundleFor(null);
         const text = bundle.instructions + '\n\n' + JSON.stringify(bundle.promos, null, 2);
         try {
           await navigator.clipboard.writeText(text);
-          copyStatus.textContent = '✅ Copied to clipboard.';
+          say('✅ Copied to clipboard — this path hands over poster URLs, not the images themselves.', 'ok');
         } catch {
-          copyStatus.textContent = '⚠ Clipboard blocked by the browser — use Download instead.';
+          say('⚠ Clipboard blocked by the browser — use Download instead.', 'err');
         }
-        copyStatus.hidden = false;
       });
     }
 

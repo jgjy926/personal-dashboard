@@ -17,6 +17,8 @@ const ENV = {
   ALLOWED_ORIGINS: "https://example.github.io",
 };
 
+const GH_PREFIX = "https://api.github.com";
+
 // The "repo": what GitHub would return, and what it received on write.
 let repoFile;
 let lastWrite;
@@ -36,8 +38,18 @@ function b64(text) {
   return Buffer.from(text, "utf-8").toString("base64");
 }
 
+// What the "bank" serves for a poster fetch (test 12 rewrites this).
+let posterUpstream = { status: 200, type: "image/jpeg", body: "\xff\xd8\xff-jpeg-bytes" };
+
 global.fetch = async (url, init = {}) => {
   const method = init.method || "GET";
+  if (!String(url).startsWith(GH_PREFIX)) {
+    // Anything not aimed at the GitHub API is a poster fetch.
+    return new Response(posterUpstream.body, {
+      status: posterUpstream.status,
+      headers: { "Content-Type": posterUpstream.type },
+    });
+  }
   if (method === "GET") {
     return new Response(JSON.stringify({ sha: "sha-123", content: b64(JSON.stringify(repoFile, null, 2)) }), { status: 200 });
   }
@@ -152,6 +164,37 @@ resetRepo();
 repoFile.promotions[0].end_date = "2026-01-31";
 await worker.fetch(req({ summaries: { aaa: { tnc_summary: "rewrite", period: "1 Jan 2026" } }, force: true }), ENV);
 check("the same period keeps its end_date", lastWrite?.decoded.promotions[0].end_date === "2026-01-31");
+
+// 12 — the poster proxy. It exists so the Console can READ poster bytes (the
+//      bank sends no CORS headers), and it must stay locked to the bank's host:
+//      an open ?url= proxy would happily fetch anything the Worker can reach.
+const POSTER_ENV = { ...ENV, POSTER_HOSTS: "www.pbebank.com" };
+const poster = (target, origin = "https://example.github.io") =>
+  new Request("https://promo-sync.workers.dev/poster?url=" + encodeURIComponent(target), { headers: { Origin: origin } });
+const REAL_POSTER = "https://www.pbebank.com/media/gfgf2ohi/visa-debit-online-cb80_wb.jpg";
+
+r = await worker.fetch(poster(REAL_POSTER), POSTER_ENV);
+check("serves an allowed poster", r.status === 200 && r.headers.get("Content-Type") === "image/jpeg");
+check("...with CORS so the page can read the bytes", r.headers.get("Access-Control-Allow-Origin") === "https://example.github.io");
+check("...and lets it be cached", (r.headers.get("Cache-Control") || "").includes("max-age"));
+check("...without asking for a sync key", (await worker.fetch(poster(REAL_POSTER), POSTER_ENV)).status === 200);
+
+r = await worker.fetch(poster("https://evil.example.com/a.jpg"), POSTER_ENV);
+check("refuses a host outside POSTER_HOSTS", r.status === 403);
+r = await worker.fetch(poster("http://www.pbebank.com/a.jpg"), POSTER_ENV);
+check("refuses plain http", r.status === 403);
+r = await worker.fetch(poster("http://169.254.169.254/latest/meta-data/"), POSTER_ENV);
+check("refuses an internal address", r.status === 403);
+r = await worker.fetch(new Request("https://promo-sync.workers.dev/poster"), POSTER_ENV);
+check("needs a ?url=", r.status === 400);
+
+posterUpstream = { status: 200, type: "text/html", body: "<html>login wall</html>" };
+r = await worker.fetch(poster(REAL_POSTER), POSTER_ENV);
+check("refuses a non-image upstream body", r.status === 502);
+posterUpstream = { status: 404, type: "image/jpeg", body: "" };
+r = await worker.fetch(poster(REAL_POSTER), POSTER_ENV);
+check("passes an upstream failure through as 502", r.status === 502);
+posterUpstream = { status: 200, type: "image/jpeg", body: "\xff\xd8\xff-jpeg-bytes" };
 
 console.log(failures ? `\n${failures} FAILED` : "\nall passed");
 process.exit(failures ? 1 : 0);

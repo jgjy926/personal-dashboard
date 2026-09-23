@@ -15,6 +15,14 @@
  * So the Worker re-reads the live file from GitHub and applies the summaries to
  * THAT. Publishing from a tab you opened yesterday is therefore safe.
  *
+ * It also proxies the campaign posters (GET /poster?url=…). That exists because
+ * the bank's image server sends no Access-Control-Allow-Origin, so the Console
+ * page may DISPLAY a poster in an <img> but may not read its bytes — which it
+ * must do to save the posters as files alongside the AI bundle, the images the
+ * AI actually needs to read an offer. This route re-serves them with CORS. It
+ * needs no SYNC_KEY (it only hands back public marketing images) and is locked
+ * to POSTER_HOSTS so it can't be used as a general-purpose open proxy.
+ *
  * Bindings (see wrangler.jsonc):
  *   secret GITHUB_TOKEN     fine-grained PAT, contents:write, this repo only
  *   secret SYNC_KEY         the passphrase the Console must present
@@ -23,6 +31,8 @@
  *   var    FILE_PATH        default "data/promotions.json"
  *   var    ALLOWED_ORIGINS  comma-separated; empty = any origin (the SYNC_KEY
  *                           is still required either way)
+ *   var    POSTER_HOSTS     comma-separated hosts /poster may fetch from;
+ *                           default "www.pbebank.com"
  */
 
 const GH = "https://api.github.com";
@@ -69,7 +79,7 @@ function corsHeaders(request, env) {
   const ok = allowed.length === 0 || allowed.includes(origin);
   return {
     "Access-Control-Allow-Origin": ok ? (origin || "*") : "null",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, X-Sync-Key",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
@@ -80,6 +90,57 @@ function json(body, status, extra) {
   return new Response(JSON.stringify(body, null, 2), {
     status,
     headers: { "Content-Type": "application/json; charset=utf-8", ...extra },
+  });
+}
+
+// ── poster proxy ───────────────────────────────────────────────────────────
+const DEFAULT_POSTER_HOSTS = "www.pbebank.com";
+const MAX_POSTER_BYTES = 10 * 1024 * 1024;
+
+/** Re-serve one campaign poster with CORS so the Console can read its bytes.
+ *  Host-locked: without that this would be an open proxy anyone could point at
+ *  any URL, including private addresses reachable from the Worker. */
+async function proxyPoster(request, env, cors) {
+  const target = new URL(request.url).searchParams.get("url") || "";
+  let u;
+  try {
+    u = new URL(target);
+  } catch {
+    return json({ error: "?url= must be an absolute URL." }, 400, cors);
+  }
+  const hosts = (env.POSTER_HOSTS || DEFAULT_POSTER_HOSTS)
+    .split(",").map((s) => s.trim().toLowerCase()).filter(Boolean);
+  if (u.protocol !== "https:" || !hosts.includes(u.hostname.toLowerCase())) {
+    return json({ error: `Only https posters from: ${hosts.join(", ")}` }, 403, cors);
+  }
+
+  // cacheEverything: the same posters are re-fetched every time someone opens the
+  // Console, and they never change behind a given URL.
+  const upstream = await fetch(u.toString(), {
+    headers: { "User-Agent": "promo-sync-worker", Accept: "image/*" },
+    redirect: "follow",
+    cf: { cacheEverything: true, cacheTtl: 86400 },
+  });
+  if (!upstream.ok) {
+    return json({ error: `Upstream ${upstream.status} for that poster.` }, 502, cors);
+  }
+  const type = upstream.headers.get("Content-Type") || "";
+  if (!type.toLowerCase().startsWith("image/")) {
+    // A login wall or error page would otherwise be saved as someone's ".jpg".
+    return json({ error: `Upstream returned ${type || "no content type"}, not an image.` }, 502, cors);
+  }
+  const len = Number(upstream.headers.get("Content-Length") || 0);
+  if (len > MAX_POSTER_BYTES) {
+    return json({ error: `Poster is ${len} bytes (max ${MAX_POSTER_BYTES}).` }, 413, cors);
+  }
+  return new Response(upstream.body, {
+    status: 200,
+    headers: {
+      ...cors,
+      "Content-Type": type,
+      "Cache-Control": "public, max-age=86400",
+      "X-Content-Type-Options": "nosniff",
+    },
   });
 }
 
@@ -156,10 +217,22 @@ export default {
 
     const url = new URL(request.url);
     if (request.method === "GET" && url.pathname === "/health") {
-      return json({ ok: true, repo: env.GITHUB_REPO, path: env.FILE_PATH || "data/promotions.json" }, 200, cors);
+      return json({
+        ok: true,
+        repo: env.GITHUB_REPO,
+        path: env.FILE_PATH || "data/promotions.json",
+        poster_hosts: (env.POSTER_HOSTS || DEFAULT_POSTER_HOSTS).split(",").map((s) => s.trim()),
+      }, 200, cors);
+    }
+    if (request.method === "GET" && url.pathname === "/poster") {
+      try {
+        return await proxyPoster(request, env, cors);
+      } catch (err) {
+        return json({ error: String(err.message || err) }, 502, cors);
+      }
     }
     if (request.method !== "POST" || url.pathname !== "/publish") {
-      return json({ error: "POST /publish" }, 404, cors);
+      return json({ error: "POST /publish, or GET /poster?url=…" }, 404, cors);
     }
     if (!env.GITHUB_TOKEN || !env.SYNC_KEY || !env.GITHUB_REPO) {
       return json({ error: "Worker is not configured (GITHUB_TOKEN / SYNC_KEY / GITHUB_REPO)." }, 500, cors);

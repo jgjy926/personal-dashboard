@@ -18,6 +18,10 @@
     // Lock the endpoint to the sites that may call it. Leave "" to allow any
     // origin — the SYNC_KEY is still required, but pinning this means a random
     // page you visit can't quietly spend your key from your browser.
-    "ALLOWED_ORIGINS": "https://jgjy926.github.io,http://localhost:8099"
+    "ALLOWED_ORIGINS": "https://jgjy926.github.io,http://localhost:8099",
+    // Hosts GET /poster may fetch a campaign poster from. That route re-serves
+    // the bank's images with CORS headers so the Console can save them next to
+    // the AI bundle; the host lock is what keeps it from being an open proxy.
+    "POSTER_HOSTS": "www.pbebank.com"
   }
 }

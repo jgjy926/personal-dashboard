@@ -53,9 +53,12 @@ small crop) — the offer, minimum spend, and campaign period are printed on it 
 Three ways to turn that into a written `tnc_summary`:
 
 - **Console + Publish (recommended)** — Card Promos → 🛠️ Console in the dashboard itself:
-  downloads a bundle of poster images + links, you paste it into a vision-capable AI
-  (Claude, ChatGPT), paste or upload the JSON reply back, then hit **Publish** and the
-  summaries are committed for you. See *Publishing from the Console* below.
+  one click saves `card-promos-ai-bundle.json` **plus every unsummarised promo's poster as
+  a .jpg**, so you can attach the images themselves to a vision-capable AI (Claude,
+  ChatGPT) — that's what it needs to read an offer. Paste or upload its JSON reply back,
+  then hit **Publish** and the summaries are committed for you. Each poster is named
+  `NN-<title>-<id>.jpg` and cross-referenced from the JSON as `poster_file`. See
+  *Publishing from the Console* below.
 - **Fully automatic** — `tools/summarize_campaign.py` reads each new promo's poster and
   official T&C with the Anthropic API and writes the summary itself. It runs in the daily
   workflow, so a promo that appears overnight is already summarised by morning. Needs an
@@ -128,6 +131,14 @@ live `promotions.json` from GitHub and applies them to that. So publishing from 
 left open yesterday can't wipe promos the daily scrape has added since. It also refuses to
 overwrite a summary that already exists (unless asked), reports unknown ids instead of
 failing, and treats a repeated publish as a no-op.
+
+The same Worker also serves `GET /poster?url=…`, which is what lets the download button
+hand you the poster **images** and not just their URLs. The bank's image server sends no
+`Access-Control-Allow-Origin`, so the page may display a poster in an `<img>` but may not
+read its bytes; this route re-serves it with CORS. It needs no sync key (public marketing
+images) and only fetches from the hosts in `POSTER_HOSTS` (default `www.pbebank.com`), so
+it can't be pointed at anything else. Without it the button still saves the JSON and says
+so — the AI then has URLs it probably can't open.
 
 `node worker/promo-sync/test.mjs` exercises all of that offline against a stubbed GitHub —
 no deploy, no token, no network.
