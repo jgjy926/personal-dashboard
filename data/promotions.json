@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-22T00:00:00+00:00",
+    "generated_at": "2026-09-23T00:49:57.951Z",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-22",
     "new_today": 5,
     "count": 31,
-    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
+    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification. Summaries published from the Card Promos Console."
   },
   "promotions": [
     {
@@ -15,11 +15,11 @@
       "image": "https://www.pbebank.com/media/yenpev44/braun-buffel-10off_wb.jpg",
       "id": "96163afaa4",
       "category": "Credit Card",
-      "period": "",
+      "period": "Now till 31 July 2027",
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/r4apwglz/tc_braun-buffel-10off.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Enjoy 10% off normal-priced items at all Braun Buffel boutiques when paying with a Public Bank or Public Islamic Bank card. No minimum spend is stated on the poster. Terms and conditions apply.",
+      "end_date": "2027-07-31"
     },
     {
       "title": "Get RM35 When you Register & Activate your PB SecureSign today!",
@@ -27,11 +27,11 @@
       "image": "https://www.pbebank.com/media/pinl10xo/pb-securesign-activate_wb.jpg",
       "id": "9eee5995b2",
       "category": "Credit Card",
-      "period": "",
+      "period": "15 September to 31 December 2026",
       "first_seen": "2026-09-21",
       "tnc_link": "https://www.pbebank.com/media/0u5pqiid/tc_pb-securesign-activate.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Get RM35 by registering and activating PB SecureSign and making 2 online transactions of any amount with an eligible PB Visa card. Download the MyPB app, register PB SecureSign in the app, then activate it at a PBB ATM or branch. Terms and conditions apply.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "WATATIME Sunway Pyramid Renovation Sale",
@@ -63,11 +63,11 @@
       "image": "https://www.pbebank.com/media/gfgf2ohi/visa-debit-online-cb80_wb.jpg",
       "id": "4e61707e71",
       "category": "Cashback",
-      "period": "",
+      "period": "15 September - 31 December 2026",
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/bnzfxwug/tc_visa-debit-online-cb80.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Get up to RM80 cash back with an accumulated spend of RM600 per month on online transactions with a PB Visa Debit Card. Registration is required, either via PBe (keyword: PBVD) or by SMS PBVD to 68333. Terms and conditions apply.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "PB Privileges @ Artaflow",
@@ -87,11 +87,11 @@
       "image": "https://www.pbebank.com/media/x4leevz2/unionpay-splendorplus-china_wb.jpg",
       "id": "1ebda4db55",
       "category": "Cashback",
-      "period": "",
+      "period": "Now - 31 December 2026",
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/cdsmeqyp/tc_unionpay-splendorplus-china.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Enjoy 1% cash back on every purchase made in mainland China with a PB UnionPay SplendorPlus Debit Card. Cash back is capped at RM300 per month. Scan the QR code on the poster for additional merchant offers. Terms and conditions apply.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "Spend & Be Rewarded at vivo",
@@ -183,11 +183,11 @@
       "image": "https://www.pbebank.com/media/fp5chwlz/rm200-overseas-transactions_wb.jpg",
       "id": "7dc08aa869",
       "category": "Cashback",
-      "period": "",
+      "period": "1 September to 31 December 2026",
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/b2kmaafh/tc_rm200-overseas-transactions.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Spend an accumulated RM400 on overseas transactions with a PB Mastercard Debit Card to get 10% cash back, up to RM200. Registration is required, either via PBe (keyword: PBUP) or by SMS PBUP to 68333. Terms and conditions apply.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "PB Privileges: RM100 OFF on MHflypass purchase with Journify",
@@ -267,11 +267,11 @@
       "image": "https://www.pbebank.com/media/ry1lgeb2/bateriku_wb.jpg",
       "id": "4fb12e4059",
       "category": "Credit Card",
-      "period": "",
+      "period": "15 August 2026 - 14 August 2027",
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/mpbfkht3/tc_bateriku.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Get RM50 off at Bateriku (Astra batteries featured) with PB cards using code PB50. Redeem by walking in to the nearest Bateriku Pitstop, calling the call-out hotline at 011 1600 6008, or booking a battery replacement via the Bateriku Mobile App. Terms and conditions apply.",
+      "end_date": "2027-08-14"
     },
     {
       "title": "PB Privileges at Kampung Lah",
