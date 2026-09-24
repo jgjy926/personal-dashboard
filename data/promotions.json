@@ -1,14 +1,26 @@
 {
   "meta": {
-    "generated_at": "2026-09-23T00:00:00+00:00",
+    "generated_at": "2026-09-24T00:00:00+00:00",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "today": "2026-09-23",
-    "new_today": 0,
-    "count": 31,
+    "today": "2026-09-24",
+    "new_today": 1,
+    "count": 32,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
+    {
+      "title": "RM20 OFF at Tiktok Shop with PB Mastercard Credit and Debit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/rm20-off-at-tiktok-shop-with-pb-mastercard-credit-and-debit-card/",
+      "image": "https://www.pbebank.com/media/e3ljggkd/tiktok-rm20-off_wb.jpg",
+      "id": "5f61d1f4b6",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-09-24",
+      "tnc_link": "https://www.pbebank.com/media/vmxd0kmv/tc_tiktok-rm20-off.pdf",
+      "tnc_summary": "",
+      "end_date": ""
+    },
     {
       "title": "PB Privileges at Braun Buffel",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-braun-buffel-1/",
