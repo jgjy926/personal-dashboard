@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-24T00:00:00+00:00",
+    "generated_at": "2026-09-25T04:47:36.043Z",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-09-24",
     "new_today": 1,
     "count": 32,
-    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
+    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification. Summaries published from the Card Promos Console."
   },
   "promotions": [
     {
@@ -15,11 +15,11 @@
       "image": "https://www.pbebank.com/media/e3ljggkd/tiktok-rm20-off_wb.jpg",
       "id": "5f61d1f4b6",
       "category": "Credit Card",
-      "period": "",
+      "period": "24 September to 12 December 2026",
       "first_seen": "2026-09-24",
       "tnc_link": "https://www.pbebank.com/media/vmxd0kmv/tc_tiktok-rm20-off.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Get RM20 off at TikTok Shop when paying with a Public Bank (PB) Mastercard Credit or Debit Card, with a minimum spend of RM100. Valid from 24 September to 12 December 2026. Terms and conditions apply. PB Debit Card is protected by PIDM up to RM250,000 per depositor.",
+      "end_date": "2026-12-12"
     },
     {
       "title": "PB Privileges at Braun Buffel",
