@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-25T04:47:36.043Z",
+    "generated_at": "2026-09-25T00:00:00+00:00",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "today": "2026-09-24",
-    "new_today": 1,
-    "count": 32,
-    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification. Summaries published from the Card Promos Console."
+    "today": "2026-09-25",
+    "new_today": 0,
+    "count": 31,
+    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
     {
@@ -226,16 +226,16 @@
       "end_date": "2026-12-27"
     },
     {
-      "title": "PB Mid-Autumn Offer @ MIKA",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-mid-autumn-offer-mika-2/",
-      "image": "https://www.pbebank.com/media/4uxhexbr/mika-mid-autumn26_wb.jpg",
-      "id": "571bb2162b",
+      "title": "PB Privileges @ 52 Pilates",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-52-pilates/",
+      "image": "https://www.pbebank.com/media/yxmj1lsp/52-pilates_wb.jpg",
+      "id": "089b68f757",
       "category": "Credit Card",
-      "period": "15 August to 25 September 2026",
-      "first_seen": "2026-09-08",
-      "tnc_link": "https://www.pbebank.com/media/zf1jlbdk/tc_mika-mid-autumn26.pdf",
-      "tnc_summary": "Enjoy RM30 off with a minimum spend of RM100 on Mid-Autumn products from mika. Use promo code MKPBM26 at checkout. Valid only at www.mika.com.my. Terms and conditions apply; PB Debit Card protected by PIDM up to RM250,000 per depositor.",
-      "end_date": "2026-09-25"
+      "period": "15 August 2026 - 31 January 2027",
+      "first_seen": "2026-09-03",
+      "tnc_link": "https://www.pbebank.com/media/d2tppzim/tc_52-pilates.pdf",
+      "tnc_summary": "Up to 40% off Pilates Group Package at 52 Pilates using code PBCM. Register and redeem via WhatsApp (+6016-662 2887).",
+      "end_date": "2027-01-31"
     },
     {
       "title": "RM25 OFF at Lazada with PB Mastercard Credit Card",
@@ -250,16 +250,16 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "PB Privileges @ 52 Pilates",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-52-pilates/",
-      "image": "https://www.pbebank.com/media/yxmj1lsp/52-pilates_wb.jpg",
-      "id": "089b68f757",
+      "title": "PB Privileges at Bateriku",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-bateriku/",
+      "image": "https://www.pbebank.com/media/ry1lgeb2/bateriku_wb.jpg",
+      "id": "4fb12e4059",
       "category": "Credit Card",
-      "period": "15 August 2026 - 31 January 2027",
-      "first_seen": "2026-09-03",
-      "tnc_link": "https://www.pbebank.com/media/d2tppzim/tc_52-pilates.pdf",
-      "tnc_summary": "Up to 40% off Pilates Group Package at 52 Pilates using code PBCM. Register and redeem via WhatsApp (+6016-662 2887).",
-      "end_date": "2027-01-31"
+      "period": "15 August 2026 - 14 August 2027",
+      "first_seen": "2026-09-22",
+      "tnc_link": "https://www.pbebank.com/media/mpbfkht3/tc_bateriku.pdf",
+      "tnc_summary": "Get RM50 off at Bateriku (Astra batteries featured) with PB cards using code PB50. Redeem by walking in to the nearest Bateriku Pitstop, calling the call-out hotline at 011 1600 6008, or booking a battery replacement via the Bateriku Mobile App. Terms and conditions apply.",
+      "end_date": "2027-08-14"
     },
     {
       "title": "PB Privileges at Bendang",
@@ -272,18 +272,6 @@
       "tnc_link": "https://www.pbebank.com/media/ymbbsoxp/tc_pb-privileges-at-bendang.pdf",
       "tnc_summary": "10% off Siakap (sea bass) with minimum spending of RM300 in a single receipt at Bendang. Picture for illustration purposes only.",
       "end_date": "2027-02-28"
-    },
-    {
-      "title": "PB Privileges at Bateriku",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-bateriku/",
-      "image": "https://www.pbebank.com/media/ry1lgeb2/bateriku_wb.jpg",
-      "id": "4fb12e4059",
-      "category": "Credit Card",
-      "period": "15 August 2026 - 14 August 2027",
-      "first_seen": "2026-09-22",
-      "tnc_link": "https://www.pbebank.com/media/mpbfkht3/tc_bateriku.pdf",
-      "tnc_summary": "Get RM50 off at Bateriku (Astra batteries featured) with PB cards using code PB50. Redeem by walking in to the nearest Bateriku Pitstop, calling the call-out hotline at 011 1600 6008, or booking a battery replacement via the Bateriku Mobile App. Terms and conditions apply.",
-      "end_date": "2027-08-14"
     },
     {
       "title": "PB Privileges at Kampung Lah",
