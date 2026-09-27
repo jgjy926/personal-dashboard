@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-09-26T11:32:59+00:00",
+    "generated_at": "2026-09-27T12:11:17+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; the US Treasury's own daily curve extends the nominal and TIPS yields, and Yahoo Finance extends the market-traded series, over the days FRED has not published yet (FRED batches the curve series, the Fed's H.10 dollar release is weekly, the EIA crude series are batched). Every card names the source behind its latest point, and the ones with no faster publisher carry their release cadence instead.",
     "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
     "missing_series": [],
-    "latest_observation": "2026-09-26"
+    "latest_observation": "2026-09-27"
   },
   "snapshot": [
     {
@@ -77,19 +77,17 @@
       "change": 23.2,
       "as_of": "2026-09-25",
       "freq": "daily",
-      "source": "Yahoo GC=F",
-      "provisional": true
+      "source": "Yahoo GC=F"
     },
     {
       "id": "BRENT",
       "label": "Brent Crude",
-      "value": 104.32,
+      "value": 97.44,
       "unit": "$",
-      "change": -2.28,
+      "change": -9.16,
       "as_of": "2026-09-25",
       "freq": "daily",
-      "source": "FRED DCOILBRENTEU + Yahoo BZ=F",
-      "provisional": true
+      "source": "FRED DCOILBRENTEU + Yahoo BZ=F"
     },
     {
       "id": "WTI",
@@ -99,8 +97,7 @@
       "change": -2.2,
       "as_of": "2026-09-25",
       "freq": "daily",
-      "source": "FRED DCOILWTICO + Yahoo CL=F",
-      "provisional": true
+      "source": "FRED DCOILWTICO + Yahoo CL=F"
     },
     {
       "id": "UNRATE",
@@ -135,7 +132,6 @@
       "as_of": "2026-09-25",
       "freq": "daily",
       "source": "Yahoo DX-Y.NYB",
-      "provisional": true,
       "release": "ICE futures, continuous"
     },
     {
@@ -144,7 +140,7 @@
       "value": 157.18,
       "unit": "¥",
       "change": -1.63,
-      "as_of": "2026-09-26",
+      "as_of": "2026-09-27",
       "freq": "daily",
       "source": "FRED DEXJPUS + Yahoo JPY=X"
     },
@@ -558,7 +554,7 @@
         70.46,
         96.95,
         89.75,
-        104.32
+        97.44
       ],
       "wti": [
         83.5,
