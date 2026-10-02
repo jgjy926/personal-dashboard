@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-10-01T00:00:00+00:00",
+    "generated_at": "2026-10-02T03:01:21.731Z",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-10-01",
     "new_today": 3,
     "count": 33,
-    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
+    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification. Summaries published from the Card Promos Console."
   },
   "promotions": [
     {
@@ -15,11 +15,11 @@
       "image": "https://www.pbebank.com/media/0iybhwyd/visa-ewallet-cb40_wb.jpg",
       "id": "2c90d1a043",
       "category": "Cashback",
-      "period": "",
+      "period": "1 October to 31 December 2026",
       "first_seen": "2026-10-01",
       "tnc_link": "https://www.pbebank.com/media/21seqjdm/tc_visa-ewallet-cb40.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "RM40 cash back on eWallet top up with PB Visa Credit Card. Minimum top up of RM2,000 per transaction. Eligible eWallets: Boost, GrabPay, Lazada, ShopeePay, Touch 'n Go. Registration required via PBe (Key Word: PBIT) or SMS PBIT to 68333. Terms and conditions apply.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "PB Privileges @ 100glasses",
@@ -27,11 +27,11 @@
       "image": "https://www.pbebank.com/media/bpegrtos/100glasses_wb.jpg",
       "id": "54f0b27f99",
       "category": "Credit Card",
-      "period": "",
+      "period": "1 October 2026 to 31 March 2027",
       "first_seen": "2026-10-01",
       "tnc_link": "https://www.pbebank.com/media/xubn3pef/tc_pb-privileges-100glasses.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "30% off glasses at 100glasses.my with PB cards, with a minimum spend of RM99. Use promo code PBB30; scan the poster QR code to shop. Terms and conditions apply.",
+      "end_date": "2027-03-31"
     },
     {
       "title": "Ocean’s Catch Seafood Dinner Buffet Deal at Sheraton Petaling Jaya Hotel",
@@ -39,11 +39,11 @@
       "image": "https://www.pbebank.com/media/e1zhg2pw/spj-oceans-catch-2026_wb.jpg",
       "id": "ed450a6f5e",
       "category": "Dining",
-      "period": "",
+      "period": "1 October - 28 November 2026",
       "first_seen": "2026-10-01",
       "tnc_link": "https://www.pbebank.com/media/wfkd4sfa/tc_spj-oceans-catch-2026.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Dine 5 Pay 4 on the Ocean's Catch Seafood Dinner Buffet at Feast, Level 3, Sheraton Petaling Jaya Hotel with PB cards. Every Thursday to Saturday, 6:30 PM to 10:30 PM. RM148 nett per adult; RM118.40 nett each after discount. Price inclusive of prevailing government taxes. Terms and conditions apply.",
+      "end_date": "2026-11-28"
     },
     {
       "title": "RM20 OFF at Tiktok Shop with PB Mastercard Credit and Debit Card",
