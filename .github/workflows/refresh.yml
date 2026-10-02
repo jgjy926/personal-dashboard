@@ -16,14 +16,22 @@ name: Refresh feeds & deploy
 #     that IS committed. The engine reads that when the database has no summary,
 #     so the published Model Performance page stays complete.
 #
-# Net effect: the daily job is a few minutes and the repo carries no binary blob.
+# TWO SPEEDS. A push (a code change, or the Console publishing promo summaries)
+# only needs the site rebuilt, so it runs the FAST path: the stdlib-only macro +
+# Treasury fetchers and the deploy, ~1-1.5 min. The daily schedule and a manual
+# run take the FULL path: promo scrape, summariser and the macro engine too.
+#
+# The engine's monthly model refit (~4-5 min) is kept OUT of the deploy path:
+# the daily run scores with last month's fit (MACRO_ALLOW_STALE_MODEL, flagged on
+# the feed as meta.model_stale_from) and the `retrain` job below refits after the
+# site is already live, then redeploys.
 
 on:
-  workflow_dispatch:            # run manually from the Actions tab
+  workflow_dispatch:            # run manually from the Actions tab (full path)
   push:
-    branches: [main]
+    branches: [main]            # fast path
   schedule:
-    - cron: "20 6 * * *"        # daily 06:20 UTC (after US markets settle)
+    - cron: "20 6 * * *"        # daily 06:20 UTC (after US markets settle), full path
 
 permissions:
   contents: write               # commit refreshed feeds back
@@ -33,6 +41,10 @@ permissions:
 concurrency:
   group: pages
   cancel-in-progress: false
+
+env:
+  # true on schedule / manual runs; false on push.
+  FULL: ${{ github.event_name != 'push' }}
 
 jobs:
   # Deliberately a SEPARATE job, and deliberately not a dependency of the deploy
@@ -59,19 +71,21 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
+    outputs:
+      needs_retrain: ${{ steps.engine.outputs.needs_retrain }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          # Wheels for the promo tools AND the engine (pandas, scikit-learn…)
+          # land in the one pip cache, so neither re-downloads them each run.
+          # The fast path installs nothing, so it skips the cache entirely.
+          cache: ${{ env.FULL == 'true' && 'pip' || '' }}
+          cache-dependency-path: tools/requirements-ci.txt
 
-      - name: Install scraper deps
-        run: |
-          pip install requests beautifulsoup4 pytesseract Pillow
-          sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr
-
-      - name: Fetch macro (FRED + Yahoo extension + Japan MoF, all keyless)
+      - name: Fetch macro (FRED + Treasury + Yahoo + Japan MoF + NY Fed SRF, all keyless)
         # Matches every step below: one bad source must not stop the others from
         # refreshing or the site from publishing. Safe because fetch_macro.py
         # refuses to overwrite when no series returned, so the previous feed
@@ -84,7 +98,15 @@ jobs:
         continue-on-error: true      # a Treasury outage must not block the deploy
         run: python tools/fetch_treasury.py
 
+      # ── FULL path only: promo scrape + summariser ───────────────────────
+      - name: Install scraper deps
+        if: env.FULL == 'true'
+        run: |
+          pip install -r tools/requirements-ci.txt
+          sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr
+
       - name: Scrape card promos (best-effort; keep prior feed on failure)
+        if: env.FULL == 'true'
         continue-on-error: true
         # --max bounds only the promos still WITHOUT a summary, per listing (credit and
         # debit each; the credit listing alone runs 130+).
@@ -99,20 +121,19 @@ jobs:
       # is not configured (the cards then just show the T&C link, as before), so the
       # deploy never depends on it.
       - name: Summarise new promos (skipped without ANTHROPIC_API_KEY)
+        if: env.FULL == 'true'
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          pip install anthropic
-          python tools/summarize_campaign.py
+        run: python tools/summarize_campaign.py
 
-      # ── Macro forecasting engine ────────────────────────────────────────
+      # ── FULL path only: macro forecasting engine ────────────────────────
       # MACRO_ENGINE_REPO may be an org/name for a separate private repo; if the
       # engine lives in this same repo under "macro-engine/", drop this step and
       # point MACRO_DIR at it instead.
       - name: Check out the macro engine
         uses: actions/checkout@v4
-        if: ${{ vars.MACRO_ENGINE_REPO != '' }}
+        if: ${{ env.FULL == 'true' && vars.MACRO_ENGINE_REPO != '' }}
         continue-on-error: true
         with:
           repository: ${{ vars.MACRO_ENGINE_REPO }}
@@ -121,71 +142,128 @@ jobs:
 
       - name: Cache the engine database (observations only, no vintage store)
         uses: actions/cache@v4
-        # Skips harmlessly until MACRO_ENGINE_REPO is set and the checkout above
-        # has actually produced a macro-engine/ directory.
-        if: ${{ vars.MACRO_ENGINE_REPO != '' }}
+        if: ${{ env.FULL == 'true' && vars.MACRO_ENGINE_REPO != '' }}
         continue-on-error: true
         with:
-          # The database AND the fitted-model cache. Without the latter, every
-          # run pays a full five-model walk-forward; with it, only the first run
-          # of each calendar month does.
+          # The database AND the fitted-model cache.
           path: |
             macro-engine/macro_engine.db
             macro-engine/data_cache
-          # Rolls monthly so the cache cannot drift stale indefinitely; a miss
-          # just means the next step does a full pull instead of an incremental
-          # one, which costs about two minutes.
+          # A miss just means `main.py daily` does a full pull instead of an
+          # incremental one, which costs about two minutes.
           key: macro-engine-db-${{ hashFiles('macro-engine/config/series.py') }}-${{ github.run_id }}
           restore-keys: |
             macro-engine-db-${{ hashFiles('macro-engine/config/series.py') }}-
             macro-engine-db-
 
       - name: Run the macro engine (keyless FRED/ALFRED/BLS)
+        id: engine
         # Until MACRO_ENGINE_REPO is set this is skipped entirely and the site
         # deploys with the last COMMITTED data/macro_engine.json -- a working
         # dashboard on a frozen snapshot, rather than a broken deploy.
-        if: ${{ vars.MACRO_ENGINE_REPO != '' }}
+        if: ${{ env.FULL == 'true' && vars.MACRO_ENGINE_REPO != '' }}
         continue-on-error: true      # a FRED outage must not block the deploy
         working-directory: macro-engine
         env:
           # Write the feed straight into this repo's data/ directory.
           MACRO_DASHBOARD_DIR: ${{ github.workspace }}
+          # New training month: score with last month's fit now, refit in the
+          # `retrain` job after the deploy instead of blocking it.
+          MACRO_ALLOW_STALE_MODEL: "1"
+        # `main.py daily` ingests incrementally from the cached database, or the
+        # full history when the database is empty, so the separate
+        # `tools/backfill.py --observations` pull that used to run first was a
+        # second download of the same 84 series (40-85s) and is gone. So is
+        # `main.py report`, which only re-printed the snapshot to this log.
         run: |
           pip install -r requirements.txt
-          # Incremental when the cache restored a database; a full first-time
-          # pull otherwise. Either way this is observations only — the vintage
-          # backfill is never run here.
-          python tools/backfill.py --observations
           python main.py daily
-          python main.py report | tail -40
-
-      - name: Commit refreshed public feeds
-        run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          # backtest_result.json is committed from your local `main.py monthly`
-          # run, not produced here — `git add` is harmless when it is unchanged.
-          git add data/macro.json data/promotions.json data/treasury.json \
-                  data/macro_engine.json data/backtest_result.json 2>/dev/null || true
-          if git diff --cached --quiet; then
-            echo "no changes"
-          else
-            git commit -m "chore: refresh macro engine + campaign feeds"
-            # The push can race a concurrent run/commit on main (rejected: fetch
-            # first). Retry with a rebase onto whatever landed, a few times,
-            # instead of silently dropping this run's refreshed data.
-            for i in 1 2 3 4 5; do
-              if git push; then break; fi
-              echo "push rejected, retrying with rebase ($i/5)…"
-              git fetch origin main
-              git rebase origin/main || { git rebase --abort; break; }
-              sleep $((i * 3))
-            done
+          if [ -f data_cache/RETRAIN_NEEDED ]; then
+            echo "needs_retrain=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Commit refreshed public feeds
+        # backtest_result.json is committed from your local `main.py monthly`
+        # run, not produced here — `git add` is harmless when it is unchanged.
+        run: |
+          bash tools/commit_feeds.sh "chore: refresh macro engine + campaign feeds" \
+            data/macro.json data/promotions.json data/treasury.json \
+            data/macro_engine.json data/backtest_result.json
+
+      # Publish the dashboard, not the workspace: the engine checkout (and its
+      # 66MB database + model pickle) used to ride along to Pages on every run.
+      - name: Stage the site
+        run: rsync -a --exclude .git --exclude macro-engine ./ "$RUNNER_TEMP/site/"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .                # index.html is at the repo root; klse.json is git-ignored
+          path: ${{ runner.temp }}/site   # index.html is at the repo root; klse.json is git-ignored
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+  # The engine's monthly model refit, AFTER the site is live. Runs only when the
+  # daily engine step scored with last month's models (it wrote RETRAIN_NEEDED).
+  # It refits, saves the fresh model cache for every later run, commits the
+  # refitted feed and redeploys.
+  retrain:
+    needs: build-and-deploy
+    if: needs.build-and-deploy.outputs.needs_retrain == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main              # the feeds build-and-deploy just pushed, not the trigger commit
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: tools/requirements-ci.txt
+
+      - name: Check out the macro engine
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.MACRO_ENGINE_REPO }}
+          path: macro-engine
+          token: ${{ secrets.MACRO_ENGINE_TOKEN || github.token }}
+
+      - name: Restore the engine database + model cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            macro-engine/macro_engine.db
+            macro-engine/data_cache
+          # Its own key: the run_id key above was already saved by the
+          # build-and-deploy job, and an exact hit is never re-saved. The
+          # restore prefix picks that just-saved entry up; the next daily run
+          # then restores THIS one, the newest, with the fresh fit in it.
+          key: macro-engine-db-${{ hashFiles('macro-engine/config/series.py') }}-${{ github.run_id }}-retrained
+          restore-keys: |
+            macro-engine-db-${{ hashFiles('macro-engine/config/series.py') }}-
+            macro-engine-db-
+
+      - name: Refit the models
+        working-directory: macro-engine
+        env:
+          MACRO_DASHBOARD_DIR: ${{ github.workspace }}
+        run: |
+          pip install -r requirements.txt
+          python main.py daily
+
+      - name: Commit the refitted engine feed
+        run: |
+          bash tools/commit_feeds.sh "chore: monthly model refit" data/macro_engine.json
+
+      # Publish the dashboard, not the workspace: the engine checkout (and its
+      # 66MB database + model pickle) used to ride along to Pages on every run.
+      - name: Stage the site
+        run: rsync -a --exclude .git --exclude macro-engine ./ "$RUNNER_TEMP/site/"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/site   # index.html is at the repo root; klse.json is git-ignored
       - id: deploy
         uses: actions/deploy-pages@v4

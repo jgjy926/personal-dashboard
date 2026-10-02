@@ -1,0 +1,8 @@
+# Python deps for the FULL refresh (promo scrape + summariser) in
+# .github/workflows/refresh.yml. Also the key for setup-python's pip cache.
+# The macro/Treasury fetchers are stdlib-only and need none of this.
+requests
+beautifulsoup4
+pytesseract
+Pillow
+anthropic

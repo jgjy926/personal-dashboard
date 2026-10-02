@@ -49,7 +49,9 @@ import json
 import os
 import re
 import sys
+import threading
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -720,116 +722,132 @@ def build_payload(raw: dict[str, list[tuple[str, float]]], years: int,
     }
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--years", type=int, default=5)
-    ap.add_argument("--out", default=OUT)
-    args = ap.parse_args()
+class _Memo:
+    """Fetch-once cache shared by the worker threads: the two JGB tenors share
+    MoF's files and the four Treasury series share two curve files. A lock per
+    key means the second thread waits for the first's download instead of
+    starting its own. Exceptions are not cached, so each caller sees (and logs)
+    the failure itself, exactly as the sequential version did."""
 
-    raw: dict[str, list[tuple[str, float]]] = {}
-    origins: dict[str, dict] = {}     # sid -> {"source", "provisional"}
-    mof_cache: dict[str, str] = {}    # url -> text, so both JGB tenors share a fetch
-    tsy_cache: dict[tuple[int, str], str] = {}   # (year, curve) -> text; 4 series, 2 fetches
-    for sid, meta in SERIES.items():
-        points: list[tuple[str, float]] = []
-        source: str | None = None
-        provisional: str | None = None
-        errors: list[str] = []
+    def __init__(self):
+        self._lock = threading.Lock()
+        self._locks: dict = {}
+        self._vals: dict = {}
 
-        # Japan: Ministry of Finance (daily + authoritative + every tenor). Two
-        # files — full history, then the current month on top — because jgbcm.csv
-        # alone is current-month-only and gave the JP cards a 5-point history.
-        # NOTE: keep the fetch/parse inside try/except but the logging OUTSIDE
-        # it. The tenor label is Japanese ("10年"), and printing that to a
-        # non-UTF-8 console (Windows cp1252) raises UnicodeEncodeError — if that
-        # happened inside the try, a *logging* failure would silently demote us
-        # to the stale monthly FRED series. Log an ASCII-safe label instead.
-        if meta.get("mof_tenor"):
-            for url in (MOF_JGB_ALL_CSV, MOF_JGB_CSV):
-                try:
-                    if url not in mof_cache:
-                        mof_cache[url] = fetch_mof_jgb(url)
-                    points, _ = splice(points, parse_mof_jgb(mof_cache[url], meta["mof_tenor"]))
-                except Exception as e:
-                    errors.append(f"MoF {url.rsplit('/', 1)[-1]}: {e}")
-            if points:
-                source = "MoF JGB curve"
-                print(f"[fetch_macro] {sid}: {len(points)} obs "
-                      f"(latest {points[-1][0]}) (via MoF JGB curve)")
+    def get(self, key, fn):
+        with self._lock:
+            lk = self._locks.setdefault(key, threading.Lock())
+        with lk:
+            if key not in self._vals:
+                self._vals[key] = fn()
+            return self._vals[key]
 
-        # FRED: the authoritative history for everything else.
-        if not points:
-            for candidate in meta["ids"]:
-                try:
-                    points = parse_fred_csv(fetch_fred_csv(candidate))
-                except Exception as e:
-                    errors.append(f"{candidate}: {e}")
-                    continue
-                if points:
-                    source = f"FRED {candidate}"
-                    tag = f" (via {candidate})" if candidate != sid else ""
-                    print(f"[fetch_macro] {sid}: {len(points)} obs"
-                          f" (latest {points[-1][0]}){tag}")
-                    break
 
-        # US Treasury: the same curve FRED redistributes as DGS*/DFII*, but from
-        # the publisher and same-day. FRED keeps the history back to 1962;
-        # splice() appends only the sessions FRED has not batched out yet.
-        if meta.get("treasury"):
-            typ, column = meta["treasury"]
-            # Treasury serves ONE CALENDAR YEAR per request, so the years to
-            # pull run from the year FRED stopped in through the current one.
-            # Usually that is a single year. It is two every early January, when
-            # FRED's last point is still in December — and it must be the whole
-            # RANGE rather than just the two endpoints, because skipping the
-            # years between would splice a fresh tail onto an old series and
-            # leave a silent hole where the middle should be.
-            this_year = datetime.now(timezone.utc).year
-            start = int(points[-1][0][:4]) if points else this_year
-            years = list(range(min(start, this_year), this_year + 1))
-            for yr in years:
-                key = (yr, typ)
-                try:
-                    if key not in tsy_cache:
-                        tsy_cache[key] = fetch_treasury_curve(yr, typ)
-                except Exception as e:
-                    errors.append(f"treasury {typ} {yr}: {e}")
-                    continue
-                points, added = splice(points, parse_treasury_curve(tsy_cache[key], column))
-                if added:
-                    source = ("US Treasury daily curve" if source is None
-                              else f"{source} + US Treasury")
-                    print(f"[fetch_macro] {sid}: +{added} obs from Treasury {typ} "
-                          f"({yr}) -> latest {points[-1][0]}")
+def fetch_series(sid: str, meta: dict, years_back: int, memo: _Memo
+                 ) -> tuple[list[tuple[str, float]], dict, list[tuple[str, bool]]]:
+    """Everything one card needs, from every source it names, in priority
+    order. Runs on a worker thread, so it returns its log lines instead of
+    printing them -- main() prints each series' lines together, in SERIES
+    order, so the job log reads the same as it did when this was sequential."""
+    out: list[tuple[str, bool]] = []
+    log = lambda msg, err=False: out.append((msg, err))
+    points: list[tuple[str, float]] = []
+    source: str | None = None
+    provisional: str | None = None
+    errors: list[str] = []
 
-        # Yahoo Finance: attempted for every series that names a symbol, not just
-        # on total FRED failure. Several FRED series are published in WEEKLY
-        # batches (H.10 for DEXJPUS/DTWEXBGS, EIA for the crudes), so FRED can be
-        # a fully working source and still be 7-11 days behind the market — which
-        # is what made these cards look like a dead refresh. splice() appends only
-        # the days FRED hasn't got yet, so the settled history stays FRED's.
-        if meta.get("yahoo"):
-            sym = meta["yahoo"]
+    # Japan: Ministry of Finance (daily + authoritative + every tenor). Two
+    # files — full history, then the current month on top — because jgbcm.csv
+    # alone is current-month-only and gave the JP cards a 5-point history.
+    # NOTE: keep the fetch/parse inside try/except but the logging OUTSIDE
+    # it. The tenor label is Japanese ("10年"), and printing that to a
+    # non-UTF-8 console (Windows cp1252) raises UnicodeEncodeError — if that
+    # happened inside the try, a *logging* failure would silently demote us
+    # to the stale monthly FRED series. Log an ASCII-safe label instead.
+    if meta.get("mof_tenor"):
+        for url in (MOF_JGB_ALL_CSV, MOF_JGB_CSV):
             try:
-                ypoints, yprov = parse_yahoo_chart(
-                    fetch_yahoo_chart(sym, rng=f"{args.years}y"))
+                points, _ = splice(points, parse_mof_jgb(
+                    memo.get(url, lambda: fetch_mof_jgb(url)), meta["mof_tenor"]))
             except Exception as e:
-                errors.append(f"yahoo {sym}: {e}")
-            else:
-                points, added = splice(points, ypoints)
-                if added:
-                    provisional = yprov
-                    source = f"Yahoo {sym}" if source is None else f"{source} + Yahoo {sym}"
-                    print(f"[fetch_macro] {sid}: +{added} obs from Yahoo {sym} "
-                          f"-> latest {points[-1][0]}"
-                          + (" (session still open)" if yprov == points[-1][0] else ""))
+                errors.append(f"MoF {url.rsplit('/', 1)[-1]}: {e}")
+        if points:
+            source = "MoF JGB curve"
+            log(f"[fetch_macro] {sid}: {len(points)} obs "
+                f"(latest {points[-1][0]}) (via MoF JGB curve)")
 
-        raw[sid] = points
-        origins[sid] = {"source": source, "provisional": provisional}
-        if not points:
-            print(f"[fetch_macro] {sid}: FAILED all candidates — {'; '.join(errors)}",
-                  file=sys.stderr)
+    # FRED: the authoritative history for everything else.
+    if not points:
+        for candidate in meta["ids"]:
+            try:
+                points = parse_fred_csv(fetch_fred_csv(candidate))
+            except Exception as e:
+                errors.append(f"{candidate}: {e}")
+                continue
+            if points:
+                source = f"FRED {candidate}"
+                tag = f" (via {candidate})" if candidate != sid else ""
+                log(f"[fetch_macro] {sid}: {len(points)} obs"
+                    f" (latest {points[-1][0]}){tag}")
+                break
 
+    # US Treasury: the same curve FRED redistributes as DGS*/DFII*, but from
+    # the publisher and same-day. FRED keeps the history back to 1962;
+    # splice() appends only the sessions FRED has not batched out yet.
+    if meta.get("treasury"):
+        typ, column = meta["treasury"]
+        # Treasury serves ONE CALENDAR YEAR per request, so the years to
+        # pull run from the year FRED stopped in through the current one.
+        # Usually that is a single year. It is two every early January, when
+        # FRED's last point is still in December — and it must be the whole
+        # RANGE rather than just the two endpoints, because skipping the
+        # years between would splice a fresh tail onto an old series and
+        # leave a silent hole where the middle should be.
+        this_year = datetime.now(timezone.utc).year
+        start = int(points[-1][0][:4]) if points else this_year
+        yrs = list(range(min(start, this_year), this_year + 1))
+        for yr in yrs:
+            key = (yr, typ)
+            try:
+                text = memo.get(key, lambda: fetch_treasury_curve(yr, typ))
+            except Exception as e:
+                errors.append(f"treasury {typ} {yr}: {e}")
+                continue
+            points, added = splice(points, parse_treasury_curve(text, column))
+            if added:
+                source = ("US Treasury daily curve" if source is None
+                          else f"{source} + US Treasury")
+                log(f"[fetch_macro] {sid}: +{added} obs from Treasury {typ} "
+                    f"({yr}) -> latest {points[-1][0]}")
+
+    # Yahoo Finance: attempted for every series that names a symbol, not just
+    # on total FRED failure. Several FRED series are published in WEEKLY
+    # batches (H.10 for DEXJPUS/DTWEXBGS, EIA for the crudes), so FRED can be
+    # a fully working source and still be 7-11 days behind the market — which
+    # is what made these cards look like a dead refresh. splice() appends only
+    # the days FRED hasn't got yet, so the settled history stays FRED's.
+    if meta.get("yahoo"):
+        sym = meta["yahoo"]
+        try:
+            ypoints, yprov = parse_yahoo_chart(
+                fetch_yahoo_chart(sym, rng=f"{years_back}y"))
+        except Exception as e:
+            errors.append(f"yahoo {sym}: {e}")
+        else:
+            points, added = splice(points, ypoints)
+            if added:
+                provisional = yprov
+                source = f"Yahoo {sym}" if source is None else f"{source} + Yahoo {sym}"
+                log(f"[fetch_macro] {sid}: +{added} obs from Yahoo {sym} "
+                    f"-> latest {points[-1][0]}"
+                    + (" (session still open)" if yprov == points[-1][0] else ""))
+
+    if not points:
+        log(f"[fetch_macro] {sid}: FAILED all candidates — {'; '.join(errors)}", err=True)
+    return points, {"source": source, "provisional": provisional}, out
+
+
+def fetch_funding() -> dict | None:
     # NY Fed funding block. The SRF itself is required for the block; SOFR and
     # ON RRP only enrich it, so either failing degrades the chart, not the panel.
     funding = None
@@ -851,6 +869,31 @@ def main() -> int:
         print(f"[fetch_macro] NYFED_SRF: {len(srf)} days (latest {srf[-1][0]}, "
               f"${srf[-1][1]}bn); alert={al['level']} "
               f"(peak ${al.get('peak_bn')}bn on {al.get('peak_date')})")
+
+    return funding
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--years", type=int, default=5)
+    ap.add_argument("--out", default=OUT)
+    args = ap.parse_args()
+
+    # One worker per series: every fetch is network-bound (FRED alone is
+    # 1-5s a series), so running them side by side takes the step from ~40s
+    # to roughly its slowest single series. The NY Fed block runs alongside.
+    memo = _Memo()
+    with ThreadPoolExecutor(max_workers=10) as pool:
+        futures = {sid: pool.submit(fetch_series, sid, meta, args.years, memo)
+                   for sid, meta in SERIES.items()}
+        funding_future = pool.submit(fetch_funding)
+    raw: dict[str, list[tuple[str, float]]] = {}
+    origins: dict[str, dict] = {}     # sid -> {"source", "provisional"}
+    for sid, fut in futures.items():
+        raw[sid], origins[sid], lines = fut.result()
+        for msg, err in lines:
+            print(msg, file=sys.stderr if err else sys.stdout)
+    funding = funding_future.result()
 
     payload = build_payload(raw, args.years, origins, funding)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
