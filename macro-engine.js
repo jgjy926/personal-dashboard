@@ -968,7 +968,9 @@
       <button class="subtab" data-page="monitor" role="tab">🔎 Series Monitor</button>
     </div>`;
 
-    root.innerHTML = `${bar}${nav}<div id="engine-page"></div>
+    // #engine-alerts sits above the page nav so it shows on EVERY page. app.js
+    // fills it from the series feed (the SRF watch), which this file never reads.
+    root.innerHTML = `${bar}<div id="engine-alerts"></div>${nav}<div id="engine-page"></div>
       <p class="engine-foot muted small">${esc(meta.data_note || '')} ${esc(meta.disclaimer || '')}</p>`;
 
     const host = root.querySelector('#engine-page');

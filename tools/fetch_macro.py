@@ -50,7 +50,7 @@ import os
 import re
 import sys
 import urllib.request
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -358,6 +358,178 @@ def parse_yahoo_chart(text: str) -> tuple[list[tuple[str, float]], str | None]:
     return out, provisional
 
 
+# ── NY Fed: Standing Repo Facility + the funding corridor around it ─────────
+# The SRF is the Fed's overnight repo backstop: banks and dealers swap
+# Treasuries/Agencies/MBS for cash at the TOP of the fed funds target range, in
+# two operations a day (08:15-08:30 and 13:30-13:45 ET). Nobody borrows at the
+# ceiling while private repo is cheaper, so take-up sits at ~$0 and only spikes
+# when private funding runs short — which is exactly why it is worth watching.
+#
+# FRED mirrors it (RPONTTLD), but FRED batches like every other series here; the
+# NY Fed's own markets API is keyless and posts each result minutes after the
+# operation closes. `last/N` is capped somewhere between 750 and 1000 rows
+# (1000 returns an empty body) and the date-range `search.json` endpoint has
+# returned nothing for long ranges, so ~750 operations (~20 months) it is.
+NYFED_API = "https://markets.newyorkfed.org/api"
+NYFED_SRF = NYFED_API + "/rp/repo/all/results/last/750.json"
+NYFED_RRP = NYFED_API + "/rp/reverserepo/all/results/last/400.json"
+NYFED_SOFR = NYFED_API + "/rates/secured/sofr/last/400.json"
+
+# The monitoring range. $50-100bn in a day means private repo is short enough
+# that real money is paying the Fed's ceiling rate (2025's year-end was $74.6bn,
+# Oct-31 $50.4bn); above $100bn it is no longer a balance-sheet date quirk.
+SRF_WATCH_BN = 50.0
+SRF_BREACH_BN = 100.0
+SRF_ALERT_WINDOW = 5      # operation days scanned, so a Friday spike survives the weekend
+SRF_RELEASE = "NY Fed, 2× daily (08:30 / 13:45 ET)"
+
+
+def fetch_nyfed(url: str, timeout: int = 60) -> str:
+    req = urllib.request.Request(url, headers={
+        "User-Agent": "Mozilla/5.0 (macro-dashboard fetcher)", "Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return r.read().decode("utf-8", "replace")
+
+
+def _op_rate(details: list[dict]) -> float | None:
+    """The facility's rate for one operation. Full-allotment operations (since
+    Dec 2025) carry `percentOfferingRate`; the earlier multiple-price auctions
+    carry `minimumBidRate` instead — read either rather than drop a year."""
+    for d in details or []:
+        for key in ("percentOfferingRate", "minimumBidRate", "percentAwardRate"):
+            if d.get(key) is not None:
+                return float(d[key])
+    return None
+
+
+def parse_nyfed_ops(text: str, op_type: str) -> list[tuple[str, float, float | None]]:
+    """NY Fed repo/reverse-repo results -> [(YYYY-MM-DD, $bn accepted, rate)]
+    ascending, ONE row per operation day (the SRF runs twice a day; the morning
+    and afternoon take-up are summed, because the question is how much the
+    market needed that day, not which window it used).
+
+    Small Value Exercises are dropped: they are the Fed test-driving its own
+    plumbing (a fixed $100mn cap, settled a day forward), not demand."""
+    ops = (json.loads(text).get("repo") or {}).get("operations") or []
+    amt: dict[str, float] = {}
+    rate: dict[str, float | None] = {}
+    for o in ops:
+        if o.get("operationType") != op_type or o.get("auctionStatus") != "Results":
+            continue
+        if "small value exercise" in (o.get("note") or "").lower():
+            continue
+        d = o.get("operationDate")
+        if not d:
+            continue
+        amt[d] = amt.get(d, 0.0) + float(o.get("totalAmtAccepted") or 0)
+        r = _op_rate(o.get("details"))
+        if r is not None:
+            rate[d] = r
+    return [(d, round(amt[d] / 1e9, 3), rate.get(d)) for d in sorted(amt)]
+
+
+def parse_nyfed_rate(text: str) -> list[tuple[str, float, float | None]]:
+    """NY Fed reference rate (SOFR) -> [(date, rate, 99th percentile)] ascending.
+    The 99th percentile is the expensive tail of the day's repo trades — the
+    part that, when it reaches the SRF rate, is what the facility exists for."""
+    rows = json.loads(text).get("refRates") or []
+    out = [(r["effectiveDate"], float(r["percentRate"]),
+            float(r["percentPercentile99"]) if r.get("percentPercentile99") is not None else None)
+           for r in rows if r.get("effectiveDate") and r.get("percentRate") is not None]
+    out.sort()
+    return out
+
+
+def calendar_tag(iso: str) -> str | None:
+    """Name the funding-calendar date a spike landed on, if any. Banks shrink
+    their repo books over reporting dates and Treasury settlements drain cash,
+    so SRF take-up clusters there for reasons that have little to do with
+    stress. Weekends only, no holiday calendar: over-tagging a day is harmless,
+    the tag is context on the banner, never a reason to suppress it."""
+    d = datetime.strptime(iso, "%Y-%m-%d").date()
+    if d.weekday() >= 5:
+        return None
+    nxt = date.fromordinal(d.toordinal() + (3 if d.weekday() == 4 else 1))
+    if nxt.month != d.month:                            # last weekday of the month
+        return {12: "year-end", 3: "quarter-end", 6: "quarter-end",
+                9: "quarter-end"}.get(d.month, "month-end")
+    if d.day <= 3:
+        return "month-turn"
+    if 15 <= d.day <= 17:
+        return ("tax date + coupon settlement" if d.month in (4, 6, 9, 12)
+                else "mid-month coupon settlement")
+    return None
+
+
+def srf_alert(daily: list[tuple[str, float, float | None]],
+              window: int = SRF_ALERT_WINDOW,
+              watch: float = SRF_WATCH_BN, breach: float = SRF_BREACH_BN) -> dict:
+    """Grade the largest take-up in the last `window` operation days:
+        normal  < $50bn
+        watch   $50bn - $100bn   (the monitoring range)
+        breach  > $100bn
+    The peak, not the latest day: a $75bn quarter-end followed by a $0 morning
+    should still be on screen the next day, not vanish at 08:30."""
+    recent = daily[-window:]
+    if not recent:
+        return {"level": "unknown", "watch_bn": watch, "breach_bn": breach}
+    peak_d, peak_bn, peak_rate = max(recent, key=lambda r: r[1])
+    level = "breach" if peak_bn > breach else "watch" if peak_bn >= watch else "normal"
+    last_d, last_bn, _ = daily[-1]
+    return {"level": level, "peak_bn": peak_bn, "peak_date": peak_d, "peak_rate": peak_rate,
+            "calendar": calendar_tag(peak_d), "latest_bn": last_bn, "latest_date": last_d,
+            "window_days": len(recent), "watch_bn": watch, "breach_bn": breach}
+
+
+def build_funding(srf: list[tuple[str, float, float | None]],
+                  sofr: list[tuple[str, float, float | None]] | None = None,
+                  rrp: list[tuple[str, float, float | None]] | None = None,
+                  days: int = 260) -> dict:
+    """The funding block: SRF take-up, the corridor it caps, two snapshot cards
+    and the alert. DAILY axis, not the monthly one the other panels use — a
+    month-end spike IS the event, and month-end resampling (last observation of
+    the month) would keep some spikes and silently drop the mid-month ones."""
+    sofr, rrp = sofr or [], rrp or []
+    tail = srf[-days:]
+    axis = [d for d, _, _ in tail]
+    sofr_by = {d: (v, p99) for d, v, p99 in sofr}
+    rrp_by = {d: r for d, _, r in rrp}
+
+    common = {"freq": "daily", "source": "NY Fed Markets API",
+              "release": SRF_RELEASE, "stale_after": 4}
+    d0, bn0, _ = srf[-1]
+    cards = [{"id": "SRF", "label": "Standing Repo Facility take-up", "value": round(bn0, 2),
+              "unit": "$bn", "change": round(bn0 - srf[-2][1], 2) if len(srf) > 1 else None,
+              "as_of": d0, **common}]
+    # Distance to the ceiling, on the latest day both exist. SOFR is published
+    # the NEXT morning, so it usually trails the operation results by a day.
+    srf_rate_by = {d: r for d, _, r in srf if r is not None}
+    spreads = [(d, round((v - srf_rate_by[d]) * 100)) for d, v, _ in sofr if d in srf_rate_by]
+    if spreads:
+        sd, sv = spreads[-1]
+        cards.append({"id": "SOFR_SRF", "label": "SOFR − SRF rate", "value": sv, "unit": "bp",
+                      "change": sv - spreads[-2][1] if len(spreads) > 1 else None,
+                      "as_of": sd, **common, "release": "NY Fed, next morning 08:00 ET"})
+
+    return {
+        "dates": axis,
+        "series": {
+            "srf_bn": [bn for _, bn, _ in tail],
+            "srf_rate": [r for _, _, r in tail],
+            "sofr": [sofr_by[d][0] if d in sofr_by else None for d in axis],
+            "sofr_p99": [sofr_by[d][1] if d in sofr_by else None for d in axis],
+            "rrp_rate": [rrp_by.get(d) for d in axis],
+        },
+        "alert": srf_alert(srf),
+        "cards": cards,
+        "note": ("SRF rate = the ceiling (top of the fed funds range); ON RRP rate = the floor. "
+                 "SOFR is the price of private overnight repo and its 99th percentile the "
+                 "expensive tail: when that tail reaches the ceiling, borrowing from the Fed "
+                 "becomes the cheaper option and SRF take-up jumps. Morning and afternoon "
+                 "operations are summed per day; Fed Small Value Exercises are excluded."),
+    }
+
+
 # ── pure helpers ────────────────────────────────────────────────────────────
 def parse_fred_csv(text: str) -> list[tuple[str, float]]:
     """FRED CSV: header row then DATE,VALUE. Missing values are '.'. Returns
@@ -451,7 +623,8 @@ def snapshot_card(sid: str, series: list[tuple[str, float]],
 
 
 def build_payload(raw: dict[str, list[tuple[str, float]]], years: int,
-                  origins: dict[str, dict] | None = None) -> dict:
+                  origins: dict[str, dict] | None = None,
+                  funding: dict | None = None) -> dict:
     origins = origins or {}
     have = {k: v for k, v in raw.items() if v}
     missing = [sid for sid in SERIES if sid not in have]
@@ -464,6 +637,10 @@ def build_payload(raw: dict[str, list[tuple[str, float]]], years: int,
 
     snapshot = [snapshot_card(sid, have[sid], origins.get(sid))
                 for sid in SERIES if sid in have]
+    if funding:
+        snapshot += funding.get("cards", [])
+    else:
+        missing.append("NYFED_SRF")   # same honest gap as a FRED id going dark
 
     real_yield = align(monthly(have["DFII10"]), axis, 2) if "DFII10" in have else []
     gold = align(monthly(have["GOLD"]), axis, 1) if "GOLD" in have else []
@@ -494,7 +671,7 @@ def build_payload(raw: dict[str, list[tuple[str, float]]], years: int,
         "meta": {
             "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "sample": False,
-            "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF",
+            "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF + NY Fed",
             "data_note": ("Live data. Freshness shows the DATA date, not the fetch date. "
                           "FRED supplies each series' settled history; the US Treasury's own "
                           "daily curve extends the nominal and TIPS yields, and Yahoo Finance "
@@ -539,6 +716,7 @@ def build_payload(raw: dict[str, list[tuple[str, float]]], years: int,
             "note": f"Unemployment plotted against the real yield shifted forward {LEAD} months (lagged relationship, not causal).",
         },
         "regime": {"label": label, "detail": detail, "caveat": "Heuristic, not a signal."},
+        **({"funding": {k: v for k, v in funding.items() if k != "cards"}} if funding else {}),
     }
 
 
@@ -652,7 +830,29 @@ def main() -> int:
             print(f"[fetch_macro] {sid}: FAILED all candidates — {'; '.join(errors)}",
                   file=sys.stderr)
 
-    payload = build_payload(raw, args.years, origins)
+    # NY Fed funding block. The SRF itself is required for the block; SOFR and
+    # ON RRP only enrich it, so either failing degrades the chart, not the panel.
+    funding = None
+    try:
+        srf = parse_nyfed_ops(fetch_nyfed(NYFED_SRF), "Repo")
+    except Exception as e:
+        srf = []
+        print(f"[fetch_macro] NYFED_SRF: FAILED — {e}", file=sys.stderr)
+    if srf:
+        extra = {}
+        for name, url, parse in (("sofr", NYFED_SOFR, parse_nyfed_rate),
+                                 ("rrp", NYFED_RRP, lambda t: parse_nyfed_ops(t, "Reverse Repo"))):
+            try:
+                extra[name] = parse(fetch_nyfed(url))
+            except Exception as e:
+                print(f"[fetch_macro] NYFED {name}: FAILED — {e}", file=sys.stderr)
+        funding = build_funding(srf, extra.get("sofr"), extra.get("rrp"))
+        al = funding["alert"]
+        print(f"[fetch_macro] NYFED_SRF: {len(srf)} days (latest {srf[-1][0]}, "
+              f"${srf[-1][1]}bn); alert={al['level']} "
+              f"(peak ${al.get('peak_bn')}bn on {al.get('peak_date')})")
+
+    payload = build_payload(raw, args.years, origins, funding)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)

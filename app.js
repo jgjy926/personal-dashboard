@@ -96,7 +96,10 @@ function lineChart(series, dates, opts = {}) {
       const cmd = pen ? 'L' : 'M'; pen = true;
       return `${cmd}${xFor(i).toFixed(1)},${yFor(v).toFixed(1)}`;
     }).filter(Boolean).join(' ');
-    return d ? `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2"/>` : '';
+    // `dash` draws a reference line (a threshold, a policy rate) so it never
+    // reads as a data series at a glance.
+    return d ? `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="${s.dash ? 1.5 : 2}"${
+      s.dash ? ` stroke-dasharray="${s.dash}"` : ''}/>` : '';
   }).join('');
   // sparse x labels
   let xlabels = '';
@@ -315,8 +318,69 @@ MODS.macro = async function initMacro() {
     root.innerHTML = `<div class="errbox">macro-engine.js did not load — check the script tag order in index.html (it must come before app.js).</div>`;
     return;
   }
-  return window.MACRO_ENGINE.render(root, CFG.feeds.macroEngine, renderSeriesMonitor);
+  await window.MACRO_ENGINE.render(root, CFG.feeds.macroEngine, renderSeriesMonitor);
+  renderEngineAlerts(root);
 };
+
+/* Alerts that belong on every Macro page, not just the drill-down: today, the
+ * Standing Repo Facility watch. Read from the series feed (data/macro.json),
+ * which the engine itself never loads. A failure only hides the strip. */
+async function renderEngineAlerts(root) {
+  const slot = root.querySelector('#engine-alerts');
+  if (!slot) return;
+  let d;
+  try { d = await fetchJSON(CFG.feeds.macro); } catch { return; }
+  slot.innerHTML = srfAlertHtml(d);
+  // The strip is a doorway to the SRF charts on the Series Monitor page.
+  slot.querySelectorAll('[data-open-monitor]').forEach(el => el.addEventListener('click', () => {
+    const tab = root.querySelector('.engine-nav .subtab[data-page="monitor"]');
+    if (tab) tab.click();
+  }));
+}
+
+const bnTxt = v => v == null ? '—' : `$${Number(v).toLocaleString(undefined, { maximumFractionDigits: 1 })}bn`;
+
+/* SRF status, graded in fetch_macro.py (srf_alert) so the thresholds live in one
+ * place; this only paints it. watch = 5-day peak inside the $50-100bn monitoring
+ * range, breach = above it: a caution-tape banner. Otherwise a slim status line,
+ * so a quiet facility still visibly reads as "checked, quiet" rather than absent. */
+function srfAlertHtml(d) {
+  const al = (d.funding || {}).alert;
+  if (!al || al.level === 'unknown') return '';
+  const spread = (d.snapshot || []).find(c => c.id === 'SOFR_SRF');
+  const rateTxt = al.peak_rate == null ? '' : fmt(al.peak_rate) + '% ';
+  const more = `<button type="button" class="linkish" data-open-monitor>View SRF charts →</button>`;
+
+  if (al.level !== 'watch' && al.level !== 'breach') {
+    return `<div class="srf-strip">
+      <span class="chip ok">SRF normal</span>
+      <span>Standing Repo Facility <b>${bnTxt(al.latest_bn)}</b> on ${esc(al.latest_date)}</span>
+      <span class="muted">· 5-day peak ${bnTxt(al.peak_bn)}${al.calendar ? ` (${esc(al.calendar)})` : ''}${
+        spread ? ` · SOFR ${spread.value > 0 ? '+' : ''}${spread.value} bp vs SRF rate` : ''}
+        · watch range ${bnTxt(al.watch_bn)}–${bnTxt(al.breach_bn)}</span>
+      ${more}
+    </div>`;
+  }
+  const breach = al.level === 'breach';
+  return `
+    <div class="hazard hazard-${al.level}" role="alert">
+      <div class="hazard-inner">
+        <span class="b-ico">${breach ? '🚨' : '⚠️'}</span>
+        <div>
+          <div class="b-title">SRF ${breach ? 'BREACH' : 'WATCH'} — ${bnTxt(al.peak_bn)} drawn from the Fed's Standing Repo Facility on ${esc(al.peak_date)}${
+            al.calendar ? ` <span class="chip">${esc(al.calendar)}</span>` : ''}</div>
+          <div class="b-detail">${breach
+            ? `Above the ${bnTxt(al.breach_bn)} ceiling of the monitoring range. Private overnight repo is short enough that dealers are paying the Fed's ${rateTxt}ceiling rate in size — treat as a funding-stress event.`
+            : `Inside the ${bnTxt(al.watch_bn)}–${bnTxt(al.breach_bn)} monitoring range. Dealers are borrowing at the Fed's ${rateTxt}ceiling rate because private repo got more expensive.`}
+            Latest day (${esc(al.latest_date)}): ${bnTxt(al.latest_bn)}. Peak taken over the last ${al.window_days} operation days.</div>
+          <div class="b-caveat">${al.calendar
+            ? `Lands on a ${esc(al.calendar)} — balance-sheet and settlement dates routinely pull take-up up; it matters more if the next ordinary day stays high.`
+            : 'Not a calendar date — a spike on an ordinary day is the more meaningful kind.'}</div>
+          <div style="margin-top:6px">${more}</div>
+        </div>
+      </div>
+    </div>`;
+}
 
 /* The original Macro Monitor: raw series cards, the real-yield/gold/S&P overlay,
  * the lagged-unemployment panel and Treasury supply. Spec 27 says the main
@@ -353,8 +417,8 @@ async function renderSeriesMonitor(root) {
   const cards = (d.snapshot || []).map(s => {
     const dir = s.change == null ? '' : (s.change >= 0 ? 'up' : 'down');
     const arrow = s.change == null ? '' : (s.change >= 0 ? '▲' : '▼');
-    const unit = s.unit === '%' ? '%' : '';
-    const pre = (s.unit === '$' || s.unit === '¥') ? s.unit : '';
+    const unit = { '%': '%', '$bn': 'bn', bp: ' bp' }[s.unit] || '';
+    const pre = (s.unit === '$' || s.unit === '¥' || s.unit === '$bn') ? s.unit[0] : '';
     const age = ageDays(s.as_of);
     const stale = age != null && age > staleAfter(s);
     const agoTxt = age == null ? '' : age <= 0 ? 'today' : age === 1 ? '1d ago' : `${age}d ago`;
@@ -435,9 +499,33 @@ async function renderSeriesMonitor(root) {
     { name: `Real yield (led ${lag.lead_months || 15}m)`, values: lag.real_yield_lead, color: cv('--s2') }
   ], lag.dates, { normalize: true, w: 860, h: 190 });
 
+  // Standing Repo Facility charts. The alert banner itself is drawn above the
+  // engine's page nav (srfAlertHtml), so it is not repeated here.
+  const fu = d.funding || {};
+  const al = fu.alert || {};
+  const fs = fu.series || {};
+  const flat = v => (fu.dates || []).map(() => v);
+  const fundingBlock = !(fu.dates && fu.dates.length) ? '' : `<div class="card-block">
+    <div class="block-head"><h3>Standing Repo Facility <span class="muted">— daily take-up, $bn</span></h3>
+      <span class="chip ${al.level === 'breach' ? 'bad' : al.level === 'watch' ? 'warn' : 'ok'}">${
+        al.level === 'breach' ? 'breach' : al.level === 'watch' ? 'watch' : 'normal'} · ${bnTxt(al.peak_bn)} 5-day peak</span></div>
+    ${lineChart([
+      { name: 'SRF take-up', values: fs.srf_bn, color: cv('--s1') },
+      { name: `Watch ${bnTxt(al.watch_bn || 50)}`, values: flat(al.watch_bn || 50), color: cv('--amber'), dash: '5 4' },
+      { name: `Breach ${bnTxt(al.breach_bn || 100)}`, values: flat(al.breach_bn || 100), color: cv('--red'), dash: '5 4' }
+    ], fu.dates, { w: 860, h: 170 })}
+    <h3 style="margin-top:14px">Funding corridor <span class="muted">— %, daily</span></h3>
+    ${lineChart([
+      { name: 'SRF rate (ceiling)', values: fs.srf_rate, color: cv('--red'), dash: '5 4' },
+      { name: 'SOFR 99th pct', values: fs.sofr_p99, color: cv('--s2') },
+      { name: 'SOFR', values: fs.sofr, color: cv('--s1') },
+      { name: 'ON RRP rate (floor)', values: fs.rrp_rate, color: cv('--green'), dash: '5 4' }
+    ], fu.dates, { w: 860, h: 190 })}
+    <p class="muted" style="margin-top:6px">${esc(fu.note || '')}</p></div>`;
+
   const missing = (d.meta && d.meta.missing_series) || [];
   root.innerHTML = `
-    ${sample ? `<div class="disclaimer">⚠ Showing <b>sample</b> data for UI review — wire the FRED/Stooq feed (Phase B) to go live. ${esc(d.meta.data_note || '')}</div>` : ''}
+    ${sample ?`<div class="disclaimer">⚠ Showing <b>sample</b> data for UI review — wire the FRED/Stooq feed (Phase B) to go live. ${esc(d.meta.data_note || '')}</div>` : ''}
     ${missing.length ? `<div class="disclaimer">⚠ Data source gap: <b>${esc(missing.join(', '))}</b> could not be fetched this run (e.g. the upstream series was renamed/discontinued) — shown as missing rather than guessed.</div>` : ''}
     <div class="banner regime-${esc(rg.label || 'Mixed')}">
       <span class="b-ico">🧭</span>
@@ -450,6 +538,7 @@ async function renderSeriesMonitor(root) {
     <div class="stat-grid">${cards}</div>
     <div class="card-block"><h3>Real yield · Gold · S&amp;P 500 <span class="muted">— each scaled to its own 0–100 range</span></h3>${overlayChart}
       <p class="muted" style="margin-top:6px">${esc(ov.note || '')}</p></div>
+    ${fundingBlock}
     ${oilBlock}
     ${fxBlock}
     <div class="card-block"><h3>Unemployment vs lagged real yield</h3>${lagChart}

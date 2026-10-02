@@ -263,5 +263,89 @@ class TestBuildPayload(unittest.TestCase):
             fm.build_payload({"DGS10": []}, years=1)
 
 
+class TestSrf(unittest.TestCase):
+    """Standing Repo Facility: daily take-up from the NY Fed's operation results,
+    and the $50-100bn monitoring range that drives the banner."""
+
+    @staticmethod
+    def _op(date, amt, rate=4.0, note="", method="Full Allotment", typ="Repo"):
+        key = "percentOfferingRate" if method == "Full Allotment" else "minimumBidRate"
+        return {"operationDate": date, "operationType": typ, "operationMethod": method,
+                "auctionStatus": "Results", "note": note, "totalAmtAccepted": amt,
+                "details": [{"securityType": "Treasury", key: rate}]}
+
+    def _parse(self, ops):
+        return fm.parse_nyfed_ops(json.dumps({"repo": {"operations": ops}}), "Repo")
+
+    def test_sums_both_daily_operations(self):
+        out = self._parse([self._op("2025-12-31", 50e9), self._op("2025-12-31", 24.6e9),
+                           self._op("2026-01-02", 0)])
+        self.assertEqual(out, [("2025-12-31", 74.6, 4.0), ("2026-01-02", 0.0, 4.0)])
+
+    def test_small_value_exercise_is_not_demand(self):
+        out = self._parse([self._op("2026-02-18", 56e6, note="<p>This operation is a Small Value Exercise (SVE)</p>"),
+                           self._op("2026-02-18", 0)])
+        self.assertEqual(out, [("2026-02-18", 0.0, 4.0)])
+
+    def test_reads_rate_from_multiple_price_era(self):
+        out = self._parse([self._op("2025-10-31", 50.35e9, rate=4.25, method="Multiple Price")])
+        self.assertEqual(out[0][2], 4.25)
+
+    def test_ignores_reverse_repo_rows(self):
+        self.assertEqual(self._parse([self._op("2026-10-01", 9e9, typ="Reverse Repo")]), [])
+
+    def _daily(self, *bns):
+        return [(f"2026-09-{21 + i:02d}", bn, 4.0) for i, bn in enumerate(bns)]
+
+    def test_monitoring_range_bounds(self):
+        self.assertEqual(fm.srf_alert(self._daily(0, 49.99))["level"], "normal")
+        self.assertEqual(fm.srf_alert(self._daily(0, 50))["level"], "watch")
+        self.assertEqual(fm.srf_alert(self._daily(0, 100))["level"], "watch")
+        self.assertEqual(fm.srf_alert(self._daily(0, 100.01))["level"], "breach")
+
+    def test_peak_survives_a_quiet_next_morning(self):
+        a = fm.srf_alert(self._daily(0, 74.6, 0, 0))
+        self.assertEqual((a["level"], a["peak_bn"], a["peak_date"]), ("watch", 74.6, "2026-09-22"))
+        self.assertEqual(a["latest_bn"], 0)
+
+    def test_peak_ages_out_of_the_window(self):
+        a = fm.srf_alert(self._daily(80, 0, 0, 0, 0, 0))
+        self.assertEqual(a["level"], "normal")
+
+    def test_calendar_tags(self):
+        self.assertEqual(fm.calendar_tag("2025-12-31"), "year-end")
+        self.assertEqual(fm.calendar_tag("2026-09-30"), "quarter-end")
+        self.assertEqual(fm.calendar_tag("2025-10-31"), "month-end")      # Friday
+        self.assertEqual(fm.calendar_tag("2026-07-31"), "month-end")      # Friday, Aug 1 is Sat
+        self.assertEqual(fm.calendar_tag("2026-04-15"), "tax date + coupon settlement")
+        self.assertEqual(fm.calendar_tag("2026-02-17"), "mid-month coupon settlement")
+        self.assertEqual(fm.calendar_tag("2026-01-02"), "month-turn")
+        self.assertIsNone(fm.calendar_tag("2026-09-23"))
+
+    def test_funding_block_and_cards(self):
+        srf = [("2026-09-29", 0.004, 4.0), ("2026-09-30", 1.2, 4.0), ("2026-10-01", 0.0, 4.0)]
+        sofr = [("2026-09-29", 3.88, 3.97), ("2026-09-30", 3.90, 3.99)]
+        rrp = [("2026-09-30", 0.5, 3.75), ("2026-10-01", 0.35, 3.75)]
+        f = fm.build_funding(srf, sofr, rrp)
+        self.assertEqual(f["dates"], ["2026-09-29", "2026-09-30", "2026-10-01"])
+        self.assertEqual(f["series"]["sofr"], [3.88, 3.90, None])     # SOFR lands next morning
+        self.assertEqual(f["series"]["rrp_rate"], [None, 3.75, 3.75])
+        cards = {c["id"]: c for c in f["cards"]}
+        self.assertEqual(cards["SRF"]["value"], 0.0)
+        self.assertEqual(cards["SRF"]["change"], -1.2)
+        self.assertEqual((cards["SOFR_SRF"]["value"], cards["SOFR_SRF"]["as_of"]), (-10, "2026-09-30"))
+        self.assertEqual(f["alert"]["level"], "normal")
+
+    def test_payload_carries_funding_or_reports_the_gap(self):
+        raw = {"GOLD": [("2026-09-08", 2500.0)]}
+        f = fm.build_funding([("2026-10-01", 0.0, 4.0)])
+        p = fm.build_payload(raw, years=1, funding=f)
+        self.assertIn("funding", p)
+        self.assertNotIn("cards", p["funding"])
+        self.assertIn("SRF", [c["id"] for c in p["snapshot"]])
+        self.assertNotIn("NYFED_SRF", p["meta"]["missing_series"])
+        self.assertIn("NYFED_SRF", fm.build_payload(raw, years=1)["meta"]["missing_series"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
