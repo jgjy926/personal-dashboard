@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-10-03T11:47:41+00:00",
+    "generated_at": "2026-10-04T12:30:01+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF + NY Fed",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; the US Treasury's own daily curve extends the nominal and TIPS yields, and Yahoo Finance extends the market-traded series, over the days FRED has not published yet (FRED batches the curve series, the Fed's H.10 dollar release is weekly, the EIA crude series are batched). Every card names the source behind its latest point, and the ones with no faster publisher carry their release cadence instead.",
     "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
     "missing_series": [],
-    "latest_observation": "2026-10-03"
+    "latest_observation": "2026-10-04"
   },
   "snapshot": [
     {
@@ -77,8 +77,7 @@
       "change": -40.0,
       "as_of": "2026-10-02",
       "freq": "daily",
-      "source": "Yahoo GC=F",
-      "provisional": true
+      "source": "Yahoo GC=F"
     },
     {
       "id": "BRENT",
@@ -88,8 +87,7 @@
       "change": -0.06,
       "as_of": "2026-10-02",
       "freq": "daily",
-      "source": "FRED DCOILBRENTEU + Yahoo BZ=F",
-      "provisional": true
+      "source": "FRED DCOILBRENTEU + Yahoo BZ=F"
     },
     {
       "id": "WTI",
@@ -99,8 +97,7 @@
       "change": -1.76,
       "as_of": "2026-10-02",
       "freq": "daily",
-      "source": "FRED DCOILWTICO + Yahoo CL=F",
-      "provisional": true
+      "source": "FRED DCOILWTICO + Yahoo CL=F"
     },
     {
       "id": "UNRATE",
@@ -135,7 +132,6 @@
       "as_of": "2026-10-02",
       "freq": "daily",
       "source": "Yahoo DX-Y.NYB",
-      "provisional": true,
       "release": "ICE futures, continuous"
     },
     {
@@ -144,7 +140,7 @@
       "value": 157.83,
       "unit": "¥",
       "change": -0.1,
-      "as_of": "2026-10-03",
+      "as_of": "2026-10-04",
       "freq": "daily",
       "source": "FRED DEXJPUS + Yahoo JPY=X"
     },
