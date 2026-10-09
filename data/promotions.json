@@ -1,14 +1,26 @@
 {
   "meta": {
-    "generated_at": "2026-10-08T00:00:00+00:00",
+    "generated_at": "2026-10-09T00:00:00+00:00",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "today": "2026-10-08",
+    "today": "2026-10-09",
     "new_today": 1,
-    "count": 34,
+    "count": 35,
     "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
   },
   "promotions": [
+    {
+      "title": "PB Privileges @ UTAR Hospital",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-utar-hospital/",
+      "image": "https://www.pbebank.com/media/qhjfny15/utar-hospital_wb.jpg",
+      "id": "59e5f40e86",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-10-09",
+      "tnc_link": "https://www.pbebank.com/media/qnrbosx0/tc_utar-hospital.pdf",
+      "tnc_summary": "",
+      "end_date": ""
+    },
     {
       "title": "PB Visa Privileges: 15% OFF on Selected Concert Tickets at Malaysian Philharmonic Orchestra",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-visa-privileges-15-off-on-selected-concert-tickets-at-malaysian-philharmonic-orchestra/",
