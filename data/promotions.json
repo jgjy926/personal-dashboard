@@ -1,12 +1,12 @@
 {
   "meta": {
-    "generated_at": "2026-10-09T00:00:00+00:00",
+    "generated_at": "2026-10-10T03:17:19.109Z",
     "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-10-09",
     "new_today": 1,
     "count": 35,
-    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification."
+    "note": "Live scrape. Each promo's `image` is the bank's full campaign poster (offer, minimum spend, and campaign period are printed on it) — where tnc_summary/period are set they were read from that poster by a human or vision-capable AI via the Console. tnc_link is the authoritative PDF/terms page for verification. Summaries published from the Card Promos Console."
   },
   "promotions": [
     {
@@ -15,11 +15,11 @@
       "image": "https://www.pbebank.com/media/qhjfny15/utar-hospital_wb.jpg",
       "id": "59e5f40e86",
       "category": "Credit Card",
-      "period": "",
+      "period": "5 October 2026 - 30 September 2027",
       "first_seen": "2026-10-09",
       "tnc_link": "https://www.pbebank.com/media/qnrbosx0/tc_utar-hospital.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "20% off Preventive Health Screening and Restorative T&CM Wellness at UTAR Hospital, Kampar. PB Premium Wellness (PB Visa Infinite, World Mastercard, Visa Signature credit cards, Red Carpet Banking Mastercard Elite/Gold Debit): RM888 male, RM927 female. PB Signature Wellness (other PB cardmembers): RM468 male, RM488 female. Book via WhatsApp 012-968 3761 or contact@utarhospital.org.my.",
+      "end_date": "2027-09-30"
     },
     {
       "title": "PB Visa Privileges: 15% OFF on Selected Concert Tickets at Malaysian Philharmonic Orchestra",
@@ -27,11 +27,11 @@
       "image": "https://www.pbebank.com/media/1ptpxzk2/malaysian-philharmonic-orchestra_wb.jpg",
       "id": "e354f1105f",
       "category": "Credit Card",
-      "period": "",
+      "period": "Now – 31 December 2026",
       "first_seen": "2026-10-08",
       "tnc_link": "https://www.visa.com.my/en_my/visa-offers-and-perks/dewan-filharmonik-petronas-dfp/174884",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "15% off selected Malaysian Philharmonic Orchestra concert tickets with PB Visa Infinite or PB Visa Signature Credit Card. Use promo code MVISA15 at www.dfp.com.my. Terms and conditions apply.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "PB Privileges @ 100glasses",
