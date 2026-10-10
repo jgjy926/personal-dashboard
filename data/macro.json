@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-10T03:17:50+00:00",
+    "generated_at": "2026-10-10T12:41:12+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF + NY Fed",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; the US Treasury's own daily curve extends the nominal and TIPS yields, and Yahoo Finance extends the market-traded series, over the days FRED has not published yet (FRED batches the curve series, the Fed's H.10 dollar release is weekly, the EIA crude series are batched). Every card names the source behind its latest point, and the ones with no faster publisher carry their release cadence instead.",
@@ -72,9 +72,9 @@
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4220.3,
+      "value": 4216.3,
       "unit": "$",
-      "change": 63.3,
+      "change": 59.3,
       "as_of": "2026-10-09",
       "freq": "daily",
       "source": "Yahoo GC=F",
@@ -83,9 +83,9 @@
     {
       "id": "BRENT",
       "label": "Brent Crude",
-      "value": 104.43,
+      "value": 104.72,
       "unit": "$",
-      "change": 0.15,
+      "change": 0.44,
       "as_of": "2026-10-09",
       "freq": "daily",
       "source": "FRED DCOILBRENTEU + Yahoo BZ=F",
@@ -94,9 +94,9 @@
     {
       "id": "WTI",
       "label": "WTI Crude",
-      "value": 91.66,
+      "value": 91.85,
       "unit": "$",
-      "change": 0.17,
+      "change": 0.36,
       "as_of": "2026-10-09",
       "freq": "daily",
       "source": "FRED DCOILWTICO + Yahoo CL=F",
@@ -392,7 +392,7 @@
         4107.0,
         4481.5,
         4186.7,
-        4220.3
+        4216.3
       ],
       "sp500": [
         4567.0,
@@ -583,7 +583,7 @@
         96.95,
         89.75,
         115.91,
-        104.43
+        104.72
       ],
       "wti": [
         66.14,
@@ -645,7 +645,7 @@
         86.16,
         87.03,
         97.18,
-        91.66
+        91.85
       ]
     },
     "unit": "$/bbl",
