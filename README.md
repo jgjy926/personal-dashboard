@@ -156,7 +156,7 @@ python tools/fetch_apims.py     # -> data/apims.json
 The API only answers CORS for DOE's own site, so the browser can't call it directly.
 The tab reads it **live** from `worker/apims-proxy`, a keyless Cloudflare Worker that
 serves the same shape as `data/apims.json` with CORS, caching for 10 minutes
-(stale-while-revalidate). Deploy: `cd worker/apims-proxy && npx wrangler deploy`;
+(stale-while-revalidate). Updates run 6 AM-11 PM MYT; overnight (00:00-06:00) it makes no APIMS calls and serves the evening copy. Deploy: `cd worker/apims-proxy && npx wrangler deploy`;
 `node worker/apims-proxy/test.mjs` checks its parser offline.
 
 The live path exists because **GitHub's cron can't do hourly here**: scheduled runs on

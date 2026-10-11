@@ -1245,7 +1245,12 @@ MODS.air = function initAir() {
     const all = data.stations;
     const s = byId[mine];
     const b = aqBand(s.api);
-    const stale = !m.readings_as_of || (Date.now() - new Date(m.readings_as_of)) / 60000 > STALE_MIN;
+    // Updates rest 00:00-06:00 MYT (apims-proxy + air-quality.yml), so overnight
+    // the 11 PM readings are expected to age; only flag them past that.
+    const mytHour = new Date(Date.now() + 8 * 36e5).getUTCHours();
+    const resting = mytHour < 6;
+    const allowMin = STALE_MIN + (resting ? (mytHour + 1) * 60 : 0);
+    const stale = !m.readings_as_of || (Date.now() - new Date(m.readings_as_of)) / 60000 > allowMin;
 
     // Nationwide distribution, worst → cleanest.
     const live = all.filter(x => x.api != null);
@@ -1270,6 +1275,7 @@ MODS.air = function initAir() {
         <span>Readings as of <b>${m.readings_as_of ? esc(mytTime(m.readings_as_of, true)) + ' MYT' : '—'}</b>
           (${m.readings_as_of ? esc(agoMin(m.readings_as_of)) : 'unknown'})</span>
         <span>· <b>${live.length}/${all.length}</b> stations reporting</span>
+        ${resting ? '<span>· <b>🌙 overnight pause</b> — updates resume at 6 AM</span>' : ''}
         <span>· ${via === 'live'
           ? `<b>live</b>, fetched from APIMS ${m.generated_at ? esc(agoMin(m.generated_at)) : ''}`
           : `site snapshot from ${m.generated_at ? esc(agoMin(m.generated_at)) : '—'} <span title="The live feed (apims-proxy Worker) couldn't be reached or was older">(live feed unavailable)</span>`}</span>

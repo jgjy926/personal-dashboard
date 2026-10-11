@@ -19,6 +19,10 @@
  * the 17 upstream calls except on a cold cache. APIMS rate-limits bursts (429),
  * hence the low concurrency and the backoff.
  *
+ * Overnight (00:00-06:00 MYT) it rests: no upstream calls at all, the last
+ * evening snapshot is served whatever its age, and a cold cache answers 503 so
+ * the page falls back to the snapshot deployed with the site.
+ *
  *   GET /apims     -> the feed
  *   GET /          -> a one-line health note
  *
@@ -29,7 +33,18 @@
 const BASE = "https://eqms.doe.gov.my/api3/publicportalapims";
 const PORTAL = "https://eqms.doe.gov.my/APIMS/main";
 const FRESH_S = 10 * 60;          // serve without refreshing
-const KEEP_S = 6 * 60 * 60;       // keep a stale copy this long as a fallback
+// Long enough to bridge the overnight rest: the last refresh is ~23:59 and the
+// next one 06:00, so the 23:00 readings must survive ~7h in the cache.
+const KEEP_S = 12 * 60 * 60;
+// Overnight rest, Malaysia time: no APIMS calls from 00:00 to 05:59. Updates
+// run 06:00-23:59 (the 6 AM through 11 PM hours); overnight the last evening
+// snapshot is served as-is.
+const REST_FROM_H = 0, REST_UNTIL_H = 6;
+
+export function isRestHour(now = new Date()) {
+  const h = new Date(now.getTime() + 8 * 3600e3).getUTCHours();
+  return h >= REST_FROM_H && h < REST_UNTIL_H;
+}
 const CACHE_KEY = "https://apims-proxy.internal/feed/v1";
 
 // Pollutant that set the index, per APIMS's own legend: "*" is PM10, "**" PM2.5.
@@ -214,8 +229,12 @@ export default {
     if (hit) {
       const age = (Date.now() - Number(hit.headers.get("X-Built-At") || 0)) / 1000;
       body = await hit.text();
-      state = age < FRESH_S ? "fresh" : "stale";
+      state = isRestHour() ? "resting" : age < FRESH_S ? "fresh" : "stale";
       if (state === "stale") ctx.waitUntil(refresh(cache).catch(() => {}));
+    } else if (isRestHour()) {
+      return new Response(JSON.stringify({ error: "resting overnight (00:00-06:00 MYT); no cached copy" }), {
+        status: 503, headers: { ...cors, "Content-Type": "application/json", "Retry-After": "3600" },
+      });
     } else {
       try { body = await refresh(cache); state = "miss"; }
       catch (e) {

@@ -1,7 +1,7 @@
 // Offline checks for the parse layer: node worker/apims-proxy/test.mjs
 // Mirrors tools/test_fetch_apims.py so the Worker and the Python fetcher agree.
 import assert from "node:assert/strict";
-import { apiValue, category, mytIso, parseMap, parseTable, merge, buildPayload } from "./src/index.js";
+import { isRestHour, apiValue, category, mytIso, parseMap, parseTable, merge, buildPayload } from "./src/index.js";
 
 for (const v of [null, "", "  ", "NA", "N/A", "n/a", "null", "-", -1, "-99", true, "abc"]) assert.equal(apiValue(v), null, String(v));
 assert.equal(apiValue(0), 0); assert.equal(apiValue("151"), 151); assert.equal(apiValue(99.6), 100);
@@ -30,4 +30,9 @@ const p = buildPayload(merged, []);
 assert.equal(p.meta.reporting, 1);
 assert.equal(p.meta.readings_as_of, "2026-10-11T12:00:00+08:00");
 assert.deepEqual(p.meta.categories, { Moderate: 1, "N/A": 1 });
+// Overnight rest is 00:00-05:59 MYT (= 16:00-21:59 UTC).
+assert.equal(isRestHour(new Date("2026-10-11T15:59:00Z")), false);  // 23:59 MYT
+assert.equal(isRestHour(new Date("2026-10-11T16:00:00Z")), true);   // 00:00 MYT
+assert.equal(isRestHour(new Date("2026-10-11T21:59:00Z")), true);   // 05:59 MYT
+assert.equal(isRestHour(new Date("2026-10-11T22:00:00Z")), false);  // 06:00 MYT
 console.log("apims-proxy: all checks passed");
