@@ -10,7 +10,7 @@ live independently without touching the UI.
 | 📈 **Macro** | `data/macro.json` | 🌱 seeded sample → Phase B backend |
 | 💳 **Card Promos** | `data/promotions.json` | ✅ live — daily scrape + AI summary |
 | 📊 **KLSE Monitor** | `data/klse.json` | ✅ real export from your SQLite |
-| 🌫️ **Air Quality** | `data/apims.json` | ✅ live — hourly from DOE APIMS |
+| 🌫️ **Air Quality** | live Worker (`config.js → apimsApi`), `data/apims.json` fallback | ✅ live — DOE APIMS, ≤10 min behind |
 
 ## Run it locally
 
@@ -153,11 +153,18 @@ latest reading + last 24 hours, from the keyless JSON endpoints behind
 python tools/fetch_apims.py     # -> data/apims.json
 ```
 
-The API only answers CORS for DOE's own site, so the browser can't call it — it's
-fetched by `.github/workflows/air-quality.yml` every hour (at :25) and published
-straight to Pages **without a commit** (the file is git-ignored; 24 commits/day of
-readings would bury the history). If a fetch fails, `tools/stage_site.sh` carries the
-live copy forward, and the tab's "readings as of" says how old it is.
+The API only answers CORS for DOE's own site, so the browser can't call it directly.
+The tab reads it **live** from `worker/apims-proxy`, a keyless Cloudflare Worker that
+serves the same shape as `data/apims.json` with CORS, caching for 10 minutes
+(stale-while-revalidate). Deploy: `cd worker/apims-proxy && npx wrangler deploy`;
+`node worker/apims-proxy/test.mjs` checks its parser offline.
+
+The live path exists because **GitHub's cron can't do hourly here**: scheduled runs on
+this repo start hours late or not at all (the daily 06:20 UTC job runs 11:47-14:52).
+`.github/workflows/air-quality.yml` still refreshes `data/apims.json` whenever GitHub
+does run it, and every deploy publishes a copy (uncommitted, git-ignored;
+`tools/stage_site.sh` carries the live one forward on a failed fetch). The tab uses
+whichever of the Worker or that snapshot has the newer readings, and says which.
 
 ### Version badge (`tools/stamp_version.py`)
 Every deploy stamps the staged site: `version.json` (deploy time, commit, trigger,

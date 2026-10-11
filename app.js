@@ -1152,7 +1152,7 @@ MODS.air = function initAir() {
   const KEY = 'air_station';
   const DEFAULT_STATION = 'CA15W';          // Batu Muda, Kuala Lumpur
   const STALE_MIN = 3 * 60;                 // newest reading this old = refresh is behind
-  let data = null, byId = {}, stateFilter = '', sort = { key: 'api', dir: -1 };
+  let data = null, byId = {}, stateFilter = '', sort = { key: 'api', dir: -1 }, via = '';
   let mine = (() => { try { return localStorage.getItem(KEY); } catch { return null; } })() || DEFAULT_STATION;
 
   const chip = api => `<span class="aqi-chip aqi-${aqBand(api).cls}">${api == null ? '—' : api}</span>`;
@@ -1265,12 +1265,14 @@ MODS.air = function initAir() {
     const behind = x => lagging(x) ? ` <span class="chip warn" title="Last reading ${esc(mytTime(x.at, true))}">behind</span>` : '';
 
     body.innerHTML = `
-      ${stale ? `<p class="status">⚠ The newest readings are ${m.readings_as_of ? esc(agoMin(m.readings_as_of)) : 'of unknown age'}. The hourly refresh may be running late (GitHub schedules are best-effort) or APIMS hasn't published — check <a href="${esc(m.source_url)}" target="_blank" rel="noopener">APIMS</a> for the current value.</p>` : ''}
+      ${stale ? `<p class="status">⚠ The newest readings are ${m.readings_as_of ? esc(agoMin(m.readings_as_of)) : 'of unknown age'}. APIMS may not have published recently, or the live feed is down and this is the site's older snapshot — check <a href="${esc(m.source_url)}" target="_blank" rel="noopener">APIMS</a> for the current value.</p>` : ''}
       <div class="freshline">
         <span>Readings as of <b>${m.readings_as_of ? esc(mytTime(m.readings_as_of, true)) + ' MYT' : '—'}</b>
           (${m.readings_as_of ? esc(agoMin(m.readings_as_of)) : 'unknown'})</span>
         <span>· <b>${live.length}/${all.length}</b> stations reporting</span>
-        <span>· feed fetched ${m.generated_at ? esc(agoMin(m.generated_at)) : '—'}, refreshed hourly</span>
+        <span>· ${via === 'live'
+          ? `<b>live</b>, fetched from APIMS ${m.generated_at ? esc(agoMin(m.generated_at)) : ''}`
+          : `site snapshot from ${m.generated_at ? esc(agoMin(m.generated_at)) : '—'} <span title="The live feed (apims-proxy Worker) couldn't be reached or was older">(live feed unavailable)</span>`}</span>
       </div>
 
       <div class="card-block aq-hero">
@@ -1345,9 +1347,32 @@ MODS.air = function initAir() {
     document.getElementById('air-state').addEventListener('change', e => { stateFilter = e.target.value; render(); });
   }
 
+  // Live from the apims-proxy Worker; the snapshot deployed with the site is
+  // the fallback, and whichever has the newer readings wins (so a Worker
+  // serving an old cached copy can't hide a fresher snapshot).
+  async function fetchFeed() {
+    const asOf = x => (x && x.meta && x.meta.readings_as_of) || '';
+    const timed = url => {
+      const ctl = new AbortController();
+      const t = setTimeout(() => ctl.abort(), 15000);
+      return fetch(url, { cache: 'no-store', signal: ctl.signal })
+        .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+        .finally(() => clearTimeout(t));
+    };
+    const [live, snap] = await Promise.allSettled([
+      CFG.apimsApi ? timed(CFG.apimsApi) : Promise.reject(new Error('no apimsApi')),
+      fetchJSON(CFG.feeds.apims),
+    ]);
+    const ok = live.status === 'fulfilled' && Array.isArray(live.value.stations) ? live.value : null;
+    const fb = snap.status === 'fulfilled' && Array.isArray(snap.value.stations) ? snap.value : null;
+    if (ok && (!fb || asOf(ok) >= asOf(fb))) { via = 'live'; return ok; }
+    if (fb) { via = 'snapshot'; return fb; }
+    throw (live.reason || snap.reason || new Error('no feed'));
+  }
+
   async function load(first) {
     let d;
-    try { d = await fetchJSON(CFG.feeds.apims); }
+    try { d = await fetchFeed(); }
     catch (e) {
       // A failed background refresh keeps the last good view on screen.
       if (first) body.innerHTML = `<div class="errbox">Couldn't load the air-quality feed (${esc(e.message)}). Expected at <code>${esc(CFG.feeds.apims)}</code> — generate it with <code>python tools/fetch_apims.py</code>, or see <a href="https://eqms.doe.gov.my/APIMS/main" target="_blank" rel="noopener">APIMS</a> directly.</div>`;

@@ -1,0 +1,15 @@
+{
+  // Deploy from this directory (no secrets needed — APIMS is public data):
+  //   cd worker/apims-proxy
+  //   npx wrangler deploy
+  //
+  // Then put the printed URL into config.js (apimsApi), or at runtime:
+  //   localStorage.setItem('apims_api', 'https://apims-proxy.<you>.workers.dev/apims')
+  "name": "apims-proxy",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-01",
+  "vars": {
+    // Sites that may read the feed. "" = any origin (it's public data anyway).
+    "ALLOWED_ORIGINS": "https://jgjy926.github.io,http://localhost:8099"
+  }
+}

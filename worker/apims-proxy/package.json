@@ -1,0 +1,5 @@
+{
+  "name": "apims-proxy",
+  "private": true,
+  "type": "module"
+}

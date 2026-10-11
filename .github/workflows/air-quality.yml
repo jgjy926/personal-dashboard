@@ -1,9 +1,9 @@
 name: Air quality (hourly)
 
-# The Air Quality tab follows DOE's APIMS, which publishes a new reading for
-# every station each hour. refresh.yml runs once a day, so this lighter job
-# refetches data/apims.json hourly and redeploys the site — about 30 seconds,
-# stdlib Python only, no installs.
+# The Air Quality tab reads APIMS LIVE from worker/apims-proxy. This job only
+# keeps the site's FALLBACK snapshot (data/apims.json) reasonably fresh for when
+# the Worker is unreachable — about 30 seconds, stdlib Python only. It is not
+# the primary path because GitHub's cron runs hours late on this repo.
 #
 # It deliberately does NOT commit: 24 commits a day of readings would bury the
 # repo's real history. The fresh feed rides along in the Pages deploy only, and

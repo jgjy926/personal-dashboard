@@ -15,6 +15,11 @@ window.DASH_CONFIG = {
   //   localStorage.setItem('promo_sync_api', 'https://promo-sync.<you>.workers.dev')
   // Leaving this blank makes Publish fall back to the download-and-commit flow.
   promoSyncApi: (localStorage.getItem('promo_sync_api') || 'https://promo-sync.jgjy926.workers.dev'),
+  // Live air-quality feed — the worker/apims-proxy Worker, which serves APIMS
+  // in the data/apims.json shape with CORS (refreshed within ~10 min of DOE
+  // publishing). The tab falls back to feeds.apims when this is unreachable.
+  // Override per-browser: localStorage.setItem('apims_api', 'https://…/apims')
+  apimsApi: (localStorage.getItem('apims_api') || 'https://apims-proxy.jgjy926.workers.dev/apims'),
   feeds: {
     // The forecasting engine's full snapshot: regime, recession probabilities,
     // factors, scenarios, market implications, model performance, data health.
