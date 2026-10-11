@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
-# Stage the dashboard for GitHub Pages and stamp its version. Used by every
-# deploy in refresh.yml and air-quality.yml.
+# Stage the dashboard for GitHub Pages and stamp its code version. Used by
+# every deploy in refresh.yml.
 #   tools/stage_site.sh <dest_dir> [live_site_base_url]
 #
 # Publishes the dashboard, not the workspace: the engine checkout (and its 66MB
 # database + model pickle) used to ride along to Pages on every run.
 #
-# data/apims.json is refreshed hourly and deliberately NOT committed (24
-# commits a day of nothing but air readings). So when this run's fetch failed
-# and there's no fresh copy, carry the one that's already live forward rather
-# than deploying a site with an empty Air Quality tab. Its own readings_as_of
-# still says how old it is.
+# data/apims.json is the Air Quality tab's FALLBACK (the tab reads APIMS live
+# from worker/apims-proxy) and is deliberately not committed. When this run's
+# fetch failed, carry the copy that's already live forward rather than
+# deploying without one. Its readings_as_of still says how old it is.
 set -eu
 dest="$1"; base="${2:-}"
 rsync -a --exclude .git --exclude macro-engine ./ "$dest/"

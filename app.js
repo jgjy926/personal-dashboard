@@ -1245,7 +1245,7 @@ MODS.air = function initAir() {
     const all = data.stations;
     const s = byId[mine];
     const b = aqBand(s.api);
-    // Updates rest 00:00-06:00 MYT (apims-proxy + air-quality.yml), so overnight
+    // Updates rest 00:00-06:00 MYT (worker/apims-proxy), so overnight
     // the 11 PM readings are expected to age; only flag them past that.
     const mytHour = new Date(Date.now() + 8 * 36e5).getUTCHours();
     const resting = mytHour < 6;
@@ -1394,18 +1394,20 @@ MODS.air = function initAir() {
     render();
   }
   load(true);
-  // The site redeploys hourly with new readings; an open tab picks them up
-  // without a reload.
+  // The live feed moves hourly; an open tab picks new readings up without a
+  // reload (and without the page's version changing — that tracks code only).
   setInterval(() => {
     if (!document.hidden && !document.getElementById('panel-air').hidden) load(false);
   }, 10 * 60e3);
 };
 
 // ── version badge ───────────────────────────────────────────────────────────
-/* Which build is live, and whether THIS page is it. version.json is written by
- * tools/stamp_version.py on every deploy; the page's own build id is stamped
- * into <meta name="build-id">. When they differ, a newer deploy has gone out
- * since this tab was loaded, and the badge says so. */
+/* Which CODE version is live, and whether THIS page is running it. version.json
+ * is written by tools/stamp_version.py on every deploy from the last commit that
+ * changed the page's code (data refreshes don't count); the page's own copy is
+ * stamped into <meta name="build-id">. When they differ, newer code has gone
+ * out since this tab was loaded, and the badge says so. Data freshness is each
+ * tab's own "as of" line, not this. */
 function initBuildBadge() {
   const btn = document.getElementById('build-badge');
   const pop = document.getElementById('build-pop');
@@ -1425,15 +1427,17 @@ function initBuildBadge() {
     }
     const c = live.commit || {};
     btn.textContent = outdated ? '↻ New version — reload' : `v${live.version}`;
-    btn.title = outdated ? 'A newer version has been deployed' : `Deployed ${agoMin(live.deployed_at)}`;
+    btn.title = outdated ? 'Newer code has been deployed since this page loaded'
+      : `Code version — last changed ${c.date ? agoMin(c.date) : 'unknown'}`;
     pop.innerHTML = `
       <table class="data-table kv"><tbody>
         <tr><td>Live version</td><td class="l"><b>v${esc(live.version)}</b></td></tr>
-        <tr><td>Deployed</td><td class="l">${esc(mytTime(live.deployed_at, true))} MYT · ${esc(agoMin(live.deployed_at))}<br>
-          <span class="muted">${esc(live.trigger || '')}${live.run_url ? ` · <a href="${esc(live.run_url)}" target="_blank" rel="noopener">run</a>` : ''}</span></td></tr>
-        <tr><td>Code</td><td class="l">${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener"><code>${esc(c.short)}</code></a>` : `<code>${esc(c.short || '?')}</code>`}
-          ${c.date ? `<span class="muted">${esc(new Date(c.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }))}</span>` : ''}
-          <br><span class="small">${esc(c.subject || '')}</span></td></tr>
+        <tr><td>Code changed</td><td class="l">${c.date ? `${esc(mytTime(c.date, true))} MYT · ${esc(agoMin(c.date))}` : '—'}
+          <br>${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener"><code>${esc(c.short)}</code></a>` : `<code>${esc(c.short || '?')}</code>`}
+          <span class="small">${esc(c.subject || '')}</span></td></tr>
+        <tr><td>Last deploy</td><td class="l"><span class="muted">${esc(mytTime(live.deployed_at, true))} MYT · ${esc(live.trigger || '')}${
+          live.run_url ? ` · <a href="${esc(live.run_url)}" target="_blank" rel="noopener">run</a>` : ''}<br>
+          Deploys also carry data refreshes; those don't change the version — each tab shows its own “as of”.</span></td></tr>
         <tr><td>This page</td><td class="l">${outdated
           ? `<span class="chip warn">older build</span> <code>${esc(mine)}</code>`
           : '<span class="chip ok">up to date</span>'}</td></tr>

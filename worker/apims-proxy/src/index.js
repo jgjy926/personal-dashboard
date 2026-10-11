@@ -1,11 +1,11 @@
 /**
  * apims-proxy — Malaysia's Air Pollutant Index, live, with CORS.
  *
- * Why this exists: the Air Quality tab used to rely on an hourly GitHub Actions
- * schedule to refresh data/apims.json, but GitHub treats cron as best-effort
- * and on this repo it runs hours late or not at all (the daily 06:20 UTC job
- * starts anywhere from 11:47 to 14:52). So the page now asks this Worker instead,
- * and falls back to the committed-with-the-site snapshot only if it's down.
+ * Why this exists: an hourly GitHub Actions schedule can't keep the tab current
+ * (GitHub treats cron as best-effort; on this repo the daily 06:20 UTC job starts
+ * anywhere from 11:47 to 14:52), and redeploying the site just for new readings
+ * mixed data into the site's version. So the data lives here: the page asks this
+ * Worker, and falls back to the snapshot deployed with the site only if it's down.
  *
  * The browser can't call APIMS itself: its API answers CORS only for DOE's own
  * origin. This Worker fetches the same keyless endpoints the APIMS map uses,

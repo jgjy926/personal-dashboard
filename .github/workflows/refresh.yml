@@ -75,6 +75,10 @@ jobs:
       needs_retrain: ${{ steps.engine.outputs.needs_retrain }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history (the repo is ~1MB): stamp_version.py looks past the
+          # bot's daily feed commits to the last CODE change for the version.
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -98,8 +102,8 @@ jobs:
         continue-on-error: true      # a Treasury outage must not block the deploy
         run: python tools/fetch_treasury.py
 
-      # Also refreshed hourly by air-quality.yml; fetched here too so a code
-      # push deploys with current readings rather than the carried-over copy.
+      # The tab reads APIMS live from worker/apims-proxy; this is only the
+      # fallback copy the site carries for when that Worker is unreachable.
       - name: Fetch Malaysia air quality (DOE APIMS, keyless)
         continue-on-error: true
         run: python tools/fetch_apims.py
@@ -196,8 +200,8 @@ jobs:
             data/macro.json data/promotions.json data/treasury.json \
             data/macro_engine.json data/backtest_result.json
 
-      # Copies the dashboard (not the workspace) and stamps version.json + the
-      # page's build id. configure-pages runs first for the live URL, which the
+      # Copies the dashboard (not the workspace) and stamps the CODE version
+      # (version.json + the page's build id). configure-pages runs first for the live URL, which the
       # stage script needs to carry the air-quality feed forward on a bad fetch.
       - id: pages
         uses: actions/configure-pages@v5
@@ -224,6 +228,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main              # the feeds build-and-deploy just pushed, not the trigger commit
+          fetch-depth: 0         # stamp_version.py needs history (see build-and-deploy)
 
       - uses: actions/setup-python@v5
         with:
@@ -265,8 +270,8 @@ jobs:
         run: |
           bash tools/commit_feeds.sh "chore: monthly model refit" data/macro_engine.json
 
-      # Copies the dashboard (not the workspace) and stamps version.json + the
-      # page's build id. configure-pages runs first for the live URL, which the
+      # Copies the dashboard (not the workspace) and stamps the CODE version
+      # (version.json + the page's build id). configure-pages runs first for the live URL, which the
       # stage script needs to carry the air-quality feed forward on a bad fetch.
       - id: pages
         uses: actions/configure-pages@v5

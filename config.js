@@ -30,8 +30,8 @@ window.DASH_CONFIG = {
     macro: 'data/macro.json',
     treasury: 'data/treasury.json',
     promotions: 'data/promotions.json',
-    // Malaysia Air Pollutant Index, all DOE stations, latest + last 24h.
-    // Written hourly by tools/fetch_apims.py (.github/workflows/air-quality.yml).
+    // Malaysia Air Pollutant Index — the FALLBACK for apimsApi above. Written by
+    // tools/fetch_apims.py on each deploy (refresh.yml), not committed.
     apims: 'data/apims.json'
   }
 };

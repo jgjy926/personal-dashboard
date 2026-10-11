@@ -144,7 +144,7 @@ so — the AI then has URLs it probably can't open.
 `node worker/promo-sync/test.mjs` exercises all of that offline against a stubbed GitHub —
 no deploy, no token, no network.
 
-### Air Quality — hourly (`tools/fetch_apims.py`)
+### Air Quality — live (`worker/apims-proxy`, fallback `tools/fetch_apims.py`)
 Malaysia's Air Pollutant Index for every DOE continuous monitoring station (68),
 latest reading + last 24 hours, from the keyless JSON endpoints behind
 <https://eqms.doe.gov.my/APIMS/main>. stdlib-only, ~1s:
@@ -159,20 +159,24 @@ serves the same shape as `data/apims.json` with CORS, caching for 10 minutes
 (stale-while-revalidate). Updates run 6 AM-11 PM MYT; overnight (00:00-06:00) it makes no APIMS calls and serves the evening copy. Deploy: `cd worker/apims-proxy && npx wrangler deploy`;
 `node worker/apims-proxy/test.mjs` checks its parser offline.
 
-The live path exists because **GitHub's cron can't do hourly here**: scheduled runs on
-this repo start hours late or not at all (the daily 06:20 UTC job runs 11:47-14:52).
-`.github/workflows/air-quality.yml` still refreshes `data/apims.json` whenever GitHub
-does run it, and every deploy publishes a copy (uncommitted, git-ignored;
+The live path exists because **GitHub's cron can't do hourly here** (scheduled runs on
+this repo start hours late or not at all), and because redeploying the site for every
+new reading would mix data into the site's version. `refresh.yml` still writes a
+fallback `data/apims.json` on each deploy (uncommitted, git-ignored;
 `tools/stage_site.sh` carries the live one forward on a failed fetch). The tab uses
 whichever of the Worker or that snapshot has the newer readings, and says which.
 
 ### Version badge (`tools/stamp_version.py`)
-Every deploy stamps the staged site: `version.json` (deploy time, commit, trigger,
-run link) and the page's own `<meta name="build-id">`. The header shows
-`v2026.10.11-1225` (deploy time, MYT); click it for the commit and run. An open tab
-re-checks every 5 min and flips to **↻ New version — reload** when a newer deploy is
-live. The script also rewrites the `?v=` cache-busters to the commit hash, so they no
-longer need bumping by hand. Served locally the badge reads *local dev build*.
+The version is the dashboard's **code**, not its data: `v2026.10.11-65c754d` is the
+date and hash of the last commit that changed the page itself. Commits that only touch
+`data/`, `tools/`, `worker/`, `.github/` or docs (e.g. the bot's daily feed refresh)
+don't change it. Data freshness lives on each tab ("Readings as of…", "fetched…").
+
+Each deploy writes `version.json` and stamps the page's `<meta name="build-id">`; an open
+tab re-checks every 5 min and shows **↻ New version — reload** only when newer code is
+live. The `?v=` cache-busters follow the same hash, so code changes always reach the
+browser and data-only deploys never force a re-download. Served locally the badge reads
+*local dev build*. (Needs full git history in CI: `fetch-depth: 0`.)
 
 ### Macro — seed now (`tools/seed_macro.py`), backend later
 `python tools/seed_macro.py` regenerates the sample `data/macro.json`. The Phase-B
