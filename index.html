@@ -4,18 +4,27 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Personal Dynamic Dashboard</title>
-  <link rel="stylesheet" href="styles.css?v=19" />
+  <!-- Filled in at deploy time by tools/stamp_version.py ("dev" when served
+       locally). The page compares it with version.json to spot a newer deploy. -->
+  <meta name="build-id" content="dev" />
+  <link rel="stylesheet" href="styles.css?v=20" />
 </head>
 <body>
   <header class="appbar">
     <div class="brand">
       <span class="logo">◧</span>
       <h1>Personal Dynamic Dashboard</h1>
+      <div class="build" id="build">
+        <button type="button" id="build-badge" class="build-badge" aria-expanded="false"
+                aria-controls="build-pop" title="Dashboard version">version…</button>
+        <div id="build-pop" class="build-pop" role="dialog" aria-label="Dashboard version" hidden></div>
+      </div>
     </div>
     <nav class="tabbar" role="tablist" aria-label="Dashboards">
       <button class="tab" id="tab-fx"       role="tab" data-tab="fx">💱 <span>FX Rates</span></button>
       <button class="tab" id="tab-macro"    role="tab" data-tab="macro">📈 <span>Macro Engine</span></button>
       <button class="tab" id="tab-campaign" role="tab" data-tab="campaign">💳 <span>Card Promos</span></button>
+      <button class="tab" id="tab-air"      role="tab" data-tab="air">🌫️ <span>Air Quality</span></button>
     </nav>
   </header>
 
@@ -102,12 +111,27 @@
       <div id="campaign-console" hidden></div>
     </section>
 
+    <!-- ───────────────────────── TAB 4 · AIR QUALITY ───────────────────────── -->
+    <section class="panel-tab" id="panel-air" role="tabpanel" aria-labelledby="tab-air" hidden>
+      <div class="tab-head">
+        <div>
+          <h2 class="tab-title">Air Pollutant Index — Malaysia</h2>
+          <p class="tab-sub">Hourly API from the Department of Environment's continuous monitoring
+             stations (APIMS). Pick your station; it's remembered on this device.</p>
+        </div>
+        <div class="controls">
+          <label class="ccy">My station <select id="air-station"></select></label>
+        </div>
+      </div>
+      <div id="air-body"><p class="muted loading">Loading air quality…</p></div>
+    </section>
+
   </main>
 
-  <script src="config.js?v=19"></script>
+  <script src="config.js?v=20"></script>
   <!-- The Macro tab is a ten-page application of its own; kept in its own file
        so app.js stays readable. Must load BEFORE app.js, which calls it. -->
-  <script src="macro-engine.js?v=19"></script>
-  <script src="app.js?v=19"></script>
+  <script src="macro-engine.js?v=20"></script>
+  <script src="app.js?v=20"></script>
 </body>
 </html>

@@ -25,3 +25,8 @@ __pycache__/
 
 # Worker deps, if you ever npm-install locally
 worker/**/node_modules/
+
+# Air-quality feed: refreshed hourly by .github/workflows/air-quality.yml and
+# published straight to Pages without a commit (24 commits/day of readings
+# would bury the real history). Run tools/fetch_apims.py for a local copy.
+data/apims.json

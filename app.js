@@ -1,4 +1,4 @@
-/* Personal Dynamic Dashboard — tab router + three tab modules.
+/* Personal Dynamic Dashboard — tab router + four tab modules.
  * Each tab renders from a JSON feed and lazy-initialises on first view.
  * Zero dependencies; charts are hand-rolled inline SVG.
  *
@@ -120,7 +120,7 @@ function lineChart(series, dates, opts = {}) {
 window.lineChart = lineChart;
 
 // ── tab controller ────────────────────────────────────────────────────────
-const TABS = ['fx', 'macro', 'campaign'];
+const TABS = ['fx', 'macro', 'campaign', 'air'];
 const started = {};
 const MODS = {}; // id -> init fn, registered below
 function showTab(id) {
@@ -1110,11 +1110,326 @@ MODS.campaign = async function initCampaign() {
   document.getElementById('csub-console').addEventListener('click', () => showSub('console'));
 };
 
+// ════════════════════════════════ TAB 4 · AIR QUALITY ═════════════════════
+/* Malaysia's Air Pollutant Index from DOE's APIMS, via data/apims.json (the
+ * upstream API only answers CORS for DOE's own site, so it can't be called from
+ * here — see tools/fetch_apims.py). Band colours are APIMS's own, so a reading
+ * looks the same here as on the official map. */
+const AQ_BANDS = [
+  { max: 50, name: 'Good', cls: 'good' },
+  { max: 100, name: 'Moderate', cls: 'moderate' },
+  { max: 200, name: 'Unhealthy', cls: 'unhealthy' },
+  { max: 300, name: 'Very Unhealthy', cls: 'very-unhealthy' },
+  { max: Infinity, name: 'Hazardous', cls: 'hazardous' },
+];
+const AQ_NA = { name: 'N/A', cls: 'na' };
+const aqBand = api => api == null ? AQ_NA : AQ_BANDS.find(b => api <= b.max);
+// General guidance per band — a plain-language summary of the public DOE/MOH
+// advice, not medical advice.
+const AQ_ADVICE = {
+  Good: 'Air quality is fine for everyone.',
+  Moderate: 'Acceptable for most. Unusually sensitive people may want to ease off long, strenuous outdoor exercise.',
+  Unhealthy: 'Cut down prolonged or strenuous outdoor activity — especially children, older adults and anyone with heart or lung conditions.',
+  'Very Unhealthy': 'Avoid outdoor activity and keep windows closed. Sensitive groups should stay indoors.',
+  Hazardous: 'Stay indoors and follow official instructions.',
+  'N/A': 'This station has no current reading.',
+};
+const mytTime = (iso, withDay) => new Date(iso).toLocaleString('en-GB', {
+  timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', hour12: false,
+  ...(withDay ? { weekday: 'short', day: 'numeric', month: 'short' } : {}) });
+function agoMin(iso) {
+  const m = Math.round((Date.now() - new Date(iso)) / 60000);
+  if (!Number.isFinite(m)) return 'unknown';
+  if (m < 1) return 'just now';
+  if (m < 60) return `${m} min ago`;
+  if (m < 48 * 60) return `${Math.round(m / 60)}h ago`;
+  return `${Math.round(m / 1440)}d ago`;
+}
+
+MODS.air = function initAir() {
+  const body = document.getElementById('air-body');
+  const sel = document.getElementById('air-station');
+  const KEY = 'air_station';
+  const DEFAULT_STATION = 'CA15W';          // Batu Muda, Kuala Lumpur
+  const STALE_MIN = 3 * 60;                 // newest reading this old = refresh is behind
+  let data = null, byId = {}, stateFilter = '', sort = { key: 'api', dir: -1 };
+  let mine = (() => { try { return localStorage.getItem(KEY); } catch { return null; } })() || DEFAULT_STATION;
+
+  const chip = api => `<span class="aqi-chip aqi-${aqBand(api).cls}">${api == null ? '—' : api}</span>`;
+  const valueAt = (s, hoursBack) => {
+    if (!s.at) return null;
+    const t = new Date(s.at).getTime() - hoursBack * 36e5;
+    const h = (s.history || []).find(x => new Date(x.t).getTime() === t);
+    return h ? h.api : null;
+  };
+  const delta = s => {
+    const then = valueAt(s, 3);
+    if (s.api == null || then == null) return '<span class="muted">—</span>';
+    const d = s.api - then;
+    if (d === 0) return '<span class="muted">±0</span>';
+    // A rising index is worse air, so up is red.
+    return `<span class="${d > 0 ? 'aq-worse' : 'aq-better'}">${d > 0 ? '▲' : '▼'} ${Math.abs(d)}</span>`;
+  };
+  const peak = s => {
+    const v = (s.history || []).map(h => h.api).filter(v => v != null);
+    return v.length ? Math.max(...v) : null;
+  };
+  // A station whose last reading is 3h+ behind the newest one anywhere.
+  const lagging = x => x.at && data.meta.readings_as_of
+    && (new Date(data.meta.readings_as_of) - new Date(x.at)) >= 3 * 36e5;
+
+  // 24h hourly bars, each coloured by its own band, with the band edges drawn
+  // in so "how close to Unhealthy" reads at a glance.
+  function bars(hist) {
+    const pts = (hist || []).slice(-25);
+    if (!pts.length) return '<p class="muted">No 24-hour history for this station.</p>';
+    const W = 860, H = 190, padL = 34, padR = 8, padT = 10, padB = 22;
+    const vals = pts.map(p => p.api).filter(v => v != null);
+    const top = Math.max(110, Math.ceil(Math.max(0, ...vals) * 1.12 / 10) * 10);
+    const y = v => padT + (1 - v / top) * (H - padT - padB);
+    const slot = (W - padL - padR) / pts.length, bw = Math.max(3, slot * 0.72);
+    const grid = [50, 100, 200, 300].filter(v => v < top).map(v =>
+      `<line x1="${padL}" x2="${W - padR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" class="aq-edge"/>
+       <text x="${padL - 5}" y="${(y(v) + 3).toFixed(1)}" text-anchor="end" class="aq-axis">${v}</text>`).join('');
+    const rects = pts.map((p, i) => {
+      const x = padL + i * slot + (slot - bw) / 2;
+      const lbl = `${mytTime(p.t, true)} — ${p.api == null ? 'no reading' : `API ${p.api} (${aqBand(p.api).name})`}`;
+      if (p.api == null) {
+        return `<rect x="${x.toFixed(1)}" y="${(H - padB - 2).toFixed(1)}" width="${bw.toFixed(1)}" height="2" class="aqi-fill-na"><title>${esc(lbl)}</title></rect>`;
+      }
+      const yy = y(p.api);
+      return `<rect x="${x.toFixed(1)}" y="${yy.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(1, H - padB - yy).toFixed(1)}" rx="2" class="aqi-fill-${aqBand(p.api).cls}"><title>${esc(lbl)}</title></rect>`;
+    }).join('');
+    // Every 3rd hour labelled, always including the newest.
+    let xl = '';
+    pts.forEach((p, i) => {
+      if ((pts.length - 1 - i) % 3) return;
+      xl += `<text x="${(padL + i * slot + slot / 2).toFixed(1)}" y="${H - 6}" text-anchor="middle" class="aq-axis">${mytTime(p.t)}</text>`;
+    });
+    return `<svg class="aq-bars" viewBox="0 0 ${W} ${H}" role="img" aria-label="Air Pollutant Index, last 24 hours">${grid}${rects}${xl}</svg>`;
+  }
+
+  function spark(hist) {
+    const v = (hist || []).slice(-24).map(h => h.api);
+    const ok = v.filter(x => x != null);
+    if (ok.length < 2) return '';
+    const W = 84, H = 22, lo = Math.min(...ok), hi = Math.max(...ok), rng = (hi - lo) || 1;
+    let pen = false;
+    const d = v.map((x, i) => {
+      if (x == null) { pen = false; return ''; }
+      const c = `${pen ? 'L' : 'M'}${(i / (v.length - 1) * (W - 2) + 1).toFixed(1)},${(H - 2 - (x - lo) / rng * (H - 4)).toFixed(1)}`;
+      pen = true; return c;
+    }).join('');
+    return `<svg class="aq-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true"><path d="${d}"/></svg>`;
+  }
+
+  function fillPicker() {
+    const groups = {};
+    data.stations.forEach(s => (groups[s.state] = groups[s.state] || []).push(s));
+    if (!byId[mine]) mine = byId[DEFAULT_STATION] ? DEFAULT_STATION : data.stations[0].id;
+    sel.innerHTML = Object.keys(groups).sort().map(st =>
+      `<optgroup label="${esc(st)}">${groups[st].map(s =>
+        `<option value="${esc(s.id)}"${s.id === mine ? ' selected' : ''}>${esc(s.location)}</option>`).join('')}</optgroup>`).join('');
+  }
+  function choose(id, scroll) {
+    if (!byId[id]) return;
+    mine = id; sel.value = id;
+    try { localStorage.setItem(KEY, id); } catch { /* private mode: just not remembered */ }
+    render();
+    if (scroll) document.getElementById('panel-air').scrollIntoView({ behavior: 'smooth' });
+  }
+  sel.addEventListener('change', () => choose(sel.value));
+
+  function render() {
+    const m = data.meta || {};
+    const all = data.stations;
+    const s = byId[mine];
+    const b = aqBand(s.api);
+    const stale = !m.readings_as_of || (Date.now() - new Date(m.readings_as_of)) / 60000 > STALE_MIN;
+
+    // Nationwide distribution, worst → cleanest.
+    const live = all.filter(x => x.api != null);
+    const counts = AQ_BANDS.map(bd => ({ ...bd, n: live.filter(x => aqBand(x.api) === bd).length }));
+    const na = all.length - live.length;
+    const ranked = [...live].sort((a, c) => c.api - a.api);
+    const li = x => `<li><button type="button" class="linkish aq-pick" data-id="${esc(x.id)}">${esc(x.location)}</button>
+      <span class="muted">${esc(x.state)}</span> ${chip(x.api)}</li>`;
+
+    const states = [...new Set(all.map(x => x.state))].sort();
+    const rows = all.filter(x => !stateFilter || x.state === stateFilter).sort((a, c) => {
+      if (sort.key === 'api') return ((a.api ?? -1) - (c.api ?? -1)) * sort.dir;
+      return String(a[sort.key]).localeCompare(String(c[sort.key])) * sort.dir;
+    });
+    const th = (k, label, cls = 'l') =>
+      `<th class="${cls} aq-sort" data-k="${k}" aria-sort="${sort.key === k ? (sort.dir < 0 ? 'descending' : 'ascending') : 'none'}">${label}${sort.key === k ? (sort.dir < 0 ? ' ↓' : ' ↑') : ''}</th>`;
+    const behind = x => lagging(x) ? ` <span class="chip warn" title="Last reading ${esc(mytTime(x.at, true))}">behind</span>` : '';
+
+    body.innerHTML = `
+      ${stale ? `<p class="status">⚠ The newest readings are ${m.readings_as_of ? esc(agoMin(m.readings_as_of)) : 'of unknown age'}. The hourly refresh may be running late (GitHub schedules are best-effort) or APIMS hasn't published — check <a href="${esc(m.source_url)}" target="_blank" rel="noopener">APIMS</a> for the current value.</p>` : ''}
+      <div class="freshline">
+        <span>Readings as of <b>${m.readings_as_of ? esc(mytTime(m.readings_as_of, true)) + ' MYT' : '—'}</b>
+          (${m.readings_as_of ? esc(agoMin(m.readings_as_of)) : 'unknown'})</span>
+        <span>· <b>${live.length}/${all.length}</b> stations reporting</span>
+        <span>· feed fetched ${m.generated_at ? esc(agoMin(m.generated_at)) : '—'}, refreshed hourly</span>
+      </div>
+
+      <div class="card-block aq-hero">
+        <div class="aq-hero-top">
+          <div class="aq-big aqi-${b.cls}">
+            <span class="aq-num">${s.api == null ? '—' : s.api}</span>
+            <span class="aq-cat">${esc(b.name)}</span>
+          </div>
+          <div class="aq-hero-info">
+            <h3>${esc(s.location)} <span class="muted">· ${esc(s.state)}</span></h3>
+            <p class="aq-advice">${esc(AQ_ADVICE[b.name])}</p>
+            <div class="aq-facts">
+              <span><span class="muted">Reading at</span> <b>${s.at ? esc(mytTime(s.at, true)) : '—'}</b>${behind(s)}</span>
+              <span><span class="muted">Main pollutant</span> <b>${esc(s.pollutant || '—')}</b></span>
+              <span><span class="muted">vs 3h ago</span> <b>${delta(s)}</b></span>
+              <span><span class="muted">24h peak</span> <b>${peak(s) ?? '—'}</b></span>
+            </div>
+          </div>
+        </div>
+        <h3 class="aq-sub">Last 24 hours</h3>
+        ${bars(s.history)}
+      </div>
+
+      <div class="aq-split">
+        <div class="card-block">
+          <h3>Across Malaysia</h3>
+          <div class="aq-dist" role="img" aria-label="${esc(counts.map(c => `${c.n} ${c.name}`).join(', '))}">
+            ${counts.filter(c => c.n).map(c => `<span class="aqi-${c.cls}" style="flex:${c.n}" title="${c.n} ${esc(c.name)}">${c.n}</span>`).join('')}
+          </div>
+          <div class="aq-legend">${counts.map(c =>
+            `<span><span class="aq-sw aqi-${c.cls}"></span>${esc(c.name)} <b>${c.n}</b></span>`).join('')}
+            ${na ? `<span><span class="aq-sw aqi-na"></span>No reading <b>${na}</b></span>` : ''}</div>
+          <p class="muted small">Good 0–50 · Moderate 51–100 · Unhealthy 101–200 · Very Unhealthy 201–300 · Hazardous &gt;300</p>
+        </div>
+        <div class="card-block">
+          <h3>Worst now</h3><ol class="aq-rank">${ranked.slice(0, 5).map(li).join('')}</ol>
+          <h3 class="aq-sub">Cleanest now</h3><ol class="aq-rank">${ranked.slice(-5).reverse().map(li).join('')}</ol>
+        </div>
+      </div>
+
+      <div class="card-block">
+        <div class="block-head">
+          <h3>All stations <span class="muted">— tap a row to make it your station</span></h3>
+          <label class="ccy">State <select id="air-state"><option value="">All states</option>${states.map(st =>
+            `<option${st === stateFilter ? ' selected' : ''}>${esc(st)}</option>`).join('')}</select></label>
+        </div>
+        <div class="table-scroll"><table class="data-table aq-table">
+          <thead><tr>${th('location', 'Station')}${th('state', 'State')}${th('api', 'API', 'num')}
+            <th class="l">Pollutant</th><th class="num">vs 3h</th><th class="num">24h peak</th><th class="l">24h</th></tr></thead>
+          <tbody>${rows.map(x => `<tr data-id="${esc(x.id)}"${x.id === mine ? ' class="next-up"' : ''}>
+            <td class="l"><b>${esc(x.location)}</b>${behind(x)}</td>
+            <td class="l">${esc(x.state)}</td>
+            <td class="num">${chip(x.api)}</td>
+            <td class="l">${esc(x.pollutant || '—')}</td>
+            <td class="num">${delta(x)}</td>
+            <td class="num">${peak(x) ?? '—'}</td>
+            <td class="l">${spark(x.history)}</td></tr>`).join('')}</tbody>
+        </table></div>
+      </div>
+
+      <div class="freshline"><span>Source: <a href="${esc(m.source_url)}" target="_blank" rel="noopener">${esc(m.source || 'DOE APIMS')}</a>
+        · The API is an hourly index (higher = worse) set by whichever pollutant is highest — usually PM2.5.
+        Guidance is general, not medical advice.</span></div>`;
+
+    body.querySelectorAll('.aq-pick').forEach(el => el.addEventListener('click', () => choose(el.dataset.id, true)));
+    body.querySelectorAll('.aq-table tbody tr').forEach(tr => tr.addEventListener('click', () => choose(tr.dataset.id, true)));
+    body.querySelectorAll('.aq-sort').forEach(el => el.addEventListener('click', () => {
+      const k = el.dataset.k;
+      sort = sort.key === k ? { key: k, dir: -sort.dir } : { key: k, dir: k === 'api' ? -1 : 1 };
+      render();
+    }));
+    document.getElementById('air-state').addEventListener('change', e => { stateFilter = e.target.value; render(); });
+  }
+
+  async function load(first) {
+    let d;
+    try { d = await fetchJSON(CFG.feeds.apims); }
+    catch (e) {
+      // A failed background refresh keeps the last good view on screen.
+      if (first) body.innerHTML = `<div class="errbox">Couldn't load the air-quality feed (${esc(e.message)}). Expected at <code>${esc(CFG.feeds.apims)}</code> — generate it with <code>python tools/fetch_apims.py</code>, or see <a href="https://eqms.doe.gov.my/APIMS/main" target="_blank" rel="noopener">APIMS</a> directly.</div>`;
+      return;
+    }
+    if (!d || !Array.isArray(d.stations) || !d.stations.length) {
+      if (first) body.innerHTML = '<div class="emptybox">The air-quality feed has no stations in it.</div>';
+      return;
+    }
+    data = d;
+    byId = Object.fromEntries(d.stations.map(x => [x.id, x]));
+    fillPicker();
+    render();
+  }
+  load(true);
+  // The site redeploys hourly with new readings; an open tab picks them up
+  // without a reload.
+  setInterval(() => {
+    if (!document.hidden && !document.getElementById('panel-air').hidden) load(false);
+  }, 10 * 60e3);
+};
+
+// ── version badge ───────────────────────────────────────────────────────────
+/* Which build is live, and whether THIS page is it. version.json is written by
+ * tools/stamp_version.py on every deploy; the page's own build id is stamped
+ * into <meta name="build-id">. When they differ, a newer deploy has gone out
+ * since this tab was loaded, and the badge says so. */
+function initBuildBadge() {
+  const btn = document.getElementById('build-badge');
+  const pop = document.getElementById('build-pop');
+  if (!btn || !pop) return;
+  const mine = (document.querySelector('meta[name="build-id"]') || {}).content || 'dev';
+  let live = null;
+
+  function paint() {
+    const outdated = !!live && mine !== 'dev' && live.build_id !== mine;
+    btn.classList.toggle('outdated', outdated);
+    if (!live) {
+      btn.textContent = mine === 'dev' ? 'local dev build' : 'version unknown';
+      pop.innerHTML = mine === 'dev'
+        ? '<p class="small">Served locally, so there is no <code>version.json</code>. Deployed builds show their version here.</p>'
+        : `<p class="small">This page is build <code>${esc(mine)}</code>; the live version couldn't be checked.</p>`;
+      return;
+    }
+    const c = live.commit || {};
+    btn.textContent = outdated ? '↻ New version — reload' : `v${live.version}`;
+    btn.title = outdated ? 'A newer version has been deployed' : `Deployed ${agoMin(live.deployed_at)}`;
+    pop.innerHTML = `
+      <table class="data-table kv"><tbody>
+        <tr><td>Live version</td><td class="l"><b>v${esc(live.version)}</b></td></tr>
+        <tr><td>Deployed</td><td class="l">${esc(mytTime(live.deployed_at, true))} MYT · ${esc(agoMin(live.deployed_at))}<br>
+          <span class="muted">${esc(live.trigger || '')}${live.run_url ? ` · <a href="${esc(live.run_url)}" target="_blank" rel="noopener">run</a>` : ''}</span></td></tr>
+        <tr><td>Code</td><td class="l">${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener"><code>${esc(c.short)}</code></a>` : `<code>${esc(c.short || '?')}</code>`}
+          ${c.date ? `<span class="muted">${esc(new Date(c.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }))}</span>` : ''}
+          <br><span class="small">${esc(c.subject || '')}</span></td></tr>
+        <tr><td>This page</td><td class="l">${outdated
+          ? `<span class="chip warn">older build</span> <code>${esc(mine)}</code>`
+          : '<span class="chip ok">up to date</span>'}</td></tr>
+      </tbody></table>
+      ${outdated ? '<button type="button" class="build-reload">↻ Reload to the new version</button>' : ''}`;
+    const r = pop.querySelector('.build-reload');
+    if (r) r.addEventListener('click', () => location.reload());
+  }
+  async function check() {
+    try { live = await fetchJSON('version.json'); } catch { /* keep the last known */ }
+    paint();
+  }
+  const setOpen = open => { pop.hidden = !open; btn.setAttribute('aria-expanded', String(open)); };
+  btn.addEventListener('click', e => { e.stopPropagation(); setOpen(pop.hidden); });
+  document.addEventListener('click', e => { if (!pop.hidden && !pop.contains(e.target)) setOpen(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
+  setInterval(() => { if (!document.hidden) check(); }, 5 * 60e3);
+  check();
+}
+
 /* The KLSE Monitor tab was removed when the Macro tab became the full
  * forecasting engine. AlphaSpike keeps its own Streamlit dashboard; its
  * exporter (tools/export_klse.py) and data/klse.json are left in place so the
  * tab can be restored by re-adding the panel to index.html and the module here. */
 
 // ── boot ────────────────────────────────────────────────────────────────────
+initBuildBadge();
 showTab((location.hash || '#fx').slice(1));
 window.addEventListener('hashchange', () => showTab((location.hash || '#fx').slice(1)));

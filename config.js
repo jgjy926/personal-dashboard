@@ -1,6 +1,6 @@
 /* Single source of truth for where each tab gets its data.
  * Every tab renders from a JSON feed: Tab 1 (FX) from the live Worker API;
- * Tabs 2–3 from local data/*.json. Override the FX API at runtime via
+ * Tabs 2–4 from local data/*.json. Override the FX API at runtime via
  *   localStorage.setItem('fx_api', 'https://your-worker.workers.dev')
  *
  * The KLSE Monitor tab was removed when the Macro tab became the full
@@ -24,6 +24,9 @@ window.DASH_CONFIG = {
     // the engine's "Series Monitor" sub-page. Written by tools/fetch_macro.py.
     macro: 'data/macro.json',
     treasury: 'data/treasury.json',
-    promotions: 'data/promotions.json'
+    promotions: 'data/promotions.json',
+    // Malaysia Air Pollutant Index, all DOE stations, latest + last 24h.
+    // Written hourly by tools/fetch_apims.py (.github/workflows/air-quality.yml).
+    apims: 'data/apims.json'
   }
 };

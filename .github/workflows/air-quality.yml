@@ -1,0 +1,56 @@
+name: Air quality (hourly)
+
+# The Air Quality tab follows DOE's APIMS, which publishes a new reading for
+# every station each hour. refresh.yml runs once a day, so this lighter job
+# refetches data/apims.json hourly and redeploys the site — about 30 seconds,
+# stdlib Python only, no installs.
+#
+# It deliberately does NOT commit: 24 commits a day of readings would bury the
+# repo's real history. The fresh feed rides along in the Pages deploy only, and
+# tools/stage_site.sh carries the live copy forward whenever a fetch fails, so
+# no deploy (from here or refresh.yml) ever publishes an empty tab.
+#
+# :25 past the hour: APIMS has the new hour by then, and it stays clear of the
+# top-of-the-hour rush when GitHub delays scheduled runs the most. Even so,
+# GitHub treats cron as best-effort; the tab shows "readings as of" and the
+# header shows when the site was last deployed, so a late run is visible.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "25 * * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Shared with refresh.yml so two deploys never race each other.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  refresh-air:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main                  # deploy the latest code + committed feeds
+
+      - name: Fetch Malaysia air quality (DOE APIMS, keyless)
+        continue-on-error: true      # stage_site.sh carries the live copy forward
+        run: python3 tools/fetch_apims.py
+
+      - id: pages
+        uses: actions/configure-pages@v5
+      - name: Stage the site
+        run: bash tools/stage_site.sh "$RUNNER_TEMP/site" "${{ steps.pages.outputs.base_url }}"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/site
+      - id: deploy
+        uses: actions/deploy-pages@v4

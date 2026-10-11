@@ -98,6 +98,12 @@ jobs:
         continue-on-error: true      # a Treasury outage must not block the deploy
         run: python tools/fetch_treasury.py
 
+      # Also refreshed hourly by air-quality.yml; fetched here too so a code
+      # push deploys with current readings rather than the carried-over copy.
+      - name: Fetch Malaysia air quality (DOE APIMS, keyless)
+        continue-on-error: true
+        run: python tools/fetch_apims.py
+
       # ── FULL path only: promo scrape + summariser ───────────────────────
       - name: Install scraper deps
         if: env.FULL == 'true'
@@ -190,11 +196,13 @@ jobs:
             data/macro.json data/promotions.json data/treasury.json \
             data/macro_engine.json data/backtest_result.json
 
-      # Publish the dashboard, not the workspace: the engine checkout (and its
-      # 66MB database + model pickle) used to ride along to Pages on every run.
+      # Copies the dashboard (not the workspace) and stamps version.json + the
+      # page's build id. configure-pages runs first for the live URL, which the
+      # stage script needs to carry the air-quality feed forward on a bad fetch.
+      - id: pages
+        uses: actions/configure-pages@v5
       - name: Stage the site
-        run: rsync -a --exclude .git --exclude macro-engine ./ "$RUNNER_TEMP/site/"
-      - uses: actions/configure-pages@v5
+        run: bash tools/stage_site.sh "$RUNNER_TEMP/site" "${{ steps.pages.outputs.base_url }}"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ runner.temp }}/site   # index.html is at the repo root; klse.json is git-ignored
@@ -257,11 +265,13 @@ jobs:
         run: |
           bash tools/commit_feeds.sh "chore: monthly model refit" data/macro_engine.json
 
-      # Publish the dashboard, not the workspace: the engine checkout (and its
-      # 66MB database + model pickle) used to ride along to Pages on every run.
+      # Copies the dashboard (not the workspace) and stamps version.json + the
+      # page's build id. configure-pages runs first for the live URL, which the
+      # stage script needs to carry the air-quality feed forward on a bad fetch.
+      - id: pages
+        uses: actions/configure-pages@v5
       - name: Stage the site
-        run: rsync -a --exclude .git --exclude macro-engine ./ "$RUNNER_TEMP/site/"
-      - uses: actions/configure-pages@v5
+        run: bash tools/stage_site.sh "$RUNNER_TEMP/site" "${{ steps.pages.outputs.base_url }}"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ runner.temp }}/site   # index.html is at the repo root; klse.json is git-ignored

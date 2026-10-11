@@ -1,6 +1,6 @@
 # Personal Dynamic Dashboard
 
-One static site, four tabs, one design system. Every tab renders from a JSON feed,
+One static site, several tabs, one design system. Every tab renders from a JSON feed,
 so the frontend is decoupled from four very different backends and each feed can go
 live independently without touching the UI.
 
@@ -10,6 +10,7 @@ live independently without touching the UI.
 | 📈 **Macro** | `data/macro.json` | 🌱 seeded sample → Phase B backend |
 | 💳 **Card Promos** | `data/promotions.json` | ✅ live — daily scrape + AI summary |
 | 📊 **KLSE Monitor** | `data/klse.json` | ✅ real export from your SQLite |
+| 🌫️ **Air Quality** | `data/apims.json` | ✅ live — hourly from DOE APIMS |
 
 ## Run it locally
 
@@ -143,6 +144,29 @@ so — the AI then has URLs it probably can't open.
 `node worker/promo-sync/test.mjs` exercises all of that offline against a stubbed GitHub —
 no deploy, no token, no network.
 
+### Air Quality — hourly (`tools/fetch_apims.py`)
+Malaysia's Air Pollutant Index for every DOE continuous monitoring station (68),
+latest reading + last 24 hours, from the keyless JSON endpoints behind
+<https://eqms.doe.gov.my/APIMS/main>. stdlib-only, ~1s:
+
+```bash
+python tools/fetch_apims.py     # -> data/apims.json
+```
+
+The API only answers CORS for DOE's own site, so the browser can't call it — it's
+fetched by `.github/workflows/air-quality.yml` every hour (at :25) and published
+straight to Pages **without a commit** (the file is git-ignored; 24 commits/day of
+readings would bury the history). If a fetch fails, `tools/stage_site.sh` carries the
+live copy forward, and the tab's "readings as of" says how old it is.
+
+### Version badge (`tools/stamp_version.py`)
+Every deploy stamps the staged site: `version.json` (deploy time, commit, trigger,
+run link) and the page's own `<meta name="build-id">`. The header shows
+`v2026.10.11-1225` (deploy time, MYT); click it for the commit and run. An open tab
+re-checks every 5 min and flips to **↻ New version — reload** when a newer deploy is
+live. The script also rewrites the `?v=` cache-busters to the commit hash, so they no
+longer need bumping by hand. Served locally the badge reads *local dev build*.
+
 ### Macro — seed now (`tools/seed_macro.py`), backend later
 `python tools/seed_macro.py` regenerates the sample `data/macro.json`. The Phase-B
 backend must emit this same shape (see below).
@@ -180,6 +204,9 @@ mirror this. Not scraped rather than half-built on fragile markup.
 - **`treasury.json`** — `meta{sources,note}`, `upcoming_auctions[]`
   (`{auction_date,issue_date,maturity_date,security_type,term,rate,cusip}`),
   `recent_buybacks[]` (`{operation_date,settlement_date,operation_type,maturity_bucket,par_accepted}`).
+- **`apims.json`** — `meta{generated_at,readings_as_of,source_url,station_count,reporting,categories}`,
+  `stations[]` (`{id,location,state,lat,lon,api,pollutant,category,at,history[{t,api}]}`); times are
+  `+08:00`, `api: null` means no reading (never 0).
 - **`klse.json`** — `meta`, `funnel{run_date,stages[]}`, `conviction{run_date,rows[]}`,
   `signals{hit_rate,resolved,total,avg_fwd_ret_20,recent[]}`, `trades{count,win_rate,avg_alpha_pct,recent[]}`, `positions[]`.
 
