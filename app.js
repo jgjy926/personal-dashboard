@@ -139,6 +139,20 @@ function showTab(id) {
 document.querySelectorAll('.tab').forEach(b =>
   b.addEventListener('click', () => showTab(b.dataset.tab)));
 
+// Back-to-top: shown once the page is scrolled past roughly one screen.
+(function () {
+  const btn = document.getElementById('to-top');
+  if (!btn) return;
+  const sync = () => { btn.hidden = window.scrollY < window.innerHeight * 0.8; };
+  window.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync);
+  btn.addEventListener('click', () => {
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+  });
+  sync();
+})();
+
 // ════════════════════════════════ TAB 1 · FX ══════════════════════════════
 MODS.fx = function initFX() {
   const API = CFG.fxApi;

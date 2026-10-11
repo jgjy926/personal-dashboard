@@ -575,3 +575,11 @@ code.hash { font-size: 10.5px; color: var(--muted); }
 .aq-sort:hover { color: var(--ink); }
 .aq-spark { display: block; }
 .aq-spark path { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+
+/* ── back-to-top ─────────────────────────────────────────────────────────── */
+.to-top { position: fixed; right: 18px; bottom: 18px; z-index: 20; width: 44px; height: 44px;
+  border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--accent);
+  font-size: 20px; line-height: 1; cursor: pointer; box-shadow: 0 2px 8px rgba(16,24,40,.18); }
+.to-top:hover { border-color: var(--accent); background: var(--accent-soft); }
+.to-top[hidden] { display: none; }
+@media (max-width: 680px) { .to-top { right: 16px; bottom: 16px; } }

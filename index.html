@@ -7,7 +7,7 @@
   <!-- The code version, filled in at deploy time by tools/stamp_version.py
        ("dev" when served locally). Compared with version.json to spot new code. -->
   <meta name="build-id" content="dev" />
-  <link rel="stylesheet" href="styles.css?v=20" />
+  <link rel="stylesheet" href="styles.css?v=21" />
 </head>
 <body>
   <header class="appbar">
@@ -128,10 +128,12 @@
 
   </main>
 
-  <script src="config.js?v=20"></script>
+  <button type="button" id="to-top" class="to-top" aria-label="Back to top" title="Back to top" hidden>↑</button>
+
+  <script src="config.js?v=21"></script>
   <!-- The Macro tab is a ten-page application of its own; kept in its own file
        so app.js stays readable. Must load BEFORE app.js, which calls it. -->
-  <script src="macro-engine.js?v=20"></script>
-  <script src="app.js?v=20"></script>
+  <script src="macro-engine.js?v=21"></script>
+  <script src="app.js?v=21"></script>
 </body>
 </html>
