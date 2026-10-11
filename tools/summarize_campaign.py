@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
 summarize_campaign.py — write the missing `tnc_summary` / `period` fields straight
-into data/promotions.json, so a new promo goes live summarised with no human step.
+into the campaign feeds (data/promos/*.json), so a new promo goes live summarised
+with no human step. Merchant-deal feeds (meta.kind "deal") are skipped: their
+text is the bank's own, published on the deal card.
 
 This replaces the Card Promos 🛠️ Console round-trip (download bundle → paste into an
 AI → upload the reply → download the merged file → drop it into data/). That loop is
@@ -9,7 +11,7 @@ manual for exactly one reason: the Console runs in the browser, and a browser pa
 cannot write back into the repo. Anything with filesystem access can — which is what
 this is.
 
-Two modes, both ending with promotions.json updated in place:
+Two modes, both ending with the feeds updated in place:
 
   auto (default)   Reads each promo's poster image and official T&C PDF with the
                    Anthropic API (vision) and writes the summary itself. Needs
@@ -48,11 +50,9 @@ import re
 import requests
 
 from merge_campaign import end_date_from_period
+from promo_feed import live_feeds
 
-HERE = os.path.dirname(os.path.abspath(__file__))
 ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-ROOT = os.path.dirname(HERE)
-LIVE = os.path.join(ROOT, "data", "promotions.json")
 
 UA = {"User-Agent": "Mozilla/5.0 (compatible; personal-dashboard/1.0)"}
 
@@ -98,6 +98,7 @@ def load(path):
 def save(path, doc):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(doc, f, indent=2, ensure_ascii=False)
+        f.write("\n")
 
 
 def fetch_pdf_b64(url):
@@ -176,7 +177,8 @@ def apply_map(doc, mapping, force=False):
 def main() -> int:
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--file", default=LIVE, help="promotions.json to update in place")
+    ap.add_argument("--file", action="append",
+                    help="feed to update in place (repeatable; default: every campaign feed in data/promos/)")
     ap.add_argument("--apply", metavar="JSON",
                     help="apply an {id: {period, tnc_summary}} map instead of calling the API")
     ap.add_argument("--id", action="append", help="restrict to these promo ids (repeatable)")
@@ -187,17 +189,29 @@ def main() -> int:
                     help="print what would be written, change nothing")
     args = ap.parse_args()
 
-    doc = load(args.file)
+    feeds = {path: load(path) for path in (args.file or live_feeds())}
+    feeds = {path: doc for path, doc in feeds.items()
+             if (doc.get("meta") or {}).get("kind", "campaign") != "deal"}
     dry = " (dry run)" if args.dry_run else ""
 
+    def save_changed(paths):
+        if not args.dry_run:
+            for path in paths:
+                save(path, feeds[path])
+
     if args.apply:
-        written = apply_map(doc, load(args.apply), force=args.force)
-        if written and not args.dry_run:
-            save(args.file, doc)
+        mapping = load(args.apply)
+        written, changed = [], []
+        for path, doc in feeds.items():
+            got = apply_map(doc, mapping, force=args.force)
+            if got:
+                written += got
+                changed.append(path)
+        save_changed(changed)
         print(f"[summarize] applied {len(written)} summary/ies{dry}: {', '.join(written) or '-'}")
         return 0
 
-    todo = [p for p in doc.get("promotions", [])
+    todo = [(path, p) for path, doc in feeds.items() for p in doc.get("promotions", [])
             if (args.force or not p.get("tnc_summary"))
             and (not args.id or p.get("id") in args.id)]
     if not todo:
@@ -216,8 +230,8 @@ def main() -> int:
         return 0
 
     client = anthropic.Anthropic()
-    written, review = [], []
-    for p in todo:
+    written, review, changed = [], [], set()
+    for path, p in todo:
         print(f"[summarize] {p['id']} - {p.get('title', '')[:70]}")
         try:
             got, usage = summarize_one(client, p, args.model)
@@ -229,13 +243,13 @@ def main() -> int:
             review.append((p["id"], note))
             print(f"    left empty for review: {note}")
             continue
-        if apply_map(doc, {p["id"]: got}, force=args.force):
+        if apply_map(feeds[path], {p["id"]: got}, force=args.force):
             written.append(p["id"])
+            changed.add(path)
         print(f"    {got.get('period', '')} | {got['tnc_summary'][:100]}"
               f"  [{usage.input_tokens} in / {usage.output_tokens} out]")
 
-    if written and not args.dry_run:
-        save(args.file, doc)
+    save_changed(sorted(changed))
     print(f"\n[summarize] wrote {len(written)} summary/ies{dry}.")
     if review:
         print("[summarize] needs a human eye (left blank rather than guessed):")

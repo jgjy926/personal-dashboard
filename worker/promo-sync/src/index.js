@@ -6,10 +6,16 @@
  * you a file to drop into data/ and commit by hand. This Worker closes that
  * loop. The Console POSTs the summaries here with a passphrase; the Worker
  * holds the GitHub token (as a Worker secret, never in the browser), commits
- * data/promotions.json, and GitHub Actions redeploys the site.
+ * the feed each promo lives in (data/promos/<bank>.json), and GitHub Actions
+ * redeploys the site.
+ *
+ * The promos are split one feed per source (Public Bank, HLB, UOB…), and the
+ * browser doesn't say which file an id is in: the Worker reads every file in
+ * PROMO_FILES, applies each summary where its id lives, and commits only the
+ * files that changed (one commit each).
  *
  * Design note — the browser sends SUMMARIES, not a whole file. It would be
- * simpler to POST the merged promotions.json the page already built, but the
+ * simpler to POST the merged feed the page already built, but the
  * page's copy of the feed is as old as the tab: the daily scrape may have added
  * promos since it loaded, and committing that stale copy would delete them.
  * So the Worker re-reads the live file from GitHub and applies the summaries to
@@ -28,11 +34,13 @@
  *   secret SYNC_KEY         the passphrase the Console must present
  *   var    GITHUB_REPO      "owner/name"
  *   var    GITHUB_BRANCH    default "main"
- *   var    FILE_PATH        default "data/promotions.json"
+ *   var    PROMO_FILES      comma-separated feeds a summary may land in;
+ *                           default DEFAULT_PROMO_FILES below (a missing file
+ *                           is skipped, so a feed can be added before it exists)
  *   var    ALLOWED_ORIGINS  comma-separated; empty = any origin (the SYNC_KEY
  *                           is still required either way)
  *   var    POSTER_HOSTS     comma-separated hosts /poster may fetch from;
- *                           default "www.pbebank.com"
+ *                           default DEFAULT_POSTER_HOSTS below
  */
 
 const GH = "https://api.github.com";
@@ -94,7 +102,7 @@ function json(body, status, extra) {
 }
 
 // ── poster proxy ───────────────────────────────────────────────────────────
-const DEFAULT_POSTER_HOSTS = "www.pbebank.com";
+const DEFAULT_POSTER_HOSTS = "www.pbebank.com,www.hlb.com.my,www.uob.com.my";
 const MAX_POSTER_BYTES = 10 * 1024 * 1024;
 
 /** Re-serve one campaign poster with CORS so the Console can read its bytes.
@@ -158,6 +166,7 @@ function ghHeaders(env) {
 async function readFile(env, path, branch) {
   const url = `${GH}/repos/${env.GITHUB_REPO}/contents/${path}?ref=${encodeURIComponent(branch)}`;
   const r = await fetch(url, { headers: ghHeaders(env) });
+  if (r.status === 404) return null;
   if (!r.ok) throw new Error(`GitHub read ${r.status}: ${(await r.text()).slice(0, 300)}`);
   const meta = await r.json();
   return { sha: meta.sha, doc: JSON.parse(b64ToText(meta.content)) };
@@ -209,6 +218,14 @@ function applySummaries(doc, summaries, force) {
   return { applied, skipped, unknown };
 }
 
+// Merchant-deal feeds take no summaries (their text is the bank's own), so
+// they are left out by default.
+const DEFAULT_PROMO_FILES = "data/promos/pbb.json,data/promos/hlb.json,data/promos/uob.json";
+
+function promoFiles(env) {
+  return (env.PROMO_FILES || DEFAULT_PROMO_FILES).split(",").map((s) => s.trim()).filter(Boolean);
+}
+
 // ── handler ────────────────────────────────────────────────────────────────
 export default {
   async fetch(request, env) {
@@ -220,7 +237,7 @@ export default {
       return json({
         ok: true,
         repo: env.GITHUB_REPO,
-        path: env.FILE_PATH || "data/promotions.json",
+        files: promoFiles(env),
         poster_hosts: (env.POSTER_HOSTS || DEFAULT_POSTER_HOSTS).split(",").map((s) => s.trim()),
       }, 200, cors);
     }
@@ -256,32 +273,44 @@ export default {
     if (ids.length > 100) return json({ error: "Too many summaries in one request (max 100)." }, 400, cors);
 
     const branch = env.GITHUB_BRANCH || "main";
-    const path = env.FILE_PATH || "data/promotions.json";
 
     try {
-      const { doc, sha } = await readFile(env, path, branch);
-      const result = applySummaries(doc, summaries, body.force === true);
+      const applied = [];
+      const skipped = [];
+      const commits = [];
+      const seen = new Set();
+      for (const path of promoFiles(env)) {
+        const file = await readFile(env, path, branch);
+        if (!file) continue;
+        const { doc, sha } = file;
+        const here = new Set((doc.promotions || []).map((p) => p.id));
+        const mine = Object.fromEntries(Object.entries(summaries).filter(([id]) => here.has(id)));
+        Object.keys(mine).forEach((id) => seen.add(id));
+        if (!Object.keys(mine).length) continue;
+        const result = applySummaries(doc, mine, body.force === true);
+        applied.push(...result.applied);
+        skipped.push(...result.skipped);
+        if (!result.applied.length) continue;
+        doc.meta = { ...(doc.meta || {}), generated_at: new Date().toISOString() };
+        const name = path.split("/").pop();
+        const commit = await writeFile(
+          env, path, branch, doc, sha,
+          `Card promos: publish ${result.applied.length} AI summary/ies to ${name} from the Console`
+        );
+        commits.push({ file: path, url: commit?.commit?.html_url || null });
+      }
+      const unknown = ids.filter((id) => !seen.has(id));
 
-      if (result.applied.length === 0) {
+      if (!commits.length) {
         // Nothing to do is a success, not a failure — re-publishing the same
         // reply twice should be harmless.
-        return json({ committed: false, ...result, message: "Nothing to write (already summarised, or unknown ids)." }, 200, cors);
+        return json({ committed: false, applied, skipped, unknown, message: "Nothing to write (already summarised, or unknown ids)." }, 200, cors);
       }
-
-      doc.meta = {
-        ...(doc.meta || {}),
-        generated_at: new Date().toISOString(),
-        note: (doc.meta?.note || "") + " Summaries published from the Card Promos Console.",
-      };
-
-      const commit = await writeFile(
-        env, path, branch, doc, sha,
-        `Card promos: publish ${result.applied.length} AI summary/ies from the Console`
-      );
       return json({
         committed: true,
-        ...result,
-        commit_url: commit?.commit?.html_url || null,
+        applied, skipped, unknown,
+        commits,
+        commit_url: commits[0].url,
       }, 200, cors);
     } catch (err) {
       return json({ error: String(err.message || err) }, 502, cors);

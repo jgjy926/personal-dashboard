@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "bank": "uob",
+    "bank_name": "UOB",
+    "kind": "campaign",
+    "source": "https://www.uob.com.my/personal/promotions/index.page",
+    "generated_at": "2026-10-11T00:00:00+00:00",
+    "today": "2026-10-11",
+    "new_today": 3,
+    "count": 3,
+    "note": "UOB's featured card campaigns. tnc_summary is written from the banner + T&C by summarize_campaign.py or the Console."
+  },
+  "promotions": [
+    {
+      "id": "b685828b19",
+      "bank": "uob",
+      "title": "Get ready for an exciting time!",
+      "desc": "Save big with deals over 70% off and win over RM1,200,000 worth of prizes!",
+      "link": "https://www.uob.com.my/personal/promotions/uob-rewards-you-carnival.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/uob-rewards-you-carnival/banner-1920x600.jpg",
+      "category": "Instalment",
+      "period": "",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/assets/web-resources/personal/promotions/uob-rewards-you-carnival/tnc.pdf",
+      "tnc_summary": "",
+      "summary_source": "",
+      "end_date": ""
+    },
+    {
+      "id": "5582f976b7",
+      "bank": "uob",
+      "title": "Full moon. Fuller returns.",
+      "desc": "",
+      "link": "https://www.uob.com.my/personal/promotions/thematic-2026.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/thematic-2026/1440x450.png",
+      "category": "Credit Card",
+      "period": "until 31 October 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "",
+      "tnc_summary": "",
+      "summary_source": "",
+      "end_date": "2026-10-31"
+    },
+    {
+      "id": "eae2e23e5e",
+      "bank": "uob",
+      "title": "Travel further with daily cashback",
+      "desc": "Earn up to RM100 cashback daily when you spend overseas with UOB Cards.",
+      "link": "https://www.uob.com.my/personal/promotions/overseas-spend.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/overseas-spend/kv-1440x450.png",
+      "category": "Travel",
+      "period": "till 30 Nov 2027",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/assets/web-resources/personal/promotions/overseas-spend/jul-oct-overseas-spend-campaign-tnc.pdf",
+      "tnc_summary": "",
+      "summary_source": "",
+      "end_date": "2027-11-30"
+    }
+  ]
+}

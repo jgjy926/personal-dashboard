@@ -22,20 +22,18 @@ Usage:
   pip install requests beautifulsoup4
   python tools/scrape_campaign.py --max 20
 
-Outputs (into data/):
-  campaign_raw/<id>.txt       raw detail-page text per promo (where non-trivial)
-  promotions.draft.json       title/image(poster)/link/tnc_link/category, tnc_summary ""
-  campaign_prompt.txt         paste-ready block for the promos with real body text
+Outputs:
+  data/campaign_raw/<id>.txt   raw detail-page text per promo (where non-trivial)
+  data/promos/pbb.draft.json   title/image(poster)/link/tnc_link/category, tnc_summary ""
+  data/campaign_prompt.txt     paste-ready block for the promos with real body text
 
-Then: python tools/merge_campaign.py   (folds into data/promotions.json, keeping
+Then: python tools/merge_campaign.py   (folds into data/promos/pbb.json, keeping
 any tnc_summary you already wrote for a given id).
 """
 from __future__ import annotations
 
 import argparse
-import hashlib
 import io
-import json
 import os
 import re
 import sys
@@ -59,10 +57,11 @@ try:
 except ImportError:
     HAS_OCR = False
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
+from promo_feed import BANKS, HEADERS, ROOT, draft_path, guess_category, prior_promos, promo_id, save
+
 DATA = os.path.join(ROOT, "data")
 RAW_DIR = os.path.join(DATA, "campaign_raw")
+FEED = "pbb"
 
 BASE = "https://www.pbebank.com"
 # Card-specific listings (verified 2026-09: both render real `.grid-item` cards,
@@ -72,35 +71,12 @@ LISTINGS = [
     (f"{BASE}/en/promotions/credit-cards-promotions/", "Credit Card"),
     (f"{BASE}/en/promotions/debit-cards-promotions/", "Debit Card"),
 ]
-UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36"
-HEADERS = {"User-Agent": UA, "Accept": "text/html,application/xhtml+xml"}
-
-CATEGORY_HINTS = [
-    ("Dining", ["dining", "restaurant", "food", "cafe", "hotpot"]),
-    ("Travel", ["travel", "flight", "airline", "lounge", "hotel", "destination"]),
-    ("Fuel", ["fuel", "petrol", "petron", "shell", "petronas"]),
-    ("Cashback", ["cashback", "cash back", "rebate"]),
-    ("Instalment", ["instalment", "installment", "0%", "flexipay"]),
-    ("Online", ["online", "e-commerce", "lazada", "shopee", "contactless", "qr"]),
-]
-
-
-def _id(link: str) -> str:
-    return hashlib.sha1(link.encode("utf-8")).hexdigest()[:10]
 
 
 def _abs(url: str) -> str:
     if not url:
         return ""
     return url if url.startswith("http") else f"{BASE}{url}"
-
-
-def _guess_category(title: str, default: str) -> str:
-    low = title.lower()
-    for cat, keys in CATEGORY_HINTS:
-        if any(k in low for k in keys):
-            return cat
-    return default
 
 
 def scrape_listing(session, url: str) -> list[dict]:
@@ -275,19 +251,12 @@ def main() -> int:
     session = requests.Session()
     today = date.today().isoformat()
 
-    prior_first_seen = {}
-    summarised_ids: set[str] = set()
-    prev_path = os.path.join(DATA, "promotions.json")
-    if os.path.exists(prev_path):
-        try:
-            prev = json.load(open(prev_path, encoding="utf-8"))
-            for p in prev.get("promotions", []):
-                if p.get("id") and p.get("first_seen"):
-                    prior_first_seen[p["id"]] = p["first_seen"]
-                if p.get("id") and p.get("tnc_summary"):
-                    summarised_ids.add(p["id"])
-        except Exception:
-            pass
+    try:
+        prior = prior_promos(FEED)
+    except Exception:
+        prior = {}
+    prior_first_seen = {pid: p["first_seen"] for pid, p in prior.items() if p.get("first_seen")}
+    summarised_ids = {pid for pid, p in prior.items() if p.get("tnc_summary")}
 
     # Read the WHOLE listing (two page loads, cheap) so a summarised promo that has
     # slid past the window is still recognised as live; the per-promo detail fetch
@@ -301,8 +270,9 @@ def main() -> int:
             if card["link"] in by_link:  # on both listings: keep its higher position
                 by_link[card["link"]]["rank"] = min(by_link[card["link"]]["rank"], rank)
                 continue
-            card["id"] = _id(card["link"])
-            card["category"] = _guess_category(card["title"], default_cat)
+            card["id"] = promo_id(card["link"])
+            card["bank"] = FEED
+            card["category"] = guess_category(card["title"], default_cat)
             card["rank"] = rank
             by_link[card["link"]] = card
     # Newest first across both listings — the feed's order is the dashboard's order.
@@ -356,15 +326,16 @@ def main() -> int:
 
     new_today = sum(1 for p in promos if p["first_seen"] == today)
     draft = {
-        "meta": {"source": LISTINGS[0][0], "sample": False, "count": len(promos),
+        "meta": {"bank": FEED, "bank_name": BANKS[FEED], "kind": "campaign",
+                 "source": LISTINGS[0][0], "count": len(promos),
                  "today": today, "new_today": new_today,
-                 "note": "Draft — tnc_summary stays blank until filled via the Console "
-                         "(a vision-capable AI reading each poster image, the reliable path) "
-                         "or from campaign_prompt.txt's OCR/page text for the ones that have it."},
+                 "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum "
+                         "spend and period are printed on it); tnc_summary/period are read from it "
+                         "and the T&C by summarize_campaign.py or the Console. tnc_link is the "
+                         "authoritative terms."},
         "promotions": promos,
     }
-    with open(os.path.join(DATA, "promotions.draft.json"), "w", encoding="utf-8") as f:
-        json.dump(draft, f, indent=2, ensure_ascii=False)
+    save(draft_path(FEED), draft)
 
     if prompt_blocks:
         instruction = (
@@ -386,7 +357,7 @@ def main() -> int:
     print(f"[scrape] Every promo's poster image is captured as `image` — enrich via the dashboard's "
           "Card Promos -> Console (view each poster with a vision-capable AI) for the main path.")
 
-    print("[scrape] wrote data/promotions.draft.json" + (", data/campaign_raw/*.txt" if prompt_blocks else ""))
+    print("[scrape] wrote data/promos/pbb.draft.json" + (", data/campaign_raw/*.txt" if prompt_blocks else ""))
     print("Next: python tools/merge_campaign.py")
     return 0
 

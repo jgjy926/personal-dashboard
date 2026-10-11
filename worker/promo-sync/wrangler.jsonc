@@ -14,7 +14,10 @@
     // ── EDIT THESE ────────────────────────────────────────────────────────
     "GITHUB_REPO": "jgjy926/personal-dashboard",
     "GITHUB_BRANCH": "main",
-    "FILE_PATH": "data/promotions.json",
+    // The campaign feeds a Console summary may land in, one per bank. The
+    // Worker finds which one holds each id. (uob-deals.json is left out: deals
+    // carry the bank's own text and take no summaries.)
+    "PROMO_FILES": "data/promos/pbb.json,data/promos/hlb.json,data/promos/uob.json",
     // Lock the endpoint to the sites that may call it. Leave "" to allow any
     // origin — the SYNC_KEY is still required, but pinning this means a random
     // page you visit can't quietly spend your key from your browser.
@@ -22,6 +25,6 @@
     // Hosts GET /poster may fetch a campaign poster from. That route re-serves
     // the bank's images with CORS headers so the Console can save them next to
     // the AI bundle; the host lock is what keeps it from being an open proxy.
-    "POSTER_HOSTS": "www.pbebank.com"
+    "POSTER_HOSTS": "www.pbebank.com,www.hlb.com.my,www.uob.com.my"
   }
 }

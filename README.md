@@ -8,7 +8,7 @@ live independently without touching the UI.
 |---|---|---|
 | 💱 **FX Rates** | live Worker API (`config.js → fxApi`) | ✅ live |
 | 📈 **Macro** | `data/macro.json` | 🌱 seeded sample → Phase B backend |
-| 💳 **Card Promos** | `data/promotions.json` | ✅ live — daily scrape + AI summary |
+| 💳 **Card Promos** | `data/promos/*.json` (one per bank) | ✅ live — Public Bank, HLB, UOB · daily scrape + AI summary |
 | 📊 **KLSE Monitor** | `data/klse.json` | ✅ real export from your SQLite |
 | 🌫️ **Air Quality** | live Worker (`config.js → apimsApi`), `data/apims.json` fallback | ✅ live — DOE APIMS, ≤10 min behind |
 
@@ -48,7 +48,35 @@ python tools/export_klse.py --db path\to.db --top 25
 
 Re-run it after each engine run to refresh the tab.
 
-### Campaign — parser + free enrichment (`tools/scrape_campaign.py`)
+### Card Promos — one feed per source (`data/promos/`)
+The tab reads one JSON file per source, listed in `config.js` (`feeds.promos`), and
+filters them by **bank** and category:
+
+| Feed | Scraper | What it holds |
+|---|---|---|
+| `pbb.json` | `tools/scrape_campaign.py` | Public Bank credit + debit card campaigns |
+| `hlb.json` | `tools/scrape_hlb.py` | HLB promos tagged **Cards** (read from the JSON servlet behind hlb.com.my's promotions page) |
+| `uob.json` | `tools/scrape_uob.py` | UOB's featured card campaigns |
+| `uob-deals.json` | `tools/scrape_uob.py` | UOB card merchant deals (Dining / Shopping / Travel / Lifestyle / Others) — shown under **Merchant deals** |
+
+Each scraper writes only its own `data/promos/<feed>.draft.json` (git-ignored) and
+`tools/merge_campaign.py` folds every draft into its live file, so one bank changing its
+page or being down never touches another bank's promos or summaries, and the daily churn
+of merchant deals doesn't bury campaign changes in the git history. Shared helpers live
+in `tools/promo_feed.py`. Merchant deals need no AI: the bank prints the offer and
+"Offer period" on each deal card, so that text is the summary (`summary_source: "bank"`).
+To add a bank: write `tools/scrape_<bank>.py` producing the same shape, add its file to
+`config.js`, `PROMO_FILES` in `worker/promo-sync/wrangler.jsonc` (campaign feeds only)
+and the scrape step in `refresh.yml`.
+
+```bash
+python tools/scrape_campaign.py --max 15   # Public Bank (details below)
+python tools/scrape_hlb.py
+python tools/scrape_uob.py
+python tools/merge_campaign.py
+```
+
+### Campaign summaries — parser + free enrichment
 No paid API, $0. Each promo's `image` is the bank's real full campaign poster (not a
 small crop) — the offer, minimum spend, and campaign period are printed on it directly.
 Three ways to turn that into a written `tnc_summary`:
@@ -83,11 +111,11 @@ debit listings **each** (the credit one alone lists 130+, so a single window ove
 never reached debit-only promos). A promo you've already summarised stays in the feed for
 as long as the bank still lists it, however far down new promos push it.
 
-Produces `data/campaign_raw/*.txt`, `data/promotions.draft.json`, and
-`data/campaign_prompt.txt`. Then: paste `campaign_prompt.txt` into Claude → get back
-`{id: {period, tnc_summary}}` JSON → fill those into `promotions.draft.json` (or run
-`tools/merge_campaign.py`, which does this against `data/promotions.json` and preserves
-any summary already written for an id) → save as `data/promotions.json`. Done, $0.
+Produces `data/campaign_raw/*.txt`, `data/promos/pbb.draft.json`, and
+`data/campaign_prompt.txt`. `tools/merge_campaign.py` folds the draft into
+`data/promos/pbb.json`, preserving any summary already written for an id. For the free
+path, paste `campaign_prompt.txt` into Claude → get back `{id: {period, tnc_summary}}`
+JSON → `python tools/summarize_campaign.py --apply reply.json`. Done, $0.
 
 To skip the paste entirely, let the summariser read the posters itself:
 
@@ -113,8 +141,8 @@ The Console used to end in a download you had to drop into `data/` and commit yo
 That wasn't a design choice — a page served from GitHub Pages is a static file with no
 write endpoint, so it had no way to persist anything. `worker/promo-sync` is that
 endpoint: a Cloudflare Worker that holds a GitHub token as a **Worker secret** and
-commits `data/promotions.json` on the Console's behalf. The browser only ever holds the
-sync passphrase, which is good for nothing but this one file.
+commits the campaign feeds in `data/promos/` on the Console's behalf. The browser only
+ever holds the sync passphrase, which is good for nothing but those files.
 
 ```bash
 cd worker/promo-sync
@@ -127,8 +155,9 @@ npx wrangler deploy
 Then point the dashboard at it — `promoSyncApi` in `config.js`, or at runtime
 `localStorage.setItem('promo_sync_api','https://promo-sync.<you>.workers.dev')`.
 
-The Console sends **only the summaries**, never the whole file: the Worker re-reads the
-live `promotions.json` from GitHub and applies them to that. So publishing from a tab you
+The Console sends **only the summaries**, never a whole file, and doesn't say which bank
+each id belongs to: the Worker re-reads every feed in `PROMO_FILES` from GitHub, applies
+each summary to the file that holds its id, and commits only the files that changed. So publishing from a tab you
 left open yesterday can't wipe promos the daily scrape has added since. It also refuses to
 overwrite a summary that already exists (unless asked), reports unknown ids instead of
 failing, and treats a repeated publish as a no-op.
@@ -137,7 +166,7 @@ The same Worker also serves `GET /poster?url=…`, which is what lets the downlo
 hand you the poster **images** and not just their URLs. The bank's image server sends no
 `Access-Control-Allow-Origin`, so the page may display a poster in an `<img>` but may not
 read its bytes; this route re-serves it with CORS. It needs no sync key (public marketing
-images) and only fetches from the hosts in `POSTER_HOSTS` (default `www.pbebank.com`), so
+images) and only fetches from the hosts in `POSTER_HOSTS` (default `www.pbebank.com`, `www.hlb.com.my`, `www.uob.com.my`), so
 it can't be pointed at anything else. Without it the button still saves the JSON and says
 so — the AI then has URLs it probably can't open.
 
@@ -167,10 +196,16 @@ fallback `data/apims.json` on each deploy (uncommitted, git-ignored;
 whichever of the Worker or that snapshot has the newer readings, and says which.
 
 ### Version badge (`tools/stamp_version.py`)
-The version is the dashboard's **code**, not its data: `v2026.10.11-65c754d` is the
-date and hash of the last commit that changed the page itself. Commits that only touch
-`data/`, `tools/`, `worker/`, `.github/` or docs (e.g. the bot's daily feed refresh)
-don't change it. Data freshness lives on each tab ("Readings as of…", "fetched…").
+The header badge shows two lines, each `<MYT date>-<n>` where n counts that kind of
+commit on that day:
+
+- **Code** `v2026.10.11-4` — the 4th commit on 11 Oct that changed the page itself.
+  Commits that only touch `data/`, `tools/`, `worker/`, `.github/` or docs don't count.
+- **Data** `2026.10.11-2` — the 2nd commit on 11 Oct that changed anything under `data/`
+  (the daily refresh, a summary published from the Console).
+
+Click it for each one's commit hash, subject and time. Per-feed freshness still lives on
+each tab ("Readings as of…", "updated…").
 
 Each deploy writes `version.json` and stamps the page's `<meta name="build-id">`; an open
 tab re-checks every 5 min and shows **↻ New version — reload** only when newer code is
@@ -211,7 +246,7 @@ mirror this. Not scraped rather than half-built on fragile markup.
   `regime{label,detail,caveat}`. `oil` and `fx` are each single-unit, so the frontend plots them on a
   real axis rather than the 0-100 rescale `overlay` needs; both blocks are optional and the monitor
   omits the chart if absent.
-- **`promotions.json`** — `meta` (incl. `today`), `promotions[]` (`{id,title,image,link,category,period,end_date,first_seen,tnc_summary}`). `end_date` (YYYY-MM-DD, or empty when unknown) is the last day the offer can be used — written with the summary, or derived from `period` by `merge_campaign.py`. Within 7 days the card shows ⏳ *Ends in N days*; once it has passed, the promo is hidden behind a **Show expired** toggle rather than deleted (only the bank delisting a promo removes it from the feed). `first_seen` = the date a promo first appeared on the page; a promo whose `first_seen` equals `meta.today` is flagged **NEW** and surfaced in the "new today" banner. The Card Promos tab filters by `category`.
+- **`promos/<feed>.json`** — `meta{bank,bank_name,kind,source,today,count,…}` (`kind` is `campaign` or `deal`), `promotions[]` (`{id,bank,title,image,link,category,subcategory?,desc?,period,end_date,first_seen,tnc_link,tnc_summary,summary_source?}`). `end_date` (YYYY-MM-DD, or empty when unknown) is the last day the offer can be used — written with the summary, or derived from `period` by `merge_campaign.py`. Within 7 days the card shows ⏳ *Ends in N days*; once it has passed, the promo is hidden behind a **Show expired** toggle rather than deleted (only the bank delisting a promo removes it from the feed). `first_seen` = the date a promo first appeared on the page; a promo whose `first_seen` equals `meta.today` is flagged **NEW** and surfaced in the "new today" banner. The Card Promos tab filters by bank and `category`, with campaigns and merchant deals as two views.
 - **`treasury.json`** — `meta{sources,note}`, `upcoming_auctions[]`
   (`{auction_date,issue_date,maturity_date,security_type,term,rate,cusip}`),
   `recent_buybacks[]` (`{operation_date,settlement_date,operation_type,maturity_bucket,par_accepted}`).
@@ -230,8 +265,8 @@ serves `/api/*` or writes a `macro.json` in this shape. **You** register the FRE
 and deploy (`wrangler`).
 
 ### Campaign
-Done — `.github/workflows/refresh.yml` runs `scrape_campaign.py` → `merge_campaign.py` →
-`summarize_campaign.py` daily and commits `promotions.json`. The scrape and merge stay
+Done — `.github/workflows/refresh.yml` runs the three scrapers (each best-effort) →
+`merge_campaign.py` → `summarize_campaign.py` daily and commits `data/promos/`. The scrape and merge stay
 $0; only the optional auto-summary step costs anything (cents per *new* promo, and only
 when `ANTHROPIC_API_KEY` is set). Without that secret the pipeline is still fully
 automatic apart from the summary itself, which you write via the Console's Publish button.

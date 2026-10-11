@@ -13,18 +13,28 @@ const ENV = {
   SYNC_KEY: "correct-horse-battery-staple",
   GITHUB_REPO: "owner/repo",
   GITHUB_BRANCH: "main",
-  FILE_PATH: "data/promotions.json",
+  // uob.json is listed but absent from the fake repo: a missing feed is skipped.
+  PROMO_FILES: "data/promos/pbb.json,data/promos/hlb.json,data/promos/uob.json",
   ALLOWED_ORIGINS: "https://example.github.io",
 };
 
 const GH_PREFIX = "https://api.github.com";
 
 // The "repo": what GitHub would return, and what it received on write.
+// repoFile is Public Bank's feed (most tests); hlbFile a second bank's.
 let repoFile;
+let hlbFile;
+let repoFiles;
 let lastWrite;
+let writes;
 
 function resetRepo() {
   lastWrite = null;
+  writes = [];
+  hlbFile = {
+    meta: { bank: "hlb" },
+    promotions: [{ id: "hhh", title: "HLB promo", period: "", tnc_summary: "" }],
+  };
   repoFile = {
     meta: { today: "2026-09-06", note: "Live scrape." },
     promotions: [
@@ -32,7 +42,10 @@ function resetRepo() {
       { id: "bbb", title: "Needs a summary", period: "", tnc_summary: "" },
     ],
   };
+  repoFiles = { "data/promos/pbb.json": repoFile, "data/promos/hlb.json": hlbFile };
 }
+
+const pathOf = (url) => decodeURIComponent(String(url).split("/contents/")[1].split("?")[0]);
 
 function b64(text) {
   return Buffer.from(text, "utf-8").toString("base64");
@@ -51,11 +64,14 @@ global.fetch = async (url, init = {}) => {
     });
   }
   if (method === "GET") {
-    return new Response(JSON.stringify({ sha: "sha-123", content: b64(JSON.stringify(repoFile, null, 2)) }), { status: 200 });
+    const doc = repoFiles[pathOf(url)];
+    if (!doc) return new Response('{"message":"Not Found"}', { status: 404 });
+    return new Response(JSON.stringify({ sha: "sha-123", content: b64(JSON.stringify(doc, null, 2)) }), { status: 200 });
   }
   if (method === "PUT") {
     const body = JSON.parse(init.body);
-    lastWrite = { ...body, decoded: JSON.parse(Buffer.from(body.content, "base64").toString("utf-8")) };
+    lastWrite = { ...body, path: pathOf(url), decoded: JSON.parse(Buffer.from(body.content, "base64").toString("utf-8")) };
+    writes.push(lastWrite);
     return new Response(JSON.stringify({ commit: { html_url: "https://github.com/owner/repo/commit/abc" } }), { status: 200 });
   }
   throw new Error("unexpected " + method);
@@ -195,6 +211,22 @@ posterUpstream = { status: 404, type: "image/jpeg", body: "" };
 r = await worker.fetch(poster(REAL_POSTER), POSTER_ENV);
 check("passes an upstream failure through as 502", r.status === 502);
 posterUpstream = { status: 200, type: "image/jpeg", body: "\xff\xd8\xff-jpeg-bytes" };
+
+// 13 — one feed per bank: each summary lands in the file that holds its id,
+//      and only files that changed are committed.
+resetRepo();
+r = await worker.fetch(req({ summaries: { hhh: { tnc_summary: "HLB summary" } } }), ENV);
+out = await r.json();
+check("writes an HLB id into hlb.json only", writes.length === 1 && lastWrite?.path === "data/promos/hlb.json", writes.map(w => w.path));
+check("...with the summary", lastWrite?.decoded.promotions[0].tnc_summary === "HLB summary");
+check("...and reports the commit per file", out.commits?.[0]?.file === "data/promos/hlb.json", out);
+resetRepo();
+r = await worker.fetch(req({ summaries: { bbb: { tnc_summary: "pbb" }, hhh: { tnc_summary: "hlb" }, zzz: { tnc_summary: "?" } } }), ENV);
+out = await r.json();
+check("a mixed publish commits each bank's file once", JSON.stringify(writes.map(w => w.path)) === '["data/promos/pbb.json","data/promos/hlb.json"]', writes.map(w => w.path));
+check("...and still reports ids found in no feed", JSON.stringify(out.unknown) === '["zzz"]', out.unknown);
+r = await worker.fetch(new Request("https://promo-sync.workers.dev/health"), ENV);
+check("health lists the feeds", (await r.json()).files?.length === 3);
 
 console.log(failures ? `\n${failures} FAILED` : "\nall passed");
 process.exit(failures ? 1 : 0);

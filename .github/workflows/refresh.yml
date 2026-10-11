@@ -115,18 +115,22 @@ jobs:
           pip install -r tools/requirements-ci.txt
           sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr
 
-      - name: Scrape card promos (best-effort; keep prior feed on failure)
+      - name: Scrape card promos (each bank best-effort; keep its prior feed on failure)
         if: env.FULL == 'true'
         continue-on-error: true
-        # --max bounds only the promos still WITHOUT a summary, per listing (credit and
-        # debit each; the credit listing alone runs 130+).
+        # One feed per source in data/promos/. Each scraper writes only its own
+        # draft, so one bank's outage or redesign leaves the others untouched.
+        # Public Bank: --max bounds only the promos still WITHOUT a summary, per
+        # listing (credit and debit each; the credit listing alone runs 130+).
         # Any promo already summarised stays in the feed while the bank lists it.
         run: |
-          python tools/scrape_campaign.py --max 15
+          python tools/scrape_campaign.py --max 15 || echo "::warning::Public Bank promo scrape failed"
+          python tools/scrape_hlb.py               || echo "::warning::HLB promo scrape failed"
+          python tools/scrape_uob.py               || echo "::warning::UOB promo scrape failed (partly or fully)"
           python tools/merge_campaign.py
 
       # Reads the poster + official T&C of any promo that arrived without a summary
-      # and writes one straight into data/promotions.json — the step that used to be
+      # and writes one straight into its data/promos/ feed — the step that used to be
       # the manual Console round-trip. Skips itself cleanly when ANTHROPIC_API_KEY
       # is not configured (the cards then just show the T&C link, as before), so the
       # deploy never depends on it.
@@ -197,7 +201,7 @@ jobs:
         # run, not produced here — `git add` is harmless when it is unchanged.
         run: |
           bash tools/commit_feeds.sh "chore: refresh macro engine + campaign feeds" \
-            data/macro.json data/promotions.json data/treasury.json \
+            data/macro.json data/promos data/treasury.json \
             data/macro_engine.json data/backtest_result.json
 
       # Copies the dashboard (not the workspace) and stamps the CODE version

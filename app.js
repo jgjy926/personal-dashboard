@@ -698,33 +698,50 @@ function wireImageZoom(container) {
 MODS.campaign = async function initCampaign() {
   const root = document.getElementById('campaign-body');
   const consoleRoot = document.getElementById('campaign-console');
-  let d;
-  try { d = await fetchJSON(CFG.feeds.promotions); }
-  catch (e) { root.innerHTML = `<div class="errbox">Couldn't load promotions feed (${esc(e.message)}). Expected at <code>${esc(CFG.feeds.promotions)}</code>.</div>`; return; }
 
-  const list = d.promotions || [];
-  const sample = d.meta && d.meta.sample;
-  if (!list.length) { root.innerHTML = `<div class="emptybox">No promotions yet. Run <code>tools/scrape_campaign.py</code>, then use the 🛠️ Console tab to enrich and publish.</div>`; return; }
+  // One feed per source (CFG.feeds.promos: Public Bank, HLB, UOB…), each with its
+  // bank and kind in meta. A feed that fails to load drops out with a note
+  // instead of blanking the tab. Which feed a promo came from is kept in a Map,
+  // not on the promo, so it can never leak into the Console's exported JSON.
+  const files = CFG.feeds.promos || [];
+  const loaded = await Promise.allSettled(files.map(f => fetchJSON(f)));
+  const feeds = [];
+  const failed = [];
+  const feedOf = new Map();
+  loaded.forEach((r, i) => {
+    if (r.status !== 'fulfilled') { failed.push(files[i]); return; }
+    const meta = r.value.meta || {};
+    const f = { file: files[i], doc: r.value, meta, kind: meta.kind === 'deal' ? 'deal' : 'campaign',
+      bank: meta.bank || '', bankName: meta.bank_name || meta.bank || files[i].split('/').pop() };
+    feeds.push(f);
+    (r.value.promotions || []).forEach(p => feedOf.set(p, f));
+  });
+  if (!feeds.length) { root.innerHTML = `<div class="errbox">Couldn't load any promotions feed. Expected them at <code>${esc(files.join(', '))}</code>.</div>`; return; }
 
-  // "New today" = first detected on the page today. Use the feed's own `today`
-  // (the date the producer ran) if present, else the viewer's local date.
-  const today = (d.meta && d.meta.today) || new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+  const list = [...feedOf.keys()];
+  if (!list.length) { root.innerHTML = `<div class="emptybox">No promotions yet. Run the scrapers in <code>tools/</code> (see README), then <code>tools/merge_campaign.py</code>.</div>`; return; }
+  const campaigns = list.filter(p => feedOf.get(p).kind === 'campaign');
+  const deals = list.filter(p => feedOf.get(p).kind === 'deal');
+  const bankOf = p => p.bank || feedOf.get(p).bank;
+  const bankNames = {};
+  const bankOrder = [];
+  feeds.forEach(f => { if (f.bank && !bankNames[f.bank]) { bankNames[f.bank] = f.bankName; bankOrder.push(f.bank); } });
+  const bankLabel = b => ({ 'Hong Leong Bank': 'HLB' })[bankNames[b]] || bankNames[b] || b;
+
+  // "New" = first detected on its bank's page on the day that feed was built
+  // (each feed carries its own `today`), else the viewer's local date.
+  const localToday = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
   const fmtDate = s => { const t = new Date(s); return Number.isNaN(+t) ? esc(s) : t.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }); };
-  list.forEach(p => p._new = p.first_seen && p.first_seen === today);
-  const newCount = list.filter(p => p._new).length;
+  const isNew = p => !!p.first_seen && p.first_seen === (feedOf.get(p).meta.today || localToday);
 
   // Expiry runs on the VIEWER's date, not the feed's `today`: a failed scrape leaves
   // an older feed up, and an offer that has ended should read as ended whatever day
   // the data was built. `end_date` (YYYY-MM-DD) is written with the summary or
   // derived from the period text by tools/merge_campaign.py; a promo without one
-  // never gets a badge and is never hidden. Computed on demand rather than stored
-  // on the promo, so it can't leak into the Console's exported JSON.
-  const localToday = new Date().toLocaleDateString('en-CA');
+  // never gets a badge and is never hidden.
   const daysLeft = p => /^\d{4}-\d{2}-\d{2}$/.test(p.end_date || '')
     ? Math.round((Date.parse(p.end_date) - Date.parse(localToday)) / 864e5) : null;
   const isExpired = p => (daysLeft(p) ?? 0) < 0;
-  const expiredCount = list.filter(isExpired).length;
-  let showExpired = false;
   const fmtIso = s => new Date(s).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
   const endNote = p => {
     const n = daysLeft(p);
@@ -733,83 +750,124 @@ MODS.campaign = async function initCampaign() {
     return `<div class="ends soon">⏳ ${n === 0 ? 'Ends today' : n === 1 ? 'Ends tomorrow' : `Ends in ${n} days`}</div>`;
   };
 
-  // Category filter values, newest-flagged first for visibility.
-  const cats = ['All', ...[...new Set(list.map(p => p.category).filter(Boolean))].sort()];
-  let active = 'All';
-
-  // Most Public Bank promos carry NO inline description on their own page — the
-  // real terms live only in a linked PDF (captured separately as tnc_link by
-  // tools/scrape_campaign.py). The promo banner image is usually self-explanatory
-  // (the offer is printed on it), so it's the star of the card — bigger, and
-  // zoomable to full size on hover — rather than padding out an empty "no
-  // summary" box. A written tnc_summary (via the Console's AI-enrich flow)
-  // still shows when one exists.
-  const cardHTML = p => `
-    <article class="promo${p._new ? ' is-new' : ''}${isExpired(p) ? ' is-expired' : ''}">
-      ${p._new ? '<span class="new-badge">🆕 NEW</span>' : ''}
+  // The poster/banner is the star of a campaign card (the offer is printed on
+  // it) and zooms to full size on hover. A written tnc_summary shows when there
+  // is one; otherwise the bank's own listing line (`desc`). Deal cards carry the
+  // bank's own offer text as their summary.
+  const cardHTML = p => {
+    const deal = feedOf.get(p).kind === 'deal';
+    const nu = isNew(p);
+    const cat = [p.category, p.subcategory].filter(Boolean).join(' · ');
+    const tncBtn = p.tnc_link && p.tnc_link !== p.link
+      ? `<a class="cta ghost" href="${esc(p.tnc_link)}" target="_blank" rel="noopener">📄 Official T&amp;C</a>` : '';
+    return `
+    <article class="promo${deal ? ' deal' : ''}${nu ? ' is-new' : ''}${isExpired(p) ? ' is-expired' : ''}">
+      ${nu ? '<span class="new-badge">🆕 NEW</span>' : ''}
       <div class="thumb">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy" onerror="this.parentNode.textContent='No image'">` : 'No image'}</div>
       <div class="body">
-        ${p.category ? `<div class="cat">${esc(p.category)}</div>` : ''}
+        <div class="meta-row"><span class="bank-tag"><span class="bank-dot" data-bank="${esc(bankOf(p))}"></span>${esc(bankLabel(bankOf(p)))}</span>${cat ? `<span class="cat">${esc(cat)}</span>` : ''}</div>
         <h3>${esc(p.title)}</h3>
         ${p.period ? `<div class="period">🗓 Valid: ${esc(p.period)}</div>` : ''}
         ${endNote(p)}
-        ${p.tnc_summary ? `<div class="tnc">${esc(p.tnc_summary)}</div>` : ''}
-        ${p.first_seen ? `<div class="seen${p._new ? ' new' : ''}">${p._new ? '🆕 Added today' : '👁 Listed since'} ${fmtDate(p.first_seen)}</div>` : ''}
+        ${p.tnc_summary ? `<div class="tnc">${esc(p.tnc_summary)}</div>` : p.desc ? `<div class="desc">${esc(p.desc)}</div>` : ''}
+        ${p.first_seen ? `<div class="seen${nu ? ' new' : ''}">${nu ? '🆕 Added today' : '👁 Listed since'} ${fmtDate(p.first_seen)}</div>` : ''}
         <div class="cta-row">
-          ${p.link ? `<a class="cta" href="${esc(p.link)}" target="_blank" rel="noopener">View promotion ➔</a>` : ''}
-          ${p.tnc_link ? `<a class="cta ghost" href="${esc(p.tnc_link)}" target="_blank" rel="noopener">📄 Official T&amp;C</a>` : ''}
+          ${p.link ? `<a class="cta" href="${esc(p.link)}" target="_blank" rel="noopener">${deal ? 'View deal' : 'View promotion'} ➔</a>` : ''}
+          ${tncBtn}
         </div>
       </div>
     </article>`;
+  };
 
-  // Free-text search over what a card shows (title, category, period, summary).
-  // Every term must match somewhere, so "lazada rm25" narrows rather than widens.
-  // It composes with the category chips, whose counts follow the search. The
-  // haystack lives in a Map, not on the promo objects, so it can never leak into
-  // the Console's exported/published JSON.
+  // Free-text search over what a card shows. Every term must match somewhere, so
+  // "lazada rm25" narrows rather than widens. It composes with the bank and
+  // category chips, whose counts follow it.
   let query = '';
-  const hay = new Map(list.map(p => [p, [p.title, p.category, p.period, p.tnc_summary].filter(Boolean).join(' ').toLowerCase()]));
+  const hay = new Map(list.map(p => [p, [p.title, p.category, p.subcategory, p.period, p.tnc_summary, p.desc,
+    bankNames[bankOf(p)], bankLabel(bankOf(p))].filter(Boolean).join(' ').toLowerCase()]));
   const matches = p => query.split(/\s+/).filter(Boolean).every(t => hay.get(p).includes(t));
+
+  let view = 'campaign';
+  let bank = 'All';
+  let active = 'All';
+  let showExpired = false;
+  const DEAL_PAGE = 60;
+  let dealLimit = DEAL_PAGE;
 
   // The shell (incl. the search box) renders once and only the results beneath it
   // re-render, so typing never loses focus or the caret.
   root.innerHTML = `
-    <div class="disclaimer">⚠ Public Bank publishes most terms only as a PDF, not on-page — tap/hover a banner for the full picture, or use 📄 Official T&amp;C for the real terms. Where a written summary is shown, it's AI-generated — <b>always verify the linked T&amp;C</b>.${sample ? ' Currently showing <b>sample</b> data.' : ''}</div>
-    ${newCount ? `<div class="banner new-banner"><span class="b-ico">🆕</span><div><div class="b-title">${newCount} new promotion${newCount > 1 ? 's' : ''} today</div><div class="b-detail">First detected on the page on ${fmtDate(today)}. Marked 🆕 below.</div></div></div>` : ''}
-    <div class="promo-search"><input type="search" id="promo-q" placeholder="Search promotions — merchant, card, offer, RM amount…" aria-label="Search promotions" autocomplete="off" spellcheck="false"></div>
+    <div class="disclaimer">⚠ Campaign terms mostly live in each bank's PDF — tap/hover a banner for the full picture, or use 📄 Official T&amp;C. Campaign summaries are AI-generated from the poster and T&amp;C; merchant-deal text is the bank's own. <b>Always verify on the bank's page.</b></div>
+    ${failed.length ? `<div class="disclaimer">Couldn't load ${failed.map(f => `<code>${esc(f)}</code>`).join(', ')} — those promos are missing below.</div>` : ''}
+    ${deals.length ? `<div class="seg" role="tablist" aria-label="Promotion type">
+      <button class="seg-btn on" data-view="campaign" role="tab">🎟️ Campaigns <span class="fn">${campaigns.filter(p => !isExpired(p)).length}</span></button>
+      <button class="seg-btn" data-view="deal" role="tab">🏷️ Merchant deals <span class="fn">${deals.filter(p => !isExpired(p)).length}</span></button>
+    </div>` : ''}
+    <div class="promo-search"><input type="search" id="promo-q" placeholder="Search promotions — bank, merchant, card, offer, RM amount…" aria-label="Search promotions" autocomplete="off" spellcheck="false"></div>
     <div id="promo-results"></div>`;
   const results = root.querySelector('#promo-results');
   const qEl = root.querySelector('#promo-q');
 
   function render() {
-    const pool = showExpired ? list : list.filter(p => !isExpired(p));
+    const all = view === 'deal' ? deals : campaigns;
+    const pool = showExpired ? all : all.filter(p => !isExpired(p));
+    const expiredCount = all.filter(isExpired).length;
     const hits = pool.filter(matches);
-    const filtered = active === 'All' ? hits : hits.filter(p => p.category === active);
-    // live before expired, then new-today first, then by first_seen desc
-    filtered.sort((a, b) => (isExpired(a) - isExpired(b)) || (b._new - a._new) || String(b.first_seen || '').localeCompare(String(a.first_seen || '')));
+    const banks = bankOrder.filter(b => all.some(p => bankOf(p) === b));
+    if (bank !== 'All' && !banks.includes(bank)) bank = 'All';
+    const inBank = bank === 'All' ? hits : hits.filter(p => bankOf(p) === bank);
+    const cats = ['All', ...[...new Set(all.filter(p => bank === 'All' || bankOf(p) === bank).map(p => p.category).filter(Boolean))].sort()];
+    if (!cats.includes(active)) active = 'All';
+    const filtered = active === 'All' ? inBank : inBank.filter(p => p.category === active);
+    // live before expired, then new first, then by first_seen desc
+    filtered.sort((a, b) => (isExpired(a) - isExpired(b)) || (isNew(b) - isNew(a)) || String(b.first_seen || '').localeCompare(String(a.first_seen || '')));
+    const shown = view === 'deal' ? filtered.slice(0, dealLimit) : filtered;
+
+    const chip = (attr, val, label, n, newN, on) =>
+      `<button class="fchip${on ? ' on' : ''}" ${attr}="${esc(val)}">${label} <span class="fn">${n}</span>${newN ? `<span class="fnew">${newN}</span>` : ''}</button>`;
+    const bankChips = bankOrder.length > 1 ? `<div class="fchips" role="tablist" aria-label="Filter by bank"><span class="frow-label">Bank</span>${
+      ['All', ...banks].map(b => {
+        const inB = b === 'All' ? hits : hits.filter(p => bankOf(p) === b);
+        return chip('data-bank', b, b === 'All' ? 'All banks' : `<span class="bank-dot" data-bank="${esc(b)}"></span>${esc(bankLabel(b))}`,
+          inB.length, inB.filter(isNew).length, b === bank);
+      }).join('')}</div>` : '';
     const expiredToggle = expiredCount
       ? `<button class="fchip toggle${showExpired ? ' on' : ''}" id="promo-expired" aria-pressed="${showExpired}">⌛ ${showExpired ? 'Hide' : 'Show'} expired <span class="fn">${expiredCount}</span></button>`
       : '';
-    const chips = cats.map(c => {
-      const inCat = c === 'All' ? hits : hits.filter(p => p.category === c);
-      const newN = inCat.filter(p => p._new).length;
-      return `<button class="fchip${c === active ? ' on' : ''}" data-cat="${esc(c)}">${esc(c)} <span class="fn">${inCat.length}</span>${newN ? `<span class="fnew">${newN}</span>` : ''}</button>`;
+    const catChips = cats.map(c => {
+      const inCat = c === 'All' ? inBank : inBank.filter(p => p.category === c);
+      return chip('data-cat', c, esc(c), inCat.length, inCat.filter(isNew).length, c === active);
     }).join('');
+    const newN = filtered.filter(isNew).length;
     const empty = query
       ? `No promotions match “${esc(query)}”${active !== 'All' ? ` in ${esc(active)}` : ''}.`
       : 'No promotions in this category.';
+    const srcFeeds = feeds.filter(f => f.kind === view && (bank === 'All' || f.bank === bank));
     results.innerHTML = `
-      <div class="fchips" role="tablist" aria-label="Filter by category">${chips}${expiredToggle}</div>
-      <div class="promo-grid">${filtered.map(cardHTML).join('') || `<div class="emptybox">${empty}</div>`}</div>
-      <div class="freshline"><span>Source: <a href="${esc((d.meta && d.meta.source) || '#')}" target="_blank" rel="noopener">Public Bank promotions</a></span>
-        <span>· Updated <b>${esc((d.meta && d.meta.generated_at || '').slice(0, 10))}</b></span>
-        <span>· ${filtered.length}/${list.length} shown${!showExpired && expiredCount ? ` (${expiredCount} expired hidden)` : ''}</span></div>`;
-    results.querySelectorAll('.fchip[data-cat]').forEach(b => b.addEventListener('click', () => { active = b.dataset.cat; render(); }));
+      ${newN ? `<div class="banner new-banner"><span class="b-ico">🆕</span><div><div class="b-title">${newN} new ${view === 'deal' ? 'deal' : 'promotion'}${newN > 1 ? 's' : ''}</div><div class="b-detail">First detected on the bank's page in its latest refresh. Marked 🆕 below.</div></div></div>` : ''}
+      ${bankChips}
+      <div class="fchips" role="tablist" aria-label="Filter by category">${bankOrder.length > 1 ? '<span class="frow-label">Type</span>' : ''}${catChips}${expiredToggle}</div>
+      <div class="promo-grid">${shown.map(cardHTML).join('') || `<div class="emptybox">${empty}</div>`}</div>
+      ${shown.length < filtered.length ? `<div class="more-row"><button class="cta ghost" id="promo-more">Show more (${filtered.length - shown.length} left)</button></div>` : ''}
+      <div class="freshline"><span>Sources:</span>${srcFeeds.map(f =>
+        `<span><a href="${esc(f.meta.source || '#')}" target="_blank" rel="noopener">${esc(f.bankName)}</a> · updated <b>${esc((f.meta.generated_at || '').slice(0, 10))}</b></span>`).join('<span>·</span>')}
+        <span>· ${shown.length}/${all.length} shown${!showExpired && expiredCount ? ` (${expiredCount} expired hidden)` : ''}</span></div>`;
+    results.querySelectorAll('.fchip[data-bank]').forEach(b => b.addEventListener('click', () => { bank = b.dataset.bank; dealLimit = DEAL_PAGE; render(); }));
+    results.querySelectorAll('.fchip[data-cat]').forEach(b => b.addEventListener('click', () => { active = b.dataset.cat; dealLimit = DEAL_PAGE; render(); }));
     const toggle = results.querySelector('#promo-expired');
     if (toggle) toggle.addEventListener('click', () => { showExpired = !showExpired; render(); });
+    const more = results.querySelector('#promo-more');
+    if (more) more.addEventListener('click', () => { dealLimit += DEAL_PAGE * 2; render(); });
     wireImageZoom(results);
   }
-  qEl.addEventListener('input', () => { query = qEl.value.trim().toLowerCase(); render(); });
+  root.querySelectorAll('.seg-btn').forEach(b => b.addEventListener('click', () => {
+    view = b.dataset.view;
+    active = 'All';
+    dealLimit = DEAL_PAGE;
+    root.querySelectorAll('.seg-btn').forEach(x => x.classList.toggle('on', x === b));
+    render();
+  }));
+  qEl.addEventListener('input', () => { query = qEl.value.trim().toLowerCase(); dealLimit = DEAL_PAGE; render(); });
   render();
 
   // ── 🛠️ Console: export a bundle for AI enrichment, then import the reply ──
@@ -828,7 +886,7 @@ MODS.campaign = async function initCampaign() {
   // which re-reads the live feed and commits it. The download remains as the
   // no-Worker fallback.
   function renderConsole() {
-    const missing = list.filter(p => !p.tnc_summary);
+    const missing = campaigns.filter(p => !p.tnc_summary);
 
     // `posterNames` maps id -> the image filename saved next to the JSON, so the
     // AI can tie each attached picture to the id it must key its reply by. Empty
@@ -858,7 +916,7 @@ MODS.campaign = async function initCampaign() {
     consoleRoot.innerHTML = `
       <div class="card-block">
         <h3>1 · Export for AI enrichment</h3>
-        <p class="muted">${missing.length} of ${list.length} promos have no summary yet. Download <code>card-promos-ai-bundle.json</code> plus each promo's poster as an image file, ready to attach to a chat.</p>
+        <p class="muted">${missing.length} of ${campaigns.length} campaigns have no summary yet. Download <code>card-promos-ai-bundle.json</code> plus each promo's poster as an image file, ready to attach to a chat.</p>
         <div class="console-actions">
           <button id="btn-dl-bundle" class="cta"${missing.length ? '' : ' disabled'}>📥 Download AI bundle (.json + ${missing.length} poster${missing.length === 1 ? '' : 's'})</button>
           <button id="btn-copy-prompt" class="cta ghost"${missing.length ? '' : ' disabled'}>📋 Copy prompt to clipboard</button>
@@ -878,13 +936,13 @@ MODS.campaign = async function initCampaign() {
         <h3>3 · Publish</h3>
         <div class="console-actions">
           <button id="btn-publish" class="cta">🚀 Publish to the live site</button>
-          <button id="btn-dl-merged" class="cta ghost">⬇ Download merged promotions.json</button>
+          <button id="btn-dl-merged" class="cta ghost">⬇ Download merged feed(s)</button>
         </div>
         <p id="publish-status" class="muted small" hidden></p>
         <p class="muted small">Publish sends just the summaries to your <code>promo-sync</code> Worker, which commits
-          <code>data/promotions.json</code> for you — the site redeploys on its own. It re-reads the live file first, so
-          publishing from a tab you left open yesterday can't overwrite promos the daily scrape has added since.
-          The download is the offline fallback: drop it into <code>data/</code> and commit by hand.</p>
+          each bank's feed in <code>data/promos/</code> for you — the site redeploys on its own. It re-reads the live
+          files first, so publishing from a tab you left open yesterday can't overwrite promos the daily scrape has added since.
+          The download is the offline fallback: drop the file(s) into <code>data/promos/</code> and commit by hand.</p>
       </div>`;
 
     const dlBundleBtn = document.getElementById('btn-dl-bundle');
@@ -1000,18 +1058,24 @@ MODS.campaign = async function initCampaign() {
         return;
       }
       const ids = Object.keys(map);
-      const merged = list.map(p => {
-        const upd = map[p.id];
-        if (!upd) return p;
-        const end = /^\d{4}-\d{2}-\d{2}$/.test(upd.end_date || '') ? upd.end_date : (upd.period && upd.period !== p.period ? '' : p.end_date);
-        return { ...p, tnc_summary: upd.tnc_summary || p.tnc_summary, period: upd.period || p.period, end_date: end || '' };
+      // The merged copy of each campaign feed the reply touches, for the download.
+      const merged = new Map();
+      feeds.filter(f => f.kind === 'campaign').forEach(f => {
+        const promos = f.doc.promotions || [];
+        if (!promos.some(p => map[p.id])) return;
+        merged.set(f, promos.map(p => {
+          const upd = map[p.id];
+          if (!upd) return p;
+          const end = /^\d{4}-\d{2}-\d{2}$/.test(upd.end_date || '') ? upd.end_date : (upd.period && upd.period !== p.period ? '' : p.end_date);
+          return { ...p, tnc_summary: upd.tnc_summary || p.tnc_summary, period: upd.period || p.period, end_date: end || '' };
+        }));
       });
-      const matched = ids.filter(id => list.some(p => p.id === id)).length;
+      const matched = ids.filter(id => campaigns.some(p => p.id === id)).length;
       previewEl.innerHTML =
         `<div class="disclaimer" style="background:var(--green-bg);color:var(--green)">✅ Matched ${matched} of ${ids.length} id(s) in this feed.</div>` +
         `<div class="table-scroll"><table class="data-table"><thead><tr><th class="l">ID</th><th class="l">Title</th><th class="l">New summary</th></tr></thead><tbody>` +
         ids.map(id => {
-          const p = list.find(x => x.id === id);
+          const p = campaigns.find(x => x.id === id);
           return `<tr><td class="l">${esc(id)}</td><td class="l">${esc(p ? p.title : '(unknown id)')}</td><td class="l">${esc((map[id] && map[id].tnc_summary || '').slice(0, 80))}</td></tr>`;
         }).join('') + `</tbody></table></div>`;
       mergedResult = merged;
@@ -1032,13 +1096,13 @@ MODS.campaign = async function initCampaign() {
       ingest(text);
     });
 
+    // One file per bank feed the reply touched, named as it sits in data/promos/.
     dlMergedBtn.addEventListener('click', () => {
       if (!mergedResult) return;
-      const payload = {
-        meta: { ...d.meta, generated_at: new Date().toISOString(), note: 'Merged locally via the Card Promos Console.' },
-        promotions: mergedResult,
-      };
-      downloadJSON(payload, 'promotions.json');
+      mergedResult.forEach((promotions, f) => downloadJSON({
+        meta: { ...f.meta, generated_at: new Date().toISOString() },
+        promotions,
+      }, f.file.split('/').pop()));
     });
 
     // ── Publish: hand the summaries to the promo-sync Worker, which holds the
@@ -1402,12 +1466,12 @@ MODS.air = function initAir() {
 };
 
 // ── version badge ───────────────────────────────────────────────────────────
-/* Which CODE version is live, and whether THIS page is running it. version.json
- * is written by tools/stamp_version.py on every deploy from the last commit that
- * changed the page's code (data refreshes don't count); the page's own copy is
- * stamped into <meta name="build-id">. When they differ, newer code has gone
- * out since this tab was loaded, and the badge says so. Data freshness is each
- * tab's own "as of" line, not this. */
+/* Two lines: the CODE version and the DATA version, each "<MYT date>-<n>" where
+ * n counts that kind of commit on that day. version.json is written by
+ * tools/stamp_version.py on every deploy; the page's own code build is stamped
+ * into <meta name="build-id">. When that differs from the live one, newer code
+ * has gone out since this tab was loaded, and the badge says so. New data alone
+ * never asks for a reload — each tab fetches its feeds itself. */
 function initBuildBadge() {
   const btn = document.getElementById('build-badge');
   const pop = document.getElementById('build-pop');
@@ -1426,18 +1490,21 @@ function initBuildBadge() {
       return;
     }
     const c = live.commit || {};
-    btn.textContent = outdated ? '↻ New version — reload' : `v${live.version}`;
+    const dv = live.data || {};
+    btn.innerHTML = outdated ? '↻ New version — reload'
+      : `<span class="bl">Code v${esc(live.version)}</span>${dv.version ? `<span class="bl">Data ${esc(dv.version)}</span>` : ''}`;
     btn.title = outdated ? 'Newer code has been deployed since this page loaded'
-      : `Code version — last changed ${c.date ? agoMin(c.date) : 'unknown'}`;
+      : `Code last changed ${c.date ? agoMin(c.date) : 'unknown'}${dv.date ? ` · data ${agoMin(dv.date)}` : ''}`;
+    const commitCell = x => `${x.date ? `${esc(mytTime(x.date, true))} MYT · ${esc(agoMin(x.date))}` : '—'}
+          <br>${x.url ? `<a href="${esc(x.url)}" target="_blank" rel="noopener"><code>${esc(x.short)}</code></a>` : `<code>${esc(x.short || '?')}</code>`}
+          <span class="small">${esc(x.subject || '')}</span>`;
     pop.innerHTML = `
       <table class="data-table kv"><tbody>
-        <tr><td>Live version</td><td class="l"><b>v${esc(live.version)}</b></td></tr>
-        <tr><td>Code changed</td><td class="l">${c.date ? `${esc(mytTime(c.date, true))} MYT · ${esc(agoMin(c.date))}` : '—'}
-          <br>${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener"><code>${esc(c.short)}</code></a>` : `<code>${esc(c.short || '?')}</code>`}
-          <span class="small">${esc(c.subject || '')}</span></td></tr>
+        <tr><td>Code</td><td class="l"><b>v${esc(live.version)}</b> <span class="muted small">· change #${esc(c.seq || '?')} that day</span><br>${commitCell(c)}</td></tr>
+        ${dv.version ? `<tr><td>Data</td><td class="l"><b>${esc(dv.version)}</b> <span class="muted small">· update #${esc(dv.seq || '?')} that day</span><br>${commitCell(dv)}</td></tr>` : ''}
         <tr><td>Last deploy</td><td class="l"><span class="muted">${esc(mytTime(live.deployed_at, true))} MYT · ${esc(live.trigger || '')}${
           live.run_url ? ` · <a href="${esc(live.run_url)}" target="_blank" rel="noopener">run</a>` : ''}<br>
-          Deploys also carry data refreshes; those don't change the version — each tab shows its own “as of”.</span></td></tr>
+          Only a code change asks you to reload; new data shows up on its own.</span></td></tr>
         <tr><td>This page</td><td class="l">${outdated
           ? `<span class="chip warn">older build</span> <code>${esc(mine)}</code>`
           : '<span class="chip ok">up to date</span>'}</td></tr>

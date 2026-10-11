@@ -1,7 +1,9 @@
 {
   "meta": {
+    "bank": "pbb",
+    "bank_name": "Public Bank",
+    "kind": "campaign",
     "generated_at": "2026-10-11T00:00:00+00:00",
-    "sample": false,
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
     "today": "2026-10-11",
     "new_today": 0,
@@ -19,7 +21,8 @@
       "first_seen": "2026-10-09",
       "tnc_link": "https://www.pbebank.com/media/qnrbosx0/tc_utar-hospital.pdf",
       "tnc_summary": "20% off Preventive Health Screening and Restorative T&CM Wellness at UTAR Hospital, Kampar. PB Premium Wellness (PB Visa Infinite, World Mastercard, Visa Signature credit cards, Red Carpet Banking Mastercard Elite/Gold Debit): RM888 male, RM927 female. PB Signature Wellness (other PB cardmembers): RM468 male, RM488 female. Book via WhatsApp 012-968 3761 or contact@utarhospital.org.my.",
-      "end_date": "2027-09-30"
+      "end_date": "2027-09-30",
+      "bank": "pbb"
     },
     {
       "title": "PB Visa Privileges: 15% OFF on Selected Concert Tickets at Malaysian Philharmonic Orchestra",
@@ -31,7 +34,8 @@
       "first_seen": "2026-10-08",
       "tnc_link": "https://www.visa.com.my/en_my/visa-offers-and-perks/dewan-filharmonik-petronas-dfp/174884",
       "tnc_summary": "15% off selected Malaysian Philharmonic Orchestra concert tickets with PB Visa Infinite or PB Visa Signature Credit Card. Use promo code MVISA15 at www.dfp.com.my. Terms and conditions apply.",
-      "end_date": "2026-12-31"
+      "end_date": "2026-12-31",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges @ 100glasses",
@@ -43,7 +47,8 @@
       "first_seen": "2026-10-01",
       "tnc_link": "https://www.pbebank.com/media/xubn3pef/tc_pb-privileges-100glasses.pdf",
       "tnc_summary": "30% off glasses at 100glasses.my with PB cards, with a minimum spend of RM99. Use promo code PBB30; scan the poster QR code to shop. Terms and conditions apply.",
-      "end_date": "2027-03-31"
+      "end_date": "2027-03-31",
+      "bank": "pbb"
     },
     {
       "title": "Cash Back on eWallet Top Up with PB Visa Credit Card",
@@ -55,7 +60,8 @@
       "first_seen": "2026-10-01",
       "tnc_link": "https://www.pbebank.com/media/21seqjdm/tc_visa-ewallet-cb40.pdf",
       "tnc_summary": "RM40 cash back on eWallet top up with PB Visa Credit Card. Minimum top up of RM2,000 per transaction. Eligible eWallets: Boost, GrabPay, Lazada, ShopeePay, Touch 'n Go. Registration required via PBe (Key Word: PBIT) or SMS PBIT to 68333. Terms and conditions apply.",
-      "end_date": "2026-12-31"
+      "end_date": "2026-12-31",
+      "bank": "pbb"
     },
     {
       "title": "Ocean’s Catch Seafood Dinner Buffet Deal at Sheraton Petaling Jaya Hotel",
@@ -67,7 +73,8 @@
       "first_seen": "2026-10-01",
       "tnc_link": "https://www.pbebank.com/media/wfkd4sfa/tc_spj-oceans-catch-2026.pdf",
       "tnc_summary": "Dine 5 Pay 4 on the Ocean's Catch Seafood Dinner Buffet at Feast, Level 3, Sheraton Petaling Jaya Hotel with PB cards. Every Thursday to Saturday, 6:30 PM to 10:30 PM. RM148 nett per adult; RM118.40 nett each after discount. Price inclusive of prevailing government taxes. Terms and conditions apply.",
-      "end_date": "2026-11-28"
+      "end_date": "2026-11-28",
+      "bank": "pbb"
     },
     {
       "title": "RM20 OFF at Tiktok Shop with PB Mastercard Credit and Debit Card",
@@ -79,7 +86,8 @@
       "first_seen": "2026-09-24",
       "tnc_link": "https://www.pbebank.com/media/vmxd0kmv/tc_tiktok-rm20-off.pdf",
       "tnc_summary": "Get RM20 off at TikTok Shop when paying with a Public Bank (PB) Mastercard Credit or Debit Card, with a minimum spend of RM100. Valid from 24 September to 12 December 2026. Terms and conditions apply. PB Debit Card is protected by PIDM up to RM250,000 per depositor.",
-      "end_date": "2026-12-12"
+      "end_date": "2026-12-12",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges at Braun Buffel",
@@ -91,7 +99,8 @@
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/r4apwglz/tc_braun-buffel-10off.pdf",
       "tnc_summary": "Enjoy 10% off normal-priced items at all Braun Buffel boutiques when paying with a Public Bank or Public Islamic Bank card. No minimum spend is stated on the poster. Terms and conditions apply.",
-      "end_date": "2027-07-31"
+      "end_date": "2027-07-31",
+      "bank": "pbb"
     },
     {
       "title": "WATATIME Sunway Pyramid Renovation Sale",
@@ -103,7 +112,8 @@
       "first_seen": "2026-09-18",
       "tnc_link": "https://www.pbebank.com/media/plpju4a4/tc_watatime-sp-renovation-sale.pdf",
       "tnc_summary": "WATATIME Renovation Sale at Sunway Pyramid (G1.61), 10am-10pm daily. Enjoy up to 85% off, plus an additional 5% off already-discounted items. Applicable at the Sunway Pyramid outlet only. Pictures shown are for illustration purposes only; actual watch models and discounts may vary by item.",
-      "end_date": "2026-10-12"
+      "end_date": "2026-10-12",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges @ Pak Nik Burger",
@@ -115,7 +125,8 @@
       "first_seen": "2026-09-17",
       "tnc_link": "https://www.pbebank.com/media/0kyjpm1p/tc_pak-nik-burger.pdf",
       "tnc_summary": "PB Cards holders enjoy 20% off every Specialty Combo Burger Set (Camden, Sizzle Pepper, Beef Meatball) at Pak Nik Burger, Level 4 (L4-48), Selera Street, Sunway Putra Mall. Offer applicable at the Sunway Putra Mall outlet only; general terms and conditions apply as per the bank's promo policy.",
-      "end_date": "2027-09-14"
+      "end_date": "2027-09-14",
+      "bank": "pbb"
     },
     {
       "title": "Get RM35 When you Register & Activate your PB SecureSign today!",
@@ -127,7 +138,8 @@
       "first_seen": "2026-09-21",
       "tnc_link": "https://www.pbebank.com/media/0u5pqiid/tc_pb-securesign-activate.pdf",
       "tnc_summary": "Get RM35 by registering and activating PB SecureSign and making 2 online transactions of any amount with an eligible PB Visa card. Download the MyPB app, register PB SecureSign in the app, then activate it at a PBB ATM or branch. Terms and conditions apply.",
-      "end_date": "2026-12-31"
+      "end_date": "2026-12-31",
+      "bank": "pbb"
     },
     {
       "title": "Get up to RM80 Cash Back on Online Transactions with PB Visa Debit Card!",
@@ -139,7 +151,8 @@
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/bnzfxwug/tc_visa-debit-online-cb80.pdf",
       "tnc_summary": "Get up to RM80 cash back with an accumulated spend of RM600 per month on online transactions with a PB Visa Debit Card. Registration is required, either via PBe (keyword: PBVD) or by SMS PBVD to 68333. Terms and conditions apply.",
-      "end_date": "2026-12-31"
+      "end_date": "2026-12-31",
+      "bank": "pbb"
     },
     {
       "title": "PB UnionPay SplendorPlus Privileges: Enjoy 1% Cash Back in Mainland China",
@@ -151,7 +164,8 @@
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/cdsmeqyp/tc_unionpay-splendorplus-china.pdf",
       "tnc_summary": "Enjoy 1% cash back on every purchase made in mainland China with a PB UnionPay SplendorPlus Debit Card. Cash back is capped at RM300 per month. Scan the QR code on the poster for additional merchant offers. Terms and conditions apply.",
-      "end_date": "2026-12-31"
+      "end_date": "2026-12-31",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges @ Artaflow",
@@ -163,7 +177,8 @@
       "first_seen": "2026-09-15",
       "tnc_link": "https://www.pbebank.com/media/5iwidarm/tc_pb-privileges-artaflow.pdf",
       "tnc_summary": "PB Cards offer at Artaflow Malaysia (Johor Bahru): first-trial 3-in-1 wellness package (Bemer Therapy, EECP Therapy, Infrared Sauna, 30 min each) with free doctor consultation. RM99 for 1 person (RRP RM700) or RM150 for 2 persons (RRP RM1,400). RSVP required via call/WhatsApp, Mon-Fri 10am-6pm.",
-      "end_date": "2026-12-31"
+      "end_date": "2026-12-31",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges @ Cengild G. I. Medical Centre",
@@ -175,7 +190,8 @@
       "first_seen": "2026-09-14",
       "tnc_link": "https://www.pbebank.com/media/qo5ng3z4/tc_pb-privileges-cengild-g-i-medical-centre.pdf",
       "tnc_summary": "PB Privileges offers discounted health screening packages at Cengild G.I. Medical Centre, Bangsar South: Urban Heart Health Screening RM548 (normal RM638), Essential Cancer Screening RM555 (normal RM638), Heart & Cancer Screening RM799, and Cancer & Gastric Screening RM799 (both normal RM938). Each includes blood tests, cardiac/cancer markers, BCA, doctor consultation, refreshment, plus a free RM30 GrabCar code.",
-      "end_date": "2027-08-31"
+      "end_date": "2027-08-31",
+      "bank": "pbb"
     },
     {
       "title": "Spend & Be Rewarded at vivo",
@@ -187,7 +203,8 @@
       "first_seen": "2026-09-15",
       "tnc_link": "https://www.pbebank.com/media/4xgfz4o2/tc_vivo-v80-lite.pdf",
       "tnc_summary": "PB Cards offer: RM100 instant rebate on vivo V80 Lite 5G purchased with a 12-month Zero Interest/Profit Instalment Plan. Available in three variants (128GB/256GB storage), priced from RM116.58 to RM158.25/month at PB Price (RM1,399-RM1,899).",
-      "end_date": "2026-11-30"
+      "end_date": "2026-11-30",
+      "bank": "pbb"
     },
     {
       "title": "JOM RASA PENANG with PB Cards",
@@ -199,7 +216,8 @@
       "first_seen": "2026-09-11",
       "tnc_link": "",
       "tnc_summary": "PB Cards dining promo across Penang outlets: 20%/15% off at G Hotel Gurney & Kelawai (to 30 Dec 2026); 10-15% off at Sood by Chef Ton, Hut Dining Buffet, Yakiniku Tenshin, Christoph's, Wagyu and Rice, Tsukiji Sushi, Norm, Peninsula House, The Pinn, Sifu Nyonya Cuisine; some require minimum spend (RM80-RM800) or complimentary items; validity periods vary by outlet.",
-      "end_date": "2027-06-30"
+      "end_date": "2027-06-30",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges @ Just Pets Megastore",
@@ -211,7 +229,8 @@
       "first_seen": "2026-09-09",
       "tnc_link": "https://www.pbebank.com/media/av4hqra5/tc_megastore-pets.pdf",
       "tnc_summary": "20% off entrance ticket to Just Pets Megastore (Just Farm, Just Cats, Just Dogs) using promo code PBJP20 for PB cardholders. Book via shop.justpets.asia. Terms and conditions apply; full details not accessible from linked PDF.",
-      "end_date": "2026-12-31"
+      "end_date": "2026-12-31",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges at Grand Millennium Kuala Lumpur",
@@ -223,7 +242,8 @@
       "first_seen": "2026-09-07",
       "tnc_link": "https://www.pbebank.com/media/omzhvulz/tc_gmkl.pdf",
       "tnc_summary": "15% off food only at Grand Millennium Kuala Lumpur, valid at three participating outlets: The Mill Café, Lai Ching Yuen, and Bistro 160.",
-      "end_date": "2027-06-30"
+      "end_date": "2027-06-30",
+      "bank": "pbb"
     },
     {
       "title": "Get up to RM200 Cash Back on Overseas Transactions with PB Mastercard Debit Cards!",
@@ -235,7 +255,8 @@
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/b2kmaafh/tc_rm200-overseas-transactions.pdf",
       "tnc_summary": "Spend an accumulated RM400 on overseas transactions with a PB Mastercard Debit Card to get 10% cash back, up to RM200. Registration is required, either via PBe (keyword: PBUP) or by SMS PBUP to 68333. Terms and conditions apply.",
-      "end_date": "2026-12-31"
+      "end_date": "2026-12-31",
+      "bank": "pbb"
     },
     {
       "title": "Lazada Double-Digit Days with PB Visa Credit Card",
@@ -247,7 +268,8 @@
       "first_seen": "2026-09-07",
       "tnc_link": "https://www.pbebank.com/media/sdrozdd4/tc_visa-lazada-double-digit.pdf",
       "tnc_summary": "RM20 instant off with minimum single-transaction spend of RM180, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Offer repeats monthly on the dates listed in the promotion period, spanning September 2026 through April 2027.",
-      "end_date": "2027-04-06"
+      "end_date": "2027-04-06",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges: RM100 OFF on MHflypass purchase with Journify",
@@ -259,7 +281,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://shop.myjournify.com/promo/cart/2325/mhfppublicbank",
       "tnc_summary": "MYR100 off MHflypass (1 pass, 3 return trips, Malaysia/ASEAN) using code PUBLIC100, exclusively for PB credit & debit cardmembers. Valid for all passes except Malaysia Zone 1.",
-      "end_date": "2026-12-14"
+      "end_date": "2026-12-14",
+      "bank": "pbb"
     },
     {
       "title": "Lazada PayDay with PB Visa Credit Card",
@@ -271,7 +294,8 @@
       "first_seen": "2026-09-07",
       "tnc_link": "https://www.pbebank.com/media/cc4olm1r/tc_visa-lazada-payday.pdf",
       "tnc_summary": "RM20 off with minimum single-transaction spend of RM180, redeemed by collecting a voucher, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Recurs monthly on the 24th–27th each month across the campaign period.",
-      "end_date": "2027-04-27"
+      "end_date": "2027-04-27",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges @ 52 Pilates",
@@ -283,7 +307,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/d2tppzim/tc_52-pilates.pdf",
       "tnc_summary": "Up to 40% off Pilates Group Package at 52 Pilates using code PBCM. Register and redeem via WhatsApp (+6016-662 2887).",
-      "end_date": "2027-01-31"
+      "end_date": "2027-01-31",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges at Bateriku",
@@ -295,7 +320,8 @@
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/mpbfkht3/tc_bateriku.pdf",
       "tnc_summary": "Get RM50 off at Bateriku (Astra batteries featured) with PB cards using code PB50. Redeem by walking in to the nearest Bateriku Pitstop, calling the call-out hotline at 011 1600 6008, or booking a battery replacement via the Bateriku Mobile App. Terms and conditions apply.",
-      "end_date": "2027-08-14"
+      "end_date": "2027-08-14",
+      "bank": "pbb"
     },
     {
       "title": "Lazada Double Date and Pay Day Sales with PB Mastercard Credit Card",
@@ -307,7 +333,8 @@
       "first_seen": "2026-09-06",
       "tnc_link": "https://www.pbebank.com/media/ms2c4g52/tc_lazada-double-date-payday.pdf",
       "tnc_summary": "RM50 off with minimum spend RM500, or RM100 off with minimum spend RM1,000, in a single transaction (excluding shipping/courier) on the Lazada mobile app with a PB/PIB Mastercard credit card. Discount applies automatically at checkout, limited to one use per Lazada ID per month, and is first-come first-served on fixed quotas within eight windows: Double Date 8-11 Sep, 9-12 Oct, 10-13 Nov, 11-14 Dec (8pm start) and Pay Day 24-27 Sep, 24-27 Oct, 24-27 Nov, 24-27 Dec 2026. Product exclusions apply.",
-      "end_date": "2026-12-27"
+      "end_date": "2026-12-27",
+      "bank": "pbb"
     },
     {
       "title": "RM25 OFF at Lazada with PB Mastercard Credit Card",
@@ -319,7 +346,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/xrpldao4/tc_rm25-off-lazada-with-pb-mastercard-credit-card.pdf",
       "tnc_summary": "RM25 off with minimum spend RM200 in a single transaction, only with PB Mastercard Credit Card, applicable to Lazada mobile app purchases only.",
-      "end_date": "2026-12-31"
+      "end_date": "2026-12-31",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges at Bendang",
@@ -331,7 +359,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/ymbbsoxp/tc_pb-privileges-at-bendang.pdf",
       "tnc_summary": "10% off Siakap (sea bass) with minimum spending of RM300 in a single receipt at Bendang. Picture for illustration purposes only.",
-      "end_date": "2027-02-28"
+      "end_date": "2027-02-28",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges at Kampung Lah",
@@ -343,7 +372,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/12jfweks/tc_pb-privileges-at-kampung-lah.pdf",
       "tnc_summary": "1 complimentary vegetable dish of choice with minimum spending of RM300 in a single receipt at Kampung Lah.",
-      "end_date": "2027-02-28"
+      "end_date": "2027-02-28",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges at Tingkap By Kampunglah",
@@ -355,7 +385,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/gm2bmyfm/tc_pb-privileges-at-tingkap-by-kampunglah.pdf",
       "tnc_summary": "10% off total bill from 2:00pm to 5:00pm at Tingkap by Kampunglah.",
-      "end_date": "2027-02-28"
+      "end_date": "2027-02-28",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges at TAPAULAH By Kampunglah",
@@ -367,7 +398,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/sq0bbqom/tc_pb-privileges-at-tapaulah-by-kampunglah.pdf",
       "tnc_summary": "1 complimentary Sirap with purchase of 2 Bun Bun Mak, or 1 complimentary drink with purchase of 1 drink, at Tapaulah by Kampunglah.",
-      "end_date": "2027-02-28"
+      "end_date": "2027-02-28",
+      "bank": "pbb"
     },
     {
       "title": "PB Privileges at Waroeng Sambal Pojok",
@@ -379,7 +411,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/sdmnskcy/tc_pb-privileges-at-waroeng-sambal-pojok.pdf",
       "tnc_summary": "10% off Iga Bakar (grilled beef ribs) at Waroeng Sambal Pojok.",
-      "end_date": "2027-02-28"
+      "end_date": "2027-02-28",
+      "bank": "pbb"
     },
     {
       "title": "Exclusive Dining Privileges with PB Visa Credit Card",
@@ -391,7 +424,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/hbadovvv/tc_exclusive-dining-privileges-with-pb-visa-credit-card.pdf",
       "tnc_summary": "RM50 cashback with spending of RM688 in a single receipt at participating restaurants (Fish Market, Hee Lai Ton, Oriental Group, Grand Imperial Group, and others). Register via PBe (keyword PBCB) or SMS PBCB to 68333.",
-      "end_date": "2026-12-31"
+      "end_date": "2026-12-31",
+      "bank": "pbb"
     },
     {
       "title": "More eWallet Top-Ups, More Rewards with PB Mastercard Credit Card",
@@ -403,7 +437,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/ia4ju12k/tc_ewallet-top-ups.pdf",
       "tnc_summary": "RM40 eVoucher for min RM2,000 top-up, or RM100 eVoucher for min RM4,000 top-up per transaction, on Boost, GrabPay, Lazada, ShopeePay or Touch 'n Go. Register via PBe (keyword PBVHR) or SMS PBVHR to 68333.",
-      "end_date": "2026-12-31"
+      "end_date": "2026-12-31",
+      "bank": "pbb"
     },
     {
       "title": "Buy 1 Get 1 Air Ticket with PB Mastercard Credit Card",
@@ -415,7 +450,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/x1egqnmx/tc_travel-china.pdf",
       "tnc_summary": "Buy 1 get 1 air ticket to China on Malaysia Airlines with minimum accumulative spend RM20,000. Plus Alipay/Trip.com China travel deals (coupon, discount, hotel promo) running to 31 December 2026. Call Holiday Tours & Travel to book.",
-      "end_date": "2026-11-23"
+      "end_date": "2026-11-23",
+      "bank": "pbb"
     },
     {
       "title": "EcoWorld Home Buyer Programme",
@@ -427,7 +463,8 @@
       "first_seen": "2026-09-03",
       "tnc_link": "https://www.pbebank.com/media/12qlbiml/tc_ecoworld-buyer.pdf",
       "tnc_summary": "Cashback on home purchases: RM200 (downpayment RM10,000-39,999), RM400 (RM40,000-99,999), RM1,000 (RM100,000+); also for 0% instalment (36mo ZIIP/ZPIP). Max one redemption per cardmember. Plus a free 16-piece cutlery set (worth RM119) with qualifying spend at EcoWorld townships.",
-      "end_date": "2026-10-31"
+      "end_date": "2026-10-31",
+      "bank": "pbb"
     }
   ]
 }

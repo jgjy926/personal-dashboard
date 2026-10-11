@@ -4,10 +4,10 @@
 # it must never land in a public repo or on a public host.
 data/klse.json
 
-# Campaign working files (raw scrape + draft + the LLM prompt) — only the finished
-# data/promotions.json is published.
+# Card-promo working files (raw scrape, per-bank drafts, the LLM prompt) — only
+# the merged data/promos/<feed>.json files are published.
 data/campaign_raw/
-data/promotions.draft.json
+data/promos/*.draft.json
 data/campaign_prompt.txt
 
 # OS / editor / python cruft

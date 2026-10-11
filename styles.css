@@ -302,6 +302,34 @@ button.cta[disabled] { opacity: .5; cursor: not-allowed; filter: none; }
 .promo-search input::placeholder { color: var(--muted); }
 .promo-search input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 
+/* Multi-bank: bank tag on each card, Bank / Type chip rows, campaigns ⇄ deals.
+ * Each bank is a small dot in its brand colour; the text stays the theme's ink,
+ * so it reads the same in light and dark. */
+.promo .meta-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bank-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 650;
+  padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.bank-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: none; }
+.bank-dot[data-bank="pbb"] { background: #d0102b; }
+.bank-dot[data-bank="hlb"] { background: #1f4fa3; }
+.bank-dot[data-bank="uob"] { background: #e3001b; box-shadow: inset 0 0 0 2px #0b2a6f; }
+.fchip.on .bank-dot { box-shadow: 0 0 0 1.5px #fff; }
+.frow-label { align-self: center; font-size: 11px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .04em; min-width: 40px; }
+.promo .desc { font-size: 13px; color: var(--muted); }
+/* Merchant-deal artwork is a 360x240 landscape logo tile, not a tall poster. */
+.promo.deal .thumb { height: 140px; }
+.promo.deal .thumb img { object-position: center; }
+.seg { display: inline-flex; gap: 4px; padding: 4px; margin-bottom: 12px; border-radius: 999px;
+  background: var(--bg); border: 1px solid var(--line); }
+.seg-btn { font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; border: 0; border-radius: 999px;
+  padding: 6px 14px; background: none; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+.seg-btn.on { background: var(--card); color: var(--ink); box-shadow: var(--shadow); }
+.seg-btn .fn { font-size: 11px; opacity: .7; font-variant-numeric: tabular-nums; }
+.more-row { display: flex; justify-content: center; margin: 16px 0 4px; }
+.more-row .cta { font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; padding: 8px 18px;
+  border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--accent); }
+.more-row .cta:hover { border-color: var(--accent); }
+
 /* ── KLSE ───────────────────────────────────────────────────────────── */
 .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 4px; }
 .funnel { display: flex; flex-direction: column; gap: 6px; }
@@ -480,6 +508,9 @@ code.hash { font-size: 10.5px; color: var(--muted); }
 .build-badge { font: inherit; font-size: 11.5px; font-weight: 600; font-variant-numeric: tabular-nums;
   padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg);
   color: var(--muted); cursor: pointer; white-space: nowrap; }
+.build-badge:has(.bl) { display: flex; flex-direction: column; align-items: flex-end; gap: 1px;
+  border-radius: 10px; padding: 3px 9px; line-height: 1.25; font-size: 11px; }
+.build-badge .bl:last-child:not(:first-child) { font-weight: 500; }
 .build-badge:hover { color: var(--ink); border-color: var(--accent); }
 .build-badge.outdated { background: var(--amber-bg); color: var(--amber); border-color: var(--amber); }
 .build-pop { position: absolute; right: 0; top: calc(100% + 6px); z-index: 20; width: min(340px, calc(100vw - 32px));

@@ -9,7 +9,7 @@
 window.DASH_CONFIG = {
   fxApi: (localStorage.getItem('fx_api') || 'https://fx-dashboard.jgjy926.workers.dev'),
   // Write endpoint for the Card Promos Console's "Publish" button — the
-  // worker/promo-sync Worker, which commits data/promotions.json on your behalf
+  // worker/promo-sync Worker, which commits the data/promos/ feeds on your behalf
   // (it holds the GitHub token; the browser only ever holds the sync key).
   // Deployed and live; override per-browser the same way as fxApi:
   //   localStorage.setItem('promo_sync_api', 'https://promo-sync.<you>.workers.dev')
@@ -29,7 +29,15 @@ window.DASH_CONFIG = {
     // the engine's "Series Monitor" sub-page. Written by tools/fetch_macro.py.
     macro: 'data/macro.json',
     treasury: 'data/treasury.json',
-    promotions: 'data/promotions.json',
+    // Card promos, one feed per source (see tools/promo_feed.py). Each carries
+    // its bank and kind ("campaign" or "deal") in meta; a feed that fails to
+    // load just drops out of the tab. Add a source = add its file here.
+    promos: [
+      'data/promos/pbb.json',
+      'data/promos/hlb.json',
+      'data/promos/uob.json',
+      'data/promos/uob-deals.json'
+    ],
     // Malaysia Air Pollutant Index — the FALLBACK for apimsApi above. Written by
     // tools/fetch_apims.py on each deploy (refresh.yml), not committed.
     apims: 'data/apims.json'
