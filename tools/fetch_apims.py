@@ -38,6 +38,8 @@ from __future__ import annotations
 import json
 import os
 import sys
+import time
+import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
@@ -71,10 +73,19 @@ BANDS = [(50, "Good"), (100, "Moderate"), (200, "Unhealthy"), (300, "Very Unheal
 
 
 # ── network (isolated so parsing stays pure/testable) ───────────────────────
-def _get_json(url: str, timeout: int = 30):
-    req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return json.loads(r.read().decode("utf-8"))
+def _get_json(url: str, timeout: int = 30, tries: int = 4):
+    """GET with backoff on 429. APIMS rate-limits bursts: 6 parallel requests
+    from a GitHub runner got 3 of 16 states refused."""
+    for attempt in range(tries):
+        req = urllib.request.Request(url, headers=UA)
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return json.loads(r.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            if e.code != 429 or attempt == tries - 1:
+                raise
+            retry_after = e.headers.get("Retry-After", "")
+            time.sleep(min(int(retry_after), 30) if retry_after.isdigit() else 2 * (attempt + 1))
 
 
 # ── pure parsing ────────────────────────────────────────────────────────────
@@ -239,7 +250,7 @@ def main() -> int:
             return state_id, None
 
     histories, failed = {}, []
-    with ThreadPoolExecutor(max_workers=6) as pool:
+    with ThreadPoolExecutor(max_workers=2) as pool:
         for state_id, h in pool.map(one, state_ids):
             if h is None:
                 failed.append(state_id)
