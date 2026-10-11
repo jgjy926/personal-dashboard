@@ -811,14 +811,21 @@ MODS.campaign = async function initCampaign() {
   function render() {
     const all = view === 'deal' ? deals : campaigns;
     const pool = showExpired ? all : all.filter(p => !isExpired(p));
-    const expiredCount = all.filter(isExpired).length;
     const hits = pool.filter(matches);
     const banks = bankOrder.filter(b => all.some(p => bankOf(p) === b));
     if (bank !== 'All' && !banks.includes(bank)) bank = 'All';
+    // Everything the chosen bank has in this view, for its Type chips and the
+    // expired toggle (not every bank's promos).
+    const scope = bank === 'All' ? all : all.filter(p => bankOf(p) === bank);
+    const expiredCount = scope.filter(isExpired).length;
     const inBank = bank === 'All' ? hits : hits.filter(p => bankOf(p) === bank);
-    const cats = ['All', ...[...new Set(all.filter(p => bank === 'All' || bankOf(p) === bank).map(p => p.category).filter(Boolean))].sort()];
+    const cats = ['All', ...[...new Set(scope.map(p => p.category).filter(Boolean))].sort()];
     if (!cats.includes(active)) active = 'All';
     const filtered = active === 'All' ? inBank : inBank.filter(p => p.category === active);
+    // The footer's "n/total shown" is out of what matches every active filter
+    // (bank, type, search); so is its "expired hidden" note.
+    const hiddenExpired = showExpired ? 0 : scope.filter(p => isExpired(p) && matches(p)
+      && (active === 'All' || p.category === active)).length;
     // live before expired, then new first, then by first_seen desc
     filtered.sort((a, b) => (isExpired(a) - isExpired(b)) || (isNew(b) - isNew(a)) || String(b.first_seen || '').localeCompare(String(a.first_seen || '')));
     const shown = view === 'deal' ? filtered.slice(0, dealLimit) : filtered;
@@ -851,7 +858,7 @@ MODS.campaign = async function initCampaign() {
       ${shown.length < filtered.length ? `<div class="more-row"><button class="cta ghost" id="promo-more">Show more (${filtered.length - shown.length} left)</button></div>` : ''}
       <div class="freshline"><span>Sources:</span>${srcFeeds.map(f =>
         `<span><a href="${esc(f.meta.source || '#')}" target="_blank" rel="noopener">${esc(f.bankName)}</a> · updated <b>${esc((f.meta.generated_at || '').slice(0, 10))}</b></span>`).join('<span>·</span>')}
-        <span>· ${shown.length}/${all.length} shown${!showExpired && expiredCount ? ` (${expiredCount} expired hidden)` : ''}</span></div>`;
+        <span>· ${shown.length}/${filtered.length} shown${!showExpired && hiddenExpired ? ` (${hiddenExpired} expired hidden)` : ''}</span></div>`;
     results.querySelectorAll('.fchip[data-bank]').forEach(b => b.addEventListener('click', () => { bank = b.dataset.bank; dealLimit = DEAL_PAGE; render(); }));
     results.querySelectorAll('.fchip[data-cat]').forEach(b => b.addEventListener('click', () => { active = b.dataset.cat; dealLimit = DEAL_PAGE; render(); }));
     const toggle = results.querySelector('#promo-expired');
