@@ -4,13 +4,28 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-11T00:00:00+00:00",
-    "today": "2026-10-11",
-    "new_today": 331,
-    "count": 331,
+    "generated_at": "2026-10-12T00:00:00+00:00",
+    "today": "2026-10-12",
+    "new_today": 4,
+    "count": 335,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
+    {
+      "id": "f003a50275",
+      "bank": "uob",
+      "title": "Kuki",
+      "link": "https://www.uob.com.my/personal/promotions/kuki.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/kuki/360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Asian",
+      "period": "1 November 2026 to 30 April 2027",
+      "first_seen": "2026-10-12",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/kuki.page",
+      "tnc_summary": "Complimentary Signature Beverage with a minimum spend of RM200",
+      "summary_source": "bank",
+      "end_date": "2027-04-30"
+    },
     {
       "id": "36d93fee39",
       "bank": "uob",
@@ -2067,6 +2082,21 @@
       "end_date": "2026-12-31"
     },
     {
+      "id": "75c35307ff",
+      "bank": "uob",
+      "title": "Temptations by Malaysia Airlines",
+      "link": "https://www.uob.com.my/personal/promotions/temptations-malaysia-airlines.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/temptations-malaysia-airlines/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "Online",
+      "period": "15 October 2026 to 31 October 2026",
+      "first_seen": "2026-10-12",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/temptations-malaysia-airlines.page",
+      "tnc_summary": "20% off with a min. spend of RM250 (capped at RM150) · Promo code: UOBTEMP20",
+      "summary_source": "bank",
+      "end_date": "2026-10-31"
+    },
+    {
       "id": "7c1be49660",
       "bank": "uob",
       "title": "SENHENG",
@@ -3357,6 +3387,21 @@
       "end_date": "2026-12-31"
     },
     {
+      "id": "af53c93292",
+      "bank": "uob",
+      "title": "Journify by Malaysia Airlines",
+      "link": "https://www.uob.com.my/personal/promotions/journify-malaysia-airlines.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/journify-malaysia-airlines/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Airline",
+      "period": "15 October 2026 to 31 October 2026",
+      "first_seen": "2026-10-12",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/journify-malaysia-airlines.page",
+      "tnc_summary": "RM100 off for selected MHFlypass · Number of redemptions: 100 units · Promo code: UOBCARNIVAL100 · Eligible passes: MHflypass Malaysia Zone 2 MHflypass Malaysia Zone 3 MHflypass ASEAN Zone 1 MHflypass ASEAN Zone 2 MHflypass ASEAN Zone 3 · MHflypass Malaysia Zone 2 · MHflypass Malaysia Zone 3 · MHflypass ASEAN Zone 1 · MHflypass ASEAN Zone 2 · MHflypass ASEAN Zone 3",
+      "summary_source": "bank",
+      "end_date": "2026-10-31"
+    },
+    {
       "id": "26f1bcec1e",
       "bank": "uob",
       "title": "Malaysia Airlines",
@@ -3430,6 +3475,21 @@
       "tnc_summary": "Complimentary USD160 Onboard Credit with a minimum spend of RM4,500 on any Disney Cruise booking",
       "summary_source": "bank",
       "end_date": "2026-10-18"
+    },
+    {
+      "id": "b298012215",
+      "bank": "uob",
+      "title": "MHholidays",
+      "link": "https://www.uob.com.my/personal/promotions/mh-holidays.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/mh-holidays/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Online",
+      "period": "15 October 2026 to 31 October 2026",
+      "first_seen": "2026-10-12",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/mh-holidays.page",
+      "tnc_summary": "RM110 off with a min. spend of RM2,800 (capped at 50 redemptions) Promo code: MHHUOB110 · RM210 off with a min. spend of RM4,900 (capped at 50 redemptions) Promo code: MHHUOB210 · RM330 off with a min. spend of RM8,000 (capped at 50 redemptions) Promo code: MHHUOB330",
+      "summary_source": "bank",
+      "end_date": "2026-10-31"
     },
     {
       "id": "d880ee3be5",
