@@ -4,7 +4,7 @@
     "bank_name": "UOB",
     "kind": "campaign",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-12T00:00:00+00:00",
+    "generated_at": "2026-10-13T13:52:40.439Z",
     "today": "2026-10-12",
     "new_today": 0,
     "count": 3,
@@ -19,12 +19,12 @@
       "link": "https://www.uob.com.my/personal/promotions/uob-rewards-you-carnival.page",
       "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/uob-rewards-you-carnival/banner-1920x600.jpg",
       "category": "Instalment",
-      "period": "",
+      "period": "15-18 October 2026",
       "first_seen": "2026-10-11",
       "tnc_link": "https://www.uob.com.my/assets/web-resources/personal/promotions/uob-rewards-you-carnival/tnc.pdf",
-      "tnc_summary": "",
+      "tnc_summary": "UOB Rewards You Carnival, held 15-18 October 2026 at Mid Valley Exhibition Centre (MVEC), Kuala Lumpur. The poster doesn't show specific rewards, eligible cards or minimum spend.",
       "summary_source": "",
-      "end_date": ""
+      "end_date": "2026-10-18"
     },
     {
       "id": "5582f976b7",
@@ -37,7 +37,7 @@
       "period": "until 31 October 2026",
       "first_seen": "2026-10-11",
       "tnc_link": "",
-      "tnc_summary": "",
+      "tnc_summary": "UOB Mid-Autumn themed campaign ('Full moon. Fuller returns.'). The poster shows only the tagline, with no reward amounts, eligible cards, minimum spend or campaign period.",
       "summary_source": "",
       "end_date": "2026-10-31"
     },
@@ -52,7 +52,7 @@
       "period": "till 30 Nov 2027",
       "first_seen": "2026-10-11",
       "tnc_link": "https://www.uob.com.my/assets/web-resources/personal/promotions/overseas-spend/jul-oct-overseas-spend-campaign-tnc.pdf",
-      "tnc_summary": "",
+      "tnc_summary": "UOB overseas-spend campaign ('Travel further with daily cashback'). The poster image shows a travel scene only, with no visible cashback rate, minimum spend, eligible cards or campaign period.",
       "summary_source": "",
       "end_date": "2027-11-30"
     }
