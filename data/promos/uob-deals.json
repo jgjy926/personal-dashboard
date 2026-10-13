@@ -4,13 +4,28 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-12T00:00:00+00:00",
-    "today": "2026-10-12",
-    "new_today": 4,
-    "count": 335,
+    "generated_at": "2026-10-13T00:00:00+00:00",
+    "today": "2026-10-13",
+    "new_today": 1,
+    "count": 336,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
+    {
+      "id": "cd6089aef9",
+      "bank": "uob",
+      "title": "Toji Yakitori Bar",
+      "link": "https://www.uob.com.my/personal/promotions/toji-yakitori-bar.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/toji-yakitori-bar/360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Asian",
+      "period": "15 October 2026 to 14 February 2027",
+      "first_seen": "2026-10-13",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/toji-yakitori-bar.page",
+      "tnc_summary": "Complimentary 1 mini Yakitori platter (3 sticks - Chef's Choice) with a min. spend of RM150",
+      "summary_source": "bank",
+      "end_date": "2027-02-14"
+    },
     {
       "id": "f003a50275",
       "bank": "uob",
@@ -2082,6 +2097,21 @@
       "end_date": "2026-12-31"
     },
     {
+      "id": "ce6aaee8d6",
+      "bank": "uob",
+      "title": "Alpro Pharmacy",
+      "link": "https://www.uob.com.my/personal/promotions/alpro-pharmacy.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/alpro-pharmacy/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "Online",
+      "period": "15 October to 31 October 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/alpro-pharmacy.page",
+      "tnc_summary": "RM10 off with a min spend of RM80 (Promo code: ALPUOB10)",
+      "summary_source": "bank",
+      "end_date": "2026-10-31"
+    },
+    {
       "id": "75c35307ff",
       "bank": "uob",
       "title": "Temptations by Malaysia Airlines",
@@ -2273,21 +2303,6 @@
       "first_seen": "2026-10-11",
       "tnc_link": "https://www.uob.com.my/personal/promotions/paulas-choice-carnival.page",
       "tnc_summary": "RM50 off with a minimum spend of RM200. · Promo code: PCUOB50OFF",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "ce6aaee8d6",
-      "bank": "uob",
-      "title": "Alpro Pharmacy",
-      "link": "https://www.uob.com.my/personal/promotions/alpro-pharmacy.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/alpro-pharmacy/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "15 October to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/alpro-pharmacy.page",
-      "tnc_summary": "RM10 off with a min spend of RM80 (Promo code: ALPUOB10)",
       "summary_source": "bank",
       "end_date": "2026-10-31"
     },

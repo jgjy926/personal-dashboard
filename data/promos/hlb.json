@@ -4,8 +4,8 @@
     "bank_name": "Hong Leong Bank",
     "kind": "campaign",
     "source": "https://www.hlb.com.my/en/personal-banking/promotions.html",
-    "generated_at": "2026-10-13T13:52:38.360Z",
-    "today": "2026-10-12",
+    "generated_at": "2026-10-13T00:00:00+00:00",
+    "today": "2026-10-13",
     "new_today": 0,
     "count": 7,
     "note": "HLB promotions tagged 'Cards'. `desc` is the bank's listing line; tnc_summary is written from the banner + T&C PDF by summarize_campaign.py or the Console."
@@ -79,12 +79,12 @@
       "link": "https://www.hlb.com.my/en/personal-banking/promotions/cards-traveloka-frenzy-friday-promotion.html",
       "image": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2025/cards-traveloka-frenzy-friday-promotion/header-banner-june-2026.jpg",
       "category": "Travel",
-      "period": "Every Friday",
+      "period": "27 March 2026-25 December 2026",
       "first_seen": "2026-10-11",
       "tnc_link": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2025/hlb-card-offers/tnc/traveloka-frf.pdf",
       "tnc_summary": "HLB Frenzy Fridays with Traveloka for HLB Credit & Debit Cards. Get up to RM100 off travel bookings every Friday. The poster doesn't show minimum spend, promo codes, quotas or the final campaign date.",
       "summary_source": "",
-      "end_date": ""
+      "end_date": "2026-12-25"
     },
     {
       "id": "5945a14685",

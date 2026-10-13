@@ -4,10 +4,10 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-10-12T00:00:00+00:00",
-    "today": "2026-10-12",
+    "generated_at": "2026-10-13T00:00:00+00:00",
+    "today": "2026-10-13",
     "new_today": 0,
-    "count": 35,
+    "count": 34,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
   },
   "promotions": [
@@ -110,20 +110,6 @@
       "end_date": "2027-07-31"
     },
     {
-      "title": "WATATIME Sunway Pyramid Renovation Sale",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/watatime-sunway-pyramid-renovation-sale/",
-      "image": "https://www.pbebank.com/media/5ehd5iuo/watatime-sp-renovation-sale_wb.jpg",
-      "id": "929f03bad4",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "18 September - 12 October 2026",
-      "first_seen": "2026-09-18",
-      "tnc_link": "https://www.pbebank.com/media/plpju4a4/tc_watatime-sp-renovation-sale.pdf",
-      "tnc_summary": "WATATIME Renovation Sale at Sunway Pyramid (G1.61), 10am-10pm daily. Enjoy up to 85% off, plus an additional 5% off already-discounted items. Applicable at the Sunway Pyramid outlet only. Pictures shown are for illustration purposes only; actual watch models and discounts may vary by item.",
-      "summary_source": "",
-      "end_date": "2026-10-12"
-    },
-    {
       "title": "PB Privileges @ Pak Nik Burger",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-pak-nik-burger/",
       "image": "https://www.pbebank.com/media/3dxbhnrf/pak-nik-burger_wb.jpg",
@@ -138,20 +124,6 @@
       "end_date": "2027-09-14"
     },
     {
-      "title": "Get RM35 When you Register & Activate your PB SecureSign today!",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/get-rm35-when-you-register-activate-your-pb-securesign-today/",
-      "image": "https://www.pbebank.com/media/pinl10xo/pb-securesign-activate_wb.jpg",
-      "id": "9eee5995b2",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "15 September to 31 December 2026",
-      "first_seen": "2026-09-21",
-      "tnc_link": "https://www.pbebank.com/media/0u5pqiid/tc_pb-securesign-activate.pdf",
-      "tnc_summary": "Get RM35 by registering and activating PB SecureSign and making 2 online transactions of any amount with an eligible PB Visa card. Download the MyPB app, register PB SecureSign in the app, then activate it at a PBB ATM or branch. Terms and conditions apply.",
-      "summary_source": "",
-      "end_date": "2026-12-31"
-    },
-    {
       "title": "Get up to RM80 Cash Back on Online Transactions with PB Visa Debit Card!",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/get-up-to-rm80-cash-back-on-online-transactions-with-pb-visa-debit-card/",
       "image": "https://www.pbebank.com/media/gfgf2ohi/visa-debit-online-cb80_wb.jpg",
@@ -162,6 +134,20 @@
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/bnzfxwug/tc_visa-debit-online-cb80.pdf",
       "tnc_summary": "Get up to RM80 cash back with an accumulated spend of RM600 per month on online transactions with a PB Visa Debit Card. Registration is required, either via PBe (keyword: PBVD) or by SMS PBVD to 68333. Terms and conditions apply.",
+      "summary_source": "",
+      "end_date": "2026-12-31"
+    },
+    {
+      "title": "Get RM35 When you Register & Activate your PB SecureSign today!",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/get-rm35-when-you-register-activate-your-pb-securesign-today/",
+      "image": "https://www.pbebank.com/media/pinl10xo/pb-securesign-activate_wb.jpg",
+      "id": "9eee5995b2",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "15 September to 31 December 2026",
+      "first_seen": "2026-09-21",
+      "tnc_link": "https://www.pbebank.com/media/0u5pqiid/tc_pb-securesign-activate.pdf",
+      "tnc_summary": "Get RM35 by registering and activating PB SecureSign and making 2 online transactions of any amount with an eligible PB Visa card. Download the MyPB app, register PB SecureSign in the app, then activate it at a PBB ATM or branch. Terms and conditions apply.",
       "summary_source": "",
       "end_date": "2026-12-31"
     },
