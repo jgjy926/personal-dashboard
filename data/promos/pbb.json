@@ -4,13 +4,26 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-10-13T00:00:00+00:00",
-    "today": "2026-10-13",
-    "new_today": 0,
-    "count": 34,
+    "generated_at": "2026-10-14T00:00:00+00:00",
+    "today": "2026-10-14",
+    "new_today": 1,
+    "count": 35,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
   },
   "promotions": [
+    {
+      "title": "PB Privileges @ Advance Vision Eye Specialist Centre",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-advance-vision-eye-specialist-centre/",
+      "image": "https://www.pbebank.com/media/52hhmnwq/advance-vision-eye-specialist_wb.jpg",
+      "id": "8d511da6c8",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-10-14",
+      "tnc_link": "https://www.pbebank.com/media/vinhcjho/tc_advance-vision-eye-specialist.pdf",
+      "tnc_summary": "",
+      "end_date": ""
+    },
     {
       "title": "PB Privileges @ UTAR Hospital",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-utar-hospital/",

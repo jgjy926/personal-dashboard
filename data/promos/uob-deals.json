@@ -4,13 +4,28 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-13T00:00:00+00:00",
-    "today": "2026-10-13",
+    "generated_at": "2026-10-14T00:00:00+00:00",
+    "today": "2026-10-14",
     "new_today": 1,
-    "count": 336,
+    "count": 337,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
+    {
+      "id": "a93cf9ce9d",
+      "bank": "uob",
+      "title": "Sand Wish",
+      "link": "https://www.uob.com.my/personal/promotions/sand-wish.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/sand-wish/360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Western",
+      "period": "1 November 2026 to 30 April 2027",
+      "first_seen": "2026-10-14",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/sand-wish.page",
+      "tnc_summary": "10% off total bill with a minimum spend of RM60",
+      "summary_source": "bank",
+      "end_date": "2027-04-30"
+    },
     {
       "id": "cd6089aef9",
       "bank": "uob",
