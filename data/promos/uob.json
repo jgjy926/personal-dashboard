@@ -4,9 +4,9 @@
     "bank_name": "UOB",
     "kind": "campaign",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-14T00:00:00+00:00",
-    "today": "2026-10-14",
-    "new_today": 0,
+    "generated_at": "2026-10-15T00:00:00+00:00",
+    "today": "2026-10-15",
+    "new_today": 1,
     "count": 3,
     "note": "UOB's featured card campaigns. tnc_summary is written from the banner + T&C by summarize_campaign.py or the Console."
   },
@@ -27,19 +27,18 @@
       "end_date": "2026-10-18"
     },
     {
-      "id": "5582f976b7",
+      "id": "7e7f6306b6",
       "bank": "uob",
-      "title": "Full moon. Fuller returns.",
+      "title": "UOB Rewards You Carnival 2026",
       "desc": "",
-      "link": "https://www.uob.com.my/personal/promotions/thematic-2026.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/thematic-2026/1440x450.png",
+      "link": "https://www.uob.com.my/personal/promotions/cyber-carnival-promo.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/uob-rewards-you-carnival/banner-1920x600.jpg",
       "category": "Credit Card",
-      "period": "until 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "",
-      "tnc_summary": "UOB Mid-Autumn themed campaign ('Full moon. Fuller returns.'). The poster shows only the tagline, with no reward amounts, eligible cards, minimum spend or campaign period.",
-      "summary_source": "",
-      "end_date": "2026-10-31"
+      "period": "",
+      "first_seen": "2026-10-15",
+      "tnc_link": "https://www.uob.com.my/assets/web-resources/personal/promotions/cyber-carnival-promo/tnc.pdf",
+      "tnc_summary": "",
+      "end_date": ""
     },
     {
       "id": "eae2e23e5e",

@@ -4,13 +4,39 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-10-14T00:00:00+00:00",
-    "today": "2026-10-14",
-    "new_today": 1,
-    "count": 35,
+    "generated_at": "2026-10-15T00:00:00+00:00",
+    "today": "2026-10-15",
+    "new_today": 5,
+    "count": 40,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
   },
   "promotions": [
+    {
+      "title": "Tan Chong Ekspres Auto Servis",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/tan-chong-ekspres-auto-servis/",
+      "image": "https://www.pbebank.com/media/m3upphot/tan-chong-express_wb.jpg",
+      "id": "27c7aaea0c",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-10-15",
+      "tnc_link": "https://www.pbebank.com/media/ctfd3bv5/tc_tan-chong-express.pdf",
+      "tnc_summary": "",
+      "end_date": ""
+    },
+    {
+      "title": "Enjoy 0% with PB Mastercard Flexipay",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/enjoy-0-with-pb-mastercard-flexipay-3/",
+      "image": "https://www.pbebank.com/media/wennitso/flexipay-mastercard_151026_wb.jpg",
+      "id": "6ebec06489",
+      "bank": "pbb",
+      "category": "Instalment",
+      "period": "",
+      "first_seen": "2026-10-15",
+      "tnc_link": "https://www.pbebank.com/media/0x3h5ikb/tc_flexipay-mastercard_151026.pdf",
+      "tnc_summary": "",
+      "end_date": ""
+    },
     {
       "title": "PB Privileges @ Advance Vision Eye Specialist Centre",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-advance-vision-eye-specialist-centre/",
@@ -21,6 +47,20 @@
       "period": "",
       "first_seen": "2026-10-14",
       "tnc_link": "https://www.pbebank.com/media/vinhcjho/tc_advance-vision-eye-specialist.pdf",
+      "tnc_summary": "",
+      "summary_source": "",
+      "end_date": ""
+    },
+    {
+      "title": "0% Balance Transfer with PB Mastercard Credit Cards",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/0-balance-transfer-with-pb-mastercard-credit-cards-4/",
+      "image": "https://www.pbebank.com/media/vokgkq5k/mastercard-balance-transfer151026_wb.jpg",
+      "id": "e4bbe0440e",
+      "bank": "pbb",
+      "category": "Instalment",
+      "period": "",
+      "first_seen": "2026-10-15",
+      "tnc_link": "https://www.pbebank.com/media/p0kb04e0/0-mastercard-balance-transfer_tcs_application-form.pdf",
       "tnc_summary": "",
       "end_date": ""
     },
@@ -39,18 +79,17 @@
       "end_date": "2027-09-30"
     },
     {
-      "title": "PB Visa Privileges: 15% OFF on Selected Concert Tickets at Malaysian Philharmonic Orchestra",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-visa-privileges-15-off-on-selected-concert-tickets-at-malaysian-philharmonic-orchestra/",
-      "image": "https://www.pbebank.com/media/1ptpxzk2/malaysian-philharmonic-orchestra_wb.jpg",
-      "id": "e354f1105f",
+      "title": "Spend More, Earn More & WIN BIG ANG POW with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/spend-more-earn-more-win-big-ang-pow-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/fz2pak4i/win-big-angpow_wb.jpg",
+      "id": "9a015d58f6",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "Now – 31 December 2026",
-      "first_seen": "2026-10-08",
-      "tnc_link": "https://www.visa.com.my/en_my/visa-offers-and-perks/dewan-filharmonik-petronas-dfp/174884",
-      "tnc_summary": "15% off selected Malaysian Philharmonic Orchestra concert tickets with PB Visa Infinite or PB Visa Signature Credit Card. Use promo code MVISA15 at www.dfp.com.my. Terms and conditions apply.",
-      "summary_source": "",
-      "end_date": "2026-12-31"
+      "period": "",
+      "first_seen": "2026-10-15",
+      "tnc_link": "https://www.pbebank.com/media/s50i2iln/tc_win-big-angpow.pdf",
+      "tnc_summary": "",
+      "end_date": ""
     },
     {
       "title": "PB Privileges @ 100glasses",
@@ -67,18 +106,17 @@
       "end_date": "2027-03-31"
     },
     {
-      "title": "Cash Back on eWallet Top Up with PB Visa Credit Card",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/cash-back-on-ewallet-top-up-with-pb-visa-credit-card/",
-      "image": "https://www.pbebank.com/media/0iybhwyd/visa-ewallet-cb40_wb.jpg",
-      "id": "2c90d1a043",
+      "title": "Hairy Crab Autumn Culinary Delicacy with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/hairy-crab-autumn-culinary-delicacy-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/vididedb/visa-hairy-crab_wb.jpg",
+      "id": "1c06f33d22",
       "bank": "pbb",
-      "category": "Cashback",
-      "period": "1 October to 31 December 2026",
-      "first_seen": "2026-10-01",
-      "tnc_link": "https://www.pbebank.com/media/21seqjdm/tc_visa-ewallet-cb40.pdf",
-      "tnc_summary": "RM40 cash back on eWallet top up with PB Visa Credit Card. Minimum top up of RM2,000 per transaction. Eligible eWallets: Boost, GrabPay, Lazada, ShopeePay, Touch 'n Go. Registration required via PBe (Key Word: PBIT) or SMS PBIT to 68333. Terms and conditions apply.",
-      "summary_source": "",
-      "end_date": "2026-12-31"
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-10-15",
+      "tnc_link": "https://www.pbebank.com/media/fjigp54j/tc_visa-hairy-crab.pdf",
+      "tnc_summary": "",
+      "end_date": ""
     },
     {
       "title": "Ocean’s Catch Seafood Dinner Buffet Deal at Sheraton Petaling Jaya Hotel",
@@ -123,6 +161,20 @@
       "end_date": "2027-07-31"
     },
     {
+      "title": "PB Visa Privileges: 15% OFF on Selected Concert Tickets at Malaysian Philharmonic Orchestra",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-visa-privileges-15-off-on-selected-concert-tickets-at-malaysian-philharmonic-orchestra/",
+      "image": "https://www.pbebank.com/media/1ptpxzk2/malaysian-philharmonic-orchestra_wb.jpg",
+      "id": "e354f1105f",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "Now – 31 December 2026",
+      "first_seen": "2026-10-08",
+      "tnc_link": "https://www.visa.com.my/en_my/visa-offers-and-perks/dewan-filharmonik-petronas-dfp/174884",
+      "tnc_summary": "15% off selected Malaysian Philharmonic Orchestra concert tickets with PB Visa Infinite or PB Visa Signature Credit Card. Use promo code MVISA15 at www.dfp.com.my. Terms and conditions apply.",
+      "summary_source": "",
+      "end_date": "2026-12-31"
+    },
+    {
       "title": "PB Privileges @ Pak Nik Burger",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-pak-nik-burger/",
       "image": "https://www.pbebank.com/media/3dxbhnrf/pak-nik-burger_wb.jpg",
@@ -137,6 +189,20 @@
       "end_date": "2027-09-14"
     },
     {
+      "title": "Cash Back on eWallet Top Up with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/cash-back-on-ewallet-top-up-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/0iybhwyd/visa-ewallet-cb40_wb.jpg",
+      "id": "2c90d1a043",
+      "bank": "pbb",
+      "category": "Cashback",
+      "period": "1 October to 31 December 2026",
+      "first_seen": "2026-10-01",
+      "tnc_link": "https://www.pbebank.com/media/21seqjdm/tc_visa-ewallet-cb40.pdf",
+      "tnc_summary": "RM40 cash back on eWallet top up with PB Visa Credit Card. Minimum top up of RM2,000 per transaction. Eligible eWallets: Boost, GrabPay, Lazada, ShopeePay, Touch 'n Go. Registration required via PBe (Key Word: PBIT) or SMS PBIT to 68333. Terms and conditions apply.",
+      "summary_source": "",
+      "end_date": "2026-12-31"
+    },
+    {
       "title": "Get up to RM80 Cash Back on Online Transactions with PB Visa Debit Card!",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/get-up-to-rm80-cash-back-on-online-transactions-with-pb-visa-debit-card/",
       "image": "https://www.pbebank.com/media/gfgf2ohi/visa-debit-online-cb80_wb.jpg",
@@ -147,20 +213,6 @@
       "first_seen": "2026-09-22",
       "tnc_link": "https://www.pbebank.com/media/bnzfxwug/tc_visa-debit-online-cb80.pdf",
       "tnc_summary": "Get up to RM80 cash back with an accumulated spend of RM600 per month on online transactions with a PB Visa Debit Card. Registration is required, either via PBe (keyword: PBVD) or by SMS PBVD to 68333. Terms and conditions apply.",
-      "summary_source": "",
-      "end_date": "2026-12-31"
-    },
-    {
-      "title": "Get RM35 When you Register & Activate your PB SecureSign today!",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/get-rm35-when-you-register-activate-your-pb-securesign-today/",
-      "image": "https://www.pbebank.com/media/pinl10xo/pb-securesign-activate_wb.jpg",
-      "id": "9eee5995b2",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "15 September to 31 December 2026",
-      "first_seen": "2026-09-21",
-      "tnc_link": "https://www.pbebank.com/media/0u5pqiid/tc_pb-securesign-activate.pdf",
-      "tnc_summary": "Get RM35 by registering and activating PB SecureSign and making 2 online transactions of any amount with an eligible PB Visa card. Download the MyPB app, register PB SecureSign in the app, then activate it at a PBB ATM or branch. Terms and conditions apply.",
       "summary_source": "",
       "end_date": "2026-12-31"
     },
@@ -207,20 +259,6 @@
       "end_date": "2027-08-31"
     },
     {
-      "title": "Spend & Be Rewarded at vivo",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/spend-be-rewarded-at-vivo-6/",
-      "image": "https://www.pbebank.com/media/wz5ldttu/vivo-v80-lite_wb.jpg",
-      "id": "b6c164fb7e",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "12 September - 30 November 2026",
-      "first_seen": "2026-09-15",
-      "tnc_link": "https://www.pbebank.com/media/4xgfz4o2/tc_vivo-v80-lite.pdf",
-      "tnc_summary": "PB Cards offer: RM100 instant rebate on vivo V80 Lite 5G purchased with a 12-month Zero Interest/Profit Instalment Plan. Available in three variants (128GB/256GB storage), priced from RM116.58 to RM158.25/month at PB Price (RM1,399-RM1,899).",
-      "summary_source": "",
-      "end_date": "2026-11-30"
-    },
-    {
       "title": "JOM RASA PENANG with PB Cards",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/jom-rasa-penang-with-pb-cards/",
       "image": "https://www.pbebank.com/media/h41p35mm/jom-rasa-penang_wb.jpg",
@@ -233,6 +271,20 @@
       "tnc_summary": "PB Cards dining promo across Penang outlets: 20%/15% off at G Hotel Gurney & Kelawai (to 30 Dec 2026); 10-15% off at Sood by Chef Ton, Hut Dining Buffet, Yakiniku Tenshin, Christoph's, Wagyu and Rice, Tsukiji Sushi, Norm, Peninsula House, The Pinn, Sifu Nyonya Cuisine; some require minimum spend (RM80-RM800) or complimentary items; validity periods vary by outlet.",
       "summary_source": "",
       "end_date": "2027-06-30"
+    },
+    {
+      "title": "Get RM35 When you Register & Activate your PB SecureSign today!",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/get-rm35-when-you-register-activate-your-pb-securesign-today/",
+      "image": "https://www.pbebank.com/media/pinl10xo/pb-securesign-activate_wb.jpg",
+      "id": "9eee5995b2",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "15 September to 31 December 2026",
+      "first_seen": "2026-09-21",
+      "tnc_link": "https://www.pbebank.com/media/0u5pqiid/tc_pb-securesign-activate.pdf",
+      "tnc_summary": "Get RM35 by registering and activating PB SecureSign and making 2 online transactions of any amount with an eligible PB Visa card. Download the MyPB app, register PB SecureSign in the app, then activate it at a PBB ATM or branch. Terms and conditions apply.",
+      "summary_source": "",
+      "end_date": "2026-12-31"
     },
     {
       "title": "PB Privileges @ Just Pets Megastore",
@@ -277,18 +329,18 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "Lazada Double-Digit Days with PB Visa Credit Card",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/lazada-double-digit-days-with-pb-visa-credit-card/",
-      "image": "https://www.pbebank.com/media/enodskho/visa-lazada-double-digit_wb.jpg",
-      "id": "3694a7ccdc",
+      "title": "Spend & Be Rewarded at vivo",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/spend-be-rewarded-at-vivo-6/",
+      "image": "https://www.pbebank.com/media/wz5ldttu/vivo-v80-lite_wb.jpg",
+      "id": "b6c164fb7e",
       "bank": "pbb",
-      "category": "Online",
-      "period": "8th (8PM) – 11th (11:59PM) Sep 2026; 9th–12th Oct 2026; 10th–13th Nov 2026; 11th–14th Dec 2026; 1st–4th Feb 2027; 2nd–5th Mar 2027; 3rd–6th Apr 2027",
-      "first_seen": "2026-09-07",
-      "tnc_link": "https://www.pbebank.com/media/sdrozdd4/tc_visa-lazada-double-digit.pdf",
-      "tnc_summary": "RM20 instant off with minimum single-transaction spend of RM180, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Offer repeats monthly on the dates listed in the promotion period, spanning September 2026 through April 2027.",
+      "category": "Credit Card",
+      "period": "12 September - 30 November 2026",
+      "first_seen": "2026-09-15",
+      "tnc_link": "https://www.pbebank.com/media/4xgfz4o2/tc_vivo-v80-lite.pdf",
+      "tnc_summary": "PB Cards offer: RM100 instant rebate on vivo V80 Lite 5G purchased with a 12-month Zero Interest/Profit Instalment Plan. Available in three variants (128GB/256GB storage), priced from RM116.58 to RM158.25/month at PB Price (RM1,399-RM1,899).",
       "summary_source": "",
-      "end_date": "2027-04-06"
+      "end_date": "2026-11-30"
     },
     {
       "title": "PB Privileges: RM100 OFF on MHflypass purchase with Journify",
@@ -303,20 +355,6 @@
       "tnc_summary": "MYR100 off MHflypass (1 pass, 3 return trips, Malaysia/ASEAN) using code PUBLIC100, exclusively for PB credit & debit cardmembers. Valid for all passes except Malaysia Zone 1.",
       "summary_source": "",
       "end_date": "2026-12-14"
-    },
-    {
-      "title": "Lazada PayDay with PB Visa Credit Card",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/lazada-payday-with-pb-visa-credit-card/",
-      "image": "https://www.pbebank.com/media/zfef5zne/visa-lazada-payday_wb.jpg",
-      "id": "c3f22053bf",
-      "bank": "pbb",
-      "category": "Online",
-      "period": "24th (8PM) – 27th (11:59PM) monthly, from September 2026 to April 2027",
-      "first_seen": "2026-09-07",
-      "tnc_link": "https://www.pbebank.com/media/cc4olm1r/tc_visa-lazada-payday.pdf",
-      "tnc_summary": "RM20 off with minimum single-transaction spend of RM180, redeemed by collecting a voucher, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Recurs monthly on the 24th–27th each month across the campaign period.",
-      "summary_source": "",
-      "end_date": "2027-04-27"
     },
     {
       "title": "PB Privileges @ 52 Pilates",
@@ -345,6 +383,34 @@
       "tnc_summary": "Get RM50 off at Bateriku (Astra batteries featured) with PB cards using code PB50. Redeem by walking in to the nearest Bateriku Pitstop, calling the call-out hotline at 011 1600 6008, or booking a battery replacement via the Bateriku Mobile App. Terms and conditions apply.",
       "summary_source": "",
       "end_date": "2027-08-14"
+    },
+    {
+      "title": "Lazada Double-Digit Days with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/lazada-double-digit-days-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/enodskho/visa-lazada-double-digit_wb.jpg",
+      "id": "3694a7ccdc",
+      "bank": "pbb",
+      "category": "Online",
+      "period": "8th (8PM) – 11th (11:59PM) Sep 2026; 9th–12th Oct 2026; 10th–13th Nov 2026; 11th–14th Dec 2026; 1st–4th Feb 2027; 2nd–5th Mar 2027; 3rd–6th Apr 2027",
+      "first_seen": "2026-09-07",
+      "tnc_link": "https://www.pbebank.com/media/sdrozdd4/tc_visa-lazada-double-digit.pdf",
+      "tnc_summary": "RM20 instant off with minimum single-transaction spend of RM180, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Offer repeats monthly on the dates listed in the promotion period, spanning September 2026 through April 2027.",
+      "summary_source": "",
+      "end_date": "2027-04-06"
+    },
+    {
+      "title": "Lazada PayDay with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/lazada-payday-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/zfef5zne/visa-lazada-payday_wb.jpg",
+      "id": "c3f22053bf",
+      "bank": "pbb",
+      "category": "Online",
+      "period": "24th (8PM) – 27th (11:59PM) monthly, from September 2026 to April 2027",
+      "first_seen": "2026-09-07",
+      "tnc_link": "https://www.pbebank.com/media/cc4olm1r/tc_visa-lazada-payday.pdf",
+      "tnc_summary": "RM20 off with minimum single-transaction spend of RM180, redeemed by collecting a voucher, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Recurs monthly on the 24th–27th each month across the campaign period.",
+      "summary_source": "",
+      "end_date": "2027-04-27"
     },
     {
       "title": "Lazada Double Date and Pay Day Sales with PB Mastercard Credit Card",

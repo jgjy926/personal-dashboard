@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-14T12:03:09+00:00",
+    "generated_at": "2026-10-15T11:39:55+00:00",
     "sources": {
       "auctions": "TreasuryDirect (upcoming auctions)",
       "results": "TreasuryDirect (auction results)",
@@ -10,15 +10,6 @@
     "results_note": "Every winning bidder pays the same stop-out rate. 'Allotted at high' is the share of bids AT that rate which were filled — the informative number, since accepted/tendered sits near 35% by construction (Treasury fixes the size; bidders over-bid ~3x). The tail (stop-out vs when-issued) is not published in this feed and is deliberately not estimated."
   },
   "upcoming_auctions": [
-    {
-      "auction_date": "2026-10-14",
-      "issue_date": "2026-10-20",
-      "maturity_date": "2027-02-16",
-      "security_type": "Bill",
-      "term": "17-Week",
-      "rate": "",
-      "cusip": "912797WZ6"
-    },
     {
       "auction_date": "2026-10-15",
       "issue_date": "2026-10-20",
@@ -84,6 +75,24 @@
     }
   ],
   "recent_results": [
+    {
+      "auction_date": "2026-10-14",
+      "issue_date": "2026-10-20",
+      "security_type": "Bill",
+      "term": "17-Week",
+      "cusip": "912797WZ6",
+      "stop_rate": 4.195,
+      "investment_rate": 4.313,
+      "coupon": null,
+      "median_rate": 4.175,
+      "bid_to_cover": 2.79,
+      "allotted_at_high": 83.69,
+      "tendered": 214414714400.0,
+      "accepted": 80054540100.0,
+      "indirect_accepted": 39855200700.0,
+      "direct_accepted": 5908690000.0,
+      "dealer_accepted": 27777600000.0
+    },
     {
       "auction_date": "2026-10-13",
       "issue_date": "2026-10-15",
@@ -209,24 +218,6 @@
       "indirect_accepted": 31063238000.0,
       "direct_accepted": 6618200000.0,
       "dealer_accepted": 984000000.0
-    },
-    {
-      "auction_date": "2026-10-07",
-      "issue_date": "2026-10-13",
-      "security_type": "Bill",
-      "term": "17-Week",
-      "cusip": "912797WY9",
-      "stop_rate": 4.105,
-      "investment_rate": 4.219,
-      "coupon": null,
-      "median_rate": 4.09,
-      "bid_to_cover": 3.1,
-      "allotted_at_high": 43.02,
-      "tendered": 238866776300.0,
-      "accepted": 81374443300.0,
-      "indirect_accepted": 43538762000.0,
-      "direct_accepted": 7400122000.0,
-      "dealer_accepted": 22028150000.0
     }
   ],
   "recent_buybacks": [
