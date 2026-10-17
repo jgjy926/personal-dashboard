@@ -4,7 +4,7 @@
     "bank_name": "UOB",
     "kind": "campaign",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-16T00:00:00+00:00",
+    "generated_at": "2026-10-17T04:41:44.420Z",
     "today": "2026-10-16",
     "new_today": 0,
     "count": 3,
@@ -34,12 +34,12 @@
       "link": "https://www.uob.com.my/personal/promotions/cyber-carnival-promo.page",
       "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/uob-rewards-you-carnival/banner-1920x600.jpg",
       "category": "Credit Card",
-      "period": "",
+      "period": "15-18 October 2026",
       "first_seen": "2026-10-15",
       "tnc_link": "https://www.uob.com.my/assets/web-resources/personal/promotions/cyber-carnival-promo/tnc.pdf",
-      "tnc_summary": "",
+      "tnc_summary": "UOB Rewards You Carnival, held at Mid Valley Exhibition Centre (MVEC), Kuala Lumpur, from 15 to 18 October 2026. The banner does not state specific offers or spend criteria.",
       "summary_source": "",
-      "end_date": ""
+      "end_date": "2026-10-18"
     },
     {
       "id": "eae2e23e5e",
