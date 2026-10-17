@@ -25,6 +25,7 @@
       <button class="tab" id="tab-macro"    role="tab" data-tab="macro">📈 <span>Macro Engine</span></button>
       <button class="tab" id="tab-campaign" role="tab" data-tab="campaign">💳 <span>Card Promos</span></button>
       <button class="tab" id="tab-air"      role="tab" data-tab="air">🌫️ <span>Air Quality</span></button>
+      <button class="tab" id="tab-weather"  role="tab" data-tab="weather">🌦️ <span>Weather</span></button>
     </nav>
   </header>
 
@@ -124,6 +125,22 @@
         </div>
       </div>
       <div id="air-body"><p class="muted loading">Loading air quality…</p></div>
+    </section>
+
+    <!-- ───────────────────────── TAB 5 · WEATHER ───────────────────────── -->
+    <section class="panel-tab" id="panel-weather" role="tabpanel" aria-labelledby="tab-weather" hidden>
+      <div class="tab-head">
+        <div>
+          <h2 class="tab-title">Weather Forecast — Malaysia</h2>
+          <p class="tab-sub">MET Malaysia's 7-day outlook by morning, afternoon and night, plus live weather
+             warnings. Refreshes on the hour from 6 AM to 2 AM; pick your location — it's remembered on this device.</p>
+        </div>
+        <div class="controls">
+          <label class="ccy">Location <select id="wx-loc"></select></label>
+          <button id="wx-refresh" title="Refresh now from data.gov.my" aria-label="Refresh now">↻</button>
+        </div>
+      </div>
+      <div id="wx-body"><p class="muted loading">Loading forecast…</p></div>
     </section>
 
   </main>

@@ -20,6 +20,9 @@ window.DASH_CONFIG = {
   // publishing). The tab falls back to feeds.apims when this is unreachable.
   // Override per-browser: localStorage.setItem('apims_api', 'https://…/apims')
   apimsApi: (localStorage.getItem('apims_api') || 'https://apims-proxy.jgjy926.workers.dev/apims'),
+  // MET Malaysia forecast + warnings (data.gov.my). Keyless and CORS-open, so
+  // the Weather tab calls it straight from the browser — no Worker in between.
+  weatherApi: (localStorage.getItem('weather_api') || 'https://api.data.gov.my/weather'),
   feeds: {
     // The forecasting engine's full snapshot: regime, recession probabilities,
     // factors, scenarios, market implications, model performance, data health.

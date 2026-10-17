@@ -1,4 +1,4 @@
-/* Personal Dynamic Dashboard — tab router + four tab modules.
+/* Personal Dynamic Dashboard — tab router + five tab modules.
  * Each tab renders from a JSON feed and lazy-initialises on first view.
  * Zero dependencies; charts are hand-rolled inline SVG.
  *
@@ -120,7 +120,7 @@ function lineChart(series, dates, opts = {}) {
 window.lineChart = lineChart;
 
 // ── tab controller ────────────────────────────────────────────────────────
-const TABS = ['fx', 'macro', 'campaign', 'air'];
+const TABS = ['fx', 'macro', 'campaign', 'air', 'weather'];
 const started = {};
 const MODS = {}; // id -> init fn, registered below
 function showTab(id) {
@@ -1484,6 +1484,276 @@ MODS.air = function initAir() {
   setInterval(() => {
     if (!document.hidden && !document.getElementById('panel-air').hidden) load(false);
   }, 10 * 60e3);
+};
+
+// ── Tab 5 · Weather ─────────────────────────────────────────────────────────
+/* MET Malaysia's 7-day forecast and live warnings, read straight from
+ * api.data.gov.my (it answers CORS for any origin, so unlike APIMS no proxy
+ * Worker is needed). The forecast is NOT hourly: each day has a morning,
+ * afternoon and night outlook in Malay plus a min/max temperature, so "the
+ * next hours" here is the next few of those periods. Rain is a qualitative
+ * how-widespread scale from MET's own wording, never a percentage. */
+const WX_PERIODS = [
+  { key: 'morning_forecast', name: 'Morning', from: 6, to: 12 },
+  { key: 'afternoon_forecast', name: 'Afternoon', from: 12, to: 18 },
+  { key: 'night_forecast', name: 'Night', from: 18, to: 30 },   // to 6 AM next day
+];
+const WX_WHEN = {
+  'Sepanjang Hari': 'All day', Pagi: 'Morning', Petang: 'Afternoon', Malam: 'Night',
+  'Pagi dan Petang': 'Morning & afternoon', 'Petang dan Malam': 'Afternoon & night',
+  'Pagi dan Malam': 'Morning & night',
+};
+// How widespread the rain is: 0 none · 1 in places · 2 most places · 3 widespread.
+const WX_RAIN = ['No rain', 'Isolated', 'Most places', 'Widespread'];
+/** MET's Malay outlook → { icon, label (English), rain 0-3 }. Unknown wording
+ *  falls through with the original text, so a new phrase is shown, not hidden. */
+function wxParse(bm, night) {
+  const t = String(bm || '').trim();
+  const lo = t.toLowerCase();
+  let icon, label, rain;
+  if (!t) return { icon: '·', label: 'No forecast', rain: null, bm: t };
+  if (lo.startsWith('tiada hujan')) { icon = night ? '🌙' : '☀️'; label = 'No rain'; rain = 0; }
+  else if (lo.startsWith('mendung')) { icon = '☁️'; label = 'Cloudy'; rain = 0; }
+  else if (lo.startsWith('jerebu')) { icon = '🌫️'; label = 'Haze'; rain = 0; }
+  else if (lo.startsWith('ribut petir')) { icon = '⛈️'; label = 'Thunderstorms'; }
+  else if (lo.startsWith('hujan')) { icon = '🌧️'; label = 'Rain'; }
+  else return { icon: '❔', label: t, rain: null, bm: t };
+  if (rain == null) {
+    if (lo.includes('di beberapa tempat')) { rain = 1; label += ' in places'; }
+    else if (lo.includes('di kebanyakan tempat')) { rain = 2; label += ' in most places'; }
+    else { rain = 3; if (lo.includes('menyeluruh')) label = 'Widespread ' + label.toLowerCase(); }
+    if (rain === 1 && icon === '🌧️') icon = night ? '🌧️' : '🌦️';
+  }
+  if (lo.includes('pedalaman')) label += ' (inland)';
+  else if (lo.includes('pantai')) label += ' (coastal)';
+  return { icon, label, rain, bm: t };
+}
+const wxPips = rain => rain == null ? '' :
+  `<span class="wx-pips" title="Rain: ${esc(WX_RAIN[rain])}" aria-label="Rain: ${esc(WX_RAIN[rain])}">${
+    [1, 2, 3].map(i => `<i class="${i <= rain ? 'on r' + rain : ''}"></i>`).join('')}</span>`;
+// MYT wall-clock helpers. The API's dates and times are local (+08:00) with no offset.
+const mytNow = () => new Date(Date.now() + 8 * 36e5);              // read with getUTC*
+const mytDate = (d = mytNow()) => d.toISOString().slice(0, 10);
+const wxDay = (ymd, today) => {
+  const tmr = mytDate(new Date(Date.parse(today + 'T00:00:00Z') + 864e5));
+  if (ymd === today) return 'Today';
+  if (ymd === tmr) return 'Tomorrow';
+  return new Date(ymd + 'T00:00:00Z').toLocaleDateString('en-GB', { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short' });
+};
+const wxLocal = s => s ? new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(s) ? s : s + '+08:00') : null;
+
+MODS.weather = function initWeather() {
+  const API = CFG.weatherApi;
+  const body = document.getElementById('wx-body');
+  const sel = document.getElementById('wx-loc');
+  const btn = document.getElementById('wx-refresh');
+  const KEY = 'wx_loc', CACHE = 'wx_cache';
+  const DEFAULT_LOC = 'Tn079';              // Kuala Lumpur (town)
+  // Auto-refresh on the hour from 6 AM to 2 AM MYT (the 2 AM run is the last).
+  const REFRESH_HOURS = new Set([...Array(18).keys()].map(h => h + 6).concat([0, 1, 2]));
+  const GROUPS = [['Tn', 'Towns'], ['St', 'States'], ['Ds', 'Districts'],
+    ['Dv', 'Sabah & Sarawak divisions'], ['Rc', 'Recreation spots']];
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode */ } },
+  };
+  let mine = (() => { try { return localStorage.getItem(KEY); } catch { return null; } })() || DEFAULT_LOC;
+  // today: every location's forecast for today (fills the picker + the
+  // nationwide strip); days: the chosen location's 7 days; warnings: MET's list.
+  let today = [], days = [], warnings = [], fetchedAt = null, stale = null, timer = null, missed = false, busy = false;
+
+  const q = (path, params) => `${API}/${path}/${params ? '?' + params : ''}`;
+  const timed = url => {
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), 20000);
+    return fetch(url, { cache: 'no-store', signal: ctl.signal })
+      .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+      .finally(() => clearTimeout(t));
+  };
+
+  function fillPicker() {
+    const locs = today.map(r => r.location);
+    if (!locs.some(l => l.location_id === mine)) mine = locs.some(l => l.location_id === DEFAULT_LOC) ? DEFAULT_LOC : (locs[0] || {}).location_id;
+    sel.innerHTML = GROUPS.map(([p, label]) => {
+      const g = locs.filter(l => l.location_id.startsWith(p)).sort((a, b) => a.location_name.localeCompare(b.location_name));
+      return g.length ? `<optgroup label="${esc(label)}">${g.map(l =>
+        `<option value="${esc(l.location_id)}"${l.location_id === mine ? ' selected' : ''}>${esc(l.location_name)}</option>`).join('')}</optgroup>` : '';
+    }).join('');
+  }
+
+  // The next n forecast periods from now, across days.
+  function upcoming(n) {
+    const now = mytNow(), ymd = mytDate(now), h = now.getUTCHours();
+    const out = [];
+    for (const d of days) {
+      if (d.date < ymd) {
+        // Yesterday's night runs until 6 AM today.
+        if (h < 6 && d.date === mytDate(new Date(now - 864e5))) out.push({ d, p: WX_PERIODS[2], now: true });
+        continue;
+      }
+      WX_PERIODS.forEach(p => {
+        if (d.date === ymd && h >= p.to) return;
+        out.push({ d, p, now: d.date === ymd && h >= p.from && h < p.to });
+      });
+    }
+    return out.slice(0, n);
+  }
+
+  function nextRefresh(from = Date.now()) {
+    let t = Math.floor(from / 36e5) * 36e5 + 36e5;
+    for (let i = 0; i < 25; i++, t += 36e5) if (REFRESH_HOURS.has(new Date(t + 8 * 36e5).getUTCHours())) return t;
+    return null;
+  }
+  function schedule() {
+    clearTimeout(timer);
+    const t = nextRefresh();
+    if (t == null) return;
+    // +20s so the top-of-hour run doesn't race MET's own publish.
+    timer = setTimeout(() => {
+      if (document.hidden) missed = true; else load(false);
+      schedule();
+    }, t - Date.now() + 20e3);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && missed) { missed = false; load(false); }
+  });
+
+  function render() {
+    const ymd = mytDate();
+    const loc = (days[0] || {}).location || (today.find(r => r.location.location_id === mine) || {}).location || {};
+    const td = days.find(d => d.date === ymd) || days[0];
+    const nt = nextRefresh();
+    const nextLbl = nt ? new Date(nt).toLocaleTimeString('en-GB', { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit' }) : '—';
+    const nowH = mytNow().getUTCHours();
+    const paused = !REFRESH_HOURS.has(nowH) && nowH < 6;
+    const active = warnings.filter(w => (w.warning_issue || {}).title_en !== 'No Advisory'
+      && (!w.valid_to || wxLocal(w.valid_to) > new Date()));
+    const strip = upcoming(6);
+    const sum = td ? wxParse(td.summary_forecast) : null;
+    const states = today.filter(r => r.location.location_id.startsWith('St'))
+      .sort((a, b) => a.location.location_id.localeCompare(b.location.location_id));
+    const wetStates = states.filter(r => (wxParse(r.summary_forecast).rain || 0) > 0).length;
+
+    body.innerHTML = `
+      ${stale ? `<p class="status">⚠ Couldn't reach data.gov.my (${esc(stale)}). Showing the last forecast this device loaded, from ${esc(agoMin(fetchedAt))}.</p>` : ''}
+      <div class="freshline">
+        <span>Loaded <b>${fetchedAt ? esc(mytTime(fetchedAt, true)) + ' MYT' : '—'}</b> (${fetchedAt ? esc(agoMin(fetchedAt)) : 'never'})</span>
+        <span>· ${paused ? '<b>🌙 auto-refresh paused</b> — resumes at 6 AM' : `next auto-refresh <b>${esc(nextLbl)}</b>`}</span>
+        <span>· MET issues the 7-day forecast once a day; warnings can change any hour</span>
+      </div>
+
+      ${active.length ? active.map(w => `
+        <details class="banner wx-warn">
+          <summary><span class="b-ico">⚠️</span><span>
+            <span class="b-title">${esc((w.warning_issue || {}).title_en || w.heading_en)}</span>
+            <span class="b-detail">${w.valid_from ? `Valid ${esc(mytTime(wxLocal(w.valid_from), true))}` : ''}${w.valid_to ? ` → ${esc(mytTime(wxLocal(w.valid_to), true))}` : ''}
+              · issued ${esc(mytTime(wxLocal(w.warning_issue.issued), true))} · <span class="linkish">details</span></span></span></summary>
+          <p class="wx-warn-text">${esc(w.text_en || '')}</p>
+          ${w.instruction_en ? `<p class="b-caveat">${esc(w.instruction_en)}</p>` : ''}
+        </details>`).join('')
+        : `<div class="srf-strip"><span class="chip ok">No active warnings</span><span class="muted">MET Malaysia has no weather warning in force right now.</span></div>`}
+
+      ${td ? `<div class="card-block wx-hero">
+        <div class="wx-hero-top">
+          <div class="wx-big"><span class="wx-ico">${sum.icon}</span>
+            <span class="wx-temp">${td.max_temp}°<small> / ${td.min_temp}°</small></span></div>
+          <div class="aq-hero-info">
+            <h3>${esc(loc.location_name || '')} <span class="muted">· ${esc(wxDay(td.date, ymd))}</span></h3>
+            <p class="aq-advice"><b>${esc(sum.label)}</b>${td.summary_when ? ` — ${esc((WX_WHEN[td.summary_when] || td.summary_when).toLowerCase())}` : ''} ${wxPips(sum.rain)}</p>
+            <p class="muted">MET wording: “${esc(td.summary_forecast)}”</p>
+          </div>
+        </div>
+        <h3 class="aq-sub">Next ${strip.length} periods <span class="muted">— about the next ${strip.length * 6} hours</span></h3>
+        <div class="wx-strip">${strip.map(({ d, p, now }) => {
+          const f = wxParse(d[p.key], p.key === 'night_forecast');
+          return `<div class="wx-slot${now ? ' now' : ''}" title="${esc(f.bm)}">
+            <span class="wx-when">${now ? 'Now' : esc(wxDay(d.date, ymd))}</span>
+            <span class="wx-pname">${esc(p.name)} <span class="muted">${String(p.from).padStart(2, '0')}–${String(p.to % 24).padStart(2, '0')}</span></span>
+            <span class="wx-ico">${f.icon}</span>
+            <span class="wx-lbl">${esc(f.label)}</span>${wxPips(f.rain)}</div>`;
+        }).join('')}</div>
+      </div>` : '<div class="emptybox">No forecast for this location yet.</div>'}
+
+      <div class="card-block">
+        <h3>7-day outlook</h3>
+        <div class="table-scroll"><table class="data-table wx-week">
+          <thead><tr><th class="l">Day</th><th class="l">Overall</th><th class="num">Low / High</th>
+            ${WX_PERIODS.map(p => `<th class="c">${p.name}</th>`).join('')}</tr></thead>
+          <tbody>${days.filter(d => d.date >= ymd).map(d => {
+            const s = wxParse(d.summary_forecast);
+            return `<tr${d.date === ymd ? ' class="next-up"' : ''}>
+              <td class="l"><b>${esc(wxDay(d.date, ymd))}</b></td>
+              <td class="l" title="${esc(s.bm)}">${s.icon} ${esc(s.label)} ${wxPips(s.rain)}
+                <div class="muted">${esc(WX_WHEN[d.summary_when] || d.summary_when || '')}</div></td>
+              <td class="num">${d.min_temp}° / <b>${d.max_temp}°</b></td>
+              ${WX_PERIODS.map(p => { const f = wxParse(d[p.key], p.key === 'night_forecast');
+                return `<td class="c wx-cell" title="${esc(f.label)} — ${esc(f.bm)}">${f.icon}</td>`; }).join('')}</tr>`;
+          }).join('')}</tbody>
+        </table></div>
+        <p class="muted small">Rain pips: ▮ isolated (in places) · ▮▮ most places · ▮▮▮ widespread — how widespread MET expects it, not a probability. Hover a cell for MET's original wording.</p>
+      </div>
+
+      ${states.length ? `<div class="card-block">
+        <h3>Across Malaysia today <span class="muted">— rain expected in ${wetStates} of ${states.length} states; tap one to view it</span></h3>
+        <div class="wx-states">${states.map(r => { const f = wxParse(r.summary_forecast);
+          return `<button type="button" class="wx-state${r.location.location_id === mine ? ' mine' : ''}" data-id="${esc(r.location.location_id)}" title="${esc(f.label)}">
+            <span class="wx-ico">${f.icon}</span><span><b>${esc(r.location.location_name.replace(/^WP /, ''))}</b>
+            <span class="muted">${r.min_temp}–${r.max_temp}° · ${esc(f.label)}</span></span></button>`; }).join('')}</div>
+      </div>` : ''}
+
+      <div class="freshline"><span>Source: <a href="https://developer.data.gov.my/realtime-api/weather" target="_blank" rel="noopener">data.gov.my Weather API</a>,
+        forecasts and warnings by <a href="https://www.met.gov.my/" target="_blank" rel="noopener">MET Malaysia</a>. English labels are translated from MET's Malay wording.</span></div>`;
+
+    body.querySelectorAll('.wx-state').forEach(el => el.addEventListener('click', () => choose(el.dataset.id, true)));
+  }
+
+  async function loadDays() {
+    const rows = await timed(q('forecast', `filter=${encodeURIComponent(mine)}@location__location_id`));
+    return (Array.isArray(rows) ? rows : []).sort((a, b) => a.date.localeCompare(b.date));
+  }
+  function choose(id, scroll) {
+    if (!id || id === mine) return;
+    mine = id; sel.value = id;
+    try { localStorage.setItem(KEY, id); } catch { /* private mode: just not remembered */ }
+    load(false);
+    if (scroll) document.getElementById('panel-weather').scrollIntoView({ behavior: 'smooth' });
+  }
+  sel.addEventListener('change', () => choose(sel.value));
+  btn.addEventListener('click', () => load(false));
+
+  async function load(first) {
+    if (busy) return;
+    busy = true; btn.disabled = true; btn.classList.add('spin');
+    try {
+      const ymd = mytDate();
+      const [t, d, w] = await Promise.all([
+        timed(q('forecast', `filter=${ymd}@date`)),
+        loadDays(),
+        timed(q('warning')).catch(() => warnings),   // warnings are a bonus; never block the forecast
+      ]);
+      // Just after midnight MET may not have published today's run yet: keep the picker we had.
+      if (Array.isArray(t) && t.length) today = t;
+      days = d; warnings = Array.isArray(w) ? w : [];
+      fetchedAt = new Date().toISOString(); stale = null;
+      store.set(CACHE, { fetchedAt, today, days, warnings, loc: mine });
+    } catch (e) {
+      stale = e.name === 'AbortError' ? 'timed out' : e.message;
+      const c = store.get(CACHE);
+      if (!days.length && c && c.loc === mine) ({ fetchedAt, today, days, warnings } = c);
+      else if (!today.length && c) { today = c.today || []; }
+      if (!days.length) {
+        if (first || !today.length) body.innerHTML = `<div class="errbox">Couldn't load the forecast from data.gov.my (${esc(stale)}). Try ↻ in a minute, or see <a href="https://www.met.gov.my/" target="_blank" rel="noopener">MET Malaysia</a> directly.</div>`;
+        if (today.length) fillPicker();
+        return;
+      }
+    } finally {
+      busy = false; btn.disabled = false; btn.classList.remove('spin');
+    }
+    if (today.length) fillPicker();
+    render();
+  }
+  load(true);
+  schedule();
 };
 
 // ── version badge ───────────────────────────────────────────────────────────

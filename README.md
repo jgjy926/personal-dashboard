@@ -11,6 +11,7 @@ live independently without touching the UI.
 | 💳 **Card Promos** | `data/promos/*.json` (one per bank) | ✅ live — Public Bank, HLB, UOB · daily scrape + AI summary |
 | 📊 **KLSE Monitor** | `data/klse.json` | ✅ real export from your SQLite |
 | 🌫️ **Air Quality** | live Worker (`config.js → apimsApi`), `data/apims.json` fallback | ✅ live — DOE APIMS, ≤10 min behind |
+| 🌦️ **Weather** | live from `api.data.gov.my/weather` (`config.js → weatherApi`) | ✅ live — MET Malaysia 7-day forecast + warnings |
 
 ## Run it locally
 
@@ -194,6 +195,27 @@ new reading would mix data into the site's version. `refresh.yml` still writes a
 fallback `data/apims.json` on each deploy (uncommitted, git-ignored;
 `tools/stage_site.sh` carries the live one forward on a failed fetch). The tab uses
 whichever of the Worker or that snapshot has the newer readings, and says which.
+
+### Weather — live, no backend (`config.js → weatherApi`)
+MET Malaysia's 7-day forecast and live weather warnings from the keyless
+[data.gov.my Weather API](https://developer.data.gov.my/realtime-api/weather). It answers
+CORS for any origin, so the tab calls it straight from the browser: no Worker, no CI step
+and no committed feed.
+
+- **What the data can and can't say.** Each day has a *morning / afternoon / night* outlook
+  (Malay wording, e.g. *Ribut petir di beberapa tempat*) plus min/max °C. There is no
+  hourly forecast and no rain percentage, so "the next hours" are the next six of those
+  periods (~36 h), and the rain pips are a how-widespread scale from MET's own wording
+  (in places · most places · widespread), not a probability. The original wording is in
+  each cell's tooltip; unknown phrases show untranslated rather than being guessed.
+- **Requests per refresh:** today's forecast for all ~440 locations (fills the picker and
+  the *Across Malaysia* strip, ~130 KB), the chosen location's 7 days, and the warnings.
+- **Refresh:** on the hour from 6 AM to 2 AM MYT while the page is open (a refresh missed
+  in a background tab runs when you come back), plus the ↻ button. MET only reissues the
+  forecast once a day, so the hourly runs mostly pick up new warnings.
+- **Fallback:** the last good load is kept in `localStorage`; if data.gov.my is down the
+  tab shows that with a warning instead of a blank pane.
+- Override per browser: `localStorage.setItem('weather_api','https://…/weather')`.
 
 ### Version badge (`tools/stamp_version.py`)
 The header badge shows two lines, each `<MYT date>-<n>` where n counts that kind of

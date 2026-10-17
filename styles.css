@@ -576,6 +576,42 @@ code.hash { font-size: 10.5px; color: var(--muted); }
 .aq-spark { display: block; }
 .aq-spark path { fill: none; stroke: var(--accent); stroke-width: 1.5; }
 
+/* ── Weather ─────────────────────────────────────────────────────────────── */
+.wx-hero-top { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.wx-big { display: flex; flex-direction: column; align-items: center; min-width: 130px;
+  padding: 10px 16px; border-radius: 14px; background: var(--accent-soft); }
+.wx-big .wx-ico { font-size: 46px; line-height: 1.1; }
+.wx-temp { font-size: 28px; font-weight: 750; font-variant-numeric: tabular-nums; }
+.wx-temp small { font-size: 15px; font-weight: 600; color: var(--muted); }
+.wx-strip { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 680px) { .wx-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.wx-slot { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px;
+  padding: 9px 6px; border: 1px solid var(--line); border-radius: 12px; font-size: 12.5px; }
+.wx-slot.now { border-color: var(--accent); background: var(--accent-soft); }
+.wx-when { font-weight: 650; }
+.wx-pname { font-size: 11.5px; }
+.wx-slot .wx-ico { font-size: 28px; line-height: 1.3; }
+.wx-lbl { min-height: 2.6em; line-height: 1.3; }
+.wx-pips { display: inline-flex; gap: 2px; vertical-align: middle; }
+.wx-pips i { width: 7px; height: 11px; border-radius: 2px; background: var(--line); display: inline-block; }
+.wx-pips i.on { background: var(--accent); }
+.wx-week td.c, .wx-week th.c { text-align: center; }
+.wx-cell { font-size: 20px; }
+.wx-states { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.wx-state { font: inherit; display: flex; align-items: center; gap: 10px; text-align: left; cursor: pointer;
+  padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink); }
+.wx-state:hover, .wx-state.mine { border-color: var(--accent); }
+.wx-state .wx-ico { font-size: 22px; }
+.wx-state > span:last-child { display: flex; flex-direction: column; font-size: 13px; }
+.wx-warn { display: block; background: var(--amber-bg); border-color: transparent; padding: 8px 12px; margin-bottom: 8px; }
+.wx-warn summary { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; list-style: none; }
+.wx-warn summary::-webkit-details-marker { display: none; }
+.wx-warn summary > span:last-child { display: flex; flex-direction: column; }
+.wx-warn-text { font-size: 13px; margin: 10px 0 0; white-space: pre-line; }
+#wx-refresh.spin { animation: wx-spin 1s linear infinite; }
+@keyframes wx-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { #wx-refresh.spin { animation: none; opacity: .5; } }
+
 /* ── back-to-top ─────────────────────────────────────────────────────────── */
 .to-top { position: fixed; right: 18px; bottom: 18px; z-index: 20; width: 44px; height: 44px;
   border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--accent);
