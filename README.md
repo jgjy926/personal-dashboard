@@ -210,9 +210,11 @@ and no committed feed.
   each cell's tooltip; unknown phrases show untranslated rather than being guessed.
 - **Requests per refresh:** today's forecast for all ~440 locations (fills the picker and
   the *Across Malaysia* strip, ~130 KB), the chosen location's 7 days, and the warnings.
-- **Refresh:** on the hour from 6 AM to 2 AM MYT while the page is open (a refresh missed
-  in a background tab runs when you come back), plus the ↻ button. MET only reissues the
-  forecast once a day, so the hourly runs mostly pick up new warnings.
+- **Refresh follows the API's own cadence**, with no polling: the forecast is updated
+  *daily* and warnings *when required* (data.gov.my's stated frequencies). The tab loads on
+  open, reloads itself once the MYT date changes (at midnight, or when you come back to it
+  if what it holds is from an earlier day or MET hadn't published today's run yet), and
+  otherwise only on ↻ or a location change, both of which also re-check warnings.
 - **Fallback:** the last good load is kept in `localStorage`; if data.gov.my is down the
   tab shows that with a warning instead of a blank pane.
 - Override per browser: `localStorage.setItem('weather_api','https://…/weather')`.

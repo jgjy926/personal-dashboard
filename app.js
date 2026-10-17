@@ -1549,8 +1549,6 @@ MODS.weather = function initWeather() {
   const btn = document.getElementById('wx-refresh');
   const KEY = 'wx_loc', CACHE = 'wx_cache';
   const DEFAULT_LOC = 'Tn079';              // Kuala Lumpur (town)
-  // Auto-refresh on the hour from 6 AM to 2 AM MYT (the 2 AM run is the last).
-  const REFRESH_HOURS = new Set([...Array(18).keys()].map(h => h + 6).concat([0, 1, 2]));
   const GROUPS = [['Tn', 'Towns'], ['St', 'States'], ['Ds', 'Districts'],
     ['Dv', 'Sabah & Sarawak divisions'], ['Rc', 'Recreation spots']];
   const store = {
@@ -1560,7 +1558,7 @@ MODS.weather = function initWeather() {
   let mine = (() => { try { return localStorage.getItem(KEY); } catch { return null; } })() || DEFAULT_LOC;
   // today: every location's forecast for today (fills the picker + the
   // nationwide strip); days: the chosen location's 7 days; warnings: MET's list.
-  let today = [], days = [], warnings = [], fetchedAt = null, stale = null, timer = null, missed = false, busy = false;
+  let today = [], days = [], warnings = [], fetchedAt = null, stale = null, timer = null, busy = false;
 
   const q = (path, params) => `${API}/${path}/${params ? '?' + params : ''}`;
   const timed = url => {
@@ -1599,33 +1597,27 @@ MODS.weather = function initWeather() {
     return out.slice(0, n);
   }
 
-  function nextRefresh(from = Date.now()) {
-    let t = Math.floor(from / 36e5) * 36e5 + 36e5;
-    for (let i = 0; i < 25; i++, t += 36e5) if (REFRESH_HOURS.has(new Date(t + 8 * 36e5).getUTCHours())) return t;
-    return null;
-  }
-  function schedule() {
+  // Follow the API's own cadence: the forecast is reissued once a day and
+  // warnings only "when required", so there's no clock to poll on. Reload
+  // when the MYT date has moved on since the last load, or when what we hold
+  // still starts before today (MET hadn't published today's run yet).
+  // Anything in between is the ↻ button or a location change.
+  const outdated = () => !fetchedAt || mytDate(new Date(Date.parse(fetchedAt) + 8 * 36e5)) < mytDate()
+    || (days[0] && days[0].date < mytDate());
+  function atMidnight() {
     clearTimeout(timer);
-    const t = nextRefresh();
-    if (t == null) return;
-    // +20s so the top-of-hour run doesn't race MET's own publish.
-    timer = setTimeout(() => {
-      if (document.hidden) missed = true; else load(false);
-      schedule();
-    }, t - Date.now() + 20e3);
+    const n = mytNow();
+    const ms = Date.UTC(n.getUTCFullYear(), n.getUTCMonth(), n.getUTCDate() + 1) - n.getTime();
+    timer = setTimeout(() => { if (!document.hidden) load(false); atMidnight(); }, ms + 60e3);
   }
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && missed) { missed = false; load(false); }
+    if (!document.hidden && !document.getElementById('panel-weather').hidden && outdated()) load(false);
   });
 
   function render() {
     const ymd = mytDate();
     const loc = (days[0] || {}).location || (today.find(r => r.location.location_id === mine) || {}).location || {};
     const td = days.find(d => d.date === ymd) || days[0];
-    const nt = nextRefresh();
-    const nextLbl = nt ? new Date(nt).toLocaleTimeString('en-GB', { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit' }) : '—';
-    const nowH = mytNow().getUTCHours();
-    const paused = !REFRESH_HOURS.has(nowH) && nowH < 6;
     const active = warnings.filter(w => (w.warning_issue || {}).title_en !== 'No Advisory'
       && (!w.valid_to || wxLocal(w.valid_to) > new Date()));
     const strip = upcoming(6);
@@ -1638,8 +1630,8 @@ MODS.weather = function initWeather() {
       ${stale ? `<p class="status">⚠ Couldn't reach data.gov.my (${esc(stale)}). Showing the last forecast this device loaded, from ${esc(agoMin(fetchedAt))}.</p>` : ''}
       <div class="freshline">
         <span>Loaded <b>${fetchedAt ? esc(mytTime(fetchedAt, true)) + ' MYT' : '—'}</b> (${fetchedAt ? esc(agoMin(fetchedAt)) : 'never'})</span>
-        <span>· ${paused ? '<b>🌙 auto-refresh paused</b> — resumes at 6 AM' : `next auto-refresh <b>${esc(nextLbl)}</b>`}</span>
-        <span>· MET issues the 7-day forecast once a day; warnings can change any hour</span>
+        <span>· MET reissues the 7-day forecast <b>daily</b> — it reloads itself when the date changes</span>
+        <span>· warnings are issued when required — press ↻ to check now</span>
       </div>
 
       ${active.length ? active.map(w => `
@@ -1753,7 +1745,7 @@ MODS.weather = function initWeather() {
     render();
   }
   load(true);
-  schedule();
+  atMidnight();
 };
 
 // ── version badge ───────────────────────────────────────────────────────────
