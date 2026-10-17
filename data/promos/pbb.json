@@ -4,9 +4,9 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-10-17T04:41:42.120Z",
-    "today": "2026-10-16",
-    "new_today": 13,
+    "generated_at": "2026-10-17T00:00:00+00:00",
+    "today": "2026-10-17",
+    "new_today": 0,
     "count": 22,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
   },
@@ -22,6 +22,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://www.pbebank.com/media/ezlbqme4/tc_meals-family-friend.pdf",
       "tnc_summary": "15% cash back with a minimum spend of RM250 using a PB Visa Credit Card at participating restaurants, including Mohd Chan, K-Fry Urban Korean, Din by Din Tai Fung, Dolly Dim Sum, Dancing Fish and Rembayung. Register first via PBe (keyword PBG) or SMS PBG to 68333.",
+      "summary_source": "",
       "end_date": "2026-12-31"
     },
     {
@@ -91,6 +92,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://apply.pbebank.com/cards/visainfinite",
       "tnc_summary": "Agoda hotel deals with PB Visa cards. Visa Infinite: Stay 3 Pay 2 nights (capped USD150/transaction), stays to 31 Dec 2027. Visa Signature: 16% off (capped RM120/transaction), stays to 30 Jun 2027. All PB/PIB Visa cards: 7% off (capped USD100/transaction), booking and stay until 31 Mar 2029.",
+      "summary_source": "",
       "end_date": "2029-03-31"
     },
     {
@@ -104,6 +106,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://www.pbebank.com/media/pampfvf3/tc_alipay-link-visa.pdf",
       "tnc_summary": "Link a PB Visa Credit Card to Alipay to get 10% cash back with a minimum spend of RM200 in Mainland China. Register first via PBe (keyword PBGR) or SMS PBGR to 68333.",
+      "summary_source": "",
       "end_date": "2026-12-31"
     },
     {
@@ -117,6 +120,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://www.unionpayintl.com/cardholderServ/serviceCenter/merchant/11961431310399?type=1",
       "tnc_summary": "Up to RM60 off on Shopee with a PB UnionPay Lifestyle Debit Card, per single transaction: RM20 off with RM80 minimum spend, RM35 off with RM150 minimum spend, or RM60 off with RM250 minimum spend.",
+      "summary_source": "",
       "end_date": "2027-06-30"
     },
     {
@@ -144,6 +148,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://www.pbebank.com/media/0zrbrblh/tc_global-plaza0726.pdf",
       "tnc_summary": "Complimentary airport lounge access with a PB RCB Mastercard Premier Debit Card. Spend at least RM12,000 per quarter on online and overseas transactions for 2 visits, or at least RM10,000 for 1 visit. Valid at Plaza Premium First, Plaza Premium Lounge and Travel Club Lounge.",
+      "summary_source": "",
       "end_date": "2027-06-30"
     },
     {
@@ -157,6 +162,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://www.pbebank.com/media/4xrhbgvc/appform_visa-balance-transfer-0626.pdf",
       "tnc_summary": "0% balance transfer for 6 months with PB Visa Credit Cards, minimum transfer amount RM3,000. Apply via www.pbebank.com (Apply > Balance Transfer > select card), call 03-2170 8000 or email custsvc@publicbank.com.my.",
+      "summary_source": "",
       "end_date": "2026-12-31"
     },
     {
@@ -170,6 +176,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://www.pbebank.com/en/cards/activate-online-and-overseas-transactions-for-your-pb-cards-now/",
       "tnc_summary": "RM0 reload fees when using a PB Debit Card to top up eWallets such as Boost, Grab and Touch 'n Go. No campaign period is shown on the poster.",
+      "summary_source": "",
       "end_date": ""
     },
     {
@@ -239,6 +246,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://www.pbebank.com/media/ruxl0b3g/tc_tripcom.pdf",
       "tnc_summary": "Trip.com deals with PB cards. Hotels: 10% off China hotels (PBCHINA10), 9% off for new users (PBSTAY9), 7% off for existing users (PBSTAY7). Flights (PBTRIPFLY): RM30 off with RM1,000 minimum spend, RM60 off with RM1,400 minimum spend. Book at my.trip.com/w/publicbankmy.",
+      "summary_source": "",
       "end_date": "2026-12-31"
     },
     {
@@ -252,6 +260,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://destinations.visa.com/thailand/#/discover",
       "tnc_summary": "PB Visa offers in Thailand: 30% off Grab, 20% off TAGTHAi Pass, complimentary Airportels luggage delivery, and dining discounts at Hyatt, Westin and Courtyard hotels. Shopping vouchers at Central, Siam Paragon/Emporium/EmQuartier and ICONSIAM/Siam Center (minimum spend THB4,000). Spa discounts at Oasis, Health Land and Cenvaree. Scan the QR code to unlock offers.",
+      "summary_source": "",
       "end_date": "2026-12-31"
     },
     {
@@ -265,6 +274,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://specials.priceless.com/en-my/offers/Agoda?Oid=202503210003&issuerId=&productId=",
       "tnc_summary": "Agoda hotel booking discount with PB Mastercard. PB World Mastercard Credit Card: 12% off, capped at US$45. All other PB Mastercard credit and debit cards: 8% off, capped at US$25.",
+      "summary_source": "",
       "end_date": "2027-03-31"
     },
     {
@@ -278,6 +288,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://www.pbebank.com/media/ixjfbidg/tc_alipay-rmb30.pdf",
       "tnc_summary": "PB Mastercard on Alipay in Mainland China. New users: RMB30 coupon after linking the card and spending at least RMB300. Existing users: RMB30 instant discount with a minimum spend of RMB1,000.",
+      "summary_source": "",
       "end_date": "2026-12-31"
     },
     {
@@ -291,6 +302,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://www.pbebank.com/media/xx5hueyp/tc_sunway-hotels-resorts.pdf",
       "tnc_summary": "15% off the best available rate for PB World Mastercard, Infinite and Signature cards (code PBB15); 10% off for other PB cards (PBB10). Applies at Sunway Resort, Pyramid and Lagoon Hotels. Also 15% off food and non-alcoholic beverages at Sunset Terrace and Cafe West. Enquiries: 03 7492 8000.",
+      "summary_source": "",
       "end_date": "2026-12-30"
     },
     {
@@ -304,6 +316,7 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://www.pbebank.com/media/2crlxklm/tc-mass-acquisition-2026v2.pdf",
       "tnc_summary": "Sign-up rewards for new PB and PIB credit cards. The poster only shows card designs (Visa Infinite, World Mastercard, Visa Signature, Platinum and PIB cards); no offer, criteria or period is printed. Refer to the T&C document for details.",
+      "summary_source": "",
       "end_date": ""
     }
   ]

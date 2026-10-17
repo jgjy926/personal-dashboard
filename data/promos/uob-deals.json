@@ -4,8 +4,8 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-16T00:00:00+00:00",
-    "today": "2026-10-16",
+    "generated_at": "2026-10-17T00:00:00+00:00",
+    "today": "2026-10-17",
     "new_today": 0,
     "count": 337,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
