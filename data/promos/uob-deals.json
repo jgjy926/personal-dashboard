@@ -4,8 +4,8 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-17T00:00:00+00:00",
-    "today": "2026-10-17",
+    "generated_at": "2026-10-18T00:00:00+00:00",
+    "today": "2026-10-18",
     "new_today": 0,
     "count": 337,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
@@ -2622,21 +2622,6 @@
       "end_date": "2026-10-18"
     },
     {
-      "id": "69f808fd6f",
-      "bank": "uob",
-      "title": "Sea Horse",
-      "link": "https://www.uob.com.my/personal/promotions/sea-horse-pillows.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/sea-horse-pillows/360x240.gif",
-      "category": "Shopping",
-      "subcategory": "In Store",
-      "period": "15 October 2026 to 18 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/sea-horse-pillows.page",
-      "tnc_summary": "Purchase 2 CORAL pillows for only RM59 (NP: RM69 per piece).",
-      "summary_source": "bank",
-      "end_date": "2026-10-18"
-    },
-    {
       "id": "3d8a23dd2d",
       "bank": "uob",
       "title": "Mastercard Exclusive: Lotte Duty Free",
@@ -2650,6 +2635,21 @@
       "tnc_summary": "Mastercard Exclusive · Complimentary Gold Membership upgrade · Pre LDF PAY – KRW10,000 off on purchases over USD50 · Discount Coupons: -USD5 off on purchases over USD50 -USD11 off on purchases over USD100 -USD33 off on purchases over USD300 -USD55 off on purchases over USD500 Available at Lotte downtown stores in South Korea only. Terms and conditions apply. · -USD5 off on purchases over USD50 · -USD11 off on purchases over USD100 · -USD33 off on purchases over USD300 · -USD55 off on purchases over USD500",
       "summary_source": "bank",
       "end_date": "2026-10-31"
+    },
+    {
+      "id": "69f808fd6f",
+      "bank": "uob",
+      "title": "Sea Horse",
+      "link": "https://www.uob.com.my/personal/promotions/sea-horse.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/sea-horse/360x240.gif",
+      "category": "Shopping",
+      "subcategory": "In Store",
+      "period": "15 September 2026 – 31 December 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/sea-horse.page",
+      "tnc_summary": "Offer 1: 50% off the 2nd mattress (Queen or King size). The lower-priced mattress gets the discount. · Offer 2: Complimentary 2 unit of cushions (worth RM158) with a minimum spend of RM3,000 in a single receipt.",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
     },
     {
       "id": "43d85167f3",
@@ -3777,21 +3777,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "33a2d64a28",
-      "bank": "uob",
-      "title": "Visa Exclusive: Spa Cenvaree",
-      "link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/spa-cenvaree/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Services",
-      "period": "Now to 31 March 2027",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
-      "tnc_summary": "Visa Exclusive 25% off on all treatments",
-      "summary_source": "bank",
-      "end_date": "2027-03-31"
-    },
-    {
       "id": "10d10b9a54",
       "bank": "uob",
       "title": "Grab",
@@ -3805,6 +3790,21 @@
       "tnc_summary": "Visa Exclusive · 30% off on Grab Transport · Promo code: VISATH",
       "summary_source": "bank",
       "end_date": "2026-12-31"
+    },
+    {
+      "id": "33a2d64a28",
+      "bank": "uob",
+      "title": "Visa Exclusive: Spa Cenvaree",
+      "link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/spa-cenvaree/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Services",
+      "period": "Now to 31 March 2027",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
+      "tnc_summary": "Visa Exclusive 25% off on all treatments",
+      "summary_source": "bank",
+      "end_date": "2027-03-31"
     },
     {
       "id": "cab7ae8354",

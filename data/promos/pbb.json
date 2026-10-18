@@ -4,8 +4,8 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-10-17T00:00:00+00:00",
-    "today": "2026-10-17",
+    "generated_at": "2026-10-18T00:00:00+00:00",
+    "today": "2026-10-18",
     "new_today": 0,
     "count": 22,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
