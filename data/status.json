@@ -1,30 +1,62 @@
 {
-  "generated_at": "2026-10-19T14:37:49+00:00",
+  "generated_at": "2026-10-19T14:40:55+00:00",
   "run": {
-    "trigger": "push",
-    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/39270583800"
+    "trigger": "workflow_dispatch",
+    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/39270597138"
   },
   "sources": {
     "apims": {
       "result": "ok",
-      "at": "2026-10-19T14:37:49+00:00",
-      "last_ok_at": "2026-10-19T14:37:49+00:00",
+      "at": "2026-10-19T14:40:55+00:00",
+      "last_ok_at": "2026-10-19T14:40:55+00:00",
       "fail_streak": 0,
       "note": "[fetch_apims] 68/68 stations reporting, as of 2026-10-19T22:00:00+08:00 -> data/apims.json"
     },
+    "engine": {
+      "result": "ok",
+      "at": "2026-10-19T14:40:55+00:00",
+      "last_ok_at": "2026-10-19T14:40:55+00:00",
+      "fail_streak": 0
+    },
+    "hlb": {
+      "result": "ok",
+      "at": "2026-10-19T14:40:55+00:00",
+      "last_ok_at": "2026-10-19T14:40:55+00:00",
+      "fail_streak": 0,
+      "note": "[hlb] 7 card promos -> data/promos/hlb.draft.json. Next: python tools/merge_campaign.py"
+    },
     "macro": {
       "result": "ok",
-      "at": "2026-10-19T14:37:49+00:00",
-      "last_ok_at": "2026-10-19T14:37:49+00:00",
+      "at": "2026-10-19T14:40:55+00:00",
+      "last_ok_at": "2026-10-19T14:40:55+00:00",
       "fail_streak": 0,
       "note": "[fetch_macro] NYFED_SRF: 411 days (latest 2026-10-19, $0.0bn); alert=normal (peak $0.111bn on 2026-10-15)"
     },
+    "pbb": {
+      "result": "ok",
+      "at": "2026-10-19T14:40:55+00:00",
+      "last_ok_at": "2026-10-19T14:40:55+00:00",
+      "fail_streak": 0,
+      "note": "[scrape] 136 cards listed; keeping 53 (top 15 of each listing + 23 already summarised further down), fetching detail pages…"
+    },
+    "summarize": {
+      "result": "ok",
+      "at": "2026-10-19T14:40:55+00:00",
+      "last_ok_at": "2026-10-19T14:40:55+00:00",
+      "fail_streak": 0
+    },
     "treasury": {
       "result": "ok",
-      "at": "2026-10-19T14:37:49+00:00",
-      "last_ok_at": "2026-10-19T14:37:49+00:00",
+      "at": "2026-10-19T14:40:55+00:00",
+      "last_ok_at": "2026-10-19T14:40:55+00:00",
       "fail_streak": 0,
       "note": "[fetch_treasury] upcoming auctions: 0"
+    },
+    "uob": {
+      "result": "ok",
+      "at": "2026-10-19T14:40:55+00:00",
+      "last_ok_at": "2026-10-19T14:40:55+00:00",
+      "fail_streak": 0
     }
   }
 }
