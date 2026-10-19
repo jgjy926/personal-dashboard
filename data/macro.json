@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-19T14:23:09+00:00",
+    "generated_at": "2026-10-19T14:28:12+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF + NY Fed",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; the US Treasury's own daily curve extends the nominal and TIPS yields, and Yahoo Finance extends the market-traded series, over the days FRED has not published yet (FRED batches the curve series, the Fed's H.10 dollar release is weekly, the EIA crude series are batched). Every card names the source behind its latest point, and the ones with no faster publisher carry their release cadence instead.",
@@ -62,9 +62,9 @@
     {
       "id": "SP500",
       "label": "S&P 500",
-      "value": 7712.7,
+      "value": 7710.34,
       "unit": "",
-      "change": 53.26,
+      "change": 50.9,
       "as_of": "2026-10-19",
       "freq": "daily",
       "source": "FRED SP500 + Yahoo ^GSPC",
@@ -73,9 +73,9 @@
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4165.5,
+      "value": 4169.0,
       "unit": "$",
-      "change": -15.6,
+      "change": -12.1,
       "as_of": "2026-10-19",
       "freq": "daily",
       "source": "Yahoo GC=F",
@@ -84,9 +84,9 @@
     {
       "id": "BRENT",
       "label": "Brent Crude",
-      "value": 108.24,
+      "value": 108.07,
       "unit": "$",
-      "change": -1.62,
+      "change": -1.79,
       "as_of": "2026-10-19",
       "freq": "daily",
       "source": "FRED DCOILBRENTEU + Yahoo BZ=F",
@@ -95,9 +95,9 @@
     {
       "id": "WTI",
       "label": "WTI Crude",
-      "value": 97.73,
+      "value": 97.53,
       "unit": "$",
-      "change": -3.68,
+      "change": -3.88,
       "as_of": "2026-10-19",
       "freq": "daily",
       "source": "FRED DCOILWTICO + Yahoo CL=F",
@@ -130,9 +130,9 @@
     {
       "id": "DXY",
       "label": "Dollar Index (ICE DXY)",
-      "value": 101.9,
+      "value": 101.92,
       "unit": "",
-      "change": 0.07,
+      "change": 0.08,
       "as_of": "2026-10-19",
       "freq": "daily",
       "source": "Yahoo DX-Y.NYB",
@@ -142,9 +142,9 @@
     {
       "id": "USDJPY",
       "label": "USD/JPY",
-      "value": 158.45,
+      "value": 158.43,
       "unit": "¥",
-      "change": 0.3,
+      "change": 0.29,
       "as_of": "2026-10-19",
       "freq": "daily",
       "source": "FRED DEXJPUS + Yahoo JPY=X",
@@ -393,7 +393,7 @@
         4107.0,
         4481.5,
         4186.7,
-        4165.5
+        4169.0
       ],
       "sp500": [
         4567.0,
@@ -455,7 +455,7 @@
         7489.7,
         7686.1,
         7651.5,
-        7712.7
+        7710.3
       ]
     },
     "note": "Real yield / gold / S&P 500 each scaled to its own 0–100 range so co-movement is comparable (min→max of the window, not indexed to the first point — robust to a series like real yield opening the window near/below zero)."
@@ -584,7 +584,7 @@
         96.95,
         89.75,
         115.91,
-        108.24
+        108.07
       ],
       "wti": [
         66.14,
@@ -646,7 +646,7 @@
         86.16,
         87.03,
         97.18,
-        97.73
+        97.53
       ]
     },
     "unit": "$/bbl",
@@ -776,7 +776,7 @@
         159.16,
         159.74,
         157.25,
-        158.45
+        158.43
       ]
     },
     "unit": "JPY per USD",
