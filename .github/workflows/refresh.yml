@@ -121,7 +121,7 @@ jobs:
         # One feed per source in data/promos/. Each scraper writes only its own
         # draft, so one bank's outage or redesign leaves the others untouched.
         # Public Bank: --max bounds only the promos still WITHOUT a summary, per
-        # listing (credit and debit each; the credit listing alone runs 130+).
+        # listing (credit, debit and the combined hub each; the hub runs ~140).
         # Any promo already summarised stays in the feed while the bank lists it.
         run: |
           python tools/scrape_campaign.py --max 15 || echo "::warning::Public Bank promo scrape failed"

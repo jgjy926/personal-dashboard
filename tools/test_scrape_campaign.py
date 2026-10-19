@@ -72,5 +72,25 @@ class TestSelectPromos(unittest.TestCase):
         self.assertEqual(got, {f"c{i}" for i in range(15)} | {f"d{i}" for i in range(15)})
 
 
+class TestListingsLookMoved(unittest.TestCase):
+    """2026-10-16: the bank cut its credit/debit listings to ~25 cards and moved the
+    rest to a hub page; one run dropped 27 of 34 summarised promos. The guard stops
+    that draft from being written."""
+
+    def test_most_summaries_vanishing_at_once_is_flagged(self):
+        summarised = {f"s{i}" for i in range(34)}
+        self.assertTrue(sc.listings_look_moved({"s0", "s1", "s2", "x"}, summarised))
+
+    def test_a_few_promos_ending_is_normal(self):
+        summarised = {f"s{i}" for i in range(34)}
+        self.assertFalse(sc.listings_look_moved(summarised - {"s1", "s2", "s3"}, summarised))
+
+    def test_no_summaries_yet_never_blocks(self):
+        self.assertFalse(sc.listings_look_moved(set(), set()))
+
+    def test_the_combined_hub_is_read(self):
+        self.assertTrue(any("credit-debit-cards-promotions" in u for u, _ in sc.LISTINGS))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -64,13 +64,26 @@ RAW_DIR = os.path.join(DATA, "campaign_raw")
 FEED = "pbb"
 
 BASE = "https://www.pbebank.com"
-# Card-specific listings (verified 2026-09: both render real `.grid-item` cards,
-# unlike the generic /credit-debit-cards-promotions/ hub page, which is mostly
-# nav/category links and was the original bug here).
+# Listings to read. All three render real `.grid-item` cards (re-verified 2026-10-19).
+#
+# Around 2026-10-16 Public Bank cut the credit and debit listings down to a short
+# curated set (~25 cards each, down from 130+). The full card-promo catalogue (~140,
+# incl. the merchant "PB Privileges" deals) now lives ONLY on the combined hub.
+# Reading just the first two dropped 31 still-live promos — and 27 summaries with
+# them — in a single run. The two card listings stay first so their default
+# category (Credit/Debit Card) wins for the promos they carry; the hub fills in
+# everything else.
 LISTINGS = [
     (f"{BASE}/en/promotions/credit-cards-promotions/", "Credit Card"),
     (f"{BASE}/en/promotions/debit-cards-promotions/", "Debit Card"),
+    (f"{BASE}/en/promotions/credit-debit-cards-promotions/", "Credit Card"),
 ]
+
+# Refuse to write a draft when fewer than this share of the promos already
+# summarised are still found in the listings. A real bank clear-out removes a few
+# at a time; losing most of them at once means the site moved its listings again,
+# and writing that draft would delete every summary with it.
+MIN_SUMMARISED_KEPT = 0.5
 
 
 def _abs(url: str) -> str:
@@ -239,6 +252,15 @@ def select_promos(listed: list[dict], window: int, summarised_ids: set[str]) -> 
             if window <= 0 or c["rank"] < window or c["id"] in summarised_ids]
 
 
+def listings_look_moved(listed_ids: set[str], summarised_ids: set[str]) -> bool:
+    """True when most already-summarised promos have vanished from the listings at
+    once — the signature of the bank moving its pages (as on 2026-10-16), not of
+    promos ending. The caller then keeps the live feed instead of overwriting it."""
+    if not summarised_ids:
+        return False
+    return len(summarised_ids & listed_ids) < MIN_SUMMARISED_KEPT * len(summarised_ids)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--max", type=int, default=20,
@@ -277,6 +299,14 @@ def main() -> int:
             by_link[card["link"]] = card
     # Newest first across both listings — the feed's order is the dashboard's order.
     listed = sorted(by_link.values(), key=lambda c: c["rank"])
+
+    if listings_look_moved({c["id"] for c in listed}, summarised_ids):
+        still_listed = summarised_ids & {c["id"] for c in listed}
+        print(f"[scrape] only {len(still_listed)}/{len(summarised_ids)} already-summarised "
+              f"promos are still in the listings ({len(listed)} cards read) — the site has "
+              "probably moved its listings. NOT writing a draft, so the live feed and its "
+              "summaries stay as they are. Check LISTINGS against pbebank.com.")
+        return 1
 
     promos = select_promos(listed, args.max, summarised_ids)
     if not promos:
