@@ -1909,7 +1909,13 @@ MODS.status = function initStatus() {
         raise(r, 'warn', `Live Worker unreachable (${errMsg(live.reason)}) — the tab falls back to the deployed snapshot.`);
         if (snap.status !== 'fulfilled') { raise(r, 'down', 'No snapshot either — the tab has nothing to show.'); return; }
       }
-      const d = live.status === 'fulfilled' ? live.value : snap.value;
+      // Same rule as the Air tab: whichever has the newer readings is what it shows.
+      const lv = live.status === 'fulfilled' ? live.value : null;
+      const sv = snap.status === 'fulfilled' ? snap.value : null;
+      const d = lv && (!sv || asOf(lv) >= asOf(sv)) ? lv : sv;
+      if (lv && sv && hours(asOf(lv)) - hours(asOf(sv)) > 3)
+        raise(r, 'warn', `Live Worker is serving readings ${Math.round(hours(asOf(lv)) - hours(asOf(sv)))}h behind the deployed snapshot (as of ${mytTime(asOf(lv), true)}) — the tab shows the snapshot; check apims-proxy's cache/cron.`);
+      if (lv) r.facts.push(['Live Worker as of', when(asOf(lv))]);
       const h = hours(asOf(d));
       r.facts.push(['Readings as of', when(asOf(d))]);
       if (snap.status === 'fulfilled') r.facts.push(['Snapshot as of', when(asOf(snap.value))]);
