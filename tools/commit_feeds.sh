@@ -9,6 +9,11 @@ set -u
 msg="$1"; shift
 git config user.name  "github-actions[bot]"
 git config user.email "github-actions[bot]@users.noreply.github.com"
+# status.json changes on every run, so an overlapping run always conflicts on it.
+# Merge it per source (.gitattributes) instead of aborting the rebase below,
+# which used to drop this run's whole feed commit.
+git config merge.status-json.name "per-source merge of data/status.json"
+git config merge.status-json.driver "python3 tools/write_status.py --merge-driver %A %B"
 git add "$@" 2>/dev/null || true
 if git diff --cached --quiet; then
   echo "no changes"

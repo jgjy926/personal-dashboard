@@ -112,6 +112,36 @@ def parse_pairs(items: list[str]) -> dict[str, str]:
     return out
 
 
+def merge_docs(a: dict, b: dict) -> dict:
+    """Two runs' status.json, combined: per source the record with the later `at`,
+    and the later run's header. Every run rewrites the file, so two overlapping runs
+    (a push during the daily refresh) always conflict on it; a line merge of JSON is
+    meaningless, and before this the conflict aborted commit_feeds.sh's rebase and
+    lost the later run's whole feed commit."""
+    newer = b if b.get("generated_at", "") >= a.get("generated_at", "") else a
+    sources = dict(a.get("sources") or {})
+    for k, rec in (b.get("sources") or {}).items():
+        if rec.get("at", "") >= sources.get(k, {}).get("at", ""):
+            sources[k] = rec
+    return {**newer, "sources": dict(sorted(sources.items()))}
+
+
+def merge_driver(ours: str, theirs: str) -> int:
+    """git merge driver (`%A %B`): writes the merged doc over `ours`. Wired up by
+    tools/commit_feeds.sh with .gitattributes `data/status.json merge=status-json`."""
+    docs = []
+    for path in (ours, theirs):
+        try:
+            with open(path, encoding="utf-8") as f:
+                docs.append(json.load(f))
+        except (OSError, ValueError):
+            docs.append({})
+    with open(ours, "w", encoding="utf-8") as f:
+        json.dump(merge_docs(*docs), f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--step", action="append", default=[], help="key=outcome (repeatable)")
@@ -119,7 +149,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--logdir", help="directory holding log-<key>.txt files")
     ap.add_argument("--trigger", default="", help="github.event_name")
     ap.add_argument("--out", default=STATUS)
+    ap.add_argument("--merge-driver", nargs=2, metavar=("OURS", "THEIRS"),
+                    help="act as a git merge driver for status.json instead")
     args = ap.parse_args(argv)
+    if args.merge_driver:
+        return merge_driver(*args.merge_driver)
 
     steps = parse_pairs(args.step)
     if args.outcomes:

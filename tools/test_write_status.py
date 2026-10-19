@@ -100,5 +100,59 @@ class TestMain(unittest.TestCase):
         self.assertEqual(doc["run"]["trigger"], "push")
 
 
+class TestMergeDriver(unittest.TestCase):
+    """Two overlapping CI runs both rewrite status.json; the merge keeps the newer
+    record per source instead of conflicting (and losing the later run's commit)."""
+    FAST = {"generated_at": "2026-10-19T14:25:00+00:00", "run": {"trigger": "push"},
+            "sources": {"macro": {"result": "ok", "at": "2026-10-19T14:25:00+00:00"}}}
+    FULL = {"generated_at": "2026-10-19T14:26:00+00:00", "run": {"trigger": "workflow_dispatch"},
+            "sources": {"macro": {"result": "fail", "at": "2026-10-19T14:24:00+00:00"},
+                        "pbb": {"result": "ok", "at": "2026-10-19T14:26:00+00:00"}}}
+
+    def test_newer_record_wins_per_source(self):
+        m = ws.merge_docs(self.FAST, self.FULL)
+        self.assertEqual(m["sources"]["macro"]["result"], "ok")     # the fast run's is newer
+        self.assertEqual(m["sources"]["pbb"]["result"], "ok")       # only the full run had it
+        self.assertEqual(m["run"]["trigger"], "workflow_dispatch")  # the later run's header
+
+    def test_order_does_not_matter(self):
+        self.assertEqual(ws.merge_docs(self.FAST, self.FULL), ws.merge_docs(self.FULL, self.FAST))
+
+    def test_rebase_conflict_resolves_through_the_driver(self):
+        import shutil
+        import subprocess
+        git = shutil.which("git")
+        if not git:
+            self.skipTest("git not installed")
+        script = os.path.abspath(ws.__file__).replace("\\", "/")
+        with tempfile.TemporaryDirectory() as d:
+            def run(*a):
+                subprocess.run([git, *a], cwd=d, check=True, capture_output=True)
+
+            def put(doc):
+                with open(os.path.join(d, "status.json"), "w", encoding="utf-8") as f:
+                    json.dump(doc, f, indent=2)
+                run("add", "status.json")
+                run("commit", "-qm", "x")
+            run("init", "-q", "-b", "main")
+            for k, v in (("user.name", "t"), ("user.email", "t@t"), ("core.autocrlf", "false"),
+                         ("merge.status-json.driver", f'"{sys.executable}" "{script}" --merge-driver %A %B')):
+                run("config", k, v)
+            with open(os.path.join(d, ".gitattributes"), "w") as f:
+                f.write("status.json merge=status-json\n")
+            run("add", ".gitattributes")
+            put({"generated_at": "", "sources": {}})
+            run("checkout", "-qb", "full")
+            put(self.FULL)
+            run("checkout", "-q", "main")
+            put(self.FAST)
+            run("checkout", "-q", "full")
+            run("rebase", "main")           # raises CalledProcessError on a conflict
+            with open(os.path.join(d, "status.json"), encoding="utf-8") as f:
+                got = json.load(f)
+        self.assertEqual(set(got["sources"]), {"macro", "pbb"})
+        self.assertEqual(got["sources"]["macro"]["result"], "ok")
+
+
 if __name__ == "__main__":
     unittest.main()
