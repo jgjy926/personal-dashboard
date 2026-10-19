@@ -4,28 +4,13 @@
     "bank_name": "UOB",
     "kind": "campaign",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-18T00:00:00+00:00",
-    "today": "2026-10-18",
+    "generated_at": "2026-10-19T00:00:00+00:00",
+    "today": "2026-10-19",
     "new_today": 0,
-    "count": 3,
+    "count": 2,
     "note": "UOB's featured card campaigns. tnc_summary is written from the banner + T&C by summarize_campaign.py or the Console."
   },
   "promotions": [
-    {
-      "id": "b685828b19",
-      "bank": "uob",
-      "title": "Get ready for an exciting time!",
-      "desc": "Save big with deals over 70% off and win over RM1,200,000 worth of prizes!",
-      "link": "https://www.uob.com.my/personal/promotions/uob-rewards-you-carnival.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/uob-rewards-you-carnival/banner-1920x600.jpg",
-      "category": "Instalment",
-      "period": "15-18 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/assets/web-resources/personal/promotions/uob-rewards-you-carnival/tnc.pdf",
-      "tnc_summary": "UOB Rewards You Carnival, held 15-18 October 2026 at Mid Valley Exhibition Centre (MVEC), Kuala Lumpur. The poster doesn't show specific rewards, eligible cards or minimum spend.",
-      "summary_source": "",
-      "end_date": "2026-10-18"
-    },
     {
       "id": "7e7f6306b6",
       "bank": "uob",

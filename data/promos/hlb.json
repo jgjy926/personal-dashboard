@@ -4,8 +4,8 @@
     "bank_name": "Hong Leong Bank",
     "kind": "campaign",
     "source": "https://www.hlb.com.my/en/personal-banking/promotions.html",
-    "generated_at": "2026-10-18T00:00:00+00:00",
-    "today": "2026-10-18",
+    "generated_at": "2026-10-19T00:00:00+00:00",
+    "today": "2026-10-19",
     "new_today": 0,
     "count": 7,
     "note": "HLB promotions tagged 'Cards'. `desc` is the bank's listing line; tnc_summary is written from the banner + T&C PDF by summarize_campaign.py or the Console."

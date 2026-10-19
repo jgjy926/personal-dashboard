@@ -4,13 +4,43 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-18T00:00:00+00:00",
-    "today": "2026-10-18",
-    "new_today": 0,
-    "count": 337,
+    "generated_at": "2026-10-19T00:00:00+00:00",
+    "today": "2026-10-19",
+    "new_today": 3,
+    "count": 338,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
+    {
+      "id": "d1c4e8c887",
+      "bank": "uob",
+      "title": "Battered Fish & Chip Co.",
+      "link": "https://www.uob.com.my/personal/promotions/battered-fish-chip-co.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/kissa/360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Western",
+      "period": "1 November 2026 to 30 April 2027",
+      "first_seen": "2026-10-19",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/battered-fish-chip-co.page",
+      "tnc_summary": "15% off total bill with a minimum spend of RM60",
+      "summary_source": "bank",
+      "end_date": "2027-04-30"
+    },
+    {
+      "id": "af1dc1254a",
+      "bank": "uob",
+      "title": "B de LIGHT Creations",
+      "link": "https://www.uob.com.my/personal/promotions/b-de-light-creations.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/b-de-light-creations/360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Cafe/Dessert",
+      "period": "15 October 2026 to 30 April 2027",
+      "first_seen": "2026-10-19",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/b-de-light-creations.page",
+      "tnc_summary": "Buy 1 and get 1 complimentary selected Wellness Tea",
+      "summary_source": "bank",
+      "end_date": "2027-04-30"
+    },
     {
       "id": "a93cf9ce9d",
       "bank": "uob",
@@ -295,36 +325,6 @@
       "tnc_summary": "Complimentary Ebi Cashewnut Maki with a minimum spend of RM200",
       "summary_source": "bank",
       "end_date": "2027-01-14"
-    },
-    {
-      "id": "b68ae4dd71",
-      "bank": "uob",
-      "title": "Heytea",
-      "link": "https://www.uob.com.my/personal/promotions/heytea2.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/heytea2/animated.gif",
-      "category": "Dining",
-      "subcategory": "Cafe/Dessert",
-      "period": "15 October 2026 to 18 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/heytea2.page",
-      "tnc_summary": "RM5 off with a minimum spend of RM20",
-      "summary_source": "bank",
-      "end_date": "2026-10-18"
-    },
-    {
-      "id": "25af58b274",
-      "bank": "uob",
-      "title": "Dunkin Donuts",
-      "link": "https://www.uob.com.my/personal/promotions/dunkin-donuts-box.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/dunkin-donuts-box/animated.gif",
-      "category": "Dining",
-      "subcategory": "Cafe/Dessert",
-      "period": "15 October 2026 to 18 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/dunkin-donuts-box.page",
-      "tnc_summary": "Box of 4 donuts + 1 iced coffee (M) at RM22.10",
-      "summary_source": "bank",
-      "end_date": "2026-10-18"
     },
     {
       "id": "7c1f91b9a5",
@@ -1257,6 +1257,21 @@
       "end_date": "2026-12-31"
     },
     {
+      "id": "25af58b274",
+      "bank": "uob",
+      "title": "Dunkin Donuts",
+      "link": "https://www.uob.com.my/personal/promotions/dunkin-donuts-birthday.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/dunkin-donuts-birthday/main-360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Cafe/Dessert",
+      "period": "1 July 2026 to 30 June 2027",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/dunkin-donuts-birthday.page",
+      "tnc_summary": "Enjoy a complimentary donut when you purchase 3 fancy donuts on your birthday month",
+      "summary_source": "bank",
+      "end_date": "2027-06-30"
+    },
+    {
       "id": "e08d320aad",
       "bank": "uob",
       "title": "Cha B",
@@ -1947,6 +1962,21 @@
       "end_date": "2026-06-30"
     },
     {
+      "id": "b68ae4dd71",
+      "bank": "uob",
+      "title": "Heytea",
+      "link": "https://www.uob.com.my/assets/web-resources/personal/promotions/heytea/heytea-tnc.pdf",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/heytea/heytea-360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Cafe/Dessert",
+      "period": "1 February 2026 to 31 December 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/assets/web-resources/personal/promotions/heytea/heytea-tnc.pdf",
+      "tnc_summary": "10% off Heytea handcrafted beverages with a minimum spend of RM20",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
+    },
+    {
       "id": "bc2ec62274",
       "bank": "uob",
       "title": "Italiannies",
@@ -2110,6 +2140,21 @@
       "tnc_summary": "RM15 off Purple Monkey whole cakes (6-inch and 8-inch)",
       "summary_source": "bank",
       "end_date": "2026-12-31"
+    },
+    {
+      "id": "790d57aa63",
+      "bank": "uob",
+      "title": "Amaggeddon",
+      "link": "https://www.uob.com.my/personal/promotions/armaggeddon.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/armaggeddon/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "Online",
+      "period": "1 November 2026 to 30 April 2027",
+      "first_seen": "2026-10-19",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/armaggeddon.page",
+      "tnc_summary": "15% off with a minimum spend of RM100",
+      "summary_source": "bank",
+      "end_date": "2027-04-30"
     },
     {
       "id": "ce6aaee8d6",
@@ -2532,36 +2577,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "daa5cfaec7",
-      "bank": "uob",
-      "title": "Verrona Hills",
-      "link": "https://www.uob.com.my/personal/promotions/verrona-hills-carnival.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/verrona-hills-carnival/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "In Store",
-      "period": "15 October 2026 to 18 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/verrona-hills-carnival.page",
-      "tnc_summary": "15% off with a minimum spend of RM40",
-      "summary_source": "bank",
-      "end_date": "2026-10-18"
-    },
-    {
-      "id": "aedf0fb6f6",
-      "bank": "uob",
-      "title": "Fred Perry",
-      "link": "https://www.uob.com.my/personal/promotions/fred-perry.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/fred-perry/animated.gif",
-      "category": "Shopping",
-      "subcategory": "In Store",
-      "period": "15 October 2026 to 18 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/fred-perry.page",
-      "tnc_summary": "20% off regular priced items",
-      "summary_source": "bank",
-      "end_date": "2026-10-18"
-    },
-    {
       "id": "f61bf8adfe",
       "bank": "uob",
       "title": "ITSU",
@@ -2605,21 +2620,6 @@
       "tnc_summary": "Mastercard Exclusive · Enjoy THB1000 off with min spend of THB5000",
       "summary_source": "bank",
       "end_date": "2026-12-31"
-    },
-    {
-      "id": "1a9c631fc5",
-      "bank": "uob",
-      "title": "Segway",
-      "link": "https://www.uob.com.my/personal/promotions/segway-uob-carnival.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/segway-uob-carnival/360x240.gif",
-      "category": "Shopping",
-      "subcategory": "In Store",
-      "period": "15 October to 18 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/segway-uob-carnival.page",
-      "tnc_summary": "Up to RM1,511 off selected products",
-      "summary_source": "bank",
-      "end_date": "2026-10-18"
     },
     {
       "id": "3d8a23dd2d",
@@ -2710,6 +2710,21 @@
       "tnc_summary": "Up to 7% off",
       "summary_source": "bank",
       "end_date": ""
+    },
+    {
+      "id": "1a9c631fc5",
+      "bank": "uob",
+      "title": "Segway",
+      "link": "https://www.uob.com.my/personal/promotions/segway.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/segway/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "In Store",
+      "period": "1 September to 31 October 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/segway.page",
+      "tnc_summary": "Up to RM1,400 off selected products",
+      "summary_source": "bank",
+      "end_date": "2026-10-31"
     },
     {
       "id": "a7aa6ed66a",
@@ -3492,21 +3507,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "8f39b76d96",
-      "bank": "uob",
-      "title": "Apple Vacations",
-      "link": "https://www.uob.com.my/personal/promotions/uryc-dcl-apple.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/uryc-dcl-apple/360x240.gif",
-      "category": "Travel",
-      "subcategory": "Recreational",
-      "period": "15 October 2026 to 18 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/uryc-dcl-apple.page",
-      "tnc_summary": "Complimentary USD160 Onboard Credit with a minimum spend of RM4,500 on any Disney Cruise booking",
-      "summary_source": "bank",
-      "end_date": "2026-10-18"
-    },
-    {
       "id": "b298012215",
       "bank": "uob",
       "title": "MHholidays",
@@ -3777,21 +3777,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "10d10b9a54",
-      "bank": "uob",
-      "title": "Grab",
-      "link": "https://www.uob.com.my/personal/promotions/grab.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/grab/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Services",
-      "period": "Now to 31 December 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/grab.page",
-      "tnc_summary": "Visa Exclusive · 30% off on Grab Transport · Promo code: VISATH",
-      "summary_source": "bank",
-      "end_date": "2026-12-31"
-    },
-    {
       "id": "33a2d64a28",
       "bank": "uob",
       "title": "Visa Exclusive: Spa Cenvaree",
@@ -3805,6 +3790,21 @@
       "tnc_summary": "Visa Exclusive 25% off on all treatments",
       "summary_source": "bank",
       "end_date": "2027-03-31"
+    },
+    {
+      "id": "10d10b9a54",
+      "bank": "uob",
+      "title": "Grab",
+      "link": "https://www.uob.com.my/personal/promotions/grab.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/grab/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Services",
+      "period": "Now to 31 December 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/grab.page",
+      "tnc_summary": "Visa Exclusive · 30% off on Grab Transport · Promo code: VISATH",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
     },
     {
       "id": "cab7ae8354",
@@ -3923,6 +3923,21 @@
       "first_seen": "2026-10-11",
       "tnc_link": "https://www.uob.com.my/personal/promotions/monkeys-canopy.page",
       "tnc_summary": "15% off Best Available Rates",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
+    },
+    {
+      "id": "8f39b76d96",
+      "bank": "uob",
+      "title": "Apple Vacations",
+      "link": "https://www.uob.com.my/personal/promotions/apple-vacations.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/apple-vacations/animated.gif",
+      "category": "Travel",
+      "subcategory": "Services",
+      "period": "15 July 2026 to 31 December 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/apple-vacations.page",
+      "tnc_summary": "RM200 off selected travel packages",
       "summary_source": "bank",
       "end_date": "2026-12-31"
     },
