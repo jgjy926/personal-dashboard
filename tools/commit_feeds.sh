@@ -24,7 +24,21 @@ for i in 1 2 3 4 5; do
   if git push; then exit 0; fi
   echo "push rejected, retrying with rebase ($i/5)…"
   git fetch origin main
-  git rebase origin/main || { git rebase --abort; break; }
+  if ! git rebase --autostash origin/main; then
+    # Two overlapping runs (a push during the daily run) both regenerate the same
+    # feeds, so they conflict line by line in files nobody edits by hand. Keep this
+    # run's whole copy of each conflicted file (in a rebase, --theirs is the commit
+    # being replayed, i.e. ours); it was fetched moments ago. Aborting here used to
+    # drop the run's entire commit, promos included.
+    conflicted=$(git diff --name-only --diff-filter=U)
+    if [ -n "$conflicted" ] && echo "$conflicted" | xargs git checkout --theirs -- \
+       && echo "$conflicted" | xargs git add \
+       && GIT_EDITOR=true git rebase --continue; then
+      echo "kept this run's copy of: $(echo $conflicted)"
+    else
+      git rebase --abort; break
+    fi
+  fi
   sleep $((i * 3))
 done
 # Warn, don't fail: the site still deploys from this run's working tree, and
