@@ -619,3 +619,34 @@ code.hash { font-size: 10.5px; color: var(--muted); }
 .to-top:hover { border-color: var(--accent); background: var(--accent-soft); }
 .to-top[hidden] { display: none; }
 @media (max-width: 680px) { .to-top { right: 16px; bottom: 16px; } }
+
+/* ── Status tab ──────────────────────────────────────────────────────────── */
+.tab.alert:not(.active) { color: var(--amber); }
+.st-head { display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  flex-wrap: wrap; margin-bottom: 12px; }
+.st-sum { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.st-card { background: var(--card); border: 1px solid var(--line); border-left-width: 4px;
+  border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; box-shadow: var(--shadow); }
+.st-card.ok   { border-left-color: var(--green); }
+.st-card.warn { border-left-color: var(--amber); }
+.st-card.down { border-left-color: var(--red); }
+.st-title { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.st-title h3 { font-size: 15px; font-weight: 650; }
+.st-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+.ok .st-badge   { background: var(--green-bg); color: var(--green); }
+.warn .st-badge { background: var(--amber-bg); color: var(--amber); }
+.down .st-badge { background: var(--red-bg); color: var(--red); }
+.st-route { font-size: 11.5px; color: var(--muted); margin-left: auto; text-decoration: none; }
+.st-route:hover { color: var(--accent); }
+.st-reasons { margin: 4px 0 8px; padding-left: 18px; font-size: 13px; }
+.st-reasons li { margin: 2px 0; overflow-wrap: anywhere; }
+.st-reasons li.down { color: var(--red); }
+.st-reasons li.warn { color: var(--amber); }
+.st-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px 16px; font-size: 12.5px; }
+.st-grid > div { display: flex; flex-direction: column; min-width: 0; }
+.st-grid span { color: var(--muted); font-size: 11.5px; }
+.st-grid b { font-weight: 550; overflow-wrap: anywhere; }
+.st-note { font-size: 11.5px; white-space: normal; }
+.st-foot { margin-top: 14px; }
+#st-refresh.spin { animation: wx-spin 1s linear infinite; }
+@media (prefers-reduced-motion: reduce) { #st-refresh.spin { animation: none; opacity: .5; } }

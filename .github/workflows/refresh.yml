@@ -95,18 +95,30 @@ jobs:
         # refuses to overwrite when no series returned, so the previous feed
         # survives intact — and a feed that silently freezes now announces itself
         # on the page ("Feed rebuilt N days ago") instead of passing as current.
+        #
+        # Every source step tees its log to $RUNNER_TEMP/log-<key>.txt and has an
+        # id, so "Record source status" can say which one broke and why.
+        id: macro
         continue-on-error: true
-        run: python tools/fetch_macro.py --years 5
+        run: |
+          set -o pipefail
+          python tools/fetch_macro.py --years 5 2>&1 | tee "$RUNNER_TEMP/log-macro.txt"
 
       - name: Fetch US Treasury supply (auctions + buybacks, keyless)
+        id: treasury
         continue-on-error: true      # a Treasury outage must not block the deploy
-        run: python tools/fetch_treasury.py
+        run: |
+          set -o pipefail
+          python tools/fetch_treasury.py 2>&1 | tee "$RUNNER_TEMP/log-treasury.txt"
 
       # The tab reads APIMS live from worker/apims-proxy; this is only the
       # fallback copy the site carries for when that Worker is unreachable.
       - name: Fetch Malaysia air quality (DOE APIMS, keyless)
+        id: apims
         continue-on-error: true
-        run: python tools/fetch_apims.py
+        run: |
+          set -o pipefail
+          python tools/fetch_apims.py 2>&1 | tee "$RUNNER_TEMP/log-apims.txt"
 
       # ── FULL path only: promo scrape + summariser ───────────────────────
       - name: Install scraper deps
@@ -123,10 +135,17 @@ jobs:
         # Public Bank: --max bounds only the promos still WITHOUT a summary, per
         # listing (credit, debit and the combined hub each; the hub runs ~140).
         # Any promo already summarised stays in the feed while the bank lists it.
+        # Each bank's exit code goes to scrape-outcomes for write_status.py.
         run: |
-          python tools/scrape_campaign.py --max 15 || echo "::warning::Public Bank promo scrape failed"
-          python tools/scrape_hlb.py               || echo "::warning::HLB promo scrape failed"
-          python tools/scrape_uob.py               || echo "::warning::UOB promo scrape failed (partly or fully)"
+          scrape() {
+            local key=$1; shift
+            set +e; "$@" 2>&1 | tee "$RUNNER_TEMP/log-$key.txt"; local rc=${PIPESTATUS[0]}; set -e
+            echo "$key=$rc" >> "$RUNNER_TEMP/scrape-outcomes"
+            [ "$rc" -eq 0 ] || echo "::warning::$key promo scrape failed (exit $rc)"
+          }
+          scrape pbb python tools/scrape_campaign.py --max 15
+          scrape hlb python tools/scrape_hlb.py
+          scrape uob python tools/scrape_uob.py
           python tools/merge_campaign.py
 
       # Reads the poster + official T&C of any promo that arrived without a summary
@@ -135,11 +154,14 @@ jobs:
       # is not configured (the cards then just show the T&C link, as before), so the
       # deploy never depends on it.
       - name: Summarise new promos (skipped without ANTHROPIC_API_KEY)
+        id: summarize
         if: env.FULL == 'true'
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python tools/summarize_campaign.py
+        run: |
+          set -o pipefail
+          python tools/summarize_campaign.py 2>&1 | tee "$RUNNER_TEMP/log-summarize.txt"
 
       # ── FULL path only: macro forecasting engine ────────────────────────
       # MACRO_ENGINE_REPO may be an org/name for a separate private repo; if the
@@ -190,11 +212,26 @@ jobs:
         # second download of the same 84 series (40-85s) and is gone. So is
         # `main.py report`, which only re-printed the snapshot to this log.
         run: |
+          set -o pipefail
           pip install -r requirements.txt
-          python main.py daily
+          python main.py daily 2>&1 | tee "$RUNNER_TEMP/log-engine.txt"
           if [ -f data_cache/RETRAIN_NEEDED ]; then
             echo "needs_retrain=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # What each source did on this run, for the Status tab. A step this run
+      # skipped (the push fast path skips promos + engine) keeps its last record.
+      - name: Record source status
+        if: always()
+        continue-on-error: true
+        run: |
+          python tools/write_status.py --trigger "${{ github.event_name }}" \
+            --step macro=${{ steps.macro.outcome }} \
+            --step treasury=${{ steps.treasury.outcome }} \
+            --step apims=${{ steps.apims.outcome }} \
+            --step summarize=${{ steps.summarize.outcome }} \
+            --step engine=${{ steps.engine.outcome }} \
+            --outcomes "$RUNNER_TEMP/scrape-outcomes" --logdir "$RUNNER_TEMP"
 
       - name: Commit refreshed public feeds
         # backtest_result.json is committed from your local `main.py monthly`
@@ -202,7 +239,7 @@ jobs:
         run: |
           bash tools/commit_feeds.sh "chore: refresh macro engine + campaign feeds" \
             data/macro.json data/promos data/treasury.json \
-            data/macro_engine.json data/backtest_result.json
+            data/macro_engine.json data/backtest_result.json data/status.json
 
       # Copies the dashboard (not the workspace) and stamps the CODE version
       # (version.json + the page's build id). configure-pages runs first for the live URL, which the

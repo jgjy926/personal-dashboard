@@ -7,7 +7,7 @@
   <!-- The code version, filled in at deploy time by tools/stamp_version.py
        ("dev" when served locally). Compared with version.json to spot new code. -->
   <meta name="build-id" content="dev" />
-  <link rel="stylesheet" href="styles.css?v=21" />
+  <link rel="stylesheet" href="styles.css?v=22" />
 </head>
 <body>
   <header class="appbar">
@@ -26,6 +26,7 @@
       <button class="tab" id="tab-campaign" role="tab" data-tab="campaign">💳 <span>Card Promos</span></button>
       <button class="tab" id="tab-air"      role="tab" data-tab="air">🌫️ <span>Air Quality</span></button>
       <button class="tab" id="tab-weather"  role="tab" data-tab="weather">🌦️ <span>Weather</span></button>
+      <button class="tab" id="tab-status"   role="tab" data-tab="status">🩺 <span>Status</span><span class="st-flag"></span></button>
     </nav>
   </header>
 
@@ -143,14 +144,29 @@
       <div id="wx-body"><p class="muted loading">Loading forecast…</p></div>
     </section>
 
+    <!-- ───────────────────────── TAB 6 · STATUS ───────────────────────── -->
+    <section class="panel-tab" id="panel-status" role="tabpanel" aria-labelledby="tab-status" hidden>
+      <div class="tab-head">
+        <div>
+          <h2 class="tab-title">Source Status</h2>
+          <p class="tab-sub">Every feed behind the other tabs: what the last CI run did to it, how fresh it is,
+             and whether anything is missing or waiting on you. Worst first.</p>
+        </div>
+        <div class="controls">
+          <button id="st-refresh" title="Check every source again" aria-label="Check again">↻</button>
+        </div>
+      </div>
+      <div id="st-body"><p class="muted loading">Checking every source…</p></div>
+    </section>
+
   </main>
 
   <button type="button" id="to-top" class="to-top" aria-label="Back to top" title="Back to top" hidden>↑</button>
 
-  <script src="config.js?v=21"></script>
+  <script src="config.js?v=22"></script>
   <!-- The Macro tab is a ten-page application of its own; kept in its own file
        so app.js stays readable. Must load BEFORE app.js, which calls it. -->
-  <script src="macro-engine.js?v=21"></script>
-  <script src="app.js?v=21"></script>
+  <script src="macro-engine.js?v=22"></script>
+  <script src="app.js?v=22"></script>
 </body>
 </html>

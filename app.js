@@ -1,4 +1,4 @@
-/* Personal Dynamic Dashboard — tab router + five tab modules.
+/* Personal Dynamic Dashboard — tab router + six tab modules.
  * Each tab renders from a JSON feed and lazy-initialises on first view.
  * Zero dependencies; charts are hand-rolled inline SVG.
  *
@@ -120,7 +120,7 @@ function lineChart(series, dates, opts = {}) {
 window.lineChart = lineChart;
 
 // ── tab controller ────────────────────────────────────────────────────────
-const TABS = ['fx', 'macro', 'campaign', 'air', 'weather'];
+const TABS = ['fx', 'macro', 'campaign', 'air', 'weather', 'status'];
 const started = {};
 const MODS = {}; // id -> init fn, registered below
 function showTab(id) {
@@ -1748,6 +1748,233 @@ MODS.weather = function initWeather() {
   atMidnight();
 };
 
+// ═══════════════════════════════ TAB 6 · STATUS ═══════════════════════════
+/* One card per data source, graded 正常-style into ok / warn / down — the same
+ * idea as eny-reader's 状态 view. Freshness alone is not enough: every fetcher
+ * refuses to overwrite its feed on failure, so a broken source keeps serving
+ * yesterday's file and looks fine, and a limping one (Public Bank moving its
+ * listings and dropping 31 promos) still produces a feed. So each card joins:
+ *   - what CI did to that source on its last run (data/status.json, written by
+ *     tools/write_status.py): result, error line, last success, fail streak;
+ *   - the feed itself: age, item count, and source-specific quality checks;
+ *   - for the browser-side sources (FX, APIMS, weather, promo-sync), a live probe.
+ * Probes and feed reads run only when the tab is opened or refreshed, never on
+ * a timer. At boot only status.json (a few hundred bytes) is read, to mark the
+ * tab ⚠ when a CI source failed. */
+const ST_LEVEL = { ok: 'OK', warn: 'Needs attention', down: 'Down' };
+const ST_RANK = { ok: 0, warn: 1, down: 2 };
+const FAIL_DOWN = 3;            // consecutive failed CI runs before a source is "down"
+const DAY_H = 24;
+
+function markStatusTab(level) {
+  const t = document.getElementById('tab-status');
+  if (!t) return;
+  t.classList.toggle('alert', level === 'warn' || level === 'down');
+  t.querySelector('.st-flag').textContent = level === 'down' ? ' ⛔' : level === 'warn' ? ' ⚠' : '';
+}
+
+async function checkStatusFlag() {
+  try {
+    const s = await fetchJSON('data/status.json');
+    const recs = Object.values(s.sources || {});
+    markStatusTab(recs.some(r => r.result === 'fail' && r.fail_streak >= FAIL_DOWN) ? 'down'
+      : recs.some(r => r.result === 'fail') ? 'warn' : 'ok');
+  } catch { /* no record yet (local dev / first deploy): leave the tab unmarked */ }
+}
+
+MODS.status = function initStatus() {
+  const body = document.getElementById('st-body');
+  const btn = document.getElementById('st-refresh');
+  const hours = iso => (Date.now() - new Date(iso)) / 36e5;
+  const when = iso => iso ? `${esc(agoMin(iso))} <span class="muted">· ${esc(mytTime(iso, true))}</span>` : '—';
+  const timed = (url, ms = 15000) => {
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), ms);
+    return fetch(url, { cache: 'no-store', signal: ctl.signal })
+      .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+      .finally(() => clearTimeout(t));
+  };
+  const errMsg = e => e && e.name === 'AbortError' ? 'timed out' : String(e && e.message || e);
+
+  // Each grader returns { level, reasons: [..], facts: [[label, html], ..] } given
+  // its CI record (or undefined) and whatever it fetched. g() starts one.
+  const g = () => ({ level: 'ok', reasons: [], facts: [] });
+  const raise = (r, level, why) => {
+    if (ST_RANK[level] > ST_RANK[r.level]) r.level = level;
+    if (why) r.reasons.push({ level, why });
+  };
+  function gradeCI(r, rec) {
+    if (!rec) { r.facts.push(['Last CI run', '<span class="muted">none recorded yet</span>']); return; }
+    r.facts.push(['Last CI run', `${rec.result === 'ok' ? '<span class="chip ok">ok</span>' : '<span class="chip bad">failed</span>'} ${when(rec.at)}`]);
+    if (rec.result === 'fail') {
+      r.facts.push(['Last CI success', when(rec.last_ok_at)]);
+      raise(r, rec.fail_streak >= FAIL_DOWN ? 'down' : 'warn',
+        `CI ${rec.fail_streak > 1 ? `failed ${rec.fail_streak} runs in a row` : 'failed on its last run'} — the page is serving the previous feed. ${rec.error || ''}`);
+    }
+    if (rec.note) r.facts.push(['Last run said', `<code class="st-note">${esc(rec.note)}</code>`]);
+  }
+  // Feeds stamped with the real build time; CI runs daily (06:20 UTC, often hours late).
+  function gradeAge(r, iso, label = 'Feed rebuilt') {
+    if (!iso) { raise(r, 'warn', 'Feed carries no build time.'); return; }
+    const h = hours(iso);
+    r.facts.push([label, when(iso)]);
+    if (h > 54) raise(r, 'down', `Not rebuilt for ${Math.round(h / DAY_H)} days — the daily run has missed at least two days.`);
+    else if (h > 30) raise(r, 'warn', `Rebuilt ${Math.round(h)}h ago — the last daily run did not refresh it.`);
+  }
+
+  const SOURCES = [
+    { key: 'fx', name: 'FX rates', tab: 'fx', via: 'FX Worker (live)', async grade(r) {
+      const d = await timed(`${CFG.fxApi}/api/rates?base=MYR&quote=USD`);
+      const rates = d.rates || [];
+      // Markets close at weekends, so the market rate may be 3 days old on a Monday.
+      const limit = { market: 4, visa: 2, mastercard: 2, wise: 2 };
+      Object.keys(limit).forEach(s => {
+        const x = rates.find(q => q.source === s);
+        if (!x) raise(r, 'warn', `No ${s} rate in the latest MYR/USD answer.`);
+        else if (x.stale_days >= limit[s]) raise(r, 'warn', `${s} rate is ${x.stale_days} days old (as of ${x.as_of}).`);
+      });
+      r.facts.push(['Rates as of', rates.map(q => `${esc(q.source)} ${esc(q.as_of)}`).join(' · ') || '—']);
+      r.facts.push(['Worker answered', when(d.generated_at)]);
+    } },
+    { key: 'macro', name: 'Macro series monitor', tab: 'macro', ci: 'macro', via: 'tools/fetch_macro.py', async grade(r, rec) {
+      gradeCI(r, rec);
+      const d = await fetchJSON(CFG.feeds.macro);
+      gradeAge(r, d.meta.generated_at);
+      r.facts.push(['Latest observation', esc(d.meta.latest_observation || '—')]);
+      const miss = d.meta.missing_series || [];
+      if (miss.length) raise(r, 'warn', `${miss.length} series missing: ${miss.join(', ')}.`);
+    } },
+    { key: 'engine', name: 'Macro forecasting engine', tab: 'macro', ci: 'engine', via: 'macro engine · main.py daily', async grade(r, rec) {
+      gradeCI(r, rec);
+      const d = await fetchJSON(CFG.feeds.macroEngine);
+      gradeAge(r, d.meta.generated_at);
+      const h = d.health || {};
+      r.facts.push(['Data health', h.n ? `${Math.round((h.health || 0) * 100)}% · ${h.n} series` : '—']);
+      if (h.stale) raise(r, 'warn', `${h.stale} stale series: ${(h.stale_series || []).slice(0, 6).join(', ')}.`);
+      if (h.critical) raise(r, 'warn', `${h.critical} series graded critical.`);
+      if (d.meta.model_stale_from) raise(r, 'warn', `Scoring with last month's model (since ${d.meta.model_stale_from}); the retrain job refits it.`);
+    } },
+    { key: 'treasury', name: 'US Treasury supply', tab: 'macro', ci: 'treasury', via: 'tools/fetch_treasury.py', async grade(r, rec) {
+      gradeCI(r, rec);
+      const d = await fetchJSON(CFG.feeds.treasury);
+      gradeAge(r, d.meta.generated_at);
+      const n = k => (d[k] || []).length;
+      r.facts.push(['Rows', `${n('upcoming_auctions')} upcoming · ${n('recent_results')} results · ${n('recent_buybacks')} buybacks`]);
+      if (!n('upcoming_auctions') && !n('recent_results')) raise(r, 'down', 'No auctions or results in the feed.');
+    } },
+    ...[['pbb', 'Public Bank promos', 'pbb', 'tools/scrape_campaign.py'],
+        ['hlb', 'Hong Leong Bank promos', 'hlb', 'tools/scrape_hlb.py'],
+        ['uob', 'UOB campaigns', 'uob', 'tools/scrape_uob.py'],
+        ['uob-deals', 'UOB merchant deals', 'uob', 'tools/scrape_uob.py']].map(([feed, name, ci, via]) => ({
+      key: feed, name, tab: 'campaign', ci, via, async grade(r, rec) {
+        gradeCI(r, rec);
+        const d = await fetchJSON(`data/promos/${feed}.json`);
+        const ps = d.promotions || [];
+        const today = new Date().toISOString().slice(0, 10);
+        // Promo feeds are stamped with the run's date only, so grade by days.
+        const days = d.meta.today ? Math.round((Date.parse(today) - Date.parse(d.meta.today)) / 864e5) : null;
+        r.facts.push(['Feed date', d.meta.today ? `${esc(d.meta.today)}${days ? ` <span class="muted">· ${days}d ago</span>` : ''}` : '—']);
+        if (days == null) raise(r, 'warn', 'Feed carries no date.');
+        else if (days >= 3) raise(r, 'down', `Not rebuilt for ${days} days.`);
+        else if (days >= 2) raise(r, 'warn', `Not rebuilt for ${days} days — the last daily run did not refresh it.`);
+        if (!ps.length) { raise(r, 'down', 'Feed is empty — the scraper found no promos.'); return; }
+        const live = ps.filter(p => !(p.end_date && p.end_date < today));
+        const noSum = ps.filter(p => !p.tnc_summary);
+        const noTnc = ps.filter(p => !p.tnc_link);
+        const noImg = ps.filter(p => !p.image);
+        r.facts.push(['Promos', `${ps.length} <span class="muted">· ${live.length} live · ${ps.length - live.length} expired</span>`]);
+        r.facts.push(['Summarised', `${ps.length - noSum.length}/${ps.length}`]);
+        r.facts.push(['T&amp;C link / poster', `${ps.length - noTnc.length}/${ps.length} · ${ps.length - noImg.length}/${ps.length}`]);
+        // Deals carry the bank's own offer text (summary_source "bank"), which the
+        // Console does not edit, so only campaigns are asked to be summarised.
+        if (noSum.length && d.meta.kind !== 'deal') raise(r, 'warn', `${noSum.length} promo${noSum.length > 1 ? 's' : ''} without a summary — read ${noSum.length > 1 ? 'their posters' : 'its poster'} in Card Promos → Console: `
+          + noSum.slice(0, 4).map(p => `“${p.title}”`).join(', ') + (noSum.length > 4 ? ` and ${noSum.length - 4} more` : '') + '.');
+        if (noImg.length) raise(r, 'warn', `${noImg.length} promo${noImg.length > 1 ? 's have' : ' has'} no poster image.`);
+      } })),
+    { key: 'summarize', name: 'Promo summariser', tab: 'campaign', ci: 'summarize', via: 'tools/summarize_campaign.py (needs ANTHROPIC_API_KEY)', async grade(r, rec) {
+      gradeCI(r, rec);
+    } },
+    { key: 'sync', name: 'Promo publish Worker', tab: 'campaign', via: 'promo-sync Worker (Console → Publish)', async grade(r) {
+      if (!CFG.promoSyncApi) { raise(r, 'warn', 'No promoSyncApi configured — Publish falls back to download-and-commit.'); return; }
+      const d = await timed(`${CFG.promoSyncApi.replace(/\/$/, '')}/health`);
+      if (!d.ok) raise(r, 'down', 'Worker answered but did not report ok.');
+      r.facts.push(['Commits to', `<code>${esc(d.repo || '?')}</code>`]);
+      r.facts.push(['Feeds it can write', esc((d.files || []).map(f => f.split('/').pop()).join(', ') || '—')]);
+    } },
+    { key: 'air', name: 'Air quality (APIMS)', tab: 'air', ci: 'apims', via: 'apims-proxy Worker (live) · snapshot fallback', async grade(r, rec) {
+      gradeCI(r, rec);
+      const [live, snap] = await Promise.allSettled([timed(CFG.apimsApi), fetchJSON(CFG.feeds.apims)]);
+      const asOf = x => x && x.meta && x.meta.readings_as_of;
+      if (live.status !== 'fulfilled') {
+        raise(r, 'warn', `Live Worker unreachable (${errMsg(live.reason)}) — the tab falls back to the deployed snapshot.`);
+        if (snap.status !== 'fulfilled') { raise(r, 'down', 'No snapshot either — the tab has nothing to show.'); return; }
+      }
+      const d = live.status === 'fulfilled' ? live.value : snap.value;
+      const h = hours(asOf(d));
+      r.facts.push(['Readings as of', when(asOf(d))]);
+      if (snap.status === 'fulfilled') r.facts.push(['Snapshot as of', when(asOf(snap.value))]);
+      const m = d.meta || {};
+      r.facts.push(['Stations reporting', `${m.reporting ?? '—'}/${m.station_count ?? '—'}`]);
+      if (h > 12) raise(r, 'down', `Newest readings are ${Math.round(h)}h old.`);
+      else if (h > 3) raise(r, 'warn', `Newest readings are ${Math.round(h)}h old (DOE publishes hourly).`);
+      if (m.station_count && m.reporting < m.station_count * 0.8) raise(r, 'warn', `Only ${m.reporting} of ${m.station_count} stations reporting.`);
+    } },
+    { key: 'weather', name: 'Weather (MET Malaysia)', tab: 'weather', via: 'api.data.gov.my (live)', async grade(r) {
+      const ymd = new Date(Date.now() + 8 * 36e5).toISOString().slice(0, 10);
+      const rows = await timed(`${CFG.weatherApi}/forecast/?filter=${ymd}@date&limit=500`, 20000);
+      r.facts.push(['Locations with a forecast today', String(rows.length)]);
+      if (!rows.length) raise(r, 'down', `No forecast published for today (${ymd}).`);
+      const last = rows.map(x => x.date).sort().pop();
+      if (last) r.facts.push(['Forecast date', esc(last)]);
+    } },
+  ];
+
+  async function gradeOne(src, ci) {
+    const r = g();
+    try { await src.grade(r, src.ci ? ci[src.ci] : undefined); }
+    catch (e) { raise(r, 'down', `Could not read it: ${errMsg(e)}.`); }
+    return r;
+  }
+
+  const cardHTML = (src, r) => `
+    <article class="st-card ${r.level}">
+      <div class="st-title">
+        <h3>${esc(src.name)}</h3><span class="st-badge">${ST_LEVEL[r.level]}</span>
+        <a class="st-route" href="#${src.tab}">${esc(src.via)} →</a>
+      </div>
+      ${r.reasons.length ? `<ul class="st-reasons">${r.reasons.map(x => `<li class="${x.level}">${esc(x.why)}</li>`).join('')}</ul>` : ''}
+      ${r.facts.length ? `<div class="st-grid">${r.facts.map(([k, v]) => `<div><span>${k}</span><b>${v}</b></div>`).join('')}</div>` : ''}
+    </article>`;
+
+  let busy = false;
+  async function load() {
+    if (busy) return;
+    busy = true; btn.disabled = true; btn.classList.add('spin');
+    if (!body.querySelector('.st-card')) body.innerHTML = '<p class="muted loading">Checking every source…</p>';
+    let st = null;
+    try { st = await fetchJSON('data/status.json'); } catch { /* none yet */ }
+    const ci = (st && st.sources) || {};
+    const graded = await Promise.all(SOURCES.map(s => gradeOne(s, ci)));
+    const worst = graded.reduce((w, r) => ST_RANK[r.level] > ST_RANK[w] ? r.level : w, 'ok');
+    const n = l => graded.filter(r => r.level === l).length;
+    // Worst first, so whatever needs attention is at the top.
+    const order = SOURCES.map((s, i) => i).sort((a, b) => ST_RANK[graded[b].level] - ST_RANK[graded[a].level]);
+    body.innerHTML = `
+      <div class="st-head">
+        <span class="st-sum"><span class="chip ok">${n('ok')} OK</span> <span class="chip warn">${n('warn')} need attention</span> <span class="chip bad">${n('down')} down</span></span>
+        <span class="muted">Checked ${esc(mytTime(new Date().toISOString(), true))} MYT · ${st
+          ? `last CI run ${esc(agoMin(st.generated_at))} (${esc(st.run.trigger || '?')})${st.run.url ? ` · <a href="${esc(st.run.url)}" target="_blank" rel="noopener">log</a>` : ''}`
+          : 'no CI status recorded yet (local build, or before the first run)'}</span>
+      </div>
+      ${order.map(i => cardHTML(SOURCES[i], graded[i])).join('')}
+      <p class="muted st-foot">“Down”: unreadable, empty, ${FAIL_DOWN}+ failed CI runs in a row, or well past its refresh. “Needs attention”: one failed run, stale for a day, missing items, or work waiting (a promo without a summary). Only opening this tab or ↻ runs these checks.</p>`;
+    markStatusTab(worst);
+    busy = false; btn.disabled = false; btn.classList.remove('spin');
+  }
+  btn.addEventListener('click', load);
+  load();
+};
+
 // ── version badge ───────────────────────────────────────────────────────────
 /* Two lines: the CODE version and the DATA version, each "<MYT date>-<n>" where
  * n counts that kind of commit on that day. version.json is written by
@@ -1816,5 +2043,6 @@ function initBuildBadge() {
 
 // ── boot ────────────────────────────────────────────────────────────────────
 initBuildBadge();
+checkStatusFlag();
 showTab((location.hash || '#fx').slice(1));
 window.addEventListener('hashchange', () => showTab((location.hash || '#fx').slice(1)));

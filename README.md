@@ -237,6 +237,27 @@ live. The `?v=` cache-busters follow the same hash, so code changes always reach
 browser and data-only deploys never force a re-download. Served locally the badge reads
 *local dev build*. (Needs full git history in CI: `fetch-depth: 0`.)
 
+### Status tab (`tools/write_status.py` → `data/status.json`)
+Every fetcher refuses to overwrite its feed when it gets nothing back, so a broken source
+keeps serving yesterday's file and looks fine — and a limping one still produces a feed
+(Public Bank moving its listings on 2026-10-16 dropped 31 promos without any step failing).
+The 🩺 **Status** tab, modelled on eny-reader's 状态 view, grades each source **OK /
+Needs attention / Down** and lists the reasons, worst first.
+
+- **CI record.** Each `refresh.yml` run tees every source step's log to `$RUNNER_TEMP`
+  (the banks one by one) and `write_status.py` writes, per source: result, the failing
+  log line, the step's own summary line ("136 cards listed…"), `last_ok_at` and a
+  `fail_streak`. A source the run skipped (the push fast path skips promos + engine)
+  keeps its last record. Committed with the feeds.
+- **Grading, in the browser.** Joins that record with the feed itself — age, item counts,
+  promos without a summary or poster, missing macro series, stale engine series — and
+  live probes of the FX Worker, apims-proxy, promo-sync `/health` and data.gov.my.
+  Down: unreadable, empty, 3+ failed runs in a row, or two days past its refresh.
+  Needs attention: one failed run, a day stale, or work waiting on you (a campaign promo
+  without a summary → Card Promos → Console).
+- Checks run only when the tab is opened or ↻ is pressed. At page load only
+  `status.json` is read, to put ⚠ / ⛔ on the tab when a CI source failed.
+
 ### Macro — seed now (`tools/seed_macro.py`), backend later
 `python tools/seed_macro.py` regenerates the sample `data/macro.json`. The Phase-B
 backend must emit this same shape (see below).
