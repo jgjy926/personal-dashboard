@@ -4,10 +4,10 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-10-20T00:00:00+00:00",
-    "today": "2026-10-20",
-    "new_today": 0,
-    "count": 53,
+    "generated_at": "2026-10-21T00:00:00+00:00",
+    "today": "2026-10-21",
+    "new_today": 1,
+    "count": 54,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
   },
   "promotions": [
@@ -250,6 +250,19 @@
       "end_date": ""
     },
     {
+      "title": "PB Visa Infinite Privileges: Infinite Tastes Beyond The Menu",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-visa-infinite-privileges-infinite-tastes-beyond-the-menu/",
+      "image": "https://www.pbebank.com/media/qpgkn1yh/infinite-tastes-beyond-menu_wb.jpg",
+      "id": "f8553a1965",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-10-21",
+      "tnc_link": "https://my.visa.com/sg_en/category/dining/beyond-the-menu",
+      "tnc_summary": "",
+      "end_date": ""
+    },
+    {
       "title": "Tan Chong Ekspres Auto Servis",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/tan-chong-ekspres-auto-servis/",
       "image": "https://www.pbebank.com/media/m3upphot/tan-chong-express_wb.jpg",
@@ -292,20 +305,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "0% Balance Transfer with PB Mastercard Credit Cards",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/0-balance-transfer-with-pb-mastercard-credit-cards-4/",
-      "image": "https://www.pbebank.com/media/vokgkq5k/mastercard-balance-transfer151026_wb.jpg",
-      "id": "e4bbe0440e",
-      "bank": "pbb",
-      "category": "Instalment",
-      "period": "15 October - 31 December 2026",
-      "first_seen": "2026-10-15",
-      "tnc_link": "https://www.pbebank.com/media/p0kb04e0/0-mastercard-balance-transfer_tcs_application-form.pdf",
-      "tnc_summary": "0% balance transfer for 6 months on PB Mastercard Credit Cards, minimum transfer RM2,000. Apply at pbebank.com (Apply > Balance Transfer > select card), or call 03-2170 8000 / email custsvc@publicbank.com.my to convert.",
-      "summary_source": "",
-      "end_date": "2026-12-31"
-    },
-    {
       "title": "PB Privileges @ Trip.com",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-tripcom/",
       "image": "https://www.pbebank.com/media/zdtesngz/tripcom_wb.jpg",
@@ -316,6 +315,20 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://www.pbebank.com/media/ruxl0b3g/tc_tripcom.pdf",
       "tnc_summary": "Trip.com deals with PB cards. Hotels: 10% off China hotels (PBCHINA10), 9% off for new users (PBSTAY9), 7% off for existing users (PBSTAY7). Flights (PBTRIPFLY): RM30 off with RM1,000 minimum spend, RM60 off with RM1,400 minimum spend. Book at my.trip.com/w/publicbankmy.",
+      "summary_source": "",
+      "end_date": "2026-12-31"
+    },
+    {
+      "title": "0% Balance Transfer with PB Mastercard Credit Cards",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/0-balance-transfer-with-pb-mastercard-credit-cards-4/",
+      "image": "https://www.pbebank.com/media/vokgkq5k/mastercard-balance-transfer151026_wb.jpg",
+      "id": "e4bbe0440e",
+      "bank": "pbb",
+      "category": "Instalment",
+      "period": "15 October - 31 December 2026",
+      "first_seen": "2026-10-15",
+      "tnc_link": "https://www.pbebank.com/media/p0kb04e0/0-mastercard-balance-transfer_tcs_application-form.pdf",
+      "tnc_summary": "0% balance transfer for 6 months on PB Mastercard Credit Cards, minimum transfer RM2,000. Apply at pbebank.com (Apply > Balance Transfer > select card), or call 03-2170 8000 / email custsvc@publicbank.com.my to convert.",
       "summary_source": "",
       "end_date": "2026-12-31"
     },
@@ -362,20 +375,6 @@
       "end_date": "2027-12-31"
     },
     {
-      "title": "PB Privileges @ UTAR Hospital",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-utar-hospital/",
-      "image": "https://www.pbebank.com/media/qhjfny15/utar-hospital_wb.jpg",
-      "id": "59e5f40e86",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "5 October 2026 - 30 September 2027",
-      "first_seen": "2026-10-09",
-      "tnc_link": "https://www.pbebank.com/media/qnrbosx0/tc_utar-hospital.pdf",
-      "tnc_summary": "20% off Preventive Health Screening and Restorative T&CM Wellness at UTAR Hospital, Kampar. PB Premium Wellness (PB Visa Infinite, World Mastercard, Visa Signature credit cards, Red Carpet Banking Mastercard Elite/Gold Debit): RM888 male, RM927 female. PB Signature Wellness (other PB cardmembers): RM468 male, RM488 female. Book via WhatsApp 012-968 3761 or contact@utarhospital.org.my.",
-      "summary_source": "",
-      "end_date": "2027-09-30"
-    },
-    {
       "title": "PB Mastercard Privileges @ Alipay",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-mastercard-privileges-alipay/",
       "image": "https://www.pbebank.com/media/ku2ja50y/alipay-rmb30_wb.jpg",
@@ -390,18 +389,18 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "PB Visa Privileges: 15% OFF on Selected Concert Tickets at Malaysian Philharmonic Orchestra",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-visa-privileges-15-off-on-selected-concert-tickets-at-malaysian-philharmonic-orchestra/",
-      "image": "https://www.pbebank.com/media/1ptpxzk2/malaysian-philharmonic-orchestra_wb.jpg",
-      "id": "e354f1105f",
+      "title": "PB Privileges @ UTAR Hospital",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-utar-hospital/",
+      "image": "https://www.pbebank.com/media/qhjfny15/utar-hospital_wb.jpg",
+      "id": "59e5f40e86",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "Now – 31 December 2026",
-      "first_seen": "2026-10-08",
-      "tnc_link": "https://www.visa.com.my/en_my/visa-offers-and-perks/dewan-filharmonik-petronas-dfp/174884",
-      "tnc_summary": "15% off selected Malaysian Philharmonic Orchestra concert tickets with PB Visa Infinite or PB Visa Signature Credit Card. Use promo code MVISA15 at www.dfp.com.my. Terms and conditions apply.",
+      "period": "5 October 2026 - 30 September 2027",
+      "first_seen": "2026-10-09",
+      "tnc_link": "https://www.pbebank.com/media/qnrbosx0/tc_utar-hospital.pdf",
+      "tnc_summary": "20% off Preventive Health Screening and Restorative T&CM Wellness at UTAR Hospital, Kampar. PB Premium Wellness (PB Visa Infinite, World Mastercard, Visa Signature credit cards, Red Carpet Banking Mastercard Elite/Gold Debit): RM888 male, RM927 female. PB Signature Wellness (other PB cardmembers): RM468 male, RM488 female. Book via WhatsApp 012-968 3761 or contact@utarhospital.org.my.",
       "summary_source": "",
-      "end_date": "2026-12-31"
+      "end_date": "2027-09-30"
     },
     {
       "title": "PB Privileges at Sunway Resort Hotel, Sunway Pyramid Hotel & Sunway Lagoon Hotel",
@@ -416,6 +415,20 @@
       "tnc_summary": "15% off the best available rate for PB World Mastercard, Infinite and Signature cards (code PBB15); 10% off for other PB cards (PBB10). Applies at Sunway Resort, Pyramid and Lagoon Hotels. Also 15% off food and non-alcoholic beverages at Sunset Terrace and Cafe West. Enquiries: 03 7492 8000.",
       "summary_source": "",
       "end_date": "2026-12-30"
+    },
+    {
+      "title": "PB Visa Privileges: 15% OFF on Selected Concert Tickets at Malaysian Philharmonic Orchestra",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-visa-privileges-15-off-on-selected-concert-tickets-at-malaysian-philharmonic-orchestra/",
+      "image": "https://www.pbebank.com/media/1ptpxzk2/malaysian-philharmonic-orchestra_wb.jpg",
+      "id": "e354f1105f",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "Now – 31 December 2026",
+      "first_seen": "2026-10-08",
+      "tnc_link": "https://www.visa.com.my/en_my/visa-offers-and-perks/dewan-filharmonik-petronas-dfp/174884",
+      "tnc_summary": "15% off selected Malaysian Philharmonic Orchestra concert tickets with PB Visa Infinite or PB Visa Signature Credit Card. Use promo code MVISA15 at www.dfp.com.my. Terms and conditions apply.",
+      "summary_source": "",
+      "end_date": "2026-12-31"
     },
     {
       "title": "PB Privileges @ 100glasses",

@@ -4,8 +4,8 @@
     "bank_name": "UOB",
     "kind": "campaign",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-20T00:00:00+00:00",
-    "today": "2026-10-20",
+    "generated_at": "2026-10-21T00:00:00+00:00",
+    "today": "2026-10-21",
     "new_today": 0,
     "count": 2,
     "note": "UOB's featured card campaigns. tnc_summary is written from the banner + T&C by summarize_campaign.py or the Console."
