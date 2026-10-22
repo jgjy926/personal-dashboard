@@ -4,7 +4,7 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-10-22T00:00:00+00:00",
+    "generated_at": "2026-10-22T15:19:04.006Z",
     "today": "2026-10-22",
     "new_today": 0,
     "count": 54,
@@ -256,12 +256,12 @@
       "id": "f8553a1965",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "",
+      "period": "8 November 2026 (12.00 pm - 3.00 pm); 5 December 2026 (4.30 pm - 9.30 pm)",
       "first_seen": "2026-10-21",
       "tnc_link": "https://my.visa.com/sg_en/category/dining/beyond-the-menu",
-      "tnc_summary": "",
+      "tnc_summary": "Exclusive chef-led dining experiences for PB Visa Infinite Credit Card holders: Bar.Kar KL 'The Roots of Fire & Water' by Chef ZX Lee, 8 Nov 2026, 12-3pm, RM738 nett; Chipta 11A Curated Dining 'The Canvas of Origins' by Chef Jack and Diane Ong, 5 Dec 2026, 4.30-9.30pm, RM790 nett. Reserve via www.pbebank.com. T&Cs apply.",
       "summary_source": "",
-      "end_date": ""
+      "end_date": "2026-12-05"
     },
     {
       "title": "Tan Chong Ekspres Auto Servis",
