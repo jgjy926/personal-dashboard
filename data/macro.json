@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-22T12:02:37+00:00",
+    "generated_at": "2026-10-22T15:19:38+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF + NY Fed",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; the US Treasury's own daily curve extends the nominal and TIPS yields, and Yahoo Finance extends the market-traded series, over the days FRED has not published yet (FRED batches the curve series, the Fed's H.10 dollar release is weekly, the EIA crude series are batched). Every card names the source behind its latest point, and the ones with no faster publisher carry their release cadence instead.",
@@ -62,19 +62,20 @@
     {
       "id": "SP500",
       "label": "S&P 500",
-      "value": 7757.17,
+      "value": 7660.66,
       "unit": "",
-      "change": 44.6,
-      "as_of": "2026-10-21",
+      "change": -96.51,
+      "as_of": "2026-10-22",
       "freq": "daily",
-      "source": "FRED SP500"
+      "source": "FRED SP500 + Yahoo ^GSPC",
+      "provisional": true
     },
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4076.7,
+      "value": 4072.0,
       "unit": "$",
-      "change": -73.3,
+      "change": -78.0,
       "as_of": "2026-10-22",
       "freq": "daily",
       "source": "Yahoo GC=F",
@@ -83,9 +84,9 @@
     {
       "id": "BRENT",
       "label": "Brent Crude",
-      "value": 112.02,
+      "value": 111.67,
       "unit": "$",
-      "change": 3.2,
+      "change": 2.85,
       "as_of": "2026-10-22",
       "freq": "daily",
       "source": "FRED DCOILBRENTEU + Yahoo BZ=F",
@@ -94,9 +95,9 @@
     {
       "id": "WTI",
       "label": "WTI Crude",
-      "value": 99.47,
+      "value": 98.73,
       "unit": "$",
-      "change": 2.32,
+      "change": 1.58,
       "as_of": "2026-10-22",
       "freq": "daily",
       "source": "FRED DCOILWTICO + Yahoo CL=F",
@@ -129,9 +130,9 @@
     {
       "id": "DXY",
       "label": "Dollar Index (ICE DXY)",
-      "value": 101.82,
+      "value": 101.78,
       "unit": "",
-      "change": 0.04,
+      "change": 0.0,
       "as_of": "2026-10-22",
       "freq": "daily",
       "source": "Yahoo DX-Y.NYB",
@@ -141,9 +142,9 @@
     {
       "id": "USDJPY",
       "label": "USD/JPY",
-      "value": 157.0,
+      "value": 157.17,
       "unit": "¥",
-      "change": -1.26,
+      "change": -1.1,
       "as_of": "2026-10-22",
       "freq": "daily",
       "source": "FRED DEXJPUS + Yahoo JPY=X",
@@ -187,7 +188,7 @@
       "value": 0.0,
       "unit": "$bn",
       "change": 0.0,
-      "as_of": "2026-10-21",
+      "as_of": "2026-10-22",
       "freq": "daily",
       "source": "NY Fed Markets API",
       "release": "NY Fed, 2× daily (08:30 / 13:45 ET)",
@@ -392,7 +393,7 @@
         4107.0,
         4481.5,
         4186.7,
-        4076.7
+        4072.0
       ],
       "sp500": [
         4567.0,
@@ -454,7 +455,7 @@
         7489.7,
         7686.1,
         7651.5,
-        7757.2
+        7660.7
       ]
     },
     "note": "Real yield / gold / S&P 500 each scaled to its own 0–100 range so co-movement is comparable (min→max of the window, not indexed to the first point — robust to a series like real yield opening the window near/below zero)."
@@ -583,7 +584,7 @@
         96.95,
         89.75,
         115.91,
-        112.02
+        111.67
       ],
       "wti": [
         66.14,
@@ -645,7 +646,7 @@
         86.16,
         87.03,
         97.18,
-        99.47
+        98.73
       ]
     },
     "unit": "$/bbl",
@@ -775,7 +776,7 @@
         159.16,
         159.74,
         157.25,
-        157.0
+        157.17
       ]
     },
     "unit": "JPY per USD",
@@ -933,7 +934,6 @@
   },
   "funding": {
     "dates": [
-      "2025-10-06",
       "2025-10-07",
       "2025-10-08",
       "2025-10-09",
@@ -1192,11 +1192,11 @@
       "2026-10-16",
       "2026-10-19",
       "2026-10-20",
-      "2026-10-21"
+      "2026-10-21",
+      "2026-10-22"
     ],
     "series": {
       "srf_bn": [
-        0.02,
         0.002,
         0.001,
         0.002,
@@ -1455,6 +1455,7 @@
         0.0,
         0.011,
         0.0,
+        0.0,
         0.0
       ],
       "srf_rate": [
@@ -1474,7 +1475,6 @@
         4.25,
         4.25,
         4.25,
-        4.25,
         4.0,
         4.0,
         4.0,
@@ -1694,6 +1694,7 @@
         3.75,
         3.75,
         3.75,
+        4.0,
         4.0,
         4.0,
         4.0,
@@ -1720,7 +1721,6 @@
         4.0
       ],
       "sofr": [
-        4.15,
         4.14,
         4.12,
         4.13,
@@ -1979,10 +1979,10 @@
         3.88,
         3.87,
         3.88,
-        3.88
+        3.88,
+        null
       ],
       "sofr_p99": [
-        4.24,
         4.23,
         4.2,
         4.21,
@@ -2241,7 +2241,8 @@
         3.95,
         3.95,
         3.96,
-        3.96
+        3.96,
+        null
       ],
       "rrp_rate": [
         4.0,
@@ -2260,7 +2261,6 @@
         4.0,
         4.0,
         4.0,
-        4.0,
         3.75,
         3.75,
         3.75,
@@ -2503,17 +2503,18 @@
         3.75,
         3.75,
         3.75,
-        3.75
+        3.75,
+        null
       ]
     },
     "alert": {
       "level": "normal",
-      "peak_bn": 0.111,
-      "peak_date": "2026-10-15",
+      "peak_bn": 0.011,
+      "peak_date": "2026-10-19",
       "peak_rate": 4.0,
-      "calendar": "mid-month coupon settlement",
+      "calendar": null,
       "latest_bn": 0.0,
-      "latest_date": "2026-10-21",
+      "latest_date": "2026-10-22",
       "window_days": 5,
       "watch_bn": 50.0,
       "breach_bn": 100.0

@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-10-22T12:04:59+00:00",
+  "generated_at": "2026-10-22T15:19:49+00:00",
   "run": {
-    "trigger": "schedule",
-    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/39775109485"
+    "trigger": "push",
+    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/39803687396"
   },
   "sources": {
     "apims": {
       "result": "ok",
-      "at": "2026-10-22T12:04:59+00:00",
-      "last_ok_at": "2026-10-22T12:04:59+00:00",
+      "at": "2026-10-22T15:19:49+00:00",
+      "last_ok_at": "2026-10-22T15:19:49+00:00",
       "fail_streak": 0,
-      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-10-22T20:00:00+08:00 -> data/apims.json"
+      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-10-22T23:00:00+08:00 -> data/apims.json"
     },
     "engine": {
       "result": "ok",
@@ -27,10 +27,10 @@
     },
     "macro": {
       "result": "ok",
-      "at": "2026-10-22T12:04:59+00:00",
-      "last_ok_at": "2026-10-22T12:04:59+00:00",
+      "at": "2026-10-22T15:19:49+00:00",
+      "last_ok_at": "2026-10-22T15:19:49+00:00",
       "fail_streak": 0,
-      "note": "[fetch_macro] NYFED_SRF: 408 days (latest 2026-10-21, $0.0bn); alert=normal (peak $0.111bn on 2026-10-15)"
+      "note": "[fetch_macro] NYFED_SRF: 408 days (latest 2026-10-22, $0.0bn); alert=normal (peak $0.011bn on 2026-10-19)"
     },
     "pbb": {
       "result": "ok",
@@ -48,8 +48,8 @@
     },
     "treasury": {
       "result": "ok",
-      "at": "2026-10-22T12:04:59+00:00",
-      "last_ok_at": "2026-10-22T12:04:59+00:00",
+      "at": "2026-10-22T15:19:49+00:00",
+      "last_ok_at": "2026-10-22T15:19:49+00:00",
       "fail_streak": 0,
       "note": "[fetch_treasury] upcoming auctions: 0"
     },
