@@ -1,62 +1,61 @@
 {
-  "generated_at": "2026-10-22T15:19:49+00:00",
+  "generated_at": "2026-10-23T11:50:06+00:00",
   "run": {
-    "trigger": "push",
-    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/39803687396"
+    "trigger": "schedule",
+    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/39948571462"
   },
   "sources": {
     "apims": {
       "result": "ok",
-      "at": "2026-10-22T15:19:49+00:00",
-      "last_ok_at": "2026-10-22T15:19:49+00:00",
+      "at": "2026-10-23T11:50:06+00:00",
+      "last_ok_at": "2026-10-23T11:50:06+00:00",
       "fail_streak": 0,
-      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-10-22T23:00:00+08:00 -> data/apims.json"
+      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-10-23T19:00:00+08:00 -> data/apims.json"
     },
     "engine": {
       "result": "ok",
-      "at": "2026-10-22T12:04:59+00:00",
-      "last_ok_at": "2026-10-22T12:04:59+00:00",
+      "at": "2026-10-23T11:50:06+00:00",
+      "last_ok_at": "2026-10-23T11:50:06+00:00",
       "fail_streak": 0
     },
     "hlb": {
       "result": "ok",
-      "at": "2026-10-22T12:04:59+00:00",
-      "last_ok_at": "2026-10-22T12:04:59+00:00",
+      "at": "2026-10-23T11:50:06+00:00",
+      "last_ok_at": "2026-10-23T11:50:06+00:00",
       "fail_streak": 0,
       "note": "[hlb] 7 card promos -> data/promos/hlb.draft.json. Next: python tools/merge_campaign.py"
     },
     "macro": {
       "result": "ok",
-      "at": "2026-10-22T15:19:49+00:00",
-      "last_ok_at": "2026-10-22T15:19:49+00:00",
+      "at": "2026-10-23T11:50:06+00:00",
+      "last_ok_at": "2026-10-23T11:50:06+00:00",
       "fail_streak": 0,
-      "note": "[fetch_macro] NYFED_SRF: 408 days (latest 2026-10-22, $0.0bn); alert=normal (peak $0.011bn on 2026-10-19)"
+      "note": "[fetch_macro] NYFED_SRF: 408 days (latest 2026-10-22, $0.001bn); alert=normal (peak $0.011bn on 2026-10-19)"
     },
     "pbb": {
       "result": "ok",
-      "at": "2026-10-22T12:04:59+00:00",
-      "last_ok_at": "2026-10-22T12:04:59+00:00",
+      "at": "2026-10-23T11:50:06+00:00",
+      "last_ok_at": "2026-10-23T11:50:06+00:00",
       "fail_streak": 0,
       "note": "[scrape] 137 cards listed; keeping 54 (top 15 of each listing + 24 already summarised further down), fetching detail pages…"
     },
     "summarize": {
       "result": "ok",
-      "at": "2026-10-22T12:04:59+00:00",
-      "last_ok_at": "2026-10-22T12:04:59+00:00",
-      "fail_streak": 0,
-      "note": "[summarize] 1 promo(s) need a summary but no ANTHROPIC_API_KEY is set - skipping. Use the Card Promos Console, or --apply a summary map."
+      "at": "2026-10-23T11:50:06+00:00",
+      "last_ok_at": "2026-10-23T11:50:06+00:00",
+      "fail_streak": 0
     },
     "treasury": {
       "result": "ok",
-      "at": "2026-10-22T15:19:49+00:00",
-      "last_ok_at": "2026-10-22T15:19:49+00:00",
+      "at": "2026-10-23T11:50:06+00:00",
+      "last_ok_at": "2026-10-23T11:50:06+00:00",
       "fail_streak": 0,
       "note": "[fetch_treasury] upcoming auctions: 0"
     },
     "uob": {
       "result": "ok",
-      "at": "2026-10-22T12:04:59+00:00",
-      "last_ok_at": "2026-10-22T12:04:59+00:00",
+      "at": "2026-10-23T11:50:06+00:00",
+      "last_ok_at": "2026-10-23T11:50:06+00:00",
       "fail_streak": 0
     }
   }

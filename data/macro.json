@@ -1,82 +1,81 @@
 {
   "meta": {
-    "generated_at": "2026-10-22T15:19:38+00:00",
+    "generated_at": "2026-10-23T11:48:02+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF + NY Fed",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; the US Treasury's own daily curve extends the nominal and TIPS yields, and Yahoo Finance extends the market-traded series, over the days FRED has not published yet (FRED batches the curve series, the Fed's H.10 dollar release is weekly, the EIA crude series are batched). Every card names the source behind its latest point, and the ones with no faster publisher carry their release cadence instead.",
     "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
     "missing_series": [],
-    "latest_observation": "2026-10-22"
+    "latest_observation": "2026-10-23"
   },
   "snapshot": [
     {
       "id": "DGS10",
       "label": "10Y Nominal Yield",
-      "value": 5.13,
+      "value": 4.96,
       "unit": "%",
-      "change": 0.01,
-      "as_of": "2026-10-21",
+      "change": -0.17,
+      "as_of": "2026-10-22",
       "freq": "daily",
       "source": "FRED DGS10 + US Treasury"
     },
     {
       "id": "DGS30",
       "label": "30Y Nominal Yield",
-      "value": 5.42,
+      "value": 5.29,
       "unit": "%",
-      "change": 0.0,
-      "as_of": "2026-10-21",
+      "change": -0.13,
+      "as_of": "2026-10-22",
       "freq": "daily",
       "source": "FRED DGS30 + US Treasury"
     },
     {
       "id": "DFII10",
       "label": "Real 10Y Yield (TIPS)",
-      "value": 2.76,
+      "value": 2.64,
       "unit": "%",
-      "change": -0.01,
-      "as_of": "2026-10-21",
+      "change": -0.12,
+      "as_of": "2026-10-22",
       "freq": "daily",
       "source": "FRED DFII10 + US Treasury"
     },
     {
       "id": "DFII30",
       "label": "Real 30Y Yield (TIPS)",
-      "value": 3.15,
+      "value": 3.05,
       "unit": "%",
-      "change": -0.01,
-      "as_of": "2026-10-21",
+      "change": -0.1,
+      "as_of": "2026-10-22",
       "freq": "daily",
       "source": "FRED DFII30 + US Treasury"
     },
     {
       "id": "T10YIE",
       "label": "Breakeven Inflation",
-      "value": 2.37,
+      "value": 2.32,
       "unit": "%",
-      "change": 0.02,
-      "as_of": "2026-10-21",
+      "change": -0.05,
+      "as_of": "2026-10-22",
       "freq": "daily",
       "source": "FRED T10YIE"
     },
     {
       "id": "SP500",
       "label": "S&P 500",
-      "value": 7660.66,
+      "value": 7663.43,
       "unit": "",
-      "change": -96.51,
+      "change": -93.74,
       "as_of": "2026-10-22",
       "freq": "daily",
-      "source": "FRED SP500 + Yahoo ^GSPC",
-      "provisional": true
+      "source": "FRED SP500 + Yahoo ^GSPC"
     },
     {
       "id": "GOLD",
       "label": "Gold (LBMA)",
-      "value": 4072.0,
+      "value": 4037.4,
       "unit": "$",
-      "change": -78.0,
-      "as_of": "2026-10-22",
+      "change": -23.0,
+      "as_of": "2026-10-23",
       "freq": "daily",
       "source": "Yahoo GC=F",
       "provisional": true
@@ -84,10 +83,10 @@
     {
       "id": "BRENT",
       "label": "Brent Crude",
-      "value": 111.67,
+      "value": 110.03,
       "unit": "$",
-      "change": 2.85,
-      "as_of": "2026-10-22",
+      "change": -3.14,
+      "as_of": "2026-10-23",
       "freq": "daily",
       "source": "FRED DCOILBRENTEU + Yahoo BZ=F",
       "provisional": true
@@ -95,10 +94,10 @@
     {
       "id": "WTI",
       "label": "WTI Crude",
-      "value": 98.73,
+      "value": 100.97,
       "unit": "$",
-      "change": 1.58,
-      "as_of": "2026-10-22",
+      "change": 1.5,
+      "as_of": "2026-10-23",
       "freq": "daily",
       "source": "FRED DCOILWTICO + Yahoo CL=F",
       "provisional": true
@@ -130,10 +129,10 @@
     {
       "id": "DXY",
       "label": "Dollar Index (ICE DXY)",
-      "value": 101.78,
+      "value": 101.81,
       "unit": "",
-      "change": 0.0,
-      "as_of": "2026-10-22",
+      "change": 0.2,
+      "as_of": "2026-10-23",
       "freq": "daily",
       "source": "Yahoo DX-Y.NYB",
       "provisional": true,
@@ -142,10 +141,10 @@
     {
       "id": "USDJPY",
       "label": "USD/JPY",
-      "value": 157.17,
+      "value": 156.87,
       "unit": "¥",
-      "change": -1.1,
-      "as_of": "2026-10-22",
+      "change": -1.27,
+      "as_of": "2026-10-23",
       "freq": "daily",
       "source": "FRED DEXJPUS + Yahoo JPY=X",
       "provisional": true
@@ -165,20 +164,20 @@
     {
       "id": "JP10Y",
       "label": "Japan 10Y Nominal Yield",
-      "value": 2.92,
+      "value": 2.91,
       "unit": "%",
-      "change": -0.0,
-      "as_of": "2026-10-21",
+      "change": -0.01,
+      "as_of": "2026-10-22",
       "freq": "daily",
       "source": "MoF JGB curve"
     },
     {
       "id": "JP30Y",
       "label": "Japan 30Y Nominal Yield",
-      "value": 3.98,
+      "value": 3.95,
       "unit": "%",
-      "change": -0.01,
-      "as_of": "2026-10-21",
+      "change": -0.03,
+      "as_of": "2026-10-22",
       "freq": "daily",
       "source": "MoF JGB curve"
     },
@@ -331,7 +330,7 @@
         2.47,
         2.44,
         2.93,
-        2.76
+        2.64
       ],
       "gold": [
         1773.6,
@@ -393,7 +392,7 @@
         4107.0,
         4481.5,
         4186.7,
-        4072.0
+        4037.4
       ],
       "sp500": [
         4567.0,
@@ -455,7 +454,7 @@
         7489.7,
         7686.1,
         7651.5,
-        7660.7
+        7663.4
       ]
     },
     "note": "Real yield / gold / S&P 500 each scaled to its own 0–100 range so co-movement is comparable (min→max of the window, not indexed to the first point — robust to a series like real yield opening the window near/below zero)."
@@ -584,7 +583,7 @@
         96.95,
         89.75,
         115.91,
-        111.67
+        110.03
       ],
       "wti": [
         66.14,
@@ -646,7 +645,7 @@
         86.16,
         87.03,
         97.18,
-        98.73
+        100.97
       ]
     },
     "unit": "$/bbl",
@@ -776,7 +775,7 @@
         159.16,
         159.74,
         157.25,
-        157.17
+        156.87
       ]
     },
     "unit": "JPY per USD",
@@ -1456,7 +1455,7 @@
         0.011,
         0.0,
         0.0,
-        0.0
+        0.001
       ],
       "srf_rate": [
         4.25,
@@ -2504,7 +2503,7 @@
         3.75,
         3.75,
         3.75,
-        null
+        3.75
       ]
     },
     "alert": {
@@ -2513,7 +2512,7 @@
       "peak_date": "2026-10-19",
       "peak_rate": 4.0,
       "calendar": null,
-      "latest_bn": 0.0,
+      "latest_bn": 0.001,
       "latest_date": "2026-10-22",
       "window_days": 5,
       "watch_bn": 50.0,

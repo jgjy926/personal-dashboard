@@ -4,10 +4,10 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-22T00:00:00+00:00",
-    "today": "2026-10-22",
-    "new_today": 0,
-    "count": 334,
+    "generated_at": "2026-10-23T00:00:00+00:00",
+    "today": "2026-10-23",
+    "new_today": 3,
+    "count": 337,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
@@ -2052,6 +2052,36 @@
       "end_date": "2026-12-31"
     },
     {
+      "id": "415d472794",
+      "bank": "uob",
+      "title": "Fitness Concept",
+      "link": "https://uob.com.my/personal/promotions/fitness-concept.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/fitness-concept/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "In Store",
+      "period": "15 October 2026 to 31 December 2026",
+      "first_seen": "2026-10-23",
+      "tnc_link": "https://uob.com.my/personal/promotions/fitness-concept.page",
+      "tnc_summary": "Offer 1: Complimentary Rower with the purchase of AEKE S1 PRO · Offer 2: Complimentary AEKE AI 6D BODY POSTURE Analysis with 5 minutes experience of AEKE equipment.",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
+    },
+    {
+      "id": "fbeae26e85",
+      "bank": "uob",
+      "title": "OPPO",
+      "link": "https://www.uob.com.my/personal/promotions/oppo.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/oppo/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "In Store",
+      "period": "30 October 2026 to 31 December 2026",
+      "first_seen": "2026-10-23",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/oppo.page",
+      "tnc_summary": "up to RM300 off selected OPPO Find X10 models with no minimum spend",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
+    },
+    {
       "id": "263a14c24e",
       "bank": "uob",
       "title": "SonicGear",
@@ -3717,21 +3747,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "10d10b9a54",
-      "bank": "uob",
-      "title": "Grab",
-      "link": "https://www.uob.com.my/personal/promotions/grab.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/grab/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Services",
-      "period": "Now to 31 December 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/grab.page",
-      "tnc_summary": "Visa Exclusive · 30% off on Grab Transport · Promo code: VISATH",
-      "summary_source": "bank",
-      "end_date": "2026-12-31"
-    },
-    {
       "id": "33a2d64a28",
       "bank": "uob",
       "title": "Visa Exclusive: Spa Cenvaree",
@@ -3745,6 +3760,21 @@
       "tnc_summary": "Visa Exclusive 25% off on all treatments",
       "summary_source": "bank",
       "end_date": "2027-03-31"
+    },
+    {
+      "id": "10d10b9a54",
+      "bank": "uob",
+      "title": "Grab",
+      "link": "https://www.uob.com.my/personal/promotions/grab.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/grab/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Services",
+      "period": "Now to 31 December 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/grab.page",
+      "tnc_summary": "Visa Exclusive · 30% off on Grab Transport · Promo code: VISATH",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
     },
     {
       "id": "cab7ae8354",
@@ -4675,6 +4705,21 @@
       "tnc_summary": "Pool Offer · 5% off poolside functions with a minimum spend of RM2,000 · Room Offer · 5% off Best Available Rates · Promo code: RAIAUOB26",
       "summary_source": "bank",
       "end_date": "2026-12-31"
+    },
+    {
+      "id": "413dc82424",
+      "bank": "uob",
+      "title": "Danai Medi-Wellness",
+      "link": "https://www.uob.com.my/personal/promotions/danai-medi.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/danai-medi/360x240.jpg",
+      "category": "Lifestyle",
+      "subcategory": "Wellness",
+      "period": "1 November 2026 to 30 April 2027",
+      "first_seen": "2026-10-23",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/danai-medi.page",
+      "tnc_summary": "RM198 for 2 Pax of Danai Medi-Wellness Package (NP : RM1,500 per pax)",
+      "summary_source": "bank",
+      "end_date": "2027-04-30"
     },
     {
       "id": "0732c27a18",
