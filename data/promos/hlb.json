@@ -4,8 +4,8 @@
     "bank_name": "Hong Leong Bank",
     "kind": "campaign",
     "source": "https://www.hlb.com.my/en/personal-banking/promotions.html",
-    "generated_at": "2026-10-23T00:00:00+00:00",
-    "today": "2026-10-23",
+    "generated_at": "2026-10-24T00:00:00+00:00",
+    "today": "2026-10-24",
     "new_today": 0,
     "count": 7,
     "note": "HLB promotions tagged 'Cards'. `desc` is the bank's listing line; tnc_summary is written from the banner + T&C PDF by summarize_campaign.py or the Console."
@@ -25,21 +25,6 @@
       "tnc_summary": "HLB credit card cash-flow offer covering Balance Transfer, Quick Cash or Flexi Payment Plan at lower interest rates. The poster doesn't show specific rates, tenures, minimum amounts or a campaign period.",
       "summary_source": "",
       "end_date": "2026-10-31"
-    },
-    {
-      "id": "33f00b7cc0",
-      "bank": "hlb",
-      "title": "Win RM2,000 Cashback or a prize of your choice",
-      "desc": "Apply & spend with your new HLB Credit Card",
-      "link": "https://www.hlb.com.my/en/personal-banking/promotions/cards-acquisition-promotion.html",
-      "image": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2025/cards-acquisition-promotion/29-sept-cashback-enrich-points-watson-header-banner.jpg",
-      "category": "Cashback",
-      "period": "18 August to 31 December 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/cards-acqui-fy2627/hlb-cashback-offline-offer-tnc.pdf",
-      "tnc_summary": "HLB Credit Card 'Tap & Pay your way to win' campaign. Tap & Pay spend can win a prize of your choice: RM2,000 cashback, 20,000 Enrich Points, or a RM2,000 Watsons in-store e-voucher. Alternatively, earn up to RM188 cashback. The poster doesn't show minimum spend or a campaign period.",
-      "summary_source": "",
-      "end_date": "2026-12-31"
     },
     {
       "id": "da6488b68c",
@@ -115,6 +100,21 @@
       "tnc_summary": "General HLB Credit & Debit Cards partner-offers banner ('Unlock a world of perks with HLB Cards'). The poster doesn't show specific merchants, discounts, minimum spend or a campaign period.",
       "summary_source": "",
       "end_date": "2035-12-31"
+    },
+    {
+      "id": "33f00b7cc0",
+      "bank": "hlb",
+      "title": "Win RM2,000 Cashback or a prize of your choice",
+      "desc": "Apply & spend with your new HLB Credit Card",
+      "link": "https://www.hlb.com.my/en/personal-banking/promotions/cards-acquisition-promotion.html",
+      "image": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2025/cards-acquisition-promotion/29-sept-cashback-enrich-points-watson-header-banner.jpg",
+      "category": "Cashback",
+      "period": "18 August to 31 December 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/cards-acqui-fy2627/hlb-cashback-offline-offer-tnc.pdf",
+      "tnc_summary": "HLB Credit Card 'Tap & Pay your way to win' campaign. Tap & Pay spend can win a prize of your choice: RM2,000 cashback, 20,000 Enrich Points, or a RM2,000 Watsons in-store e-voucher. Alternatively, earn up to RM188 cashback. The poster doesn't show minimum spend or a campaign period.",
+      "summary_source": "",
+      "end_date": "2026-12-31"
     }
   ]
 }
