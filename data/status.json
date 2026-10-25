@@ -1,61 +1,61 @@
 {
-  "generated_at": "2026-10-24T11:15:35+00:00",
+  "generated_at": "2026-10-25T11:45:32+00:00",
   "run": {
     "trigger": "schedule",
-    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/40088971195"
+    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/40189996828"
   },
   "sources": {
     "apims": {
       "result": "ok",
-      "at": "2026-10-24T11:15:35+00:00",
-      "last_ok_at": "2026-10-24T11:15:35+00:00",
+      "at": "2026-10-25T11:45:32+00:00",
+      "last_ok_at": "2026-10-25T11:45:32+00:00",
       "fail_streak": 0,
-      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-10-24T19:00:00+08:00 -> data/apims.json"
+      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-10-25T19:00:00+08:00 -> data/apims.json"
     },
     "engine": {
       "result": "ok",
-      "at": "2026-10-24T11:15:35+00:00",
-      "last_ok_at": "2026-10-24T11:15:35+00:00",
+      "at": "2026-10-25T11:45:32+00:00",
+      "last_ok_at": "2026-10-25T11:45:32+00:00",
       "fail_streak": 0
     },
     "hlb": {
       "result": "ok",
-      "at": "2026-10-24T11:15:35+00:00",
-      "last_ok_at": "2026-10-24T11:15:35+00:00",
+      "at": "2026-10-25T11:45:32+00:00",
+      "last_ok_at": "2026-10-25T11:45:32+00:00",
       "fail_streak": 0,
       "note": "[hlb] 7 card promos -> data/promos/hlb.draft.json. Next: python tools/merge_campaign.py"
     },
     "macro": {
       "result": "ok",
-      "at": "2026-10-24T11:15:35+00:00",
-      "last_ok_at": "2026-10-24T11:15:35+00:00",
+      "at": "2026-10-25T11:45:32+00:00",
+      "last_ok_at": "2026-10-25T11:45:32+00:00",
       "fail_streak": 0,
       "note": "[fetch_macro] NYFED_SRF: 407 days (latest 2026-10-23, $0.0bn); alert=normal (peak $0.011bn on 2026-10-19)"
     },
     "pbb": {
       "result": "ok",
-      "at": "2026-10-24T11:15:35+00:00",
-      "last_ok_at": "2026-10-24T11:15:35+00:00",
+      "at": "2026-10-25T11:45:32+00:00",
+      "last_ok_at": "2026-10-25T11:45:32+00:00",
       "fail_streak": 0,
       "note": "[scrape] 137 cards listed; keeping 54 (top 15 of each listing + 24 already summarised further down), fetching detail pages…"
     },
     "summarize": {
       "result": "ok",
-      "at": "2026-10-24T11:15:35+00:00",
-      "last_ok_at": "2026-10-24T11:15:35+00:00",
+      "at": "2026-10-25T11:45:32+00:00",
+      "last_ok_at": "2026-10-25T11:45:32+00:00",
       "fail_streak": 0
     },
     "treasury": {
       "result": "ok",
-      "at": "2026-10-24T11:15:35+00:00",
-      "last_ok_at": "2026-10-24T11:15:35+00:00",
+      "at": "2026-10-25T11:45:32+00:00",
+      "last_ok_at": "2026-10-25T11:45:32+00:00",
       "fail_streak": 0,
       "note": "[fetch_treasury] upcoming auctions: 0"
     },
     "uob": {
       "result": "ok",
-      "at": "2026-10-24T11:15:35+00:00",
-      "last_ok_at": "2026-10-24T11:15:35+00:00",
+      "at": "2026-10-25T11:45:32+00:00",
+      "last_ok_at": "2026-10-25T11:45:32+00:00",
       "fail_streak": 0
     }
   }
