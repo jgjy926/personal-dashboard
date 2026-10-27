@@ -4,43 +4,13 @@
     "bank_name": "Hong Leong Bank",
     "kind": "campaign",
     "source": "https://www.hlb.com.my/en/personal-banking/promotions.html",
-    "generated_at": "2026-10-26T00:00:00+00:00",
-    "today": "2026-10-26",
+    "generated_at": "2026-10-27T00:00:00+00:00",
+    "today": "2026-10-27",
     "new_today": 0,
     "count": 7,
     "note": "HLB promotions tagged 'Cards'. `desc` is the bank's listing line; tnc_summary is written from the banner + T&C PDF by summarize_campaign.py or the Console."
   },
   "promotions": [
-    {
-      "id": "57a3ad95c8",
-      "bank": "hlb",
-      "title": "Enjoy affordable interest rates today",
-      "desc": "Apply for Quick Cash, Balance Transfer or Flexi Payment Plan",
-      "link": "https://www.hlb.com.my/en/personal-banking/promotions/cards-portfolio-sales-campaign.html",
-      "image": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2025/cards-portfolio-sales-campaign/ps-oct-header.jpg",
-      "category": "Credit Card",
-      "period": "01 October 2026-31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/cards-portfolio-sales-campaign/hlb-portfolio-sales-balance-transfer-tnc.pdf",
-      "tnc_summary": "HLB credit card cash-flow offer covering Balance Transfer, Quick Cash or Flexi Payment Plan at lower interest rates. The poster doesn't show specific rates, tenures, minimum amounts or a campaign period.",
-      "summary_source": "",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "da6488b68c",
-      "bank": "hlb",
-      "title": "Get iPhone Duo with HLB 0% Extended Payment Plan",
-      "desc": "Enjoy accessories voucher when you pay with your HLB Credit Card with min. 24-mths EPP or higher.",
-      "link": "https://www.hlb.com.my/en/personal-banking/promotions/hlb-cards-iphone-18-launch-campaign.html",
-      "image": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/hlb-cards-iphone-18-launch-campaign/iphone-duo-header-banner.jpg",
-      "category": "Instalment",
-      "period": "16 September 2026-31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/hlb-cards-iphone-18-launch-campaign/hlb-cards-iphone-18-launch-campaign-tnc.pdf",
-      "tnc_summary": "Pre-order the iPhone 18 Pro with an HLB Credit Card. The poster doesn't show plan tenure, interest rate, minimum spend, participating merchants or a campaign period.",
-      "summary_source": "",
-      "end_date": "2026-10-31"
-    },
     {
       "id": "386973aab1",
       "bank": "hlb",
@@ -115,6 +85,36 @@
       "tnc_summary": "HLB Credit Card 'Tap & Pay your way to win' campaign. Tap & Pay spend can win a prize of your choice: RM2,000 cashback, 20,000 Enrich Points, or a RM2,000 Watsons in-store e-voucher. Alternatively, earn up to RM188 cashback. The poster doesn't show minimum spend or a campaign period.",
       "summary_source": "",
       "end_date": "2026-12-31"
+    },
+    {
+      "id": "57a3ad95c8",
+      "bank": "hlb",
+      "title": "Enjoy affordable interest rates today",
+      "desc": "Apply for Quick Cash, Balance Transfer or Flexi Payment Plan",
+      "link": "https://www.hlb.com.my/en/personal-banking/promotions/cards-portfolio-sales-campaign.html",
+      "image": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2025/cards-portfolio-sales-campaign/ps-oct-header.jpg",
+      "category": "Credit Card",
+      "period": "01 October 2026-31 October 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/cards-portfolio-sales-campaign/hlb-portfolio-sales-balance-transfer-tnc.pdf",
+      "tnc_summary": "HLB credit card cash-flow offer covering Balance Transfer, Quick Cash or Flexi Payment Plan at lower interest rates. The poster doesn't show specific rates, tenures, minimum amounts or a campaign period.",
+      "summary_source": "",
+      "end_date": "2026-10-31"
+    },
+    {
+      "id": "da6488b68c",
+      "bank": "hlb",
+      "title": "Get iPhone Duo with HLB 0% Extended Payment Plan",
+      "desc": "Enjoy accessories voucher when you pay with your HLB Credit Card with min. 24-mths EPP or higher.",
+      "link": "https://www.hlb.com.my/en/personal-banking/promotions/hlb-cards-iphone-18-launch-campaign.html",
+      "image": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/hlb-cards-iphone-18-launch-campaign/iphone-duo-header-banner.jpg",
+      "category": "Instalment",
+      "period": "16 September 2026-31 October 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/hlb-cards-iphone-18-launch-campaign/hlb-cards-iphone-18-launch-campaign-tnc.pdf",
+      "tnc_summary": "Pre-order the iPhone 18 Pro with an HLB Credit Card. The poster doesn't show plan tenure, interest rate, minimum spend, participating merchants or a campaign period.",
+      "summary_source": "",
+      "end_date": "2026-10-31"
     }
   ]
 }
