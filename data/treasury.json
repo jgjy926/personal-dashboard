@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-10-27T12:22:57+00:00",
+    "generated_at": "2026-10-28T13:08:53+00:00",
     "sources": {
       "auctions": "TreasuryDirect (upcoming auctions)",
       "results": "TreasuryDirect (auction results)",
@@ -31,15 +31,15 @@
     },
     {
       "auction_date": "",
-      "issue_date": "2026-10-30",
+      "issue_date": "2026-11-02",
       "security_type": "Note",
       "term": "5-Year",
-      "cusip": "91282CRR4",
-      "stop_rate": 2.367,
+      "cusip": "91282CRT0",
+      "stop_rate": 4.845,
       "investment_rate": null,
-      "coupon": 2.25,
+      "coupon": 4.75,
       "median_rate": null,
-      "bid_to_cover": 2.41,
+      "bid_to_cover": 2.33,
       "allotted_at_high": null,
       "tendered": null,
       "accepted": null,
@@ -49,15 +49,15 @@
     },
     {
       "auction_date": "",
-      "issue_date": "2026-10-15",
+      "issue_date": "2026-10-30",
       "security_type": "Note",
-      "term": "3-Year",
-      "cusip": "91282CRQ6",
-      "stop_rate": 4.932,
+      "term": "5-Year",
+      "cusip": "91282CRR4",
+      "stop_rate": 2.367,
       "investment_rate": null,
-      "coupon": 4.875,
+      "coupon": 2.25,
       "median_rate": null,
-      "bid_to_cover": 2.62,
+      "bid_to_cover": 2.41,
       "allotted_at_high": null,
       "tendered": null,
       "accepted": null,
@@ -122,6 +122,16 @@
   ],
   "recent_buybacks": [
     {
+      "operation_date": "2026-10-27",
+      "settlement_date": "2026-10-28",
+      "operation_type": "Liquidity Support",
+      "security_type": "Nominal Coupons",
+      "maturity_bucket": "20Y to 30Y",
+      "par_offered": 10746000000.0,
+      "par_accepted": 6000000000.0,
+      "par_cap": 6000000000.0
+    },
+    {
       "operation_date": "2026-10-21",
       "settlement_date": "2026-10-22",
       "operation_type": "Liquidity Support",
@@ -170,16 +180,6 @@
       "par_offered": 46391000000.0,
       "par_accepted": 6000000000.0,
       "par_cap": 6000000000.0
-    },
-    {
-      "operation_date": "2026-09-29",
-      "settlement_date": "2026-09-30",
-      "operation_type": "Liquidity Support",
-      "security_type": "TIPS",
-      "maturity_bucket": "1Y to 10Y",
-      "par_offered": 3981000000.0,
-      "par_accepted": 605000000.0,
-      "par_cap": 750000000.0
     }
   ]
 }
