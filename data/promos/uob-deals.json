@@ -4,13 +4,43 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-28T00:00:00+00:00",
-    "today": "2026-10-28",
-    "new_today": 3,
-    "count": 340,
+    "generated_at": "2026-10-29T00:00:00+00:00",
+    "today": "2026-10-29",
+    "new_today": 4,
+    "count": 344,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
+    {
+      "id": "e7c7f34ea3",
+      "bank": "uob",
+      "title": "Cha FOR TEA",
+      "link": "https://www.uob.com.my/personal/promotions/cha-for-tea.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/cha-for-tea/360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Cafe/Dessert",
+      "period": "Now to 31 October 2026",
+      "first_seen": "2026-10-29",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/cha-for-tea.page",
+      "tnc_summary": "Visa Exclusive · 5% off with min spend of TWD 1,000 or more",
+      "summary_source": "bank",
+      "end_date": "2026-10-31"
+    },
+    {
+      "id": "205965534e",
+      "bank": "uob",
+      "title": "Salad Atelier",
+      "link": "https://www.uob.com.my/personal/promotions/salad-atelier.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/salad-atelier/360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Western",
+      "period": "1 November 2026 to 30 April 2027",
+      "first_seen": "2026-10-28",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/salad-atelier.page",
+      "tnc_summary": "10% off total bill with no minimum spend",
+      "summary_source": "bank",
+      "end_date": "2027-04-30"
+    },
     {
       "id": "562dedc5f0",
       "bank": "uob",
@@ -40,21 +70,6 @@
       "tnc_summary": "Visa Exclusive · Complimentary twin-side hotpot upgrade (value TWD 180)",
       "summary_source": "bank",
       "end_date": "2026-12-31"
-    },
-    {
-      "id": "205965534e",
-      "bank": "uob",
-      "title": "Salad Atelier",
-      "link": "https://www.uob.com.my/personal/promotions/salad-atelier.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/salad-atelier/360x240.jpg",
-      "category": "Dining",
-      "subcategory": "Western",
-      "period": "1 November 2026 to 30 April 2027",
-      "first_seen": "2026-10-28",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/salad-atelier.page",
-      "tnc_summary": "10% off total bill with no minimum spend",
-      "summary_source": "bank",
-      "end_date": "2027-04-30"
     },
     {
       "id": "d1c4e8c887",
@@ -2097,6 +2112,21 @@
       "end_date": "2026-12-31"
     },
     {
+      "id": "ebb87a10a8",
+      "bank": "uob",
+      "title": "Pods & Petals' Giftlab",
+      "link": "https://www.uob.com.my/personal/promotions/pos-petals-giftlab.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/pos-petals-giftlab/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "Online",
+      "period": "1 November 2026 to 30 April 2027",
+      "first_seen": "2026-10-29",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/pos-petals-giftlab.page",
+      "tnc_summary": "15% off storewide on flowers, hampers and gifts with no minimum spend",
+      "summary_source": "bank",
+      "end_date": "2027-04-30"
+    },
+    {
       "id": "415d472794",
       "bank": "uob",
       "title": "Fitness Concept",
@@ -3445,6 +3475,36 @@
       "tnc_summary": "12% off with a minimum spend of RM250 (capped at RM100) · Promo code: UOBZAL2026",
       "summary_source": "bank",
       "end_date": "2026-12-31"
+    },
+    {
+      "id": "4b26a093de",
+      "bank": "uob",
+      "title": "DIB Bangkok",
+      "link": "https://www.uob.com.my/personal/promotions/dib-bangkok.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/dib-bangkok/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Recreational",
+      "period": "1 October 2026 to 31 March 2027",
+      "first_seen": "2026-10-29",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/dib-bangkok.page",
+      "tnc_summary": "Enjoy 10% discount on admission tickets and food & beverages at the café.",
+      "summary_source": "bank",
+      "end_date": "2027-03-31"
+    },
+    {
+      "id": "075c4a42d0",
+      "bank": "uob",
+      "title": "MARINA BAY SANDS",
+      "link": "https://www.uob.com.my/personal/promotions/marina-bay-sands.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/marina-bay-sands/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Recreational",
+      "period": "Now to 30 June 2027",
+      "first_seen": "2026-10-29",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/marina-bay-sands.page",
+      "tnc_summary": "Up to 20% Resort Dollars",
+      "summary_source": "bank",
+      "end_date": "2027-06-30"
     },
     {
       "id": "af53c93292",
