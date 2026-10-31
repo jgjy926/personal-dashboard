@@ -4,10 +4,10 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-30T00:00:00+00:00",
-    "today": "2026-10-30",
+    "generated_at": "2026-10-31T00:00:00+00:00",
+    "today": "2026-10-31",
     "new_today": 0,
-    "count": 344,
+    "count": 343,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
@@ -3252,21 +3252,6 @@
       "end_date": "2026-10-30"
     },
     {
-      "id": "5f767b9539",
-      "bank": "uob",
-      "title": "Marc Jacobs",
-      "link": "https://www.uob.com.my/assets/web-resources/personal/promotions/marc-jacobs/tnc.pdf",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/marc-jacobs/animated.gif",
-      "category": "Shopping",
-      "subcategory": "In Store",
-      "period": "Now to 30 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/assets/web-resources/personal/promotions/marc-jacobs/tnc.pdf",
-      "tnc_summary": "Mastercard Exclusive · 10% off normal priced items",
-      "summary_source": "bank",
-      "end_date": "2026-10-30"
-    },
-    {
       "id": "681a596e1b",
       "bank": "uob",
       "title": "Casetify",
@@ -3852,21 +3837,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "33a2d64a28",
-      "bank": "uob",
-      "title": "Visa Exclusive: Spa Cenvaree",
-      "link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/spa-cenvaree/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Services",
-      "period": "Now to 31 March 2027",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
-      "tnc_summary": "Visa Exclusive 25% off on all treatments",
-      "summary_source": "bank",
-      "end_date": "2027-03-31"
-    },
-    {
       "id": "10d10b9a54",
       "bank": "uob",
       "title": "Grab",
@@ -3880,6 +3850,21 @@
       "tnc_summary": "Visa Exclusive · 30% off on Grab Transport · Promo code: VISATH",
       "summary_source": "bank",
       "end_date": "2026-12-31"
+    },
+    {
+      "id": "33a2d64a28",
+      "bank": "uob",
+      "title": "Visa Exclusive: Spa Cenvaree",
+      "link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/spa-cenvaree/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Services",
+      "period": "Now to 31 March 2027",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
+      "tnc_summary": "Visa Exclusive 25% off on all treatments",
+      "summary_source": "bank",
+      "end_date": "2027-03-31"
     },
     {
       "id": "cab7ae8354",

@@ -1,62 +1,63 @@
 {
-  "generated_at": "2026-10-30T18:43:15+00:00",
+  "generated_at": "2026-10-31T18:20:17+00:00",
   "run": {
     "trigger": "schedule",
-    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/41060519271"
+    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/41202388458"
   },
   "sources": {
     "apims": {
       "result": "ok",
-      "at": "2026-10-30T18:43:15+00:00",
-      "last_ok_at": "2026-10-30T18:43:15+00:00",
+      "at": "2026-10-31T18:20:17+00:00",
+      "last_ok_at": "2026-10-31T18:20:17+00:00",
       "fail_streak": 0,
-      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-10-30T21:00:00+08:00 -> data/apims.json"
+      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-10-31T20:00:00+08:00 -> data/apims.json"
     },
     "engine": {
       "result": "ok",
-      "at": "2026-10-30T18:43:15+00:00",
-      "last_ok_at": "2026-10-30T18:43:15+00:00",
+      "at": "2026-10-31T18:20:17+00:00",
+      "last_ok_at": "2026-10-31T18:20:17+00:00",
       "fail_streak": 0
     },
     "hlb": {
       "result": "ok",
-      "at": "2026-10-30T18:43:15+00:00",
-      "last_ok_at": "2026-10-30T18:43:15+00:00",
+      "at": "2026-10-31T18:20:17+00:00",
+      "last_ok_at": "2026-10-31T18:20:17+00:00",
       "fail_streak": 0,
       "note": "[hlb] 7 card promos -> data/promos/hlb.draft.json. Next: python tools/merge_campaign.py"
     },
     "macro": {
       "result": "ok",
-      "at": "2026-10-30T18:43:15+00:00",
-      "last_ok_at": "2026-10-30T18:43:15+00:00",
+      "at": "2026-10-31T18:20:17+00:00",
+      "last_ok_at": "2026-10-31T18:20:17+00:00",
       "fail_streak": 0,
-      "note": "[fetch_macro] NYFED_SRF: 403 days (latest 2026-10-30, $0.0bn); alert=normal (peak $0.031bn on 2026-10-29)"
+      "note": "[fetch_macro] NYFED_SRF: 402 days (latest 2026-10-30, $0.0bn); alert=normal (peak $0.031bn on 2026-10-29)"
     },
     "pbb": {
       "result": "fail",
-      "at": "2026-10-30T18:43:15+00:00",
+      "at": "2026-10-31T18:20:17+00:00",
       "last_ok_at": "2026-10-28T18:44:56+00:00",
-      "fail_streak": 2,
+      "fail_streak": 3,
       "error": "[scrape] only 24/54 already-summarised promos are still in the listings (33 cards read) — the site has probably moved its listings. NOT writing a draft, so the live feed and its summaries stay as they are. Check LISTINGS against pbebank.com."
     },
     "summarize": {
       "result": "ok",
-      "at": "2026-10-30T18:43:15+00:00",
-      "last_ok_at": "2026-10-30T18:43:15+00:00",
+      "at": "2026-10-31T18:20:17+00:00",
+      "last_ok_at": "2026-10-31T18:20:17+00:00",
       "fail_streak": 0
     },
     "treasury": {
       "result": "ok",
-      "at": "2026-10-30T18:43:15+00:00",
-      "last_ok_at": "2026-10-30T18:43:15+00:00",
+      "at": "2026-10-31T18:20:17+00:00",
+      "last_ok_at": "2026-10-31T18:20:17+00:00",
       "fail_streak": 0,
       "note": "[fetch_treasury] upcoming auctions: 0"
     },
     "uob": {
-      "result": "ok",
-      "at": "2026-10-30T18:43:15+00:00",
+      "result": "fail",
+      "at": "2026-10-31T18:20:17+00:00",
       "last_ok_at": "2026-10-30T18:43:15+00:00",
-      "fail_streak": 0
+      "fail_streak": 1,
+      "error": "[uob] no featured campaigns found on the landing page — its layout may have changed."
     }
   }
 }
