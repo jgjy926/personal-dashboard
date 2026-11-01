@@ -10,12 +10,14 @@ looks fine. Freshness catches a feed that stops changing, but not one that is
 limping — Public Bank's listings moving on 2026-10-16 still produced a feed,
 just with 31 promos missing. So each run writes down, per source:
 
-  result       "ok" | "fail" for the last run that actually tried this source
+  result       "ok" | "degraded" | "fail" for the last run that actually tried this
+               source; "degraded" is a step that exited 0 but ingested under half
+               its series (the macro engine scores on stale data rather than fail)
   at           when that was
-  error        the failing line from the step's log (fail only)
+  error        the failing line from the step's log (fail and degraded only)
   note         the step's own one-line summary, e.g. "136 cards listed" (ok only)
-  last_ok_at   the last run it succeeded, carried across runs
-  fail_streak  consecutive failed runs, carried across runs
+  last_ok_at   the last run it fully succeeded, carried across runs
+  fail_streak  consecutive failed or degraded runs, carried across runs
 
 A source the run skipped (the push-triggered fast path skips the promo scrape
 and the engine) keeps its previous record untouched, so the page always shows
@@ -47,6 +49,11 @@ _ERROR_HINT = re.compile(r"fail|error|refus|may have changed|moved|not found|tim
 # "[merge] pbb.json: 53 promos, …". Tagged and carrying a number.
 _NOTE_LINE = re.compile(r"^\[\w+\]\s.*\d")
 _NOISE = re.compile(r"^(Next:|Optional|hint:|::)", re.I)
+# The engine's ingest summary, after its logger's timestamp prefix:
+# "… INFO    [ingest] 1/84 series OK, 0 new obs, 1 revisions, FAILED: PERMIT, HOUST, …"
+_INGEST = re.compile(r"\[ingest\] (\d+)/(\d+) series OK.*")
+_INGEST_FAILED = re.compile(r"\[ingest\] \S+: FAILED -- (.*)")
+INGEST_DEGRADED_BELOW = 0.5     # share of series ingested; "most failed" = degraded
 
 
 def normalise(outcome: str) -> str | None:
@@ -87,17 +94,45 @@ def note_line(lines: list[str]) -> str:
     return ""
 
 
+def ingest_summary(lines: list[str]) -> re.Match | None:
+    """The last ingest summary in a step's log, or None for a step without one."""
+    for ln in reversed(lines):
+        m = _INGEST.search(ln)
+        if m:
+            return m
+    return None
+
+
+def degraded_error(summary: re.Match | None, lines: list[str]) -> str:
+    """Why an ok-exiting step is really degraded, or "" if it is not. The engine
+    exits 0 and rebuilds its feed however little it ingested, so its outcome alone
+    reported ok through a week of 1/84 series (2026-10-26 onwards)."""
+    if not summary:
+        return ""
+    good, total = int(summary[1]), int(summary[2])
+    if not total or good / total >= INGEST_DEGRADED_BELOW:
+        return ""
+    cause = next((m[1] for m in map(_INGEST_FAILED.search, lines) if m), "")
+    return f"only {good}/{total} series ingested" + (f": {cause}" if cause else "")
+
+
 def update(prior: dict, result: str | None, lines: list[str], now: str) -> dict:
     """The new record for one source. A skipped source keeps its prior record."""
     if result is None:
         return prior
+    summary = ingest_summary(lines) if result == "ok" else None
+    degraded = degraded_error(summary, lines)
+    if degraded:
+        result = "degraded"
     rec = {"result": result, "at": now,
            "last_ok_at": now if result == "ok" else prior.get("last_ok_at", ""),
            "fail_streak": 0 if result == "ok" else int(prior.get("fail_streak", 0)) + 1}
     if result == "fail":
         rec["error"] = error_line(lines) or "step failed (no log captured)"
+    elif degraded:
+        rec["error"] = degraded[:300]
     else:
-        note = note_line(lines)
+        note = summary[0][:200] if summary else note_line(lines)
         if note:
             rec["note"] = note
     return rec
@@ -190,7 +225,7 @@ def main(argv: list[str] | None = None) -> int:
         json.dump(doc, f, indent=2, ensure_ascii=False)
         f.write("\n")
     ran = {k: v for k, v in steps.items() if normalise(v)}
-    failed = [k for k, v in ran.items() if normalise(v) == "fail"]
+    failed = [k for k in ran if sources[k]["result"] != "ok"]
     print(f"[status] {len(ran)} sources ran, {len(failed)} failed"
           + (f": {', '.join(failed)}" if failed else "") + f" -> {os.path.relpath(args.out, ROOT)}")
     return 0

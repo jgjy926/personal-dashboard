@@ -75,6 +75,64 @@ class TestUpdate(unittest.TestCase):
         self.assertNotIn("error", rec)
 
 
+class TestIngestGrade(unittest.TestCase):
+    """The engine exits 0 however little it ingested, so its log decides the grade."""
+    NOW = "2026-10-31T18:20:00+00:00"
+    PREFIX = "2026-10-31 18:19:58,938 "
+    # The shape of run 41202388458's log.
+    BAD = ["Successfully installed pandas-3.0.0",
+           PREFIX + "ERROR   [ingest] PERMIT: FAILED -- FRED PERMIT: TimeoutError: The read operation timed out",
+           PREFIX + "ERROR   [ingest] HOUST: FAILED -- FRED HOUST: TimeoutError: The read operation timed out",
+           PREFIX + "INFO    [ingest] 1/84 series OK, 0 new obs, 1 revisions, FAILED: PERMIT, HOUST",
+           PREFIX + "INFO    [main] 2026-10-31 | LATE_CYCLE | 12m recession 12.9%"]
+    GOOD = [PREFIX + "INFO    [ingest] GOLD via Yahoo GC=F (2514 obs) -- FRED ids retired",
+            PREFIX + "INFO    [ingest] 84/84 series OK, 0 new obs, 0 revisions"]
+
+    def test_most_series_failing_is_degraded_and_says_why(self):
+        rec = ws.update({}, "ok", self.BAD, self.NOW)
+        self.assertEqual(rec["result"], "degraded")
+        self.assertIn("1/84", rec["error"])
+        self.assertIn("TimeoutError", rec["error"])
+
+    def test_degraded_counts_as_a_failed_run_across_runs(self):
+        prior = {"result": "degraded", "last_ok_at": "2026-10-25T11:45:00+00:00", "fail_streak": 2}
+        rec = ws.update(prior, "ok", self.BAD, self.NOW)
+        self.assertEqual(rec["fail_streak"], 3)
+        self.assertEqual(rec["last_ok_at"], "2026-10-25T11:45:00+00:00")
+
+    def test_full_ingest_stays_ok_and_clears_the_streak(self):
+        rec = ws.update({"result": "degraded", "fail_streak": 5}, "ok", self.GOOD, self.NOW)
+        self.assertEqual((rec["result"], rec["fail_streak"], rec["last_ok_at"]), ("ok", 0, self.NOW))
+        self.assertEqual(rec["note"], "[ingest] 84/84 series OK, 0 new obs, 0 revisions")
+        self.assertNotIn("error", rec)
+
+    def test_threshold_is_half_the_series(self):
+        at = lambda n: ws.update({}, "ok", [f"[ingest] {n}/84 series OK, 0 new obs"], self.NOW)["result"]
+        self.assertEqual((at(41), at(42)), ("degraded", "ok"))
+
+    def test_partial_failure_stays_ok_but_names_them_in_the_note(self):
+        rec = ws.update({}, "ok", ["[ingest] 80/84 series OK, 0 new obs, 0 revisions, FAILED: A, B"], self.NOW)
+        self.assertEqual(rec["result"], "ok")
+        self.assertIn("FAILED: A, B", rec["note"])
+
+    def test_a_step_failure_is_not_softened_to_degraded(self):
+        self.assertEqual(ws.update({}, "fail", self.BAD, self.NOW)["result"], "fail")
+
+    def test_a_step_without_an_ingest_summary_is_untouched(self):
+        rec = ws.update({}, "ok", ["[hlb] 7 card promos -> data/promos/hlb.draft.json"], self.NOW)
+        self.assertEqual(rec["result"], "ok")
+        self.assertTrue(rec["note"].startswith("[hlb] 7 card promos"))
+
+    def test_main_records_degraded_from_the_engine_log(self):
+        with tempfile.TemporaryDirectory() as d:
+            out = os.path.join(d, "status.json")
+            with open(os.path.join(d, "log-engine.txt"), "w", encoding="utf-8") as f:
+                f.write("\n".join(self.BAD) + "\n")
+            ws.main(["--out", out, "--step", "engine=success", "--logdir", d])
+            with open(out, encoding="utf-8") as f:
+                self.assertEqual(json.load(f)["sources"]["engine"]["result"], "degraded")
+
+
 class TestMain(unittest.TestCase):
     def test_round_trip_carries_skipped_sources(self):
         with tempfile.TemporaryDirectory() as d:

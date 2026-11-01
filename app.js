@@ -1777,8 +1777,8 @@ async function checkStatusFlag() {
   try {
     const s = await fetchJSON('data/status.json');
     const recs = Object.values(s.sources || {});
-    markStatusTab(recs.some(r => r.result === 'fail' && r.fail_streak >= FAIL_DOWN) ? 'down'
-      : recs.some(r => r.result === 'fail') ? 'warn' : 'ok');
+    markStatusTab(recs.some(r => r.result !== 'ok' && r.fail_streak >= FAIL_DOWN) ? 'down'
+      : recs.some(r => r.result !== 'ok') ? 'warn' : 'ok');
   } catch { /* no record yet (local dev / first deploy): leave the tab unmarked */ }
 }
 
@@ -1805,11 +1805,13 @@ MODS.status = function initStatus() {
   };
   function gradeCI(r, rec) {
     if (!rec) { r.facts.push(['Last CI run', '<span class="muted">none recorded yet</span>']); return; }
-    r.facts.push(['Last CI run', `${rec.result === 'ok' ? '<span class="chip ok">ok</span>' : '<span class="chip bad">failed</span>'} ${when(rec.at)}`]);
-    if (rec.result === 'fail') {
+    const chip = { ok: '<span class="chip ok">ok</span>', degraded: '<span class="chip warn">degraded</span>' }[rec.result] || '<span class="chip bad">failed</span>';
+    r.facts.push(['Last CI run', `${chip} ${when(rec.at)}`]);
+    if (rec.result !== 'ok') {
       r.facts.push(['Last CI success', when(rec.last_ok_at)]);
+      const verb = rec.result === 'degraded' ? 'degraded' : 'failed';
       raise(r, rec.fail_streak >= FAIL_DOWN ? 'down' : 'warn',
-        `CI ${rec.fail_streak > 1 ? `failed ${rec.fail_streak} runs in a row` : 'failed on its last run'} — the page is serving the previous feed. ${rec.error || ''}`);
+        `CI ${rec.fail_streak > 1 ? `${verb} ${rec.fail_streak} runs in a row` : `${verb} on its last run`} — ${rec.result === 'degraded' ? 'the feed was rebuilt on stale data' : 'the page is serving the previous feed'}. ${rec.error || ''}`);
     }
     if (rec.note) r.facts.push(['Last run said', `<code class="st-note">${esc(rec.note)}</code>`]);
   }
@@ -1973,7 +1975,7 @@ MODS.status = function initStatus() {
           : 'no CI status recorded yet (local build, or before the first run)'}</span>
       </div>
       ${order.map(i => cardHTML(SOURCES[i], graded[i])).join('')}
-      <p class="muted st-foot">“Down”: unreadable, empty, ${FAIL_DOWN}+ failed CI runs in a row, or well past its refresh. “Needs attention”: one failed run, stale for a day, missing items, or work waiting (a promo without a summary). Only opening this tab or ↻ runs these checks.</p>`;
+      <p class="muted st-foot">“Down”: unreadable, empty, ${FAIL_DOWN}+ failed or degraded CI runs in a row, or well past its refresh. “Needs attention”: one failed or degraded run, stale for a day, missing items, or work waiting (a promo without a summary). Only opening this tab or ↻ runs these checks.</p>`;
     markStatusTab(worst);
     busy = false; btn.disabled = false; btn.classList.remove('spin');
   }

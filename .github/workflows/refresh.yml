@@ -66,8 +66,11 @@ jobs:
           python-version: "3.12"
       - run: python -m unittest discover -s tools -p 'test_*.py' -v
 
+  # Pinned, not ubuntu-latest: the macro engine's FRED ingest timed out on every
+  # run once ubuntu-latest became ubuntu-26.04 (2026-10-26: 84/84 series -> 1/84,
+  # and 5.5 hours of retries), though tools/fetch_macro.py still reached FRED there.
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -200,10 +203,15 @@ jobs:
         # dashboard on a frozen snapshot, rather than a broken deploy.
         if: ${{ env.FULL == 'true' && vars.MACRO_ENGINE_REPO != '' }}
         continue-on-error: true      # a FRED outage must not block the deploy
+        # A healthy step takes ~3 min. An engine that cannot reach FRED otherwise
+        # retries every batch and then every series: 3 x 60s for ~110 calls, 5.5h.
+        timeout-minutes: 20
         working-directory: macro-engine
         env:
           # Write the feed straight into this repo's data/ directory.
           MACRO_DASHBOARD_DIR: ${{ github.workspace }}
+          MACRO_HTTP_TIMEOUT: "30"
+          MACRO_HTTP_RETRIES: "2"
           # New training month: score with last month's fit now, refit in the
           # `retrain` job after the deploy instead of blocking it.
           MACRO_ALLOW_STALE_MODEL: "1"
@@ -262,7 +270,7 @@ jobs:
   retrain:
     needs: build-and-deploy
     if: needs.build-and-deploy.outputs.needs_retrain == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04        # as build-and-deploy, for the same reason
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -301,9 +309,12 @@ jobs:
             macro-engine-db-
 
       - name: Refit the models
+        timeout-minutes: 30          # ~5 min refit; same bound on a dead FRED as the daily step
         working-directory: macro-engine
         env:
           MACRO_DASHBOARD_DIR: ${{ github.workspace }}
+          MACRO_HTTP_TIMEOUT: "30"
+          MACRO_HTTP_RETRIES: "2"
         run: |
           pip install -r requirements.txt
           python main.py daily
