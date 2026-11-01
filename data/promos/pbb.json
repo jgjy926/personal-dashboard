@@ -4,7 +4,7 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-01T00:00:00+00:00",
+    "generated_at": "2026-11-01T03:31:08.502Z",
     "today": "2026-11-01",
     "new_today": 6,
     "count": 58,
@@ -32,11 +32,11 @@
       "id": "2724949b74",
       "bank": "pbb",
       "category": "Travel",
-      "period": "",
+      "period": "1 November 2026 - 31 January 2027",
       "first_seen": "2026-11-01",
       "tnc_link": "https://www.pbebank.com/media/0hqjdnx5/tc_overseas-enrich-travel.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "PB Visa Credit Card overseas spend campaign; register via PBe (keyword PBTR) or SMS PBTR to 68333. Monthly cash back: RM100 for min RM5,000 accumulated overseas spend, RM300 for min RM10,000. Monthly prizes: 30 x 30,000 Enrich Points (min RM30,000 overseas spend) and 60 x 10,000 Enrich Points (min RM10,000).",
+      "end_date": "2027-01-31"
     },
     {
       "title": "Sign Up & Be Rewarded with your new PB & PIB Credit Card",
@@ -115,11 +115,11 @@
       "id": "ae0fc83ab4",
       "bank": "pbb",
       "category": "Online",
-      "period": "",
+      "period": "1 November - 31 December 2026",
       "first_seen": "2026-11-01",
       "tnc_link": "https://www.pbebank.com/media/4jviqsbb/tc_rm30-lazada.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "RM30 off with a minimum spend of RM200 in a single transaction, only with PB Mastercard Credit Card. Valid for Lazada mobile app purchases only.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "Lazada PayDay with PB Visa Credit Card",
@@ -170,11 +170,11 @@
       "id": "f3c5659a12",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "",
+      "period": "1 November 2026 to 28 February 2027",
       "first_seen": "2026-11-01",
       "tnc_link": "https://www.pbebank.com/media/5qvp5wx0/tc_reward-plus-bm.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "PB PLUS Savings Account deposit campaign: earmark deposits for 6 months to receive a bonus gift — RM88,000 for La gourmet 6L pressure cooker, RM188,000 for Apple Watch Series 12 GPS 42mm, RM288,000 for Blueair 2-in-1 dehumidifier+purifier. Deposits also earn Diamond Entries to win a BMW i5 and more prizes.",
+      "end_date": "2027-02-28"
     },
     {
       "title": "Link Your PB Visa Credit Cards To Alipay & Get Cash Back",
@@ -225,11 +225,11 @@
       "id": "db7f1002a3",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "",
+      "period": "30 October to 31 December 2026",
       "first_seen": "2026-11-01",
       "tnc_link": "https://www.pbebank.com/media/214boptp/tc_oppo-x10.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Up to RM300 instant rebate on OPPO Find X10 Series with PB Credit/Debit Card at selected OPPO Brand Stores, with 24-month instalments. Find X10 Pro Max RM6,699 (RM279.13/mo); Find X10 12GB+512GB RM5,299 (RM220.79/mo); Find X10 12GB+256GB RM4,799 (RM199.96/mo).",
+      "end_date": "2026-12-31"
     },
     {
       "title": "Enjoy 0% with PB Mastercard Flexipay",
@@ -280,11 +280,11 @@
       "id": "21b6aac38c",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "",
+      "period": "31 October 2026 - 28 February 2027",
       "first_seen": "2026-11-01",
       "tnc_link": "https://www.pbebank.com/media/i3wj4g1d/tc_vivo-x500-xfold6.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Up to RM200 instant rebate on vivo X500 Series and vivo X Fold6 with PB card on a 24-month Zero Interest/Profit Instalment Plan. PB prices from RM4,599 (X500 12GB+256GB, RM191.63/mo) to RM8,499 (X Fold6 12GB+512GB, RM354.13/mo).",
+      "end_date": "2027-02-28"
     },
     {
       "title": "0% Balance Transfer with PB Visa Credit Cards",
@@ -307,11 +307,11 @@
       "id": "f0b56db6fb",
       "bank": "pbb",
       "category": "Cashback",
-      "period": "",
+      "period": "1 November 2026 - 30 June 2027",
       "first_seen": "2026-11-01",
       "tnc_link": "https://www.pbebank.com/media/r3nfmfil/tc_apply-enjoy-cashback1.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Extra 1% cash back, up to RM300 per month, on top of existing benefits for new-to-bank PB Visa Commercial/Business cardmembers (cards approved from 1 November 2026). Base benefits: Commercial Card unlimited 0.5% on all transactions; Business Card unlimited 0.8% overseas and 0.3% domestic.",
+      "end_date": "2027-06-30"
     },
     {
       "title": "Top-up using PB Debit Cards with RM0 Reload Fees!",
