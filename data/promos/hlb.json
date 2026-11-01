@@ -4,13 +4,42 @@
     "bank_name": "Hong Leong Bank",
     "kind": "campaign",
     "source": "https://www.hlb.com.my/en/personal-banking/promotions.html",
-    "generated_at": "2026-10-31T00:00:00+00:00",
-    "today": "2026-10-31",
-    "new_today": 0,
+    "generated_at": "2026-11-01T00:00:00+00:00",
+    "today": "2026-11-01",
+    "new_today": 1,
     "count": 7,
     "note": "HLB promotions tagged 'Cards'. `desc` is the bank's listing line; tnc_summary is written from the banner + T&C PDF by summarize_campaign.py or the Console."
   },
   "promotions": [
+    {
+      "id": "62db33aac2",
+      "bank": "hlb",
+      "title": "1,200,000 Enrich Points to be won",
+      "desc": "Turn your Overseas Spend into Business Class luxury",
+      "link": "https://www.hlb.com.my/en/personal-banking/promotions/enrich-points-overseas-campaign.html",
+      "image": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/enrich-points-overseas-campaign/cc-enrich-promo-banner.jpg",
+      "category": "Travel",
+      "period": "01 November 2026-31 January 2027",
+      "first_seen": "2026-11-01",
+      "tnc_link": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/enrich-points-overseas-campaign/hlb-enrich-point-spend-campaign-tnc.pdf",
+      "tnc_summary": "",
+      "end_date": "2027-01-31"
+    },
+    {
+      "id": "57a3ad95c8",
+      "bank": "hlb",
+      "title": "Enjoy affordable interest rates today",
+      "desc": "Apply for Quick Cash, Balance Transfer or Flexi Payment Plan",
+      "link": "https://www.hlb.com.my/en/personal-banking/promotions/cards-portfolio-sales-campaign.html",
+      "image": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2025/cards-portfolio-sales-campaign/ps-oct-header.jpg",
+      "category": "Credit Card",
+      "period": "01 November 2026-30 November 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/cards-portfolio-sales-campaign/hlb-portfolio-sales-balance-transfer-tnc.pdf",
+      "tnc_summary": "HLB credit card cash-flow offer covering Balance Transfer, Quick Cash or Flexi Payment Plan at lower interest rates. The poster doesn't show specific rates, tenures, minimum amounts or a campaign period.",
+      "summary_source": "",
+      "end_date": "2026-11-30"
+    },
     {
       "id": "33f00b7cc0",
       "bank": "hlb",
@@ -85,36 +114,6 @@
       "tnc_summary": "General HLB Credit & Debit Cards partner-offers banner ('Unlock a world of perks with HLB Cards'). The poster doesn't show specific merchants, discounts, minimum spend or a campaign period.",
       "summary_source": "",
       "end_date": "2035-12-31"
-    },
-    {
-      "id": "57a3ad95c8",
-      "bank": "hlb",
-      "title": "Enjoy affordable interest rates today",
-      "desc": "Apply for Quick Cash, Balance Transfer or Flexi Payment Plan",
-      "link": "https://www.hlb.com.my/en/personal-banking/promotions/cards-portfolio-sales-campaign.html",
-      "image": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2025/cards-portfolio-sales-campaign/ps-oct-header.jpg",
-      "category": "Credit Card",
-      "period": "01 October 2026-31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/cards-portfolio-sales-campaign/hlb-portfolio-sales-balance-transfer-tnc.pdf",
-      "tnc_summary": "HLB credit card cash-flow offer covering Balance Transfer, Quick Cash or Flexi Payment Plan at lower interest rates. The poster doesn't show specific rates, tenures, minimum amounts or a campaign period.",
-      "summary_source": "",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "da6488b68c",
-      "bank": "hlb",
-      "title": "Get iPhone Duo with HLB 0% Extended Payment Plan",
-      "desc": "Enjoy accessories voucher when you pay with your HLB Credit Card with min. 24-mths EPP or higher.",
-      "link": "https://www.hlb.com.my/en/personal-banking/promotions/hlb-cards-iphone-18-launch-campaign.html",
-      "image": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/hlb-cards-iphone-18-launch-campaign/iphone-duo-header-banner.jpg",
-      "category": "Instalment",
-      "period": "16 September 2026-31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.hlb.com.my/content/dam/hlb/my/images/Promotions/2026/hlb-cards-iphone-18-launch-campaign/hlb-cards-iphone-18-launch-campaign-tnc.pdf",
-      "tnc_summary": "Pre-order the iPhone 18 Pro with an HLB Credit Card. The poster doesn't show plan tenure, interest rate, minimum spend, participating merchants or a campaign period.",
-      "summary_source": "",
-      "end_date": "2026-10-31"
     }
   ]
 }

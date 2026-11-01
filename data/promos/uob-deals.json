@@ -4,10 +4,10 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-10-31T00:00:00+00:00",
-    "today": "2026-10-31",
+    "generated_at": "2026-11-01T00:00:00+00:00",
+    "today": "2026-11-01",
     "new_today": 0,
-    "count": 343,
+    "count": 316,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
@@ -822,21 +822,6 @@
       "end_date": "2026-12-30"
     },
     {
-      "id": "3ea0a9d6be",
-      "bank": "uob",
-      "title": "Restaurant Jie",
-      "link": "https://www.uob.com.my/personal/promotions/restaurant-jie.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/restaurant-jie/360x240.jpg",
-      "category": "Dining",
-      "subcategory": "Asian",
-      "period": "1 August 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/restaurant-jie.page",
-      "tnc_summary": "Complimentary one glass of selected Sake or House Wine with every order of the Full Dinner Tasting Menu",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
       "id": "b2d93afb32",
       "bank": "uob",
       "title": "Three Plates Full",
@@ -1467,21 +1452,6 @@
       "end_date": "2026-11-30"
     },
     {
-      "id": "c448b2e718",
-      "bank": "uob",
-      "title": "The Farm (Subang Parade)",
-      "link": "https://www.uob.com.my/personal/promotions/the-farm-sp.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/the-farm-sp/360x240.jpg",
-      "category": "Dining",
-      "subcategory": "Cafe/Dessert",
-      "period": "1 Aug 2026 – 31 Oct 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/the-farm-sp.page",
-      "tnc_summary": "10% off total bill with a minimum spend of RM100",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
       "id": "4fd8f31d52",
       "bank": "uob",
       "title": "AnCasa Resort Port Dickson",
@@ -1572,36 +1542,6 @@
       "end_date": "2026-10-31"
     },
     {
-      "id": "42ff5c8fdd",
-      "bank": "uob",
-      "title": "Christoph's",
-      "link": "https://www.uob.com.my/personal/promotions/christophs.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/christophs/360x240.jpg",
-      "category": "Dining",
-      "subcategory": "Western",
-      "period": "1 May 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/christophs.page",
-      "tnc_summary": "10% off with a minimum spend of RM300",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "c548c83146",
-      "bank": "uob",
-      "title": "Kazu",
-      "link": "https://www.uob.com.my/personal/promotions/kazu.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/kazu/360x240.jpg",
-      "category": "Dining",
-      "subcategory": "Asian",
-      "period": "1 May 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/kazu.page",
-      "tnc_summary": "One complimentary 300ml bottle sake worth RM175 with order of 2 omakase courses with a minimum spend of RM600.",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
       "id": "672e4e618a",
       "bank": "uob",
       "title": "gēn",
@@ -1645,21 +1585,6 @@
       "tnc_summary": "10% off food bill",
       "summary_source": "bank",
       "end_date": "2026-12-31"
-    },
-    {
-      "id": "d6e77771b4",
-      "bank": "uob",
-      "title": "Mr Dakgalbi Sunway Pyramid",
-      "link": "https://www.uob.com.my/personal/promotions/mr-dakgalbi.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/mr-dakgalbi/360x240.jpg",
-      "category": "Dining",
-      "subcategory": "Asian",
-      "period": "1 May 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/mr-dakgalbi.page",
-      "tnc_summary": "RM5 off with a minimum spend of RM50",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
     },
     {
       "id": "aad351c42a",
@@ -1707,21 +1632,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "5976a3f245",
-      "bank": "uob",
-      "title": "Gai by Darren Chin",
-      "link": "https://www.uob.com.my/personal/promotions/gai-by-darren-chin.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/gai-by-darren-chin/360x240.jpg",
-      "category": "Dining",
-      "subcategory": "Asian",
-      "period": "1 May 2026 to 31 October 20266",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/gai-by-darren-chin.page",
-      "tnc_summary": "15% off total bill",
-      "summary_source": "bank",
-      "end_date": ""
-    },
-    {
       "id": "6cf02f99f7",
       "bank": "uob",
       "title": "Sabato's, Kimpton Naluria Kuala Lumpur",
@@ -1748,36 +1658,6 @@
       "first_seen": "2026-10-11",
       "tnc_link": "https://www.uob.com.my/personal/promotions/nok-yung.page",
       "tnc_summary": "10% off total bill",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "6fff0bf793",
-      "bank": "uob",
-      "title": "Sushi Qubey",
-      "link": "https://www.uob.com.my/personal/promotions/sushi-qubey.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/sushi-qubey/360x240.jpg",
-      "category": "Dining",
-      "subcategory": "Asian",
-      "period": "1 May 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/sushi-qubey.page",
-      "tnc_summary": "RM80 off with a minimum spend of RM800 · RM150 off with a minimum spend of RM1,288",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "37a4782fb8",
-      "bank": "uob",
-      "title": "Sushi Mew",
-      "link": "https://www.uob.com.my/personal/promotions/sushi-mew.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/sushi-mew/360x240.jpg",
-      "category": "Dining",
-      "subcategory": "Asian",
-      "period": "1 May 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/sushi-mew.page",
-      "tnc_summary": "RM80 off with a minimum spend of RM800 · RM150 off with a minimum spend of RM1,288",
       "summary_source": "bank",
       "end_date": "2026-10-31"
     },
@@ -2217,21 +2097,6 @@
       "end_date": "2027-04-30"
     },
     {
-      "id": "ce6aaee8d6",
-      "bank": "uob",
-      "title": "Alpro Pharmacy",
-      "link": "https://www.uob.com.my/personal/promotions/alpro-pharmacy.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/alpro-pharmacy/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "15 October to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/alpro-pharmacy.page",
-      "tnc_summary": "RM10 off with a min spend of RM80 (Promo code: ALPUOB10)",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
       "id": "75c35307ff",
       "bank": "uob",
       "title": "Temptations by Malaysia Airlines",
@@ -2243,21 +2108,6 @@
       "first_seen": "2026-10-12",
       "tnc_link": "https://www.uob.com.my/personal/promotions/temptations-malaysia-airlines.page",
       "tnc_summary": "20% off with a min. spend of RM250 (capped at RM150) · Promo code: UOBTEMP20",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "7c1be49660",
-      "bank": "uob",
-      "title": "SENHENG",
-      "link": "https://www.uob.com.my/personal/promotions/senheng.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/images/promotions/merchandise/senheng/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "15 October to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/senheng.page",
-      "tnc_summary": "RM100 off with minimum spend RM3,000 · Promo Code: UOB20",
       "summary_source": "bank",
       "end_date": "2026-10-31"
     },
@@ -2277,36 +2127,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "960311b147",
-      "bank": "uob",
-      "title": "Isetan Online Store",
-      "link": "https://www.uob.com.my/personal/promotions/cybersales-isetan.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/cybersales-isetan/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "15 October 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/cybersales-isetan.page",
-      "tnc_summary": "RM35 off with a min. spend of RM250 · Promo code: UOB35",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "21c8fe06c5",
-      "bank": "uob",
-      "title": "Sony",
-      "link": "https://www.uob.com.my/personal/promotions/cyber-carnival-sony.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/cyber-carnival-sony/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "15 October to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/cyber-carnival-sony.page",
-      "tnc_summary": "Up to 20% off Sony headset products with promo code UOB20",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
       "id": "baed45e57f",
       "bank": "uob",
       "title": "Siam Premium Outlets Bangkok",
@@ -2320,21 +2140,6 @@
       "tnc_summary": "Visa Exclusive · Get SIAM GIFT CARD worth THB200 when spending THB4,000 on a single sales slip Terms and Conditions apply.",
       "summary_source": "bank",
       "end_date": "2026-12-31"
-    },
-    {
-      "id": "6bd476dd4c",
-      "bank": "uob",
-      "title": "AirAsia Duty-Free",
-      "link": "https://www.uob.com.my/personal/promotions/airasia-duty-free.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/airasia-duty-free/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "15 October 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/airasia-duty-free.page",
-      "tnc_summary": "Offer 1: · 20% off with a minimum spend of RM300. (Promo Code: UOB20) · Offer 2: · 30% off with a minimum spend of RM400. (Promo Code: UOB30)",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
     },
     {
       "id": "7fdb0de552",
@@ -2397,36 +2202,6 @@
       "end_date": "2026-10-31"
     },
     {
-      "id": "2a6fd1cb31",
-      "bank": "uob",
-      "title": "BIG Pharmacy",
-      "link": "https://www.uob.com.my/personal/promotions/big-pharmacy.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/big-pharmacy/animated.gif",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "15 October 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/big-pharmacy.page",
-      "tnc_summary": "RM10 off with minimum spend of RM80",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "ed4bba92fc",
-      "bank": "uob",
-      "title": "Paula Choice",
-      "link": "https://www.uob.com.my/personal/promotions/paulas-choice-carnival.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/paulas-choice-carnival/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "15 October 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/paulas-choice-carnival.page",
-      "tnc_summary": "RM50 off with a minimum spend of RM200. · Promo code: PCUOB50OFF",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
       "id": "851659cb6e",
       "bank": "uob",
       "title": "TTRacing",
@@ -2438,21 +2213,6 @@
       "first_seen": "2026-10-11",
       "tnc_link": "https://uob.com.my/personal/promotions/ttracing.page",
       "tnc_summary": "11% off with a minimum spend of RM650 with promo code UOB11.",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "4541fbe082",
-      "bank": "uob",
-      "title": "LAC",
-      "link": "https://www.uob.com.my/personal/promotions/lac2.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/lac2/animated.gif",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "15 October 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/lac2.page",
-      "tnc_summary": "RM50 off with a min spend of RM499 LAC Health Supplement on normal price item (Promo code: UOBCARNIVAL50)",
       "summary_source": "bank",
       "end_date": "2026-10-31"
     },
@@ -2513,21 +2273,6 @@
       "first_seen": "2026-10-11",
       "tnc_link": "https://www.uob.com.my/personal/promotions/lips-carpenter-online.page",
       "tnc_summary": "RM50 off with a minimum spend of RM300 (promo code: UOBCARNIVAL50)",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "4a7c11a054",
-      "bank": "uob",
-      "title": "Ecominim",
-      "link": "https://www.uob.com.my/personal/promotions/ecominim-carnival.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/ecominim-carnival/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "15 October 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/ecominim-carnival.page",
-      "tnc_summary": "Additional 20% off from in-house 20% discount on the first purchase · 20% off on all subsequent purchases",
       "summary_source": "bank",
       "end_date": "2026-10-31"
     },
@@ -2742,21 +2487,6 @@
       "end_date": ""
     },
     {
-      "id": "1a9c631fc5",
-      "bank": "uob",
-      "title": "Segway",
-      "link": "https://www.uob.com.my/personal/promotions/segway.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/segway/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "In Store",
-      "period": "1 September to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/segway.page",
-      "tnc_summary": "Up to RM1,400 off selected products",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
       "id": "a7aa6ed66a",
       "bank": "uob",
       "title": "Cellar Eighteen",
@@ -2785,36 +2515,6 @@
       "tnc_summary": "1-for-1 on LAC Health Supplement",
       "summary_source": "bank",
       "end_date": "2026-12-31"
-    },
-    {
-      "id": "b3572682a0",
-      "bank": "uob",
-      "title": "Lovely Lace",
-      "link": "https://www.uob.com.my/personal/promotions/lovely-lace.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/lovely-lace/main-360x240.gif",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "1 May 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/lovely-lace.page",
-      "tnc_summary": "Get 10% off with no minimum spend · Promo code: UOB10LOVELY",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "9a4d6dc163",
-      "bank": "uob",
-      "title": "Larrie",
-      "link": "https://www.uob.com.my/personal/promotions/larrie.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/larrie/main-360x240.gif",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "1 May 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/larrie.page",
-      "tnc_summary": "Up to 15% off total bill with no minimum spend.",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
     },
     {
       "id": "80ee49cf41",
@@ -2875,6 +2575,21 @@
       "tnc_summary": "1. RM200 off ITSU AuraWave 2. Complimentary ITSU iCare toothbrush worth RM280 with 15 minutes experience of ITSU AuraWave",
       "summary_source": "bank",
       "end_date": "2026-12-30"
+    },
+    {
+      "id": "4a7c11a054",
+      "bank": "uob",
+      "title": "Ecominim",
+      "link": "https://www.uob.com.my/personal/promotions/ecominim.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/ecominim/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "Online",
+      "period": "1 August 2026 to 31 December 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/ecominim.page",
+      "tnc_summary": "Additional 10% off from in-house 10% discount on the first purchase · 10% off on all subsequent purchases · Promo code: UOB10",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
     },
     {
       "id": "5551f217ee",
@@ -3207,21 +2922,6 @@
       "end_date": "2026-06-30"
     },
     {
-      "id": "d3cad7596a",
-      "bank": "uob",
-      "title": "Delfimart",
-      "link": "https://www.uob.com.my/personal/promotions/delfimart.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/delfimart/main-360x240.gif",
-      "category": "Shopping",
-      "subcategory": "Online",
-      "period": "1 May 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/delfimart.page",
-      "tnc_summary": "Get 10% off with a minimum spend of RM60 · Promo code: DELFIUOBPD10",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
       "id": "f069aad175",
       "bank": "uob",
       "title": "Superdry",
@@ -3310,21 +3010,6 @@
       "tnc_summary": "RM15 off with a minimum spend of RM138 (Valid for both online and in-store purchases) · Promo code : GIFFYUOB",
       "summary_source": "bank",
       "end_date": "2026-12-31"
-    },
-    {
-      "id": "c16bef425e",
-      "bank": "uob",
-      "title": "Dking",
-      "link": "https://www.uob.com.my/personal/promotions/dking.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/dking/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "In Store",
-      "period": "1 May 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/dking.page",
-      "tnc_summary": "10% off with a minimum spend of RM150 (capped at RM150)",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
     },
     {
       "id": "b314ad2f33",
@@ -3492,51 +3177,6 @@
       "end_date": "2027-06-30"
     },
     {
-      "id": "af53c93292",
-      "bank": "uob",
-      "title": "Journify by Malaysia Airlines",
-      "link": "https://www.uob.com.my/personal/promotions/journify-malaysia-airlines.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/journify-malaysia-airlines/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Airline",
-      "period": "15 October 2026 to 31 October 2026",
-      "first_seen": "2026-10-12",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/journify-malaysia-airlines.page",
-      "tnc_summary": "RM100 off for selected MHFlypass · Number of redemptions: 100 units · Promo code: UOBCARNIVAL100 · Eligible passes: MHflypass Malaysia Zone 2 MHflypass Malaysia Zone 3 MHflypass ASEAN Zone 1 MHflypass ASEAN Zone 2 MHflypass ASEAN Zone 3 · MHflypass Malaysia Zone 2 · MHflypass Malaysia Zone 3 · MHflypass ASEAN Zone 1 · MHflypass ASEAN Zone 2 · MHflypass ASEAN Zone 3",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "26f1bcec1e",
-      "bank": "uob",
-      "title": "Malaysia Airlines",
-      "link": "https://www.uob.com.my/personal/promotions/malaysia-airlines.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/malaysia-airlines/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Airline",
-      "period": "15 October 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/malaysia-airlines.page",
-      "tnc_summary": "10% for Business Class Tickets · 5% for Economy Class Tickets",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "6705265ce1",
-      "bank": "uob",
-      "title": "KKday",
-      "link": "https://www.uob.com.my/personal/promotions/kkday-promo.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/kkday/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Services",
-      "period": "15 October 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/kkday-promo.page",
-      "tnc_summary": "Offer 1: Enjoy 10% OFF on Taiwan Products, capped at RM20 (no min. spend). · Promo Code: UOBCARNIVAL10 · Offer 2: Enjoy RM50 OFF on Tours Only, with a minimum spend of RM350. Promo Code: UOBCARNIVAL50",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
       "id": "8c8ae0adc0",
       "bank": "uob",
       "title": "TAGTHAi",
@@ -3627,36 +3267,6 @@
       "end_date": "2027-12-31"
     },
     {
-      "id": "5056567540",
-      "bank": "uob",
-      "title": "Sedunia Travel",
-      "link": "https://www.uob.com.my/personal/promotions/sedunia-travel-carnival.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/sedunia-travel-carnival/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Online",
-      "period": "15 October 2026 to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/sedunia-travel-carnival.page",
-      "tnc_summary": "Tours: Save up to 50% on Selected Tours · Rail Journeys: Save up to RM5,000 per Person on Selected Iconic Rail Journeys · Cruises: Save up to 50% on Selected Cruises",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
-      "id": "6907b2e8a0",
-      "bank": "uob",
-      "title": "Agoda",
-      "link": "https://www.uob.com.my/personal/promotions/agoda-cyber.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/agoda-cyber/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Online",
-      "period": "15 October to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/agoda-cyber.page",
-      "tnc_summary": "Get 15% off accommodation bookings (capped at MYR 150).",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
       "id": "1ff9f65c39",
       "bank": "uob",
       "title": "Alipay",
@@ -3685,21 +3295,6 @@
       "tnc_summary": "Offer 1 : Leisure Travel - RM200 instant rebate for any travel series package Offer 2 : Umrah Packages - RM200 instant rebate for Umrah Packages Offer 3 : Cruise Packages - RM200 instant rebate for any route for Star Voyager & Genting Dream",
       "summary_source": "bank",
       "end_date": "2026-10-31"
-    },
-    {
-      "id": "8334b91741",
-      "bank": "uob",
-      "title": "Eva Air",
-      "link": "https://www.uob.com.my/personal/promotions/eva-air2.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/eva-air2/animated.gif",
-      "category": "Travel",
-      "subcategory": "Online",
-      "period": "",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/eva-air2.page",
-      "tnc_summary": "15% off · Premium Economy Class (Booking Class: P) and · Economy Class (Booking Class: V) · Booking period: 15 October 2026 to 29 October 2026 · Travel period: 1 November 2026 to 30 November 2026; 4 January 2027 to 30 January 2027 and 15 March 2027 to 15 May 2027",
-      "summary_source": "bank",
-      "end_date": ""
     },
     {
       "id": "04bb9d38db",
@@ -3837,21 +3432,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "10d10b9a54",
-      "bank": "uob",
-      "title": "Grab",
-      "link": "https://www.uob.com.my/personal/promotions/grab.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/grab/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Services",
-      "period": "Now to 31 December 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/grab.page",
-      "tnc_summary": "Visa Exclusive · 30% off on Grab Transport · Promo code: VISATH",
-      "summary_source": "bank",
-      "end_date": "2026-12-31"
-    },
-    {
       "id": "33a2d64a28",
       "bank": "uob",
       "title": "Visa Exclusive: Spa Cenvaree",
@@ -3865,6 +3445,21 @@
       "tnc_summary": "Visa Exclusive 25% off on all treatments",
       "summary_source": "bank",
       "end_date": "2027-03-31"
+    },
+    {
+      "id": "10d10b9a54",
+      "bank": "uob",
+      "title": "Grab",
+      "link": "https://www.uob.com.my/personal/promotions/grab.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/grab/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Services",
+      "period": "Now to 31 December 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/grab.page",
+      "tnc_summary": "Visa Exclusive · 30% off on Grab Transport · Promo code: VISATH",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
     },
     {
       "id": "cab7ae8354",
@@ -4002,21 +3597,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "a75a8d2d88",
-      "bank": "uob",
-      "title": "Park Hyatt Hotel",
-      "link": "https://www.uob.com.my/personal/promotions/park-hyatt.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/park-hyatt/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Hotel",
-      "period": "Now to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/park-hyatt.page",
-      "tnc_summary": "Visa Exclusive · Enjoy 10% off room bookings at four Park Hyatt hotels and 15% off dining. · Park Hyatt Beijing · Park Hyatt Hangzhou · Park Hyatt Suzhou · Park Hyatt Shenzhen · Promo Code: VISASO",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
-    },
-    {
       "id": "906d9d0732",
       "bank": "uob",
       "title": "Beijing Subway",
@@ -4092,6 +3672,21 @@
       "end_date": ""
     },
     {
+      "id": "8334b91741",
+      "bank": "uob",
+      "title": "Eva Air",
+      "link": "https://www.uob.com.my/personal/promotions/eva-air.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/eva-air/360x240.gif",
+      "category": "Travel",
+      "subcategory": "Airline",
+      "period": "",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/eva-air.page",
+      "tnc_summary": "7% off Business Class · 5% off Premium Economy and Economy Class · Booking period: 1 July 2026 to 30 June 2027 · Travel period: 1 July 2026 to 31 December 2027",
+      "summary_source": "bank",
+      "end_date": ""
+    },
+    {
       "id": "2864fd0153",
       "bank": "uob",
       "title": "Just Pets",
@@ -4105,6 +3700,21 @@
       "tnc_summary": "20% off admission tickets at Just Farm, Just Cats and Just Dogs with no minimum spend (capped at RM20) · Promo code: JUSTPETSUOB2026",
       "summary_source": "bank",
       "end_date": "2026-12-31"
+    },
+    {
+      "id": "6907b2e8a0",
+      "bank": "uob",
+      "title": "Agoda",
+      "link": "https://www.uob.com.my/personal/promotions/agoda.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/agoda/agoda-360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Services",
+      "period": "15 October to 31 October 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/agoda.page",
+      "tnc_summary": "12% off for worldwide hotel bookings (capped at RM100) · Booking period: 9 February 2026 till 31 December 2026 · Stay period: 9 February 2026 till 31 December 2027",
+      "summary_source": "bank",
+      "end_date": "2026-10-31"
     },
     {
       "id": "9595922d58",
@@ -4750,21 +4360,6 @@
       "tnc_summary": "UOB Mastercard Exclusive · Complimentary one-night stay · Promo code: 3HMCLHG",
       "summary_source": "bank",
       "end_date": "2027-12-31"
-    },
-    {
-      "id": "aa058762be",
-      "bank": "uob",
-      "title": "Villa Finder",
-      "link": "https://www.uob.com.my/personal/promotions/travel-deals.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/villa-finder/villa-finder-360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Hotel",
-      "period": "Now to 31 October 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "",
-      "tnc_summary": "UOB Mastercard Exclusive · UOB Zenith, PRVI Miles Elite, Lady's Solitaire and World Mastercard · 10% off bookings with a minimum spend of RM6,500 (capped at RM1,800) · Promo code: VFWORLD · All other UOB Credit and Debit Mastercard · 7% off bookings with a minimum spend of RM1,600 (capped at RM600) · Promo code: VFMASTER",
-      "summary_source": "bank",
-      "end_date": "2026-10-31"
     },
     {
       "id": "5ea116e473",
