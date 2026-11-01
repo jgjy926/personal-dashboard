@@ -64,20 +64,27 @@ RAW_DIR = os.path.join(DATA, "campaign_raw")
 FEED = "pbb"
 
 BASE = "https://www.pbebank.com"
-# Listings to read. All three render real `.grid-item` cards (re-verified 2026-10-19).
+# Listings to read. All four render real `.grid-item` cards (re-verified 2026-11-01).
 #
 # Around 2026-10-16 Public Bank cut the credit and debit listings down to a short
-# curated set (~25 cards each, down from 130+). The full card-promo catalogue (~140,
-# incl. the merchant "PB Privileges" deals) now lives ONLY on the combined hub.
-# Reading just the first two dropped 31 still-live promos — and 27 summaries with
-# them — in a single run. The two card listings stay first so their default
-# category (Credit/Debit Card) wins for the promos they carry; the hub fills in
-# everything else.
+# curated set (~25 cards each, down from 130+), moving the catalogue to the combined
+# hub. Around 2026-10-29 it cut the hub to 5 cards too; the full catalogue (~140,
+# incl. the merchant "PB Privileges" deals) now lives ONLY on latest-promotions.
+# The card listings stay first so their default category (Credit/Debit Card) wins
+# for the promos they carry; latest-promotions fills in everything else.
 LISTINGS = [
     (f"{BASE}/en/promotions/credit-cards-promotions/", "Credit Card"),
     (f"{BASE}/en/promotions/debit-cards-promotions/", "Debit Card"),
     (f"{BASE}/en/promotions/credit-debit-cards-promotions/", "Credit Card"),
+    (f"{BASE}/en/promotions/latest-promotions/", "Credit Card"),
 ]
+
+# latest-promotions covers the whole bank and its filter links are client-side only
+# (the server returns all ~140 for any query), so deposits, loans and the like are
+# told apart by title. Used only for promos with no summary yet.
+_NON_CARD_RE = re.compile(
+    r"fixed deposit|\beFD\b|PowerInvest|\beGold\b|first home|hire purchase|vehicle financing"
+    r"|dream car|insurance|MyPB App|digital invoicing|update your personal details", re.I)
 
 # Refuse to write a draft when fewer than this share of the promos already
 # summarised are still found in the listings. A real bank clear-out removes a few
@@ -247,9 +254,13 @@ def select_promos(listed: list[dict], window: int, summarised_ids: set[str]) -> 
     The window is per listing, not over the credit + debit listings joined end to
     end: the credit listing alone runs 130+ cards, so a joined window never got
     past it and a debit-only promo (e.g. "RM80 Cash Back on Online Transactions
-    with PB Visa Debit Card", 4th on the debit listing) was never scraped."""
+    with PB Visa Debit Card", 4th on the debit listing) was never scraped.
+
+    A card with no summary yet is also skipped when its title marks it as a non-card
+    product (see _NON_CARD_RE)."""
     return [c for c in listed
-            if window <= 0 or c["rank"] < window or c["id"] in summarised_ids]
+            if c["id"] in summarised_ids
+            or ((window <= 0 or c["rank"] < window) and not _NON_CARD_RE.search(c.get("title", "")))]
 
 
 def listings_look_moved(listed_ids: set[str], summarised_ids: set[str]) -> bool:

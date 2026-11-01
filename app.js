@@ -1865,7 +1865,7 @@ MODS.status = function initStatus() {
     ...[['pbb', 'Public Bank promos', 'pbb', 'tools/scrape_campaign.py'],
         ['hlb', 'Hong Leong Bank promos', 'hlb', 'tools/scrape_hlb.py'],
         ['uob', 'UOB campaigns', 'uob', 'tools/scrape_uob.py'],
-        ['uob-deals', 'UOB merchant deals', 'uob', 'tools/scrape_uob.py']].map(([feed, name, ci, via]) => ({
+        ['uob-deals', 'UOB merchant deals', 'uob-deals', 'tools/scrape_uob.py']].map(([feed, name, ci, via]) => ({
       key: feed, name, tab: 'campaign', ci, via, async grade(r, rec) {
         gradeCI(r, rec);
         const d = await fetchJSON(`data/promos/${feed}.json`);

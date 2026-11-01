@@ -91,6 +91,29 @@ class TestListingsLookMoved(unittest.TestCase):
     def test_the_combined_hub_is_read(self):
         self.assertTrue(any("credit-debit-cards-promotions" in u for u, _ in sc.LISTINGS))
 
+    def test_the_full_catalogue_is_read(self):
+        # 2026-10-29: the hub shrank to 5 cards and the catalogue moved here.
+        self.assertTrue(any("latest-promotions" in u for u, _ in sc.LISTINGS))
+
+
+class TestNonCardProducts(unittest.TestCase):
+    """latest-promotions covers the whole bank, not just its cards."""
+
+    @staticmethod
+    def card(cid, title, rank=0):
+        return {"id": cid, "title": title, "rank": rank}
+
+    def test_new_non_card_products_are_skipped(self):
+        listed = [self.card("fd", "PB Special Fixed Deposit Campaign"),
+                  self.card("efd", "PB eFD Via FPX Campaign"),
+                  self.card("hp", "Hire Purchase Step-Up Financing"),
+                  self.card("visa", "Enrich Your Travels with PB Visa Credit Card")]
+        self.assertEqual([c["id"] for c in sc.select_promos(listed, 15, set())], ["visa"])
+
+    def test_a_summarised_promo_is_never_filtered(self):
+        listed = [self.card("fd", "PB Special Fixed Deposit Campaign")]
+        self.assertEqual([c["id"] for c in sc.select_promos(listed, 15, {"fd"})], ["fd"])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -24,9 +24,12 @@ tnc_summary (summary_source "bank") and the period gives end_date.
 Usage:
   pip install requests beautifulsoup4
   python tools/scrape_uob.py && python tools/merge_campaign.py
+
+--only campaigns|deals runs one feed, so CI can record each feed's result on its own.
 """
 from __future__ import annotations
 
+import argparse
 import html as htmllib
 import re
 import sys
@@ -54,6 +57,9 @@ DEAL_CATEGORIES = [
 ]
 # Site-wide PDFs every UOB page links in its chrome; never a campaign's T&C.
 _CHROME_PDF = re.compile(r"cctips|stc-governing|service-guide|privacy|pn-web-cookies", re.I)
+# A tile's button_name is "find out more" or, since 2026-10-31, "<tile name>:find out
+# more" with the name often blank. The site's header and footer use the same scheme.
+_FEATURED_CTA = re.compile(r"^(?!header|footer|searchbar)[^:]*:?\s*find out more\s*$", re.I)
 
 
 def _get(session, url, **kw) -> str:
@@ -68,7 +74,7 @@ def featured_links(landing_html: str) -> list[dict]:
     """The landing page's 'Find out more' tiles: link, heading, blurb."""
     soup = BeautifulSoup(landing_html, "html.parser")
     out, seen = [], set()
-    for a in soup.find_all("a", href=True, attrs={"button_name": "find out more"}):
+    for a in soup.find_all("a", href=True, attrs={"button_name": _FEATURED_CTA}):
         link = urljoin(BASE, a["href"]).split("?")[0]
         if link in seen:
             continue
@@ -103,10 +109,33 @@ def parse_campaign(page_html: str) -> dict:
             "tnc_link": tnc, "period": find_period(soup.get_text(" "))}
 
 
+def page_gone(session, url: str) -> bool:
+    """True only when the bank has clearly removed a page. A timeout or server error
+    says nothing about the campaign, so it does not count."""
+    try:
+        r = session.get(url, headers=HEADERS, timeout=60)
+    except requests.RequestException:
+        return False
+    return r.status_code in (404, 410) or r.url.split("?")[0] != url
+
+
+def still_running(prior: dict, featured: set[str], today: str, is_gone) -> list[dict]:
+    """Known campaigns the landing page no longer features but whose stated period has
+    not ended. The landing page is a short rotating carousel, so leaving it does not
+    end a campaign, and the merge would otherwise drop the promo and its summary."""
+    return [p for p in prior.values()
+            if p.get("link") not in featured
+            and (p.get("end_date") or "") >= today
+            and not is_gone(p.get("link", ""))]
+
+
 def scrape_campaigns(session, today: str) -> list[dict]:
     prior = prior_promos("uob")
     promos = []
-    for f in featured_links(_get(session, LANDING)):
+    featured = featured_links(_get(session, LANDING))
+    if not featured:   # a layout change, not an empty campaign list: leave the feed alone
+        return []
+    for f in featured:
         try:
             c = parse_campaign(_get(session, f["link"]))
         except Exception as e:  # noqa: BLE001
@@ -121,7 +150,10 @@ def scrape_campaigns(session, today: str) -> list[dict]:
             "tnc_link": c["tnc_link"], "tnc_summary": "",
         })
         print(f"   • campaign {pid}  {title[:60]}")
-    return promos
+    kept = still_running(prior, {f["link"] for f in featured}, today, lambda u: page_gone(session, u))
+    for p in kept:
+        print(f"   • campaign {p['id']}  {p.get('title', '')[:60]} [off the landing page, still running]")
+    return promos + kept
 
 
 # ── merchant deals ──────────────────────────────────────────────────────────
@@ -199,44 +231,58 @@ def scrape_deals(session, today: str) -> list[dict]:
     return promos
 
 
+def run_campaigns(session, today: str) -> int:
+    try:
+        campaigns = scrape_campaigns(session, today)
+    except Exception as e:  # noqa: BLE001 - the deals are independent
+        print(f"[uob] campaigns failed: {type(e).__name__}: {e}")
+        return 1
+    if not campaigns:
+        print("[uob] no featured campaigns found on the landing page — its layout may have changed.")
+        return 1
+    save(draft_path("uob"), {
+        "meta": {"bank": "uob", "bank_name": BANKS["uob"], "kind": "campaign", "source": LANDING,
+                 "count": len(campaigns), "today": today,
+                 "note": "UOB's featured card campaigns. tnc_summary is written from the "
+                         "banner + T&C by summarize_campaign.py or the Console."},
+        "promotions": campaigns,
+    })
+    print(f"[uob] {len(campaigns)} campaigns -> data/promos/uob.draft.json. Next: python tools/merge_campaign.py")
+    return 0
+
+
+def run_deals(session, today: str) -> int:
+    try:
+        deals = scrape_deals(session, today)
+    except Exception as e:  # noqa: BLE001
+        print(f"[uob] deals failed: {type(e).__name__}: {e}")
+        return 1
+    if not deals:
+        print("[uob] no deals parsed — the deal pages' layout may have changed.")
+        return 1
+    save(draft_path("uob-deals"), {
+        "meta": {"bank": "uob", "bank_name": BANKS["uob"], "kind": "deal",
+                 "source": f"{BASE}/personal/promotions/index.page",
+                 "count": len(deals), "today": today,
+                 "note": "UOB card merchant deals. tnc_summary is the bank's own offer text "
+                         "from the deal card (summary_source 'bank'), not an AI summary."},
+        "promotions": deals,
+    })
+    print(f"[uob] {len(deals)} deals -> data/promos/uob-deals.draft.json. Next: python tools/merge_campaign.py")
+    return 0
+
+
 def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--only", choices=["campaigns", "deals"], help="run just this feed (default: both)")
+    args = ap.parse_args()
     session = requests.Session()
     today = date.today().isoformat()
     status = 0
-    try:
-        campaigns = scrape_campaigns(session, today)
-        if campaigns:
-            save(draft_path("uob"), {
-                "meta": {"bank": "uob", "bank_name": BANKS["uob"], "kind": "campaign", "source": LANDING,
-                         "count": len(campaigns), "today": today,
-                         "note": "UOB's featured card campaigns. tnc_summary is written from the "
-                                 "banner + T&C by summarize_campaign.py or the Console."},
-                "promotions": campaigns,
-            })
-        else:
-            print("[uob] no featured campaigns found on the landing page — its layout may have changed.")
-            status = 1
-    except Exception as e:  # noqa: BLE001 - the deals below are independent
-        print(f"[uob] campaigns failed: {type(e).__name__}: {e}")
-        status = 1
-    try:
-        deals = scrape_deals(session, today)
-        if deals:
-            save(draft_path("uob-deals"), {
-                "meta": {"bank": "uob", "bank_name": BANKS["uob"], "kind": "deal",
-                         "source": f"{BASE}/personal/promotions/index.page",
-                         "count": len(deals), "today": today,
-                         "note": "UOB card merchant deals. tnc_summary is the bank's own offer text "
-                                 "from the deal card (summary_source 'bank'), not an AI summary."},
-                "promotions": deals,
-            })
-        else:
-            print("[uob] no deals parsed — the deal pages' layout may have changed.")
-            status = 1
-    except Exception as e:  # noqa: BLE001
-        print(f"[uob] deals failed: {type(e).__name__}: {e}")
-        status = 1
-    print("[uob] wrote data/promos/uob*.draft.json. Next: python tools/merge_campaign.py")
+    if args.only != "deals":
+        status |= run_campaigns(session, today)
+    if args.only != "campaigns":
+        status |= run_deals(session, today)
     return status
 
 

@@ -145,7 +145,8 @@ jobs:
           }
           scrape pbb python tools/scrape_campaign.py --max 15
           scrape hlb python tools/scrape_hlb.py
-          scrape uob python tools/scrape_uob.py
+          scrape uob python tools/scrape_uob.py --only campaigns
+          scrape uob-deals python tools/scrape_uob.py --only deals
           python tools/merge_campaign.py
 
       # Reads the poster + official T&C of any promo that arrived without a summary

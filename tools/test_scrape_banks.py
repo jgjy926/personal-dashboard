@@ -82,6 +82,33 @@ class TestHlbListing(unittest.TestCase):
 
 
 @unittest.skipUnless(HAS_BS4, "needs beautifulsoup4")
+class TestUobFeatured(unittest.TestCase):
+    def test_reads_every_button_name_form_but_not_the_site_chrome(self):
+        html = """<a button_name="header:find out more" href="/personal/save/index.page">x</a>
+        <a button_name="footer:find out more" href="/personal/footer.page">x</a>
+        <a button_name="header:find out about uob tmrw" href="/personal/tmrw.page">x</a>
+        <a button_name="find out more" href="/personal/promotions/plain.page">x</a>
+        <a button_name=":find out more" href="/personal/promotions/blank-name.page">x</a>
+        <a button_name="Some Offer:find out more " href="/personal/promotions/named.page">x</a>
+        <a button_name="Some Offer:explore deals" href="/personal/promotions/named.page">x</a>"""
+        self.assertEqual([f["link"].rsplit("/", 1)[1] for f in uob.featured_links(html)],
+                         ["plain.page", "blank-name.page", "named.page"])
+
+
+class TestUobStillRunning(unittest.TestCase):
+    TODAY = "2026-11-01"
+    PRIOR = {"on": {"id": "on", "link": "u/on", "end_date": "2027-11-30"},
+             "live": {"id": "live", "link": "u/live", "end_date": "2027-11-30"},
+             "ended": {"id": "ended", "link": "u/ended", "end_date": "2026-10-18"},
+             "undated": {"id": "undated", "link": "u/undated", "end_date": ""},
+             "removed": {"id": "removed", "link": "u/removed", "end_date": "2027-01-01"}}
+
+    def test_keeps_only_unexpired_campaigns_off_the_landing_page(self):
+        got = uob.still_running(self.PRIOR, {"u/on"}, self.TODAY, lambda u: u == "u/removed")
+        self.assertEqual([p["id"] for p in got], ["live"])
+
+
+@unittest.skipUnless(HAS_BS4, "needs beautifulsoup4")
 class TestUobDeals(unittest.TestCase):
     def test_offer_period_and_terms_link(self):
         desc = ('<p class="paragraph" ><p>RM100 off with minimum spend RM3,000</p><p>&nbsp;</p>'
