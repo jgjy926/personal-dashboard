@@ -4,9 +4,9 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-11-02T00:00:00+00:00",
-    "today": "2026-11-02",
-    "new_today": 4,
+    "generated_at": "2026-11-03T00:00:00+00:00",
+    "today": "2026-11-03",
+    "new_today": 0,
     "count": 304,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
@@ -2922,21 +2922,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "5b80697902",
-      "bank": "uob",
-      "title": "Disney Cruise Line",
-      "link": "https://www.uob.com.my/personal/promotions/disney-cruise-line.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/disney-cruise-line/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Recreational",
-      "period": "15 Oct till 21 Dec 2026",
-      "first_seen": "2026-11-02",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/disney-cruise-line.page",
-      "tnc_summary": "Get USD100 Onboard Credits with no min. spend · Promotion Period: 15 Oct till 21 Dec 2026 Sailing Period: 1 Nov till 21 Dec 2026 Limited to first 200 redemptions per month. · Terms and conditions apply.",
-      "summary_source": "bank",
-      "end_date": "2026-12-21"
-    },
-    {
       "id": "af53c93292",
       "bank": "uob",
       "title": "Journify by Malaysia Airlines",
@@ -2965,6 +2950,21 @@
       "tnc_summary": "RM110 off with a min. spend of RM2,800 (capped at 50 redemptions) Promo code: MHHUOB110 · RM210 off with a min. spend of RM4,900 (capped at 50 redemptions) Promo code: MHHUOB210 · RM330 off with a min. spend of RM8,000 (capped at 50 redemptions) Promo code: MHHUOB330",
       "summary_source": "bank",
       "end_date": "2026-11-30"
+    },
+    {
+      "id": "5b80697902",
+      "bank": "uob",
+      "title": "Disney Cruise Line",
+      "link": "https://www.uob.com.my/personal/promotions/disney-cruise-line.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/disney-cruise-line/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Recreational",
+      "period": "15 Oct till 21 Dec 2026",
+      "first_seen": "2026-11-02",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/disney-cruise-line.page",
+      "tnc_summary": "Get USD100 Onboard Credits with no min. spend · Promotion Period: 15 Oct till 21 Dec 2026 Sailing Period: 1 Nov till 21 Dec 2026 Limited to first 200 redemptions per month. · Terms and conditions apply.",
+      "summary_source": "bank",
+      "end_date": "2026-12-21"
     },
     {
       "id": "276cb9911f",
@@ -3192,21 +3192,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "10d10b9a54",
-      "bank": "uob",
-      "title": "Grab",
-      "link": "https://www.uob.com.my/personal/promotions/grab.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/grab/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Services",
-      "period": "Now to 31 December 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/grab.page",
-      "tnc_summary": "Visa Exclusive · 30% off on Grab Transport · Promo code: VISATH",
-      "summary_source": "bank",
-      "end_date": "2026-12-31"
-    },
-    {
       "id": "33a2d64a28",
       "bank": "uob",
       "title": "Visa Exclusive: Spa Cenvaree",
@@ -3220,6 +3205,21 @@
       "tnc_summary": "Visa Exclusive 25% off on all treatments",
       "summary_source": "bank",
       "end_date": "2027-03-31"
+    },
+    {
+      "id": "10d10b9a54",
+      "bank": "uob",
+      "title": "Grab",
+      "link": "https://www.uob.com.my/personal/promotions/grab.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/grab/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Services",
+      "period": "Now to 31 December 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/grab.page",
+      "tnc_summary": "Visa Exclusive · 30% off on Grab Transport · Promo code: VISATH",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
     },
     {
       "id": "cab7ae8354",
@@ -4402,7 +4402,7 @@
       "period": "1 July 2026 to 31 December 2026",
       "first_seen": "2026-10-11",
       "tnc_link": "https://www.uob.com.my/personal/promotions/beacon-hospital.page",
-      "tnc_summary": "Receive a complimentary cabin luggage with the purchase of any health screening package",
+      "tnc_summary": "Receive a complimentary Dessini Kettle with the purchase of any health screening package",
       "summary_source": "bank",
       "end_date": "2026-12-31"
     },

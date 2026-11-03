@@ -4,9 +4,9 @@
     "bank_name": "UOB",
     "kind": "campaign",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-11-02T00:00:00+00:00",
-    "today": "2026-11-02",
-    "new_today": 1,
+    "generated_at": "2026-11-03T00:00:00+00:00",
+    "today": "2026-11-03",
+    "new_today": 0,
     "count": 2,
     "note": "UOB's featured card campaigns. tnc_summary is written from the banner + T&C by summarize_campaign.py or the Console."
   },
@@ -23,6 +23,7 @@
       "first_seen": "2026-11-02",
       "tnc_link": "https://www.uob.com.my/assets/web-resources/personal/promotions/cards-acquisition/credit-cards-acquisition-mar-2026-campaign-tnc.pdf",
       "tnc_summary": "",
+      "summary_source": "",
       "end_date": ""
     },
     {
