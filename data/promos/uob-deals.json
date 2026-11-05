@@ -4,10 +4,10 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-11-04T00:00:00+00:00",
-    "today": "2026-11-04",
-    "new_today": 0,
-    "count": 304,
+    "generated_at": "2026-11-05T00:00:00+00:00",
+    "today": "2026-11-05",
+    "new_today": 1,
+    "count": 305,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
@@ -1947,6 +1947,21 @@
       "end_date": "2026-12-31"
     },
     {
+      "id": "36912ddf08",
+      "bank": "uob",
+      "title": "SK-II",
+      "link": "https://www.uob.com.my/personal/promotions/sk-II.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/sk-II/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "In Store",
+      "period": "1 November 2026 to 30 April 2027",
+      "first_seen": "2026-11-05",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/sk-II.page",
+      "tnc_summary": "Complimentary 1 piece of Facial Treatment Gentle Cleanser 20g (worth RM45) with min spend RM300",
+      "summary_source": "bank",
+      "end_date": "2027-04-30"
+    },
+    {
       "id": "75c35307ff",
       "bank": "uob",
       "title": "Temptations by Malaysia Airlines",
@@ -3192,21 +3207,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "33a2d64a28",
-      "bank": "uob",
-      "title": "Visa Exclusive: Spa Cenvaree",
-      "link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/spa-cenvaree/360x240.jpg",
-      "category": "Travel",
-      "subcategory": "Services",
-      "period": "Now to 31 March 2027",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
-      "tnc_summary": "Visa Exclusive 25% off on all treatments",
-      "summary_source": "bank",
-      "end_date": "2027-03-31"
-    },
-    {
       "id": "10d10b9a54",
       "bank": "uob",
       "title": "Grab",
@@ -3220,6 +3220,21 @@
       "tnc_summary": "Visa Exclusive · 30% off on Grab Transport · Promo code: VISATH",
       "summary_source": "bank",
       "end_date": "2026-12-31"
+    },
+    {
+      "id": "33a2d64a28",
+      "bank": "uob",
+      "title": "Visa Exclusive: Spa Cenvaree",
+      "link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/spa-cenvaree/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Services",
+      "period": "Now to 31 March 2027",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/spa-cenvaree.page",
+      "tnc_summary": "Visa Exclusive 25% off on all treatments",
+      "summary_source": "bank",
+      "end_date": "2027-03-31"
     },
     {
       "id": "cab7ae8354",
