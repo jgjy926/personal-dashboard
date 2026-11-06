@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-11-05T14:45:39+00:00",
+    "generated_at": "2026-11-06T14:24:00+00:00",
     "sources": {
       "auctions": "TreasuryDirect (upcoming auctions)",
       "results": "TreasuryDirect (auction results)",
@@ -104,6 +104,16 @@
   ],
   "recent_buybacks": [
     {
+      "operation_date": "2026-11-05",
+      "settlement_date": "2026-11-06",
+      "operation_type": "Liquidity Support",
+      "security_type": "Nominal Coupons",
+      "maturity_bucket": "1Mo to 2Y",
+      "par_offered": 47319000000.0,
+      "par_accepted": 4000000000.0,
+      "par_cap": 4000000000.0
+    },
+    {
       "operation_date": "2026-11-04",
       "settlement_date": "2026-11-05",
       "operation_type": "Liquidity Support",
@@ -152,16 +162,6 @@
       "par_offered": 14886000000.0,
       "par_accepted": 6000000000.0,
       "par_cap": 6000000000.0
-    },
-    {
-      "operation_date": "2026-10-06",
-      "settlement_date": "2026-10-07",
-      "operation_type": "Liquidity Support",
-      "security_type": "Nominal Coupons",
-      "maturity_bucket": "2Y to 3Y",
-      "par_offered": 14763000000.0,
-      "par_accepted": 1327000000.0,
-      "par_cap": 4000000000.0
     }
   ]
 }

@@ -4,9 +4,9 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-05T00:00:00+00:00",
-    "today": "2026-11-05",
-    "new_today": 1,
+    "generated_at": "2026-11-06T00:00:00+00:00",
+    "today": "2026-11-06",
+    "new_today": 0,
     "count": 59,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
   },
@@ -54,19 +54,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "Electrify Your Cash Back with PB Visa Credit Card",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/electrify-your-cash-back-with-pb-visa-credit-card/",
-      "image": "https://www.pbebank.com/media/eq1hldwb/visa-electrify-cashback_wb.jpg",
-      "id": "34c55af13d",
-      "bank": "pbb",
-      "category": "Cashback",
-      "period": "",
-      "first_seen": "2026-11-05",
-      "tnc_link": "https://www.pbebank.com/media/1odba0rw/tc_visa-electrify-cashback.pdf",
-      "tnc_summary": "",
-      "end_date": ""
-    },
-    {
       "title": "Hairy Crab Autumn Culinary Delicacy with PB Visa Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/hairy-crab-autumn-culinary-delicacy-with-pb-visa-credit-card/",
       "image": "https://www.pbebank.com/media/vididedb/visa-hairy-crab_wb.jpg",
@@ -109,6 +96,20 @@
       "end_date": "2026-12-31"
     },
     {
+      "title": "Electrify Your Cash Back with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/electrify-your-cash-back-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/eq1hldwb/visa-electrify-cashback_wb.jpg",
+      "id": "34c55af13d",
+      "bank": "pbb",
+      "category": "Cashback",
+      "period": "",
+      "first_seen": "2026-11-05",
+      "tnc_link": "https://www.pbebank.com/media/1odba0rw/tc_visa-electrify-cashback.pdf",
+      "tnc_summary": "",
+      "summary_source": "",
+      "end_date": ""
+    },
+    {
       "title": "Lazada PayDay with PB Visa Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/lazada-payday-with-pb-visa-credit-card/",
       "image": "https://www.pbebank.com/media/zfef5zne/visa-lazada-payday_wb.jpg",
@@ -121,20 +122,6 @@
       "tnc_summary": "RM20 off with minimum single-transaction spend of RM180, redeemed by collecting a voucher, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Recurs monthly on the 24th–27th each month across the campaign period.",
       "summary_source": "",
       "end_date": "2027-04-27"
-    },
-    {
-      "title": "Enrich Your Travels with PB Visa Credit Card",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/enrich-your-travels-with-pb-visa-credit-card/",
-      "image": "https://www.pbebank.com/media/zt3gxpx4/overseas-enrich-travel_wb.jpg",
-      "id": "2724949b74",
-      "bank": "pbb",
-      "category": "Travel",
-      "period": "1 November 2026 - 31 January 2027",
-      "first_seen": "2026-11-01",
-      "tnc_link": "https://www.pbebank.com/media/0hqjdnx5/tc_overseas-enrich-travel.pdf",
-      "tnc_summary": "PB Visa Credit Card overseas spend campaign; register via PBe (keyword PBTR) or SMS PBTR to 68333. Monthly cash back: RM100 for min RM5,000 accumulated overseas spend, RM300 for min RM10,000. Monthly prizes: 30 x 30,000 Enrich Points (min RM30,000 overseas spend) and 60 x 10,000 Enrich Points (min RM10,000).",
-      "summary_source": "",
-      "end_date": "2027-01-31"
     },
     {
       "title": "PB Visa Privileges: Relaxing Getaway with Agoda",
@@ -179,6 +166,20 @@
       "end_date": "2026-12-31"
     },
     {
+      "title": "Enrich Your Travels with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/enrich-your-travels-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/zt3gxpx4/overseas-enrich-travel_wb.jpg",
+      "id": "2724949b74",
+      "bank": "pbb",
+      "category": "Travel",
+      "period": "1 November 2026 - 31 January 2027",
+      "first_seen": "2026-11-01",
+      "tnc_link": "https://www.pbebank.com/media/0hqjdnx5/tc_overseas-enrich-travel.pdf",
+      "tnc_summary": "PB Visa Credit Card overseas spend campaign; register via PBe (keyword PBTR) or SMS PBTR to 68333. Monthly cash back: RM100 for min RM5,000 accumulated overseas spend, RM300 for min RM10,000. Monthly prizes: 30 x 30,000 Enrich Points (min RM30,000 overseas spend) and 60 x 10,000 Enrich Points (min RM10,000).",
+      "summary_source": "",
+      "end_date": "2027-01-31"
+    },
+    {
       "title": "Buy 1 Get 1 Air Ticket with PB Mastercard Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/buy-1-get-1-air-ticket-with-pb-mastercard-credit-card/",
       "image": "https://www.pbebank.com/media/qblm50g4/travel-china_wb.jpg",
@@ -205,20 +206,6 @@
       "tnc_summary": "Up to RM60 off on Shopee with a PB UnionPay Lifestyle Debit Card, per single transaction: RM20 off with RM80 minimum spend, RM35 off with RM150 minimum spend, or RM60 off with RM250 minimum spend.",
       "summary_source": "",
       "end_date": "2027-06-30"
-    },
-    {
-      "title": "RM30 OFF at Lazada with PB Mastercard Credit Card",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/rm30-off-at-lazada-with-pb-mastercard-credit-card/",
-      "image": "https://www.pbebank.com/media/ag4d0u3c/rm30-lazada_wb.jpg",
-      "id": "ae0fc83ab4",
-      "bank": "pbb",
-      "category": "Online",
-      "period": "1 November - 31 December 2026",
-      "first_seen": "2026-11-01",
-      "tnc_link": "https://www.pbebank.com/media/4jviqsbb/tc_rm30-lazada.pdf",
-      "tnc_summary": "RM30 off with a minimum spend of RM200 in a single transaction, only with PB Mastercard Credit Card. Valid for Lazada mobile app purchases only.",
-      "summary_source": "",
-      "end_date": "2026-12-31"
     },
     {
       "title": "Enjoy 0% with PB Mastercard Flexipay",
@@ -263,18 +250,18 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "RewardPLUS Campaign",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/rewardplus-campaign/",
-      "image": "https://www.pbebank.com/media/c2je4ovs/reward-plus_wb.jpg",
-      "id": "f3c5659a12",
+      "title": "RM30 OFF at Lazada with PB Mastercard Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/rm30-off-at-lazada-with-pb-mastercard-credit-card/",
+      "image": "https://www.pbebank.com/media/ag4d0u3c/rm30-lazada_wb.jpg",
+      "id": "ae0fc83ab4",
       "bank": "pbb",
-      "category": "Credit Card",
-      "period": "1 November 2026 to 28 February 2027",
+      "category": "Online",
+      "period": "1 November - 31 December 2026",
       "first_seen": "2026-11-01",
-      "tnc_link": "https://www.pbebank.com/media/5qvp5wx0/tc_reward-plus-bm.pdf",
-      "tnc_summary": "PB PLUS Savings Account deposit campaign: earmark deposits for 6 months to receive a bonus gift — RM88,000 for La gourmet 6L pressure cooker, RM188,000 for Apple Watch Series 12 GPS 42mm, RM288,000 for Blueair 2-in-1 dehumidifier+purifier. Deposits also earn Diamond Entries to win a BMW i5 and more prizes.",
+      "tnc_link": "https://www.pbebank.com/media/4jviqsbb/tc_rm30-lazada.pdf",
+      "tnc_summary": "RM30 off with a minimum spend of RM200 in a single transaction, only with PB Mastercard Credit Card. Valid for Lazada mobile app purchases only.",
       "summary_source": "",
-      "end_date": "2027-02-28"
+      "end_date": "2026-12-31"
     },
     {
       "title": "0% Balance Transfer with PB Visa Credit Cards",
@@ -305,6 +292,20 @@
       "end_date": ""
     },
     {
+      "title": "RewardPLUS Campaign",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/rewardplus-campaign/",
+      "image": "https://www.pbebank.com/media/c2je4ovs/reward-plus_wb.jpg",
+      "id": "f3c5659a12",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "1 November 2026 to 28 February 2027",
+      "first_seen": "2026-11-01",
+      "tnc_link": "https://www.pbebank.com/media/5qvp5wx0/tc_reward-plus-bm.pdf",
+      "tnc_summary": "PB PLUS Savings Account deposit campaign: earmark deposits for 6 months to receive a bonus gift — RM88,000 for La gourmet 6L pressure cooker, RM188,000 for Apple Watch Series 12 GPS 42mm, RM288,000 for Blueair 2-in-1 dehumidifier+purifier. Deposits also earn Diamond Entries to win a BMW i5 and more prizes.",
+      "summary_source": "",
+      "end_date": "2027-02-28"
+    },
+    {
       "title": "PB Privileges at OPPO",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-oppo-1/",
       "image": "https://www.pbebank.com/media/5gflaaa2/oppo-x10_wb.jpg",
@@ -317,20 +318,6 @@
       "tnc_summary": "Up to RM300 instant rebate on OPPO Find X10 Series with PB Credit/Debit Card at selected OPPO Brand Stores, with 24-month instalments. Find X10 Pro Max RM6,699 (RM279.13/mo); Find X10 12GB+512GB RM5,299 (RM220.79/mo); Find X10 12GB+256GB RM4,799 (RM199.96/mo).",
       "summary_source": "",
       "end_date": "2026-12-31"
-    },
-    {
-      "title": "Spend & Be Rewarded at vivo",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/spend-be-rewarded-at-vivo-7/",
-      "image": "https://www.pbebank.com/media/4tqmpgjw/vivo-x500-xfold6_wb.jpg",
-      "id": "21b6aac38c",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "31 October 2026 - 28 February 2027",
-      "first_seen": "2026-11-01",
-      "tnc_link": "https://www.pbebank.com/media/i3wj4g1d/tc_vivo-x500-xfold6.pdf",
-      "tnc_summary": "Up to RM200 instant rebate on vivo X500 Series and vivo X Fold6 with PB card on a 24-month Zero Interest/Profit Instalment Plan. PB prices from RM4,599 (X500 12GB+256GB, RM191.63/mo) to RM8,499 (X Fold6 12GB+512GB, RM354.13/mo).",
-      "summary_source": "",
-      "end_date": "2027-02-28"
     },
     {
       "title": "Apply & Enjoy EXTRA 1% Cash Back on ALL Transactions with PB Visa Commercial/Business Card (New-to-Bank Cardmembers Only)",
@@ -361,18 +348,18 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "PB Visa Infinite Privileges: Infinite Tastes Beyond The Menu",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-visa-infinite-privileges-infinite-tastes-beyond-the-menu/",
-      "image": "https://www.pbebank.com/media/qpgkn1yh/infinite-tastes-beyond-menu_wb.jpg",
-      "id": "f8553a1965",
+      "title": "Spend & Be Rewarded at vivo",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/spend-be-rewarded-at-vivo-7/",
+      "image": "https://www.pbebank.com/media/4tqmpgjw/vivo-x500-xfold6_wb.jpg",
+      "id": "21b6aac38c",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "8 November 2026 (12.00 pm - 3.00 pm); 5 December 2026 (4.30 pm - 9.30 pm)",
-      "first_seen": "2026-10-21",
-      "tnc_link": "https://my.visa.com/sg_en/category/dining/beyond-the-menu",
-      "tnc_summary": "Exclusive chef-led dining experiences for PB Visa Infinite Credit Card holders: Bar.Kar KL 'The Roots of Fire & Water' by Chef ZX Lee, 8 Nov 2026, 12-3pm, RM738 nett; Chipta 11A Curated Dining 'The Canvas of Origins' by Chef Jack and Diane Ong, 5 Dec 2026, 4.30-9.30pm, RM790 nett. Reserve via www.pbebank.com. T&Cs apply.",
+      "period": "31 October 2026 - 28 February 2027",
+      "first_seen": "2026-11-01",
+      "tnc_link": "https://www.pbebank.com/media/i3wj4g1d/tc_vivo-x500-xfold6.pdf",
+      "tnc_summary": "Up to RM200 instant rebate on vivo X500 Series and vivo X Fold6 with PB card on a 24-month Zero Interest/Profit Instalment Plan. PB prices from RM4,599 (X500 12GB+256GB, RM191.63/mo) to RM8,499 (X Fold6 12GB+512GB, RM354.13/mo).",
       "summary_source": "",
-      "end_date": "2026-12-05"
+      "end_date": "2027-02-28"
     },
     {
       "title": "PB Privileges: RM100 OFF on MHflypass purchase with Journify",
@@ -389,18 +376,18 @@
       "end_date": "2026-12-14"
     },
     {
-      "title": "Tan Chong Ekspres Auto Servis",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/tan-chong-ekspres-auto-servis/",
-      "image": "https://www.pbebank.com/media/m3upphot/tan-chong-express_wb.jpg",
-      "id": "27c7aaea0c",
+      "title": "PB Visa Infinite Privileges: Infinite Tastes Beyond The Menu",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-visa-infinite-privileges-infinite-tastes-beyond-the-menu/",
+      "image": "https://www.pbebank.com/media/qpgkn1yh/infinite-tastes-beyond-menu_wb.jpg",
+      "id": "f8553a1965",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "15 October 2026 - 31 March 2027",
-      "first_seen": "2026-10-15",
-      "tnc_link": "https://www.pbebank.com/media/ctfd3bv5/tc_tan-chong-express.pdf",
-      "tnc_summary": "Car service package at all Tan Chong Ekspres Auto Servis (TCEAS) centres with PB cards: Enduro Semi Synthetic 10W40 (4L) at RM109 (normally RM190) or Fully Synthetic 5W30 (4L) at RM129 (normally RM240). Includes engine oil, oil filter, oil pan washer, multi-point inspection and labour. Call 1800-88-2447 to book.",
+      "period": "8 November 2026 (12.00 pm - 3.00 pm); 5 December 2026 (4.30 pm - 9.30 pm)",
+      "first_seen": "2026-10-21",
+      "tnc_link": "https://my.visa.com/sg_en/category/dining/beyond-the-menu",
+      "tnc_summary": "Exclusive chef-led dining experiences for PB Visa Infinite Credit Card holders: Bar.Kar KL 'The Roots of Fire & Water' by Chef ZX Lee, 8 Nov 2026, 12-3pm, RM738 nett; Chipta 11A Curated Dining 'The Canvas of Origins' by Chef Jack and Diane Ong, 5 Dec 2026, 4.30-9.30pm, RM790 nett. Reserve via www.pbebank.com. T&Cs apply.",
       "summary_source": "",
-      "end_date": "2027-03-31"
+      "end_date": "2026-12-05"
     },
     {
       "title": "PB Privileges @ Trip.com",
@@ -417,6 +404,20 @@
       "end_date": "2026-12-31"
     },
     {
+      "title": "Tan Chong Ekspres Auto Servis",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/tan-chong-ekspres-auto-servis/",
+      "image": "https://www.pbebank.com/media/m3upphot/tan-chong-express_wb.jpg",
+      "id": "27c7aaea0c",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "15 October 2026 - 31 March 2027",
+      "first_seen": "2026-10-15",
+      "tnc_link": "https://www.pbebank.com/media/ctfd3bv5/tc_tan-chong-express.pdf",
+      "tnc_summary": "Car service package at all Tan Chong Ekspres Auto Servis (TCEAS) centres with PB cards: Enduro Semi Synthetic 10W40 (4L) at RM109 (normally RM190) or Fully Synthetic 5W30 (4L) at RM129 (normally RM240). Includes engine oil, oil filter, oil pan washer, multi-point inspection and labour. Call 1800-88-2447 to book.",
+      "summary_source": "",
+      "end_date": "2027-03-31"
+    },
+    {
       "title": "Discover Amazing Thailand with PB Visa Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/discover-amazing-thailand-with-pb-visa-card/",
       "image": "https://www.pbebank.com/media/julktg2z/thailand-visa26_wb.jpg",
@@ -427,20 +428,6 @@
       "first_seen": "2026-10-16",
       "tnc_link": "https://destinations.visa.com/thailand/#/discover",
       "tnc_summary": "PB Visa offers in Thailand: 30% off Grab, 20% off TAGTHAi Pass, complimentary Airportels luggage delivery, and dining discounts at Hyatt, Westin and Courtyard hotels. Shopping vouchers at Central, Siam Paragon/Emporium/EmQuartier and ICONSIAM/Siam Center (minimum spend THB4,000). Spa discounts at Oasis, Health Land and Cenvaree. Scan the QR code to unlock offers.",
-      "summary_source": "",
-      "end_date": "2026-12-31"
-    },
-    {
-      "title": "0% Balance Transfer with PB Mastercard Credit Cards",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/0-balance-transfer-with-pb-mastercard-credit-cards-4/",
-      "image": "https://www.pbebank.com/media/vokgkq5k/mastercard-balance-transfer151026_wb.jpg",
-      "id": "e4bbe0440e",
-      "bank": "pbb",
-      "category": "Instalment",
-      "period": "15 October - 31 December 2026",
-      "first_seen": "2026-10-15",
-      "tnc_link": "https://www.pbebank.com/media/p0kb04e0/0-mastercard-balance-transfer_tcs_application-form.pdf",
-      "tnc_summary": "0% balance transfer for 6 months on PB Mastercard Credit Cards, minimum transfer RM2,000. Apply at pbebank.com (Apply > Balance Transfer > select card), or call 03-2170 8000 / email custsvc@publicbank.com.my to convert.",
       "summary_source": "",
       "end_date": "2026-12-31"
     },
@@ -459,6 +446,20 @@
       "end_date": "2027-03-31"
     },
     {
+      "title": "0% Balance Transfer with PB Mastercard Credit Cards",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/0-balance-transfer-with-pb-mastercard-credit-cards-4/",
+      "image": "https://www.pbebank.com/media/vokgkq5k/mastercard-balance-transfer151026_wb.jpg",
+      "id": "e4bbe0440e",
+      "bank": "pbb",
+      "category": "Instalment",
+      "period": "15 October - 31 December 2026",
+      "first_seen": "2026-10-15",
+      "tnc_link": "https://www.pbebank.com/media/p0kb04e0/0-mastercard-balance-transfer_tcs_application-form.pdf",
+      "tnc_summary": "0% balance transfer for 6 months on PB Mastercard Credit Cards, minimum transfer RM2,000. Apply at pbebank.com (Apply > Balance Transfer > select card), or call 03-2170 8000 / email custsvc@publicbank.com.my to convert.",
+      "summary_source": "",
+      "end_date": "2026-12-31"
+    },
+    {
       "title": "PB Mastercard Privileges @ Alipay",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-mastercard-privileges-alipay/",
       "image": "https://www.pbebank.com/media/ku2ja50y/alipay-rmb30_wb.jpg",
@@ -473,20 +474,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "PB Privileges @ Advance Vision Eye Specialist Centre",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-advance-vision-eye-specialist-centre/",
-      "image": "https://www.pbebank.com/media/52hhmnwq/advance-vision-eye-specialist_wb.jpg",
-      "id": "8d511da6c8",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "15 October 2026 - 31 December 2027",
-      "first_seen": "2026-10-14",
-      "tnc_link": "https://www.pbebank.com/media/vinhcjho/tc_advance-vision-eye-specialist.pdf",
-      "tnc_summary": "RM600 off the High Power TransPRK package at Advance Vision Eye Specialist Centre, Damansara Utama: PB price RM4,988 (normally RM5,588), with 0% instalments up to 12 months (ZIIP/ZPIP). Includes pre-op screening, post-op medicine, 5 follow-ups and lifetime power warranty.",
-      "summary_source": "",
-      "end_date": "2027-12-31"
-    },
-    {
       "title": "PB Privileges at Sunway Resort Hotel, Sunway Pyramid Hotel & Sunway Lagoon Hotel",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-sunway-resort-hotel-sunway-pyramid-hotel-sunway-lagoon-hotel/",
       "image": "https://www.pbebank.com/media/muzlopa1/sunway-hotels-resorts_wb.jpg",
@@ -499,6 +486,20 @@
       "tnc_summary": "15% off the best available rate for PB World Mastercard, Infinite and Signature cards (code PBB15); 10% off for other PB cards (PBB10). Applies at Sunway Resort, Pyramid and Lagoon Hotels. Also 15% off food and non-alcoholic beverages at Sunset Terrace and Cafe West. Enquiries: 03 7492 8000.",
       "summary_source": "",
       "end_date": "2026-12-30"
+    },
+    {
+      "title": "PB Privileges @ Advance Vision Eye Specialist Centre",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-advance-vision-eye-specialist-centre/",
+      "image": "https://www.pbebank.com/media/52hhmnwq/advance-vision-eye-specialist_wb.jpg",
+      "id": "8d511da6c8",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "15 October 2026 - 31 December 2027",
+      "first_seen": "2026-10-14",
+      "tnc_link": "https://www.pbebank.com/media/vinhcjho/tc_advance-vision-eye-specialist.pdf",
+      "tnc_summary": "RM600 off the High Power TransPRK package at Advance Vision Eye Specialist Centre, Damansara Utama: PB price RM4,988 (normally RM5,588), with 0% instalments up to 12 months (ZIIP/ZPIP). Includes pre-op screening, post-op medicine, 5 follow-ups and lifetime power warranty.",
+      "summary_source": "",
+      "end_date": "2027-12-31"
     },
     {
       "title": "PB Privileges @ UTAR Hospital",
