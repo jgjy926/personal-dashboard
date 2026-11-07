@@ -4,9 +4,9 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-11-06T00:00:00+00:00",
-    "today": "2026-11-06",
-    "new_today": 2,
+    "generated_at": "2026-11-07T00:00:00+00:00",
+    "today": "2026-11-07",
+    "new_today": 0,
     "count": 307,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
@@ -3297,21 +3297,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "id": "4d67a1a321",
-      "bank": "uob",
-      "title": "Japan Airlines",
-      "link": "https://www.uob.com.my/personal/promotions/jal-via-ht.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/jal-via-ht/360x240.gif",
-      "category": "Travel",
-      "subcategory": "Airline",
-      "period": "",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/jal-via-ht.page",
-      "tnc_summary": "12% off Business and Economy Class Flights to Japan · Booking period: 5 Sep 2026 to 5 November 2026 · Travel period: 5 Sep 2026 to 30 April 2027",
-      "summary_source": "bank",
-      "end_date": ""
-    },
-    {
       "id": "1983222d4d",
       "bank": "uob",
       "title": "The Hoverland",
@@ -3385,6 +3370,21 @@
       "tnc_summary": "15% off Best Available Rates",
       "summary_source": "bank",
       "end_date": "2026-12-31"
+    },
+    {
+      "id": "4d67a1a321",
+      "bank": "uob",
+      "title": "Japan airlines",
+      "link": "https://www.uob.com.my/personal/promotions/japan-airlines.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/japan-airlines/360x240.jpg",
+      "category": "Travel",
+      "subcategory": "Airline",
+      "period": "",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/japan-airlines.page",
+      "tnc_summary": "12% off Business and Economy Flight to Japan. · Promo code: 26CIMYUOBD12 · Booking period: 5 May 2026 to 5 November 2026 Travel period: 5 May 2026 to 30 April 2027",
+      "summary_source": "bank",
+      "end_date": ""
     },
     {
       "id": "8f39b76d96",
