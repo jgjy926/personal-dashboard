@@ -293,8 +293,12 @@ jobs:
           path: macro-engine
           token: ${{ secrets.MACRO_ENGINE_TOKEN || github.token }}
 
+      # Restore and save are separate steps so the fresh fit is saved as soon
+      # as it exists. With plain actions/cache the save is a post-job step that
+      # is skipped when anything later fails (a Pages deploy hiccup), which
+      # threw the refit away and left every daily run scoring stale again.
       - name: Restore the engine database + model cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: |
             macro-engine/macro_engine.db
@@ -319,6 +323,14 @@ jobs:
           pip install -r requirements.txt
           python main.py daily
 
+      - name: Save the refitted model cache
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            macro-engine/macro_engine.db
+            macro-engine/data_cache
+          key: macro-engine-db-${{ hashFiles('macro-engine/config/series.py') }}-${{ github.run_id }}-retrained
+
       - name: Commit the refitted engine feed
         run: |
           bash tools/commit_feeds.sh "chore: monthly model refit" data/macro_engine.json
@@ -330,8 +342,13 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Stage the site
         run: bash tools/stage_site.sh "$RUNNER_TEMP/site" "${{ steps.pages.outputs.base_url }}"
+      # build-and-deploy already uploaded "github-pages" in this run, and
+      # deploy-pages refuses to pick between two artifacts of the same name.
       - uses: actions/upload-pages-artifact@v3
         with:
+          name: github-pages-retrain
           path: ${{ runner.temp }}/site   # index.html is at the repo root; klse.json is git-ignored
       - id: deploy
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-retrain
