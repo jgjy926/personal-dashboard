@@ -4,7 +4,7 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-06T00:00:00+00:00",
+    "generated_at": "2026-11-07T01:54:34.081Z",
     "today": "2026-11-06",
     "new_today": 0,
     "count": 59,
@@ -102,12 +102,12 @@
       "id": "34c55af13d",
       "bank": "pbb",
       "category": "Cashback",
-      "period": "",
+      "period": "1 November 2026 - 31 October 2027",
       "first_seen": "2026-11-05",
       "tnc_link": "https://www.pbebank.com/media/1odba0rw/tc_visa-electrify-cashback.pdf",
-      "tnc_summary": "",
+      "tnc_summary": "Enjoy 25% cashback on EV charging transactions with a minimum accumulated retail spend of RM1,000 using a PB Visa Credit Card. Registration via PBe (Keyword: PBM) or SMS is required.",
       "summary_source": "",
-      "end_date": ""
+      "end_date": "2027-10-31"
     },
     {
       "title": "Lazada PayDay with PB Visa Credit Card",
