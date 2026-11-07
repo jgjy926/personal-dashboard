@@ -4,7 +4,7 @@
     "bank_name": "UOB",
     "kind": "campaign",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-11-06T00:00:00+00:00",
+    "generated_at": "2026-11-07T01:54:36.670Z",
     "today": "2026-11-06",
     "new_today": 0,
     "count": 2,
@@ -19,12 +19,12 @@
       "link": "https://www.uob.com.my/personal/promotions/japanese-cuisine.page",
       "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/japanese-cuisine/1920x600.jpg",
       "category": "Credit Card",
-      "period": "",
+      "period": "1 March 2026 - 28 February 2027",
       "first_seen": "2026-11-02",
       "tnc_link": "https://www.uob.com.my/assets/web-resources/personal/promotions/cards-acquisition/credit-cards-acquisition-mar-2026-campaign-tnc.pdf",
-      "tnc_summary": "",
+      "tnc_summary": "Cardholders enjoy special dining privileges and savings on Japanese cuisine at participating outlets using eligible cards during the campaign period.",
       "summary_source": "",
-      "end_date": ""
+      "end_date": "2027-02-28"
     },
     {
       "id": "eae2e23e5e",
