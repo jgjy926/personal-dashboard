@@ -4,13 +4,43 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-11-09T00:00:00+00:00",
-    "today": "2026-11-09",
-    "new_today": 0,
-    "count": 307,
+    "generated_at": "2026-11-10T00:00:00+00:00",
+    "today": "2026-11-10",
+    "new_today": 3,
+    "count": 309,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
+    {
+      "id": "4c794c4136",
+      "bank": "uob",
+      "title": "Vintry",
+      "link": "https://www.uob.com.my/personal/promotions/vintry.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/vintry/360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Asian",
+      "period": "15 November 2026 to 31 March 2027",
+      "first_seen": "2026-11-10",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/vintry.page",
+      "tnc_summary": "Complimentary one Hokkien Mee with a min spend of RM150 on food bill",
+      "summary_source": "bank",
+      "end_date": "2027-03-31"
+    },
+    {
+      "id": "59a2f77f32",
+      "bank": "uob",
+      "title": "Smith Breads & Café",
+      "link": "https://www.uob.com.my/personal/promotions/smith-breads-cafe.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/smith-breads-cafe/360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Asian",
+      "period": "15 November 2026 to 31 March 2027",
+      "first_seen": "2026-11-10",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/smith-breads-cafe.page",
+      "tnc_summary": "Complimentary one Shio Pan with a min spend of RM50 on total bill",
+      "summary_source": "bank",
+      "end_date": "2027-03-31"
+    },
     {
       "id": "1d97301248",
       "bank": "uob",
@@ -1977,6 +2007,21 @@
       "end_date": "2026-12-31"
     },
     {
+      "id": "8049b7332e",
+      "bank": "uob",
+      "title": "TMT and vivo Malaysia",
+      "link": "https://www.uob.com.my/personal/promotions/phone-models-offers.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/phone-models-offers/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "In Store",
+      "period": "1 November 2026 to 31 December 2026",
+      "first_seen": "2026-11-10",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/phone-models-offers.page",
+      "tnc_summary": "Get up to RM500 off new devices.",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
+    },
+    {
       "id": "36912ddf08",
       "bank": "uob",
       "title": "SK-II",
@@ -2170,21 +2215,6 @@
       "tnc_summary": "Get a voucher worth THB6,000 with min spend up to THB100,000",
       "summary_source": "bank",
       "end_date": "2026-12-31"
-    },
-    {
-      "id": "d09ef195cd",
-      "bank": "uob",
-      "title": "Phone Offers",
-      "link": "https://www.uob.com.my/personal/promotions/phone-models-offers.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/phone-models-offers/360x240.jpg",
-      "category": "Shopping",
-      "subcategory": "In Store",
-      "period": "30 September 2026 to 30 December 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/phone-models-offers.page",
-      "tnc_summary": "Discount is 30% and above",
-      "summary_source": "bank",
-      "end_date": "2026-12-30"
     },
     {
       "id": "29714bff91",
