@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-11-10T15:00:00+00:00",
+    "generated_at": "2026-11-12T15:24:05+00:00",
     "sources": {
       "auctions": "TreasuryDirect (upcoming auctions)",
       "results": "TreasuryDirect (auction results)",
@@ -103,15 +103,15 @@
     },
     {
       "auction_date": "",
-      "issue_date": "2026-10-23",
-      "security_type": "Bond",
-      "term": "19-Year 10-Month",
-      "cusip": "912810UX4",
-      "stop_rate": 5.469,
+      "issue_date": "2026-11-16",
+      "security_type": "Note",
+      "term": "10-Year",
+      "cusip": "91282CRX1",
+      "stop_rate": 5.02,
       "investment_rate": null,
-      "coupon": 5.125,
+      "coupon": 5.0,
       "median_rate": null,
-      "bid_to_cover": 2.73,
+      "bid_to_cover": 2.46,
       "allotted_at_high": null,
       "tendered": null,
       "accepted": null,
