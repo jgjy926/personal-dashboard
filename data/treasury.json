@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-11-12T15:24:05+00:00",
+    "generated_at": "2026-11-13T14:42:09+00:00",
     "sources": {
       "auctions": "TreasuryDirect (upcoming auctions)",
       "results": "TreasuryDirect (auction results)",
@@ -49,15 +49,15 @@
     },
     {
       "auction_date": "",
-      "issue_date": "2026-10-30",
-      "security_type": "Note",
-      "term": "5-Year",
-      "cusip": "91282CRR4",
-      "stop_rate": 2.367,
+      "issue_date": "2026-11-16",
+      "security_type": "Bond",
+      "term": "30-Year",
+      "cusip": "912810UY2",
+      "stop_rate": 5.441,
       "investment_rate": null,
-      "coupon": 2.25,
+      "coupon": 5.375,
       "median_rate": null,
-      "bid_to_cover": 2.41,
+      "bid_to_cover": 2.36,
       "allotted_at_high": null,
       "tendered": null,
       "accepted": null,
@@ -122,6 +122,16 @@
   ],
   "recent_buybacks": [
     {
+      "operation_date": "2026-11-12",
+      "settlement_date": "2026-11-13",
+      "operation_type": "Liquidity Support",
+      "security_type": "TIPS",
+      "maturity_bucket": "1Y to 10Y",
+      "par_offered": 3224000000.0,
+      "par_accepted": 556000000.0,
+      "par_cap": 750000000.0
+    },
+    {
       "operation_date": "2026-11-05",
       "settlement_date": "2026-11-06",
       "operation_type": "Liquidity Support",
@@ -168,16 +178,6 @@
       "security_type": "Nominal Coupons",
       "maturity_bucket": "10Y to 20Y",
       "par_offered": 40836000000.0,
-      "par_accepted": 6000000000.0,
-      "par_cap": 6000000000.0
-    },
-    {
-      "operation_date": "2026-10-08",
-      "settlement_date": "2026-10-09",
-      "operation_type": "Liquidity Support",
-      "security_type": "Nominal Coupons",
-      "maturity_bucket": "20Y to 30Y",
-      "par_offered": 14886000000.0,
       "par_accepted": 6000000000.0,
       "par_cap": 6000000000.0
     }
