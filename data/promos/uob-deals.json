@@ -4,10 +4,10 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-11-16T00:00:00+00:00",
-    "today": "2026-11-16",
+    "generated_at": "2026-11-17T00:00:00+00:00",
+    "today": "2026-11-17",
     "new_today": 1,
-    "count": 314,
+    "count": 315,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
@@ -3070,6 +3070,21 @@
       "tnc_summary": "12% off with a minimum spend of RM250 (capped at RM100) · Promo code: UOBZAL2026",
       "summary_source": "bank",
       "end_date": "2026-12-31"
+    },
+    {
+      "id": "54aa3974d0",
+      "bank": "uob",
+      "title": "Bukit Kemuning Golf & Country Resort",
+      "link": "https://www.uob.com.my/personal/promotions/bukit-kemuning-golf-golfing.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/bukit-kemuning-golf-golfing/360x240.gif",
+      "category": "Travel",
+      "subcategory": "Recreational",
+      "period": "1 November 2026 to 30 June 2027",
+      "first_seen": "2026-11-17",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/bukit-kemuning-golf-golfing.page",
+      "tnc_summary": "10% off Golfing",
+      "summary_source": "bank",
+      "end_date": "2027-06-30"
     },
     {
       "id": "763dba7120",

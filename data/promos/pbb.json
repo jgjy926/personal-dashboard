@@ -4,10 +4,10 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-16T00:00:00+00:00",
-    "today": "2026-11-16",
+    "generated_at": "2026-11-17T00:00:00+00:00",
+    "today": "2026-11-17",
     "new_today": 1,
-    "count": 60,
+    "count": 61,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
   },
   "promotions": [
@@ -24,6 +24,19 @@
       "tnc_summary": "15% cash back with a minimum spend of RM250 using a PB Visa Credit Card at participating restaurants, including Mohd Chan, K-Fry Urban Korean, Din by Din Tai Fung, Dolly Dim Sum, Dancing Fish and Rembayung. Register first via PBe (keyword PBG) or SMS PBG to 68333.",
       "summary_source": "",
       "end_date": "2026-12-31"
+    },
+    {
+      "title": "Apple Pay Launch Campaign",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/apple-pay-cashback-campaign/",
+      "image": "https://www.pbebank.com/media/zxoki5o2/apple-pay-cashback_wb1.jpg",
+      "id": "30ab3629f8",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-11-17",
+      "tnc_link": "https://www.pbebank.com/media/vsflsgqn/apple-pay-launch-campaign-tc.pdf",
+      "tnc_summary": "",
+      "end_date": ""
     },
     {
       "title": "Sign Up & Be Rewarded with your new PB & PIB Credit Card",
@@ -68,19 +81,6 @@
       "end_date": "2026-11-30"
     },
     {
-      "title": "PB Privileges at Sun Gourmet TRX",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-sun-gourmet-trx/",
-      "image": "https://www.pbebank.com/media/tdyotwcm/sun-gourment-trx_wb.jpg",
-      "id": "1e55bf8eca",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "",
-      "first_seen": "2026-11-16",
-      "tnc_link": "https://www.pbebank.com/media/tt3nwldz/tc_sun-gourment-trx.pdf",
-      "tnc_summary": "",
-      "end_date": ""
-    },
-    {
       "title": "RM20 OFF at Tiktok Shop with PB Mastercard Credit and Debit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/rm20-off-at-tiktok-shop-with-pb-mastercard-credit-and-debit-card/",
       "image": "https://www.pbebank.com/media/e3ljggkd/tiktok-rm20-off_wb.jpg",
@@ -121,6 +121,20 @@
       "tnc_summary": "RM20 off with minimum single-transaction spend of RM180, redeemed by collecting a voucher, valid only with PB Visa Credit Card and only on Lazada Mobile App purchases. Recurs monthly on the 24th–27th each month across the campaign period.",
       "summary_source": "",
       "end_date": "2027-04-27"
+    },
+    {
+      "title": "PB Privileges at Sun Gourmet TRX",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-sun-gourmet-trx/",
+      "image": "https://www.pbebank.com/media/tdyotwcm/sun-gourment-trx_wb.jpg",
+      "id": "1e55bf8eca",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-11-16",
+      "tnc_link": "https://www.pbebank.com/media/tt3nwldz/tc_sun-gourment-trx.pdf",
+      "tnc_summary": "",
+      "summary_source": "",
+      "end_date": ""
     },
     {
       "title": "Spend More, Earn More & WIN BIG ANG POW with PB Visa Credit Card",
@@ -165,20 +179,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "Electrify Your Cash Back with PB Visa Credit Card",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/electrify-your-cash-back-with-pb-visa-credit-card/",
-      "image": "https://www.pbebank.com/media/eq1hldwb/visa-electrify-cashback_wb.jpg",
-      "id": "34c55af13d",
-      "bank": "pbb",
-      "category": "Cashback",
-      "period": "1 November 2026 - 31 October 2027",
-      "first_seen": "2026-11-05",
-      "tnc_link": "https://www.pbebank.com/media/1odba0rw/tc_visa-electrify-cashback.pdf",
-      "tnc_summary": "Enjoy 25% cashback on EV charging transactions with a minimum accumulated retail spend of RM1,000 using a PB Visa Credit Card. Registration via PBe (Keyword: PBM) or SMS is required.",
-      "summary_source": "",
-      "end_date": "2027-10-31"
-    },
-    {
       "title": "Buy 1 Get 1 Air Ticket with PB Mastercard Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/buy-1-get-1-air-ticket-with-pb-mastercard-credit-card/",
       "image": "https://www.pbebank.com/media/qblm50g4/travel-china_wb.jpg",
@@ -219,6 +219,20 @@
       "tnc_summary": "0% interest instalment with PB Mastercard Flexipay on a minimum amount of RM800 over a 6-month tenure. To convert, call 03-2170 8000 or email custsvc@publicbank.com.my.",
       "summary_source": "",
       "end_date": "2026-12-31"
+    },
+    {
+      "title": "Electrify Your Cash Back with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/electrify-your-cash-back-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/eq1hldwb/visa-electrify-cashback_wb.jpg",
+      "id": "34c55af13d",
+      "bank": "pbb",
+      "category": "Cashback",
+      "period": "1 November 2026 - 31 October 2027",
+      "first_seen": "2026-11-05",
+      "tnc_link": "https://www.pbebank.com/media/1odba0rw/tc_visa-electrify-cashback.pdf",
+      "tnc_summary": "Enjoy 25% cashback on EV charging transactions with a minimum accumulated retail spend of RM1,000 using a PB Visa Credit Card. Registration via PBe (Keyword: PBM) or SMS is required.",
+      "summary_source": "",
+      "end_date": "2027-10-31"
     },
     {
       "title": "Cash Back on eWallet Top Up with PB Visa Credit Card",
@@ -263,20 +277,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "Enrich Your Travels with PB Visa Credit Card",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/enrich-your-travels-with-pb-visa-credit-card/",
-      "image": "https://www.pbebank.com/media/zt3gxpx4/overseas-enrich-travel_wb.jpg",
-      "id": "2724949b74",
-      "bank": "pbb",
-      "category": "Travel",
-      "period": "1 November 2026 - 31 January 2027",
-      "first_seen": "2026-11-01",
-      "tnc_link": "https://www.pbebank.com/media/0hqjdnx5/tc_overseas-enrich-travel.pdf",
-      "tnc_summary": "PB Visa Credit Card overseas spend campaign; register via PBe (keyword PBTR) or SMS PBTR to 68333. Monthly cash back: RM100 for min RM5,000 accumulated overseas spend, RM300 for min RM10,000. Monthly prizes: 30 x 30,000 Enrich Points (min RM30,000 overseas spend) and 60 x 10,000 Enrich Points (min RM10,000).",
-      "summary_source": "",
-      "end_date": "2027-01-31"
-    },
-    {
       "title": "Top-up using PB Debit Cards with RM0 Reload Fees!",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/top-up-using-pb-debit-cards-with-rm0-reload-fees/",
       "image": "https://www.pbebank.com/media/cskji2cv/top-up-no-charges_wb.jpg",
@@ -289,6 +289,20 @@
       "tnc_summary": "RM0 reload fees when using a PB Debit Card to top up eWallets such as Boost, Grab and Touch 'n Go. No campaign period is shown on the poster.",
       "summary_source": "",
       "end_date": ""
+    },
+    {
+      "title": "Enrich Your Travels with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/enrich-your-travels-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/zt3gxpx4/overseas-enrich-travel_wb.jpg",
+      "id": "2724949b74",
+      "bank": "pbb",
+      "category": "Travel",
+      "period": "1 November 2026 - 31 January 2027",
+      "first_seen": "2026-11-01",
+      "tnc_link": "https://www.pbebank.com/media/0hqjdnx5/tc_overseas-enrich-travel.pdf",
+      "tnc_summary": "PB Visa Credit Card overseas spend campaign; register via PBe (keyword PBTR) or SMS PBTR to 68333. Monthly cash back: RM100 for min RM5,000 accumulated overseas spend, RM300 for min RM10,000. Monthly prizes: 30 x 30,000 Enrich Points (min RM30,000 overseas spend) and 60 x 10,000 Enrich Points (min RM10,000).",
+      "summary_source": "",
+      "end_date": "2027-01-31"
     },
     {
       "title": "RM30 OFF at Lazada with PB Mastercard Credit Card",
