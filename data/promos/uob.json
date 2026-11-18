@@ -4,10 +4,10 @@
     "bank_name": "UOB",
     "kind": "campaign",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-11-17T00:00:00+00:00",
-    "today": "2026-11-17",
-    "new_today": 0,
-    "count": 2,
+    "generated_at": "2026-11-18T00:00:00+00:00",
+    "today": "2026-11-18",
+    "new_today": 1,
+    "count": 3,
     "note": "UOB's featured card campaigns. tnc_summary is written from the banner + T&C by summarize_campaign.py or the Console."
   },
   "promotions": [
@@ -25,6 +25,20 @@
       "tnc_summary": "Cardholders enjoy special dining privileges and savings on Japanese cuisine at participating outlets using eligible cards during the campaign period.",
       "summary_source": "",
       "end_date": "2027-02-28"
+    },
+    {
+      "id": "059438e192",
+      "bank": "uob",
+      "title": "An extra treat, on us",
+      "desc": "",
+      "link": "https://www.uob.com.my/personal/promotions/tinkermen-collective.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/tinkermen-collective/banner-1920x600.jpg",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-11-18",
+      "tnc_link": "",
+      "tnc_summary": "",
+      "end_date": ""
     },
     {
       "id": "eae2e23e5e",
