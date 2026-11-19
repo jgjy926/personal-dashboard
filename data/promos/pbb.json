@@ -4,7 +4,7 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-19T00:00:00+00:00",
+    "generated_at": "2026-11-19T16:41:30.786Z",
     "today": "2026-11-19",
     "new_today": 0,
     "count": 64,
@@ -32,12 +32,12 @@
       "id": "8942de91f2",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "",
+      "period": "15 November 2026 to 14 March 2027; 10 June to 31 December 2026; 15 October 2026 to 28 February 2027; 1 November 2026 to 31 January 2027",
       "first_seen": "2026-11-18",
       "tnc_link": "https://www.pbebank.com/media/fqeppwzw/tc_visacard-activation.pdf",
-      "tnc_summary": "",
+      "tnc_summary": "Visa Signature, Quantum Visa, Platinum cardholders: RM50 cash back for 3x RM100 spend per transaction. 0% FlexiPay (min RM1,000) or 0% balance transfer (min RM3,000), both for 6 months. Up to RM8,888 ang pow or RM218 cash back with min RM38,000 monthly local spend. 30,000 Enrich Points or up to RM300 cash back with min RM30,000 monthly overseas spend.",
       "summary_source": "",
-      "end_date": ""
+      "end_date": "2027-03-14"
     },
     {
       "title": "Sign Up & Be Rewarded with your new PB & PIB Credit Card",
@@ -88,12 +88,12 @@
       "id": "219755bd0c",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "",
+      "period": "15 November 2026 to 14 March 2027; 15 October to 31 December 2026; 24 August to 23 November 2026",
       "first_seen": "2026-11-18",
       "tnc_link": "https://www.pbebank.com/media/g41dauqz/tc_mastercard-activation.pdf",
-      "tnc_summary": "",
+      "tnc_summary": "Quantum or Platinum Mastercard cardholders: RM50 cash back for 3x RM100 spend per transaction. 0% FlexiPay (min RM800) or 0% balance transfer (min RM2,000), both for 6 months. Buy 1 Get 1 Malaysia Airlines air ticket to China with min accumulative RM20,000 spend, ending 23 November 2026.",
       "summary_source": "",
-      "end_date": ""
+      "end_date": "2027-03-14"
     },
     {
       "title": "RM20 OFF at Tiktok Shop with PB Mastercard Credit and Debit Card",
@@ -147,7 +147,7 @@
       "period": "",
       "first_seen": "2026-11-17",
       "tnc_link": "https://www.pbebank.com/media/vsflsgqn/apple-pay-launch-campaign-tc.pdf",
-      "tnc_summary": "",
+      "tnc_summary": "Get up to RM30 cashback by making 3 transactions of minimum RM50 each using a Public Bank credit card or -i card with Apple Pay. No campaign period is printed on the poster. Terms apply.",
       "summary_source": "",
       "end_date": ""
     },
@@ -228,12 +228,12 @@
       "id": "5d846a0bb4",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "",
+      "period": "Now till 31 December 2026",
       "first_seen": "2026-11-18",
       "tnc_link": "https://www.pbebank.com/media/4tgbyuu0/tc_pb-efdfpx-bm.pdf",
-      "tnc_summary": "",
+      "tnc_summary": "Make an eFD placement via FPX fund transfer on PBe, selecting the PB eFD via FPX Campaign option. Rates: 3.50% (3-month), 3.80% (6-month), 3.85% (9-month), 3.90% (12-month), effective 26 October 2026 onwards. Placements earn Diamond Entries for a BMW i5 and more prizes.",
       "summary_source": "",
-      "end_date": ""
+      "end_date": "2026-12-31"
     },
     {
       "title": "Enjoy 0% with PB Mastercard Flexipay",
@@ -298,12 +298,12 @@
       "id": "1e55bf8eca",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "",
+      "period": "15 November 2026 to 30 April 2027",
       "first_seen": "2026-11-16",
       "tnc_link": "https://www.pbebank.com/media/tt3nwldz/tc_sun-gourment-trx.pdf",
-      "tnc_summary": "",
+      "tnc_summary": "Exclusively for PB cardmembers at Sun Gourmet TRX, dine-in only: 1 complimentary dish with minimum spend RM180, or 2 complimentary dishes with minimum spend RM380. Located at 52 Jalan Utara, Off Jalan Imbi, Kuala Lumpur. Pictures are for illustration only.",
       "summary_source": "",
-      "end_date": ""
+      "end_date": "2027-04-30"
     },
     {
       "title": "Top-up using PB Debit Cards with RM0 Reload Fees!",
