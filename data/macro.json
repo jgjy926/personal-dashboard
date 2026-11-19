@@ -1,12 +1,15 @@
 {
   "meta": {
-    "generated_at": "2026-11-19T16:42:16+00:00",
+    "generated_at": "2026-11-19T16:43:20+00:00",
     "sample": false,
     "source": "FRED (keyless CSV) + Yahoo Finance + Japan MoF + NY Fed",
     "data_note": "Live data. Freshness shows the DATA date, not the fetch date. FRED supplies each series' settled history; the US Treasury's own daily curve extends the nominal and TIPS yields, and Yahoo Finance extends the market-traded series, over the days FRED has not published yet (FRED batches the curve series, the Fed's H.10 dollar release is weekly, the EIA crude series are batched). Every card names the source behind its latest point, and the ones with no faster publisher carry their release cadence instead.",
     "disclaimer": "For monitoring context only. The regime flag is a heuristic, not a signal.",
-    "missing_series": [],
-    "latest_observation": "2026-11-19"
+    "missing_series": [
+      "GOLD",
+      "DXY"
+    ],
+    "latest_observation": "2026-11-18"
   },
   "snapshot": [
     {
@@ -62,46 +65,32 @@
     {
       "id": "SP500",
       "label": "S&P 500",
-      "value": 7328.11,
+      "value": 7323.63,
       "unit": "",
-      "change": 4.48,
-      "as_of": "2026-11-19",
+      "change": -16.9,
+      "as_of": "2026-11-18",
       "freq": "daily",
-      "source": "FRED SP500 + Yahoo ^GSPC",
-      "provisional": true
-    },
-    {
-      "id": "GOLD",
-      "label": "Gold (LBMA)",
-      "value": 3681.4,
-      "unit": "$",
-      "change": -60.5,
-      "as_of": "2026-11-19",
-      "freq": "daily",
-      "source": "Yahoo GC=F",
-      "provisional": true
+      "source": "FRED SP500"
     },
     {
       "id": "BRENT",
       "label": "Brent Crude",
-      "value": 89.97,
+      "value": 92.94,
       "unit": "$",
-      "change": -1.98,
-      "as_of": "2026-11-19",
+      "change": 0.04,
+      "as_of": "2026-11-17",
       "freq": "daily",
-      "source": "FRED DCOILBRENTEU + Yahoo BZ=F",
-      "provisional": true
+      "source": "FRED DCOILBRENTEU"
     },
     {
       "id": "WTI",
       "label": "WTI Crude",
-      "value": 83.37,
+      "value": 89.53,
       "unit": "$",
-      "change": 0.11,
-      "as_of": "2026-11-19",
+      "change": 0.29,
+      "as_of": "2026-11-17",
       "freq": "daily",
-      "source": "FRED DCOILWTICO + Yahoo CL=F",
-      "provisional": true
+      "source": "FRED DCOILWTICO"
     },
     {
       "id": "UNRATE",
@@ -128,27 +117,14 @@
       "stale_after": 12
     },
     {
-      "id": "DXY",
-      "label": "Dollar Index (ICE DXY)",
-      "value": 103.89,
-      "unit": "",
-      "change": 0.03,
-      "as_of": "2026-11-19",
-      "freq": "daily",
-      "source": "Yahoo DX-Y.NYB",
-      "provisional": true,
-      "release": "ICE futures, continuous"
-    },
-    {
       "id": "USDJPY",
       "label": "USD/JPY",
-      "value": 159.9,
+      "value": 159.93,
       "unit": "¥",
-      "change": 0.4,
-      "as_of": "2026-11-19",
+      "change": 0.33,
+      "as_of": "2026-11-13",
       "freq": "daily",
-      "source": "FRED DEXJPUS + Yahoo JPY=X",
-      "provisional": true
+      "source": "FRED DEXJPUS"
     },
     {
       "id": "CSUSHPISA",
@@ -333,68 +309,7 @@
         2.6,
         2.88
       ],
-      "gold": [
-        1828.6,
-        1795.0,
-        1900.7,
-        1923.7,
-        1911.7,
-        1848.7,
-        1801.5,
-        1787.7,
-        1709.3,
-        1672.0,
-        1649.7,
-        1746.0,
-        1826.2,
-        1929.5,
-        1836.7,
-        1969.0,
-        1992.2,
-        1995.5,
-        1929.4,
-        1978.8,
-        1967.1,
-        1866.1,
-        1987.5,
-        2038.1,
-        2071.8,
-        2048.4,
-        2054.7,
-        2257.1,
-        2311.0,
-        2322.9,
-        2338.9,
-        2480.8,
-        2527.6,
-        2690.3,
-        2749.2,
-        2657.0,
-        2641.0,
-        2812.5,
-        2848.5,
-        3146.0,
-        3222.2,
-        3288.9,
-        3349.8,
-        3399.8,
-        3516.1,
-        3897.5,
-        3996.5,
-        4254.9,
-        4341.1,
-        4745.1,
-        5247.9,
-        4813.1,
-        4644.5,
-        4506.3,
-        4082.4,
-        4107.0,
-        4396.4,
-        4202.3,
-        3898.9,
-        3681.4
-      ],
+      "gold": [],
       "sp500": [
         4766.2,
         4515.6,
@@ -455,7 +370,7 @@
         7686.1,
         7651.5,
         7580.1,
-        7328.1
+        7323.6
       ]
     },
     "note": "Real yield / gold / S&P 500 each scaled to its own 0–100 range so co-movement is comparable (min→max of the window, not indexed to the first point — robust to a series like real yield opening the window near/below zero)."
@@ -584,7 +499,7 @@
         89.75,
         115.91,
         120.15,
-        89.97
+        92.94
       ],
       "wti": [
         75.33,
@@ -646,7 +561,7 @@
         87.03,
         97.18,
         107.56,
-        83.37
+        89.53
       ]
     },
     "unit": "$/bbl",
@@ -776,7 +691,7 @@
         159.74,
         157.25,
         157.47,
-        159.9
+        159.93
       ]
     },
     "unit": "JPY per USD",
@@ -928,8 +843,8 @@
     "note": "Unemployment plotted against the real yield shifted forward 15 months (lagged relationship, not causal)."
   },
   "regime": {
-    "label": "Tightening",
-    "detail": "Real yields rising while gold softens.",
+    "label": "Mixed",
+    "detail": "Real yields and gold not clearly diverging.",
     "caveat": "Heuristic, not a signal."
   },
   "funding": {
