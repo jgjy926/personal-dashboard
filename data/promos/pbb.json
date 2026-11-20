@@ -4,8 +4,8 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-19T16:41:30.786Z",
-    "today": "2026-11-19",
+    "generated_at": "2026-11-20T00:00:00+00:00",
+    "today": "2026-11-20",
     "new_today": 0,
     "count": 64,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
@@ -222,7 +222,7 @@
       "end_date": "2027-06-30"
     },
     {
-      "title": "PB via FPX Campaign",
+      "title": "PB eFD via FPX Campaign",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-efd-via-fpx-campaign-13/",
       "image": "https://www.pbebank.com/media/w40fqho5/pb-efd-1126_wb.jpg",
       "id": "5d846a0bb4",

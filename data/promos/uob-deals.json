@@ -4,13 +4,28 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-11-19T00:00:00+00:00",
-    "today": "2026-11-19",
-    "new_today": 2,
+    "generated_at": "2026-11-20T00:00:00+00:00",
+    "today": "2026-11-20",
+    "new_today": 0,
     "count": 319,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
+    {
+      "id": "e7bb96b6b1",
+      "bank": "uob",
+      "title": "Baan Thai Family Recipe",
+      "link": "https://www.uob.com.my/personal/promotions/baan-thai.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/baan-thai/360x240.jpg",
+      "category": "Dining",
+      "subcategory": "Western",
+      "period": "Now to 31 December 2026",
+      "first_seen": "2026-10-11",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/baan-thai.page",
+      "tnc_summary": "Visa Exclusive · Get a complimentary drink when spending THB1,000 or more",
+      "summary_source": "bank",
+      "end_date": "2026-12-31"
+    },
     {
       "id": "54aa3974d0",
       "bank": "uob",
@@ -353,21 +368,6 @@
       "first_seen": "2026-10-11",
       "tnc_link": "https://www.uob.com.my/personal/promotions/anya-thai-cuisine.page",
       "tnc_summary": "Visa Exclusive · 10% off on food only when spending THB1,000 or more per sales slip · Terms and Conditions apply.",
-      "summary_source": "bank",
-      "end_date": "2026-12-31"
-    },
-    {
-      "id": "e7bb96b6b1",
-      "bank": "uob",
-      "title": "Baan Thai Family Recipe",
-      "link": "https://www.uob.com.my/personal/promotions/baan-thai.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/baan-thai/360x240.jpg",
-      "category": "Dining",
-      "subcategory": "Western",
-      "period": "Now to 31 December 2026",
-      "first_seen": "2026-10-11",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/baan-thai.page",
-      "tnc_summary": "Visa Exclusive · Get a complimentary drink when spending THB1,000 or more",
       "summary_source": "bank",
       "end_date": "2026-12-31"
     },
