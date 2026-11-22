@@ -4,8 +4,8 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-21T00:00:00+00:00",
-    "today": "2026-11-21",
+    "generated_at": "2026-11-22T00:00:00+00:00",
+    "today": "2026-11-22",
     "new_today": 0,
     "count": 64,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
@@ -334,20 +334,6 @@
       "end_date": "2027-10-31"
     },
     {
-      "title": "PB Privileges at OPPO",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-oppo-1/",
-      "image": "https://www.pbebank.com/media/5gflaaa2/oppo-x10_wb.jpg",
-      "id": "db7f1002a3",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "30 October to 31 December 2026",
-      "first_seen": "2026-11-01",
-      "tnc_link": "https://www.pbebank.com/media/214boptp/tc_oppo-x10.pdf",
-      "tnc_summary": "Up to RM300 instant rebate on OPPO Find X10 Series with PB Credit/Debit Card at selected OPPO Brand Stores, with 24-month instalments. Find X10 Pro Max RM6,699 (RM279.13/mo); Find X10 12GB+512GB RM5,299 (RM220.79/mo); Find X10 12GB+256GB RM4,799 (RM199.96/mo).",
-      "summary_source": "",
-      "end_date": "2026-12-31"
-    },
-    {
       "title": "Enrich Your Travels with PB Visa Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/enrich-your-travels-with-pb-visa-credit-card/",
       "image": "https://www.pbebank.com/media/zt3gxpx4/overseas-enrich-travel_wb.jpg",
@@ -362,18 +348,18 @@
       "end_date": "2027-01-31"
     },
     {
-      "title": "Spend & Be Rewarded at vivo",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/spend-be-rewarded-at-vivo-7/",
-      "image": "https://www.pbebank.com/media/4tqmpgjw/vivo-x500-xfold6_wb.jpg",
-      "id": "21b6aac38c",
+      "title": "PB Privileges at OPPO",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-oppo-1/",
+      "image": "https://www.pbebank.com/media/5gflaaa2/oppo-x10_wb.jpg",
+      "id": "db7f1002a3",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "31 October 2026 - 28 February 2027",
+      "period": "30 October to 31 December 2026",
       "first_seen": "2026-11-01",
-      "tnc_link": "https://www.pbebank.com/media/i3wj4g1d/tc_vivo-x500-xfold6.pdf",
-      "tnc_summary": "Up to RM200 instant rebate on vivo X500 Series and vivo X Fold6 with PB card on a 24-month Zero Interest/Profit Instalment Plan. PB prices from RM4,599 (X500 12GB+256GB, RM191.63/mo) to RM8,499 (X Fold6 12GB+512GB, RM354.13/mo).",
+      "tnc_link": "https://www.pbebank.com/media/214boptp/tc_oppo-x10.pdf",
+      "tnc_summary": "Up to RM300 instant rebate on OPPO Find X10 Series with PB Credit/Debit Card at selected OPPO Brand Stores, with 24-month instalments. Find X10 Pro Max RM6,699 (RM279.13/mo); Find X10 12GB+512GB RM5,299 (RM220.79/mo); Find X10 12GB+256GB RM4,799 (RM199.96/mo).",
       "summary_source": "",
-      "end_date": "2027-02-28"
+      "end_date": "2026-12-31"
     },
     {
       "title": "RM30 OFF at Lazada with PB Mastercard Credit Card",
@@ -390,6 +376,20 @@
       "end_date": "2026-12-31"
     },
     {
+      "title": "Spend & Be Rewarded at vivo",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/spend-be-rewarded-at-vivo-7/",
+      "image": "https://www.pbebank.com/media/4tqmpgjw/vivo-x500-xfold6_wb.jpg",
+      "id": "21b6aac38c",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "31 October 2026 - 28 February 2027",
+      "first_seen": "2026-11-01",
+      "tnc_link": "https://www.pbebank.com/media/i3wj4g1d/tc_vivo-x500-xfold6.pdf",
+      "tnc_summary": "Up to RM200 instant rebate on vivo X500 Series and vivo X Fold6 with PB card on a 24-month Zero Interest/Profit Instalment Plan. PB prices from RM4,599 (X500 12GB+256GB, RM191.63/mo) to RM8,499 (X Fold6 12GB+512GB, RM354.13/mo).",
+      "summary_source": "",
+      "end_date": "2027-02-28"
+    },
+    {
       "title": "Tan Chong Ekspres Auto Servis",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/tan-chong-ekspres-auto-servis/",
       "image": "https://www.pbebank.com/media/m3upphot/tan-chong-express_wb.jpg",
@@ -402,20 +402,6 @@
       "tnc_summary": "Car service package at all Tan Chong Ekspres Auto Servis (TCEAS) centres with PB cards: Enduro Semi Synthetic 10W40 (4L) at RM109 (normally RM190) or Fully Synthetic 5W30 (4L) at RM129 (normally RM240). Includes engine oil, oil filter, oil pan washer, multi-point inspection and labour. Call 1800-88-2447 to book.",
       "summary_source": "",
       "end_date": "2027-03-31"
-    },
-    {
-      "title": "PB Privileges @ Advance Vision Eye Specialist Centre",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-advance-vision-eye-specialist-centre/",
-      "image": "https://www.pbebank.com/media/52hhmnwq/advance-vision-eye-specialist_wb.jpg",
-      "id": "8d511da6c8",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "15 October 2026 - 31 December 2027",
-      "first_seen": "2026-10-14",
-      "tnc_link": "https://www.pbebank.com/media/vinhcjho/tc_advance-vision-eye-specialist.pdf",
-      "tnc_summary": "RM600 off the High Power TransPRK package at Advance Vision Eye Specialist Centre, Damansara Utama: PB price RM4,988 (normally RM5,588), with 0% instalments up to 12 months (ZIIP/ZPIP). Includes pre-op screening, post-op medicine, 5 follow-ups and lifetime power warranty.",
-      "summary_source": "",
-      "end_date": "2027-12-31"
     },
     {
       "title": "RewardPLUS Campaign",
@@ -432,6 +418,20 @@
       "end_date": "2027-02-28"
     },
     {
+      "title": "PB Privileges @ Advance Vision Eye Specialist Centre",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-advance-vision-eye-specialist-centre/",
+      "image": "https://www.pbebank.com/media/52hhmnwq/advance-vision-eye-specialist_wb.jpg",
+      "id": "8d511da6c8",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "15 October 2026 - 31 December 2027",
+      "first_seen": "2026-10-14",
+      "tnc_link": "https://www.pbebank.com/media/vinhcjho/tc_advance-vision-eye-specialist.pdf",
+      "tnc_summary": "RM600 off the High Power TransPRK package at Advance Vision Eye Specialist Centre, Damansara Utama: PB price RM4,988 (normally RM5,588), with 0% instalments up to 12 months (ZIIP/ZPIP). Includes pre-op screening, post-op medicine, 5 follow-ups and lifetime power warranty.",
+      "summary_source": "",
+      "end_date": "2027-12-31"
+    },
+    {
       "title": "PB Privileges @ UTAR Hospital",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-utar-hospital/",
       "image": "https://www.pbebank.com/media/qhjfny15/utar-hospital_wb.jpg",
@@ -444,20 +444,6 @@
       "tnc_summary": "20% off Preventive Health Screening and Restorative T&CM Wellness at UTAR Hospital, Kampar. PB Premium Wellness (PB Visa Infinite, World Mastercard, Visa Signature credit cards, Red Carpet Banking Mastercard Elite/Gold Debit): RM888 male, RM927 female. PB Signature Wellness (other PB cardmembers): RM468 male, RM488 female. Book via WhatsApp 012-968 3761 or contact@utarhospital.org.my.",
       "summary_source": "",
       "end_date": "2027-09-30"
-    },
-    {
-      "title": "PB Privileges @ 100glasses",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-100glasses/",
-      "image": "https://www.pbebank.com/media/bpegrtos/100glasses_wb.jpg",
-      "id": "54f0b27f99",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "1 October 2026 to 31 March 2027",
-      "first_seen": "2026-10-01",
-      "tnc_link": "https://www.pbebank.com/media/xubn3pef/tc_pb-privileges-100glasses.pdf",
-      "tnc_summary": "30% off glasses at 100glasses.my with PB cards, with a minimum spend of RM99. Use promo code PBB30; scan the poster QR code to shop. Terms and conditions apply.",
-      "summary_source": "",
-      "end_date": "2027-03-31"
     },
     {
       "title": "Apply & Enjoy EXTRA 1% Cash Back on ALL Transactions with PB Visa Commercial/Business Card (New-to-Bank Cardmembers Only)",
@@ -474,18 +460,18 @@
       "end_date": "2027-06-30"
     },
     {
-      "title": "Ocean’s Catch Seafood Dinner Buffet Deal at Sheraton Petaling Jaya Hotel",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/ocean-s-catch-seafood-dinner-buffet-deal-at-sheraton-petaling-jaya-hotel/",
-      "image": "https://www.pbebank.com/media/e1zhg2pw/spj-oceans-catch-2026_wb.jpg",
-      "id": "ed450a6f5e",
+      "title": "PB Privileges @ 100glasses",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-100glasses/",
+      "image": "https://www.pbebank.com/media/bpegrtos/100glasses_wb.jpg",
+      "id": "54f0b27f99",
       "bank": "pbb",
-      "category": "Dining",
-      "period": "1 October - 28 November 2026",
+      "category": "Credit Card",
+      "period": "1 October 2026 to 31 March 2027",
       "first_seen": "2026-10-01",
-      "tnc_link": "https://www.pbebank.com/media/wfkd4sfa/tc_spj-oceans-catch-2026.pdf",
-      "tnc_summary": "Dine 5 Pay 4 on the Ocean's Catch Seafood Dinner Buffet at Feast, Level 3, Sheraton Petaling Jaya Hotel with PB cards. Every Thursday to Saturday, 6:30 PM to 10:30 PM. RM148 nett per adult; RM118.40 nett each after discount. Price inclusive of prevailing government taxes. Terms and conditions apply.",
+      "tnc_link": "https://www.pbebank.com/media/xubn3pef/tc_pb-privileges-100glasses.pdf",
+      "tnc_summary": "30% off glasses at 100glasses.my with PB cards, with a minimum spend of RM99. Use promo code PBB30; scan the poster QR code to shop. Terms and conditions apply.",
       "summary_source": "",
-      "end_date": "2026-11-28"
+      "end_date": "2027-03-31"
     },
     {
       "title": "PB Visa Infinite Privileges: Infinite Tastes Beyond The Menu",
@@ -502,6 +488,20 @@
       "end_date": "2026-12-05"
     },
     {
+      "title": "Ocean’s Catch Seafood Dinner Buffet Deal at Sheraton Petaling Jaya Hotel",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/ocean-s-catch-seafood-dinner-buffet-deal-at-sheraton-petaling-jaya-hotel/",
+      "image": "https://www.pbebank.com/media/e1zhg2pw/spj-oceans-catch-2026_wb.jpg",
+      "id": "ed450a6f5e",
+      "bank": "pbb",
+      "category": "Dining",
+      "period": "1 October - 28 November 2026",
+      "first_seen": "2026-10-01",
+      "tnc_link": "https://www.pbebank.com/media/wfkd4sfa/tc_spj-oceans-catch-2026.pdf",
+      "tnc_summary": "Dine 5 Pay 4 on the Ocean's Catch Seafood Dinner Buffet at Feast, Level 3, Sheraton Petaling Jaya Hotel with PB cards. Every Thursday to Saturday, 6:30 PM to 10:30 PM. RM148 nett per adult; RM118.40 nett each after discount. Price inclusive of prevailing government taxes. Terms and conditions apply.",
+      "summary_source": "",
+      "end_date": "2026-11-28"
+    },
+    {
       "title": "PB Privileges at Braun Buffel",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-at-braun-buffel-1/",
       "image": "https://www.pbebank.com/media/yenpev44/braun-buffel-10off_wb.jpg",
@@ -516,20 +516,6 @@
       "end_date": "2027-07-31"
     },
     {
-      "title": "PB Privileges @ Pak Nik Burger",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-pak-nik-burger/",
-      "image": "https://www.pbebank.com/media/3dxbhnrf/pak-nik-burger_wb.jpg",
-      "id": "a0b1005d46",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "15 September 2026 to 14 September 2027",
-      "first_seen": "2026-09-17",
-      "tnc_link": "https://www.pbebank.com/media/0kyjpm1p/tc_pak-nik-burger.pdf",
-      "tnc_summary": "PB Cards holders enjoy 20% off every Specialty Combo Burger Set (Camden, Sizzle Pepper, Beef Meatball) at Pak Nik Burger, Level 4 (L4-48), Selera Street, Sunway Putra Mall. Offer applicable at the Sunway Putra Mall outlet only; general terms and conditions apply as per the bank's promo policy.",
-      "summary_source": "",
-      "end_date": "2027-09-14"
-    },
-    {
       "title": "0% Balance Transfer with PB Mastercard Credit Cards",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/0-balance-transfer-with-pb-mastercard-credit-cards-4/",
       "image": "https://www.pbebank.com/media/vokgkq5k/mastercard-balance-transfer151026_wb.jpg",
@@ -542,6 +528,20 @@
       "tnc_summary": "0% balance transfer for 6 months on PB Mastercard Credit Cards, minimum transfer RM2,000. Apply at pbebank.com (Apply > Balance Transfer > select card), or call 03-2170 8000 / email custsvc@publicbank.com.my to convert.",
       "summary_source": "",
       "end_date": "2026-12-31"
+    },
+    {
+      "title": "PB Privileges @ Pak Nik Burger",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-pak-nik-burger/",
+      "image": "https://www.pbebank.com/media/3dxbhnrf/pak-nik-burger_wb.jpg",
+      "id": "a0b1005d46",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "15 September 2026 to 14 September 2027",
+      "first_seen": "2026-09-17",
+      "tnc_link": "https://www.pbebank.com/media/0kyjpm1p/tc_pak-nik-burger.pdf",
+      "tnc_summary": "PB Cards holders enjoy 20% off every Specialty Combo Burger Set (Camden, Sizzle Pepper, Beef Meatball) at Pak Nik Burger, Level 4 (L4-48), Selera Street, Sunway Putra Mall. Offer applicable at the Sunway Putra Mall outlet only; general terms and conditions apply as per the bank's promo policy.",
+      "summary_source": "",
+      "end_date": "2027-09-14"
     },
     {
       "title": "PB UnionPay SplendorPlus Privileges: Enjoy 1% Cash Back in Mainland China",
@@ -586,20 +586,6 @@
       "end_date": "2027-08-31"
     },
     {
-      "title": "JOM RASA PENANG with PB Cards",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/jom-rasa-penang-with-pb-cards/",
-      "image": "https://www.pbebank.com/media/h41p35mm/jom-rasa-penang_wb.jpg",
-      "id": "7d8282b253",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "Now - 30 June 2027 (varies by outlet)",
-      "first_seen": "2026-09-11",
-      "tnc_link": "",
-      "tnc_summary": "PB Cards dining promo across Penang outlets: 20%/15% off at G Hotel Gurney & Kelawai (to 30 Dec 2026); 10-15% off at Sood by Chef Ton, Hut Dining Buffet, Yakiniku Tenshin, Christoph's, Wagyu and Rice, Tsukiji Sushi, Norm, Peninsula House, The Pinn, Sifu Nyonya Cuisine; some require minimum spend (RM80-RM800) or complimentary items; validity periods vary by outlet.",
-      "summary_source": "",
-      "end_date": "2027-06-30"
-    },
-    {
       "title": "PB Visa Privileges: 15% OFF on Selected Concert Tickets at Malaysian Philharmonic Orchestra",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-visa-privileges-15-off-on-selected-concert-tickets-at-malaysian-philharmonic-orchestra/",
       "image": "https://www.pbebank.com/media/1ptpxzk2/malaysian-philharmonic-orchestra_wb.jpg",
@@ -612,6 +598,20 @@
       "tnc_summary": "15% off selected Malaysian Philharmonic Orchestra concert tickets with PB Visa Infinite or PB Visa Signature Credit Card. Use promo code MVISA15 at www.dfp.com.my. Terms and conditions apply.",
       "summary_source": "",
       "end_date": "2026-12-31"
+    },
+    {
+      "title": "JOM RASA PENANG with PB Cards",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/jom-rasa-penang-with-pb-cards/",
+      "image": "https://www.pbebank.com/media/h41p35mm/jom-rasa-penang_wb.jpg",
+      "id": "7d8282b253",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "Now - 30 June 2027 (varies by outlet)",
+      "first_seen": "2026-09-11",
+      "tnc_link": "",
+      "tnc_summary": "PB Cards dining promo across Penang outlets: 20%/15% off at G Hotel Gurney & Kelawai (to 30 Dec 2026); 10-15% off at Sood by Chef Ton, Hut Dining Buffet, Yakiniku Tenshin, Christoph's, Wagyu and Rice, Tsukiji Sushi, Norm, Peninsula House, The Pinn, Sifu Nyonya Cuisine; some require minimum spend (RM80-RM800) or complimentary items; validity periods vary by outlet.",
+      "summary_source": "",
+      "end_date": "2027-06-30"
     },
     {
       "title": "PB Privileges @ Just Pets Megastore",
