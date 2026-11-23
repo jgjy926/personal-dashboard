@@ -4,10 +4,10 @@
     "bank_name": "UOB",
     "kind": "deal",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-11-22T00:00:00+00:00",
-    "today": "2026-11-22",
-    "new_today": 0,
-    "count": 319,
+    "generated_at": "2026-11-23T00:00:00+00:00",
+    "today": "2026-11-23",
+    "new_today": 2,
+    "count": 320,
     "note": "UOB card merchant deals. tnc_summary is the bank's own offer text from the deal card (summary_source 'bank'), not an AI summary."
   },
   "promotions": [
@@ -2097,6 +2097,36 @@
       "end_date": "2026-12-31"
     },
     {
+      "id": "42a582677d",
+      "bank": "uob",
+      "title": "IOI Malls",
+      "link": "https://www.uob.com.my/personal/promotions/ioi-malls.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/ioi-malls/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "In Store",
+      "period": "20 November 2026 – 3 January 2027",
+      "first_seen": "2026-11-23",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/ioi-malls.page",
+      "tnc_summary": "Complimentary gifts and more when you spend with UOB Cards at IOI Malls",
+      "summary_source": "bank",
+      "end_date": "2027-01-03"
+    },
+    {
+      "id": "d8aea044c3",
+      "bank": "uob",
+      "title": "AEON Malls",
+      "link": "https://www.uob.com.my/personal/promotions/aeon-xmas.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/aeon-xmas/360x240.jpg",
+      "category": "Shopping",
+      "subcategory": "In Store",
+      "period": "20 November 2026 to 3 January 2027",
+      "first_seen": "2026-11-23",
+      "tnc_link": "https://www.uob.com.my/personal/promotions/aeon-xmas.page",
+      "tnc_summary": "Complimentary items with minimum spend RM250",
+      "summary_source": "bank",
+      "end_date": "2027-01-03"
+    },
+    {
       "id": "75737f4de8",
       "bank": "uob",
       "title": "Sunway Malls",
@@ -3130,21 +3160,6 @@
       "tnc_summary": "10% off admission ticket",
       "summary_source": "bank",
       "end_date": "2027-06-30"
-    },
-    {
-      "id": "68c5f96f29",
-      "bank": "uob",
-      "title": "Grand Holidays",
-      "link": "https://www.uob.com.my/personal/promotions/grand-holidays.page",
-      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/grand-holidays/360x240.gif",
-      "category": "Travel",
-      "subcategory": "Recreational",
-      "period": "20 November 2026 to 22 November 2026",
-      "first_seen": "2026-11-19",
-      "tnc_link": "https://www.uob.com.my/personal/promotions/grand-holidays.page",
-      "tnc_summary": "Complimentary USD160 Onboard Credit with a minimum spend of RM4,500 on any Disney Cruise booking",
-      "summary_source": "bank",
-      "end_date": "2026-11-22"
     },
     {
       "id": "763dba7120",
