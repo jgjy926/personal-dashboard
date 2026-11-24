@@ -228,6 +228,17 @@ jobs:
             echo "needs_retrain=true" >> "$GITHUB_OUTPUT"
           fi
 
+      # Dalio lens: stdlib-only and ~5s, so it runs on BOTH paths. It sits after
+      # the engine so its side-by-side compares against today's engine snapshot
+      # (on the push path that is simply the last committed one). Refuses to
+      # overwrite the feed when a critical series is missing.
+      - name: Build the Dalio lens (FRED + Yahoo, keyless)
+        id: dalio
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python tools/fetch_dalio.py 2>&1 | tee "$RUNNER_TEMP/log-dalio.txt"
+
       # What each source did on this run, for the Status tab. A step this run
       # skipped (the push fast path skips promos + engine) keeps its last record.
       - name: Record source status
@@ -240,6 +251,7 @@ jobs:
             --step apims=${{ steps.apims.outcome }} \
             --step summarize=${{ steps.summarize.outcome }} \
             --step engine=${{ steps.engine.outcome }} \
+            --step dalio=${{ steps.dalio.outcome }} \
             --outcomes "$RUNNER_TEMP/scrape-outcomes" --logdir "$RUNNER_TEMP"
 
       - name: Commit refreshed public feeds
@@ -248,7 +260,7 @@ jobs:
         run: |
           bash tools/commit_feeds.sh "chore: refresh macro engine + campaign feeds" \
             data/macro.json data/promos data/treasury.json \
-            data/macro_engine.json data/backtest_result.json data/status.json
+            data/macro_engine.json data/backtest_result.json data/status.json data/dalio_lens.json
 
       # Copies the dashboard (not the workspace) and stamps the CODE version
       # (version.json + the page's build id). configure-pages runs first for the live URL, which the

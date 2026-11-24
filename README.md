@@ -283,6 +283,35 @@ not as a structured feed, so the panel never claims a "next buyback" date it can
 sub-pages with no CSV/Excel/PDF data files (checked), so there's no clean feed to
 mirror this. Not scraped rather than half-built on fragile markup.
 
+### Macro › Dalio Lens (`tools/fetch_dalio.py` → `data/dalio_lens.json`)
+Ray Dalio's framework applied to the same economy the engine models. Keyless,
+stdlib only, ~5s. It runs on every deploy, after the engine, so its side-by-side
+comparison uses that day's engine snapshot. Opens as the **🌀 Dalio Lens** sub-tab
+(`dalio-lens.js`).
+
+```bash
+python tools/fetch_dalio.py          # -> data/dalio_lens.json (35 FRED series + gold)
+python tools/test_fetch_dalio.py     # pure-logic tests, no network
+```
+
+- **Growth × inflation quadrant.** Goldilocks, inflationary boom, stagflation or
+  deflationary slowdown, from 6-month momentum, with a 24-month trail. The 6-month
+  odds come from two walk-forward logistic regressions on leading indicators. Where
+  persistence beat a model out of sample, persistence is used. Both hit rates are
+  shown on the page.
+- **Long-term debt cycle.** Private (BIS) + federal debt/GDP, interest as a share of
+  federal receipts, effective rate minus nominal growth (r − g), the deficit against
+  Dalio's 3%-of-GDP marker, and the foreign share of federal debt. These roll up into
+  a written-down stage rule and a 0–1 pressure score.
+- **Short-term credit cycle, policy room (MP1/MP2/MP3), productivity, dollar/gold.**
+- **All-Weather tilt.** A fixed asset × quadrant map weighted by the odds, plus a
+  debt-pressure overlay. Illustrative, not advice.
+
+Inputs are revised data, not real-time vintages, so real-time accuracy will be lower
+than the published hit rates. The fetcher refuses to overwrite the feed when a
+critical series (growth, inflation, fed funds, GDP) is missing. A single missing
+month, such as October 2025 CPI, which was never published, is interpolated.
+
 ## JSON contracts (so Phase-B producers are drop-in)
 
 - **`macro.json`** — `meta`, `snapshot[]` (`{id,label,value,unit,change,as_of,freq}`),

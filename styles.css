@@ -650,3 +650,25 @@ code.hash { font-size: 10.5px; color: var(--muted); }
 .st-foot { margin-top: 14px; }
 #st-refresh.spin { animation: wx-spin 1s linear infinite; }
 @media (prefers-reduced-motion: reduce) { #st-refresh.spin { animation: none; opacity: .5; } }
+
+/* ── Macro › Dalio Lens (dalio-lens.js) ──────────────────────────────────── */
+.dl-headline { font-size: 17px; font-weight: 700; margin: 2px 0 6px; }
+/* Mostly sentences, not figures: left-aligned and allowed to wrap. */
+.dl-page .data-table { font-size: 13px; }
+.dl-page .data-table th, .dl-page .data-table td { text-align: left; white-space: normal; vertical-align: top; }
+.exec-mid.dl-two { grid-template-columns: 1fr 1fr; }
+@media (max-width: 980px) { .exec-mid.dl-two { grid-template-columns: 1fr; } }
+.dl-qname { font-size: 20px; font-weight: 750; margin: 2px 0; }
+.dl-quad { width: 100%; max-width: 300px; height: auto; display: block; margin: 6px auto; }
+.dl-odds { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0 10px; }
+.dl-odds-cell { display: flex; flex-direction: column; gap: 1px; padding: 10px; border-radius: 10px;
+  border: 1px solid var(--line); background: color-mix(in srgb, var(--c) calc(var(--a) * 100%), transparent); }
+.dl-odds-cell .k { font-size: 11.5px; font-weight: 650; color: var(--c); }
+.dl-odds-cell b { font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; }
+.dl-odds-cell.top { border-color: var(--c); box-shadow: 0 0 0 1px var(--c); }
+.dl-dirs { display: grid; gap: 6px; font-size: 12.5px; }
+.dl-dirs > div { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dl-dirs .k { color: var(--muted); min-width: 108px; }
+.dl-stage { font-size: 17px; font-weight: 700; margin: 0 0 6px; }
+.dl-stage.sm { font-size: 14px; font-weight: 650; }
+.dl-press { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; margin: 2px 0 4px; }

@@ -928,7 +928,11 @@
     { id: 'health', label: '🩺 Data Health', fn: pageHealth }
   ];
 
-  async function render(root, feedUrl, monitorFn) {
+  /* extras: further sub-pages that bring their own feed, as
+   * [{ id, label, fn(host, engineSnapshot) }]. The Dalio Lens is one. They get
+   * the engine snapshot so they can sit side by side with it without
+   * re-fetching it. */
+  async function render(root, feedUrl, monitorFn, extras = []) {
     let d;
     try {
       const r = await fetch(feedUrl, { cache: 'no-store' });
@@ -965,6 +969,7 @@
 
     const nav = `<div class="subtabs engine-nav" role="tablist">
       ${PAGES.map((p, i) => `<button class="subtab ${i === 0 ? 'active' : ''}" data-page="${p.id}" role="tab">${p.label}</button>`).join('')}
+      ${extras.map(x => `<button class="subtab" data-page="${esc(x.id)}" role="tab">${esc(x.label)}</button>`).join('')}
       <button class="subtab" data-page="monitor" role="tab">🔎 Series Monitor</button>
     </div>`;
 
@@ -978,6 +983,8 @@
       root.querySelectorAll('.engine-nav .subtab').forEach(b =>
         b.classList.toggle('active', b.dataset.page === id));
       if (id === 'monitor') { monitorFn(host); return; }
+      const extra = extras.find(x => x.id === id);
+      if (extra) { extra.fn(host, d); return; }
       const page = PAGES.find(p => p.id === id) || PAGES[0];
       try { host.innerHTML = page.fn(d); }
       catch (e) { host.innerHTML = `<div class="errbox">Page failed to render: ${esc(e.message)}</div>`; console.error(e); }

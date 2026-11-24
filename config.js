@@ -31,6 +31,9 @@ window.DASH_CONFIG = {
     // The original series monitor (yields / gold / equities overlay), kept as
     // the engine's "Series Monitor" sub-page. Written by tools/fetch_macro.py.
     macro: 'data/macro.json',
+    // Ray Dalio's lens on the same economy: growth/inflation quadrant, debt
+    // cycles, policy room. Written by tools/fetch_dalio.py on every deploy.
+    dalioLens: 'data/dalio_lens.json',
     treasury: 'data/treasury.json',
     // Card promos, one feed per source (see tools/promo_feed.py). Each carries
     // its bank and kind ("campaign" or "deal") in meta; a feed that fails to

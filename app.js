@@ -332,7 +332,13 @@ MODS.macro = async function initMacro() {
     root.innerHTML = `<div class="errbox">macro-engine.js did not load — check the script tag order in index.html (it must come before app.js).</div>`;
     return;
   }
-  await window.MACRO_ENGINE.render(root, CFG.feeds.macroEngine, renderSeriesMonitor);
+  // The Dalio Lens brings its own feed (tools/fetch_dalio.py); it is left off
+  // the sub-nav if dalio-lens.js failed to load rather than shown broken.
+  const extras = window.DALIO_LENS ? [{
+    id: 'dalio', label: '🌀 Dalio Lens',
+    fn: (host, engine) => window.DALIO_LENS.render(host, CFG.feeds.dalioLens, engine)
+  }] : [];
+  await window.MACRO_ENGINE.render(root, CFG.feeds.macroEngine, renderSeriesMonitor, extras);
   renderEngineAlerts(root);
 };
 
@@ -1855,6 +1861,14 @@ MODS.status = function initStatus() {
       if (h.stale) raise(r, 'warn', `${h.stale} stale series: ${(h.stale_series || []).slice(0, 6).join(', ')}.`);
       if (h.critical) raise(r, 'warn', `${h.critical} series graded critical.`);
       if (d.meta.model_stale_from) raise(r, 'warn', `Scoring with last month's model (since ${d.meta.model_stale_from}); the retrain job refits it.`);
+    } },
+    { key: 'dalio', name: 'Macro Dalio lens', tab: 'macro', ci: 'dalio', via: 'tools/fetch_dalio.py', async grade(r, rec) {
+      gradeCI(r, rec);
+      const d = await fetchJSON(CFG.feeds.dalioLens);
+      gradeAge(r, d.meta.generated_at);
+      r.facts.push(['Data to', esc(d.meta.as_of || '—')]);
+      const miss = d.meta.missing_series || [];
+      if (miss.length) raise(r, 'warn', `${miss.length} series missing: ${miss.join(', ')}.`);
     } },
     { key: 'treasury', name: 'US Treasury supply', tab: 'macro', ci: 'treasury', via: 'tools/fetch_treasury.py', async grade(r, rec) {
       gradeCI(r, rec);
