@@ -4,7 +4,7 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-23T00:00:00+00:00",
+    "generated_at": "2026-11-24T07:59:45.172Z",
     "today": "2026-11-23",
     "new_today": 1,
     "count": 65,
@@ -60,11 +60,11 @@
       "id": "a873139e6e",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "",
+      "period": "Valid from 23 Nov 2026 – 28 Feb 2027",
       "first_seen": "2026-11-23",
       "tnc_link": "https://www.pbebank.com/media/k0ffbuo0/tc_umobile-prepaid-bm.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Public Bank and U Mobile promo: subscribe to a U Mobile Prepaid Plan of RM35 and above via participating banks to enter. Prizes are 3 grand prizes of iPhone 18 Pro and 1,500 monthly prizes of RM50 petrol vouchers. Campaign runs 23 Nov 2026 to 28 Feb 2027. Terms and conditions apply.",
+      "end_date": "2027-02-28"
     },
     {
       "title": "Hairy Crab Autumn Culinary Delicacy with PB Visa Credit Card",
