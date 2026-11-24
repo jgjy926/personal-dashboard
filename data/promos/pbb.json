@@ -4,9 +4,9 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-24T07:59:45.172Z",
-    "today": "2026-11-23",
-    "new_today": 1,
+    "generated_at": "2026-11-24T00:00:00+00:00",
+    "today": "2026-11-24",
+    "new_today": 0,
     "count": 65,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
   },
@@ -64,6 +64,7 @@
       "first_seen": "2026-11-23",
       "tnc_link": "https://www.pbebank.com/media/k0ffbuo0/tc_umobile-prepaid-bm.pdf",
       "tnc_summary": "Public Bank and U Mobile promo: subscribe to a U Mobile Prepaid Plan of RM35 and above via participating banks to enter. Prizes are 3 grand prizes of iPhone 18 Pro and 1,500 monthly prizes of RM50 petrol vouchers. Campaign runs 23 Nov 2026 to 28 Feb 2027. Terms and conditions apply.",
+      "summary_source": "",
       "end_date": "2027-02-28"
     },
     {
