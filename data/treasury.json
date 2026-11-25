@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_at": "2026-11-25T01:21:30+00:00",
+    "generated_at": "2026-11-25T17:22:27+00:00",
     "sources": {
       "auctions": "TreasuryDirect (upcoming auctions)",
       "results": "TreasuryDirect (auction results)",
@@ -20,6 +20,24 @@
       "stop_rate": 2.903,
       "investment_rate": null,
       "coupon": 2.375,
+      "median_rate": null,
+      "bid_to_cover": 2.43,
+      "allotted_at_high": null,
+      "tendered": null,
+      "accepted": null,
+      "indirect_accepted": null,
+      "direct_accepted": null,
+      "dealer_accepted": null
+    },
+    {
+      "auction_date": "",
+      "issue_date": "2026-11-30",
+      "security_type": "Note",
+      "term": "7-Year",
+      "cusip": "91282CSA0",
+      "stop_rate": 4.708,
+      "investment_rate": null,
+      "coupon": 4.625,
       "median_rate": null,
       "bid_to_cover": 2.43,
       "allotted_at_high": null,

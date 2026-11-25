@@ -4,8 +4,8 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-24T00:00:00+00:00",
-    "today": "2026-11-24",
+    "generated_at": "2026-11-25T00:00:00+00:00",
+    "today": "2026-11-25",
     "new_today": 0,
     "count": 65,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
@@ -196,7 +196,7 @@
     {
       "title": "Apple Pay Launch Campaign",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/apple-pay-cashback-campaign/",
-      "image": "https://www.pbebank.com/media/zxoki5o2/apple-pay-cashback_wb1.jpg",
+      "image": "https://www.pbebank.com/media/zxoki5o2/apple-pay-cashback-wb1.jpg",
       "id": "30ab3629f8",
       "bank": "pbb",
       "category": "Credit Card",

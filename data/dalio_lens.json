@@ -1,7 +1,7 @@
 {
  "meta": {
-  "generated_at": "2026-11-25T01:21:41+00:00",
-  "as_of": "2026-09",
+  "generated_at": "2026-11-25T17:26:59+00:00",
+  "as_of": "2026-10",
   "version": "dalio-lens-v1",
   "missing_series": [],
   "source": "FRED keyless CSV (BEA, BLS, Fed, BIS, Treasury); gold via Yahoo Finance",
@@ -15,27 +15,21 @@
    "detail": "Rising growth · rising inflation",
    "growth": "up",
    "inflation": "up",
-   "as_of": "2026-09",
-   "growth_momentum": 0.01,
-   "inflation_momentum": 0.402,
+   "as_of": "2026-10",
+   "growth_momentum": 0.057,
+   "inflation_momentum": 0.304,
    "growth_word": "flat",
    "inflation_word": "rising",
    "borderline": true,
-   "growth_level_z": -0.55,
-   "inflation_level": 3.42,
-   "core_pce_yoy": 3.12,
-   "core_pce_as_of": "2026-09",
+   "growth_level_z": -0.5,
+   "inflation_level": 3.61,
+   "core_pce_yoy": 3.26,
+   "core_pce_as_of": "2026-10",
    "cpi_yoy": 3.95,
    "cpi_as_of": "2026-10",
-   "months_in_quadrant": 2
+   "months_in_quadrant": 1
   },
   "trail": [
-   {
-    "date": "2024-10",
-    "g": -0.181,
-    "i": -0.515,
-    "q": "deflation"
-   },
    {
     "date": "2024-11",
     "g": -0.204,
@@ -140,38 +134,44 @@
    },
    {
     "date": "2026-04",
-    "g": -0.169,
+    "g": -0.173,
     "i": 0.242,
     "q": "stagflation"
    },
    {
     "date": "2026-05",
-    "g": -0.157,
+    "g": -0.166,
     "i": 0.627,
     "q": "stagflation"
    },
    {
     "date": "2026-06",
-    "g": -0.083,
+    "g": -0.1,
     "i": 0.698,
     "q": "stagflation"
    },
    {
     "date": "2026-07",
-    "g": -0.023,
+    "g": -0.044,
     "i": 0.643,
     "q": "stagflation"
    },
    {
     "date": "2026-08",
-    "g": 0.011,
-    "i": 0.491,
-    "q": "reflation"
+    "g": -0.01,
+    "i": 0.493,
+    "q": "stagflation"
    },
    {
     "date": "2026-09",
-    "g": 0.01,
-    "i": 0.402,
+    "g": -0.007,
+    "i": 0.408,
+    "q": "stagflation"
+   },
+   {
+    "date": "2026-10",
+    "g": 0.057,
+    "i": 0.304,
     "q": "reflation"
    }
   ],
@@ -203,7 +203,7 @@
    },
    {
     "date": "2000-06",
-    "g": 0.297,
+    "g": 0.296,
     "i": 0.476
    },
    {
@@ -278,7 +278,7 @@
    },
    {
     "date": "2001-09",
-    "g": -0.691,
+    "g": -0.69,
     "i": -0.465
    },
    {
@@ -543,7 +543,7 @@
    },
    {
     "date": "2006-02",
-    "g": 0.085,
+    "g": 0.084,
     "i": 0.324
    },
    {
@@ -558,7 +558,7 @@
    },
    {
     "date": "2006-05",
-    "g": 0.361,
+    "g": 0.36,
     "i": -0.208
    },
    {
@@ -813,7 +813,7 @@
    },
    {
     "date": "2010-08",
-    "g": 1.404,
+    "g": 1.403,
     "i": -0.738
    },
    {
@@ -853,7 +853,7 @@
    },
    {
     "date": "2011-04",
-    "g": 0.319,
+    "g": 0.318,
     "i": 0.736
    },
    {
@@ -938,7 +938,7 @@
    },
    {
     "date": "2012-09",
-    "g": -0.183,
+    "g": -0.182,
     "i": -0.745
    },
    {
@@ -983,12 +983,12 @@
    },
    {
     "date": "2013-06",
-    "g": -0.75,
+    "g": -0.749,
     "i": -0.432
    },
    {
     "date": "2013-07",
-    "g": -0.539,
+    "g": -0.538,
     "i": -0.161
    },
    {
@@ -1398,7 +1398,7 @@
    },
    {
     "date": "2020-05",
-    "g": -2.193,
+    "g": -2.192,
     "i": -0.79
    },
    {
@@ -1753,71 +1753,71 @@
    },
    {
     "date": "2026-04",
-    "g": -0.169,
+    "g": -0.173,
     "i": 0.242
    },
    {
     "date": "2026-05",
-    "g": -0.157,
+    "g": -0.166,
     "i": 0.627
    },
    {
     "date": "2026-06",
-    "g": -0.083,
+    "g": -0.1,
     "i": 0.698
    },
    {
     "date": "2026-07",
-    "g": -0.023,
+    "g": -0.044,
     "i": 0.643
    },
    {
     "date": "2026-08",
-    "g": 0.011,
-    "i": 0.491
+    "g": -0.01,
+    "i": 0.493
    },
    {
     "date": "2026-09",
-    "g": 0.01,
-    "i": 0.402
+    "g": -0.007,
+    "i": 0.408
+   },
+   {
+    "date": "2026-10",
+    "g": 0.057,
+    "i": 0.304
    }
   ],
   "forward": {
    "horizon_m": 6,
    "p_growth_up": 0.5,
-   "p_inflation_up": 0.507,
+   "p_inflation_up": 0.531,
    "probs": {
-    "goldilocks": 0.246,
-    "reflation": 0.254,
-    "stagflation": 0.254,
-    "deflation": 0.246
+    "goldilocks": 0.234,
+    "reflation": 0.266,
+    "stagflation": 0.266,
+    "deflation": 0.234
    },
    "most_likely": "reflation",
    "growth": {
     "p_up": 0.5,
-    "as_of": "2026-09",
+    "as_of": "2026-10",
     "method": "persistence",
-    "p_model": 0.542,
-    "lead": 0.24,
-    "momentum": 0.01,
+    "p_model": 0.521,
+    "lead": 0.19,
+    "momentum": 0.057,
     "skill": {
-     "n": 315,
-     "hit_rate": 0.613,
-     "persistence_hit_rate": 0.632,
-     "base_rate_up": 0.465,
+     "n": 316,
+     "hit_rate": 0.617,
+     "persistence_hit_rate": 0.636,
+     "base_rate_up": 0.463,
      "test_from": "2000-01"
     },
     "coefficients": [
-     -0.216,
-     1.611,
-     -0.004
+     -0.226,
+     1.617,
+     -0.001
     ],
     "history": [
-     {
-      "date": "2016-04",
-      "p": 0.381,
-      "actual": 0
-     },
      {
       "date": "2016-05",
       "p": 0.354,
@@ -2040,7 +2040,7 @@
      },
      {
       "date": "2020-01",
-      "p": 0.325,
+      "p": 0.324,
       "actual": 0
      },
      {
@@ -2105,12 +2105,12 @@
      },
      {
       "date": "2021-02",
-      "p": 0.393,
+      "p": 0.392,
       "actual": 1
      },
      {
       "date": "2021-03",
-      "p": 0.778,
+      "p": 0.777,
       "actual": 1
      },
      {
@@ -2160,7 +2160,7 @@
      },
      {
       "date": "2022-01",
-      "p": 0.673,
+      "p": 0.672,
       "actual": 0
      },
      {
@@ -2195,12 +2195,12 @@
      },
      {
       "date": "2022-08",
-      "p": 0.397,
+      "p": 0.396,
       "actual": 1
      },
      {
       "date": "2022-09",
-      "p": 0.448,
+      "p": 0.447,
       "actual": 1
      },
      {
@@ -2230,7 +2230,7 @@
      },
      {
       "date": "2023-03",
-      "p": 0.181,
+      "p": 0.18,
       "actual": 1
      },
      {
@@ -2345,7 +2345,7 @@
      },
      {
       "date": "2025-02",
-      "p": 0.365,
+      "p": 0.364,
       "actual": 0
      },
      {
@@ -2390,12 +2390,12 @@
      },
      {
       "date": "2025-11",
-      "p": 0.383,
+      "p": 0.382,
       "actual": 0
      },
      {
       "date": "2025-12",
-      "p": 0.42,
+      "p": 0.419,
       "actual": 0
      },
      {
@@ -2405,41 +2405,41 @@
      },
      {
       "date": "2026-02",
-      "p": 0.436,
-      "actual": 1
+      "p": 0.435,
+      "actual": 0
      },
      {
       "date": "2026-03",
       "p": 0.404,
+      "actual": 0
+     },
+     {
+      "date": "2026-04",
+      "p": 0.451,
       "actual": 1
      }
     ]
    },
    "inflation": {
-    "p_up": 0.507,
-    "as_of": "2026-09",
+    "p_up": 0.531,
+    "as_of": "2026-10",
     "method": "model",
-    "p_model": 0.507,
-    "lead": -0.13,
-    "momentum": 0.402,
+    "p_model": 0.531,
+    "lead": -0.01,
+    "momentum": 0.304,
     "skill": {
-     "n": 315,
-     "hit_rate": 0.603,
-     "persistence_hit_rate": 0.543,
-     "base_rate_up": 0.499,
+     "n": 316,
+     "hit_rate": 0.604,
+     "persistence_hit_rate": 0.544,
+     "base_rate_up": 0.5,
      "test_from": "2000-01"
     },
     "coefficients": [
-     -0.035,
-     1.238,
+     -0.032,
+     1.242,
      0.558
     ],
     "history": [
-     {
-      "date": "2016-04",
-      "p": 0.603,
-      "actual": 1
-     },
      {
       "date": "2016-05",
       "p": 0.651,
@@ -2817,7 +2817,7 @@
      },
      {
       "date": "2022-08",
-      "p": 0.556,
+      "p": 0.557,
       "actual": 0
      },
      {
@@ -2977,7 +2977,7 @@
      },
      {
       "date": "2025-04",
-      "p": 0.374,
+      "p": 0.375,
       "actual": 1
      },
      {
@@ -3034,6 +3034,11 @@
       "date": "2026-03",
       "p": 0.631,
       "actual": 1
+     },
+     {
+      "date": "2026-04",
+      "p": 0.705,
+      "actual": 1
      }
     ]
    },
@@ -3041,9 +3046,9 @@
     {
      "sid": "NEWORDER",
      "label": "Core capital goods orders, YoY",
-     "date": "2026-09",
-     "value": 13.65,
-     "z": 1.2,
+     "date": "2026-10",
+     "value": 14.67,
+     "z": 1.31,
      "pushing": "up"
     },
     {
@@ -3058,16 +3063,16 @@
      "sid": "PERMIT",
      "label": "Building permits, YoY",
      "date": "2026-10",
-     "value": -8.67,
-     "z": -0.53,
+     "value": -8.53,
+     "z": -0.52,
      "pushing": "down"
     },
     {
      "sid": "ICSA",
      "label": "Initial jobless claims, YoY (inverted)",
      "date": "2026-11",
-     "value": -8.95,
-     "z": 0.18,
+     "value": -11.12,
+     "z": 0.2,
      "pushing": "flat"
     },
     {
@@ -3099,10 +3104,10 @@
     {
      "sid": "PCEPILFE",
      "label": "Core PCE 3m annualised minus YoY",
-     "date": "2026-09",
-     "value": -0.22,
-     "z": -0.29,
-     "pushing": "down"
+     "date": "2026-10",
+     "value": 0.36,
+     "z": 0.46,
+     "pushing": "up"
     },
     {
      "sid": "M2SL",
@@ -3129,11 +3134,11 @@
    "change_3y": -5.0,
    "change_5y": -26.2,
    "private_credit_yoy": 3.93,
-   "nominal_gdp_yoy": 5.87,
-   "interest_to_receipts": 21.0,
-   "interest_to_receipts_2y_change": -0.3,
-   "interest_to_receipts_percentile": 0.767,
-   "interest_pct_gdp": 4.03,
+   "nominal_gdp_yoy": 6.02,
+   "interest_to_receipts": 21.6,
+   "interest_to_receipts_2y_change": -0.2,
+   "interest_to_receipts_percentile": 0.796,
+   "interest_pct_gdp": 4.02,
    "effective_rate": 3.24,
    "ten_year_q": 4.76,
    "r_minus_g": -3.07,
@@ -3156,7 +3161,7 @@
     "Debt is still at the 91st percentile of its history (262% of GDP).",
     "The 2025 deficit was 5.8% of GDP, against Dalio's 3% marker."
    ],
-   "pressure": 0.495,
+   "pressure": 0.5,
    "components": [
     {
      "key": "level",
@@ -3177,9 +3182,9 @@
     {
      "key": "interest",
      "label": "Federal interest / receipts vs history",
-     "value": 20.98,
-     "display": "21.0% · 77th pct",
-     "score": 0.767,
+     "value": 21.63,
+     "display": "21.6% · 80th pct",
+     "score": 0.796,
      "note": "The share of federal revenue that goes to interest before anything else is paid for, ranked against every quarter since 1947."
     },
     {
@@ -5142,7 +5147,8 @@
     "2025-07",
     "2025-10",
     "2026-01",
-    "2026-04"
+    "2026-04",
+    "2026-07"
    ],
    "interest_to_receipts": [
     16.6,
@@ -5370,7 +5376,8 @@
     21.1,
     21.2,
     20.8,
-    21.0
+    21.0,
+    21.6
    ]
   }
  },
@@ -5379,7 +5386,7 @@
   "as_of": "2026-10",
   "fed_funds": 3.88,
   "fed_funds_12m_change": -0.21,
-  "real_rate": 0.76,
+  "real_rate": 0.62,
   "ten_year": 4.98,
   "fed_balance_sheet_pct_gdp": 20.4,
   "median_cut": 5.75,
@@ -5445,7 +5452,7 @@
   "trend_10y": 2.15,
   "trend_40y": 1.98,
   "unit_labor_cost_yoy": 2.39,
-  "real_gdp_trend_5y": 2.6,
+  "real_gdp_trend_5y": 2.65,
   "read": "Productivity is running near its long-run pace.",
   "history": {
    "dates": [
@@ -5673,8 +5680,8 @@
   "usd_as_of": "2026-11",
   "usd_12m": 0.75,
   "gold_as_of": "2026-11",
-  "gold_12m": -16.85,
-  "gold": 3538.0,
+  "gold_12m": -17.08,
+  "gold": 3528.0,
   "foreign_share": 23.9,
   "foreign_share_5y_change": -1.1,
   "read": "No external stress signal from the dollar, gold or foreign holdings."
@@ -5682,63 +5689,63 @@
  "outlook": {
   "headline": "Inflationary boom now (borderline) · no clear lead for the next 6m",
   "clear_signal": false,
-  "narrative": "The economy reads as inflationary boom (growth flat, inflation rising) for 2 month(s) — borderline, since one axis is barely moving. Over the next 6 months the leading indicators give no clear lead: every quadrant sits near 25%. Long-term debt cycle: deleveraging via nominal growth, pressure 0.49 of 1. Short-term credit cycle: mid — steady. Policy lever: MP1 → MP2 — Rates could fall 3.9pp, short of the 5.8pp a typical recession has needed. A deep downturn would likely push the Fed back to balance-sheet tools.",
+  "narrative": "The economy reads as inflationary boom (growth flat, inflation rising) for 1 month(s) — borderline, since one axis is barely moving. Over the next 6 months the leading indicators give no clear lead: every quadrant sits between 23% and 27%. Long-term debt cycle: deleveraging via nominal growth, pressure 0.50 of 1. Short-term credit cycle: mid — steady. Policy lever: MP1 → MP2 — Rates could fall 3.9pp, short of the 5.8pp a typical recession has needed. A deep downturn would likely push the Fed back to balance-sheet tools.",
   "assets": [
    {
     "asset": "Inflation-linked (TIPS)",
-    "score": 0.356,
-    "base": 0.357,
-    "overlay": -0.002,
+    "score": 0.379,
+    "base": 0.379,
+    "overlay": 0.0,
     "stance": "FAVOURED",
-    "why": "Stagflation (25%) helps"
+    "why": "Stagflation (27%) helps"
    },
    {
     "asset": "Gold",
-    "score": 0.279,
-    "base": 0.282,
-    "overlay": -0.003,
+    "score": 0.302,
+    "base": 0.302,
+    "overlay": 0.0,
     "stance": "TILT UP",
-    "why": "Stagflation (25%) helps"
+    "why": "Stagflation (27%) helps"
    },
    {
     "asset": "Commodities",
-    "score": 0.11,
-    "base": 0.111,
-    "overlay": -0.001,
+    "score": 0.145,
+    "base": 0.145,
+    "overlay": 0.0,
     "stance": "TILT UP",
-    "why": "Inflationary boom (25%) helps"
-   },
-   {
-    "asset": "Nominal Treasuries",
-    "score": -0.009,
-    "base": -0.012,
-    "overlay": 0.003,
-    "stance": "NEUTRAL",
-    "why": "Inflationary boom (25%) hurts"
+    "why": "Inflationary boom (27%) helps"
    },
    {
     "asset": "Cash / T-bills",
-    "score": -0.024,
-    "base": -0.024,
-    "overlay": -0.0,
+    "score": -0.02,
+    "base": -0.02,
+    "overlay": 0.0,
     "stance": "NEUTRAL",
-    "why": "Goldilocks (25%) hurts"
+    "why": "Goldilocks (23%) hurts"
    },
    {
     "asset": "Corporate Credit",
-    "score": -0.028,
-    "base": -0.028,
+    "score": -0.036,
+    "base": -0.036,
+    "overlay": 0.0,
+    "stance": "NEUTRAL",
+    "why": "Stagflation (27%) hurts"
+   },
+   {
+    "asset": "Nominal Treasuries",
+    "score": -0.048,
+    "base": -0.048,
     "overlay": -0.0,
     "stance": "NEUTRAL",
-    "why": "Stagflation (25%) hurts"
+    "why": "Inflationary boom (27%) hurts"
    },
    {
     "asset": "US Equities",
-    "score": -0.078,
-    "base": -0.078,
-    "overlay": -0.0,
+    "score": -0.086,
+    "base": -0.086,
+    "overlay": 0.0,
     "stance": "NEUTRAL",
-    "why": "Stagflation (25%) hurts"
+    "why": "Stagflation (27%) hurts"
    }
   ],
   "risks": [
@@ -5746,7 +5753,7 @@
    "Rate cuts alone may not be enough in a real downturn."
   ],
   "watch": [
-   "Core capital goods orders, YoY (+1.2σ, pushing growth up)",
+   "Core capital goods orders, YoY (+1.31σ, pushing growth up)",
    "Yield curve (10Y-3M) level (-0.68σ, pushing growth down)",
    "10Y breakeven, 6m change (-0.63σ, pushing inflation down)",
    "WTI oil, 6m % change (-0.58σ, pushing inflation down)"
@@ -5755,7 +5762,7 @@
  },
  "engine_compare": {
   "available": true,
-  "engine_as_of": "2026-11-24",
+  "engine_as_of": "2026-11-25",
   "rows": [
    {
     "topic": "Cycle position",
@@ -5766,13 +5773,13 @@
    {
     "topic": "Growth direction",
     "engine": "Sluggish · composite momentum -0.09",
-    "dalio": "Flat now (+0.01σ over 6m) · 50% odds of rising in 6m",
+    "dalio": "Flat now (+0.06σ over 6m) · 50% odds of rising in 6m",
     "agree": true
    },
    {
     "topic": "Inflation direction",
     "engine": "Stable",
-    "dalio": "Rising (+0.40pp over 6m) · 51% odds of rising in 6m",
+    "dalio": "Rising (+0.30pp over 6m) · 53% odds of rising in 6m",
     "agree": false
    },
    {
@@ -5790,7 +5797,7 @@
    {
     "topic": "Long-term debt cycle",
     "engine": "Not modelled",
-    "dalio": "Deleveraging via nominal growth · pressure 0.49",
+    "dalio": "Deleveraging via nominal growth · pressure 0.50",
     "agree": null
    }
   ],

@@ -1,76 +1,83 @@
 {
-  "generated_at": "2026-11-25T01:21:42+00:00",
+  "generated_at": "2026-11-25T17:27:00+00:00",
   "run": {
-    "trigger": "push",
-    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/45525067736"
+    "trigger": "schedule",
+    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/45663952374"
   },
   "sources": {
     "apims": {
       "result": "ok",
-      "at": "2026-11-25T01:21:42+00:00",
-      "last_ok_at": "2026-11-25T01:21:42+00:00",
+      "at": "2026-11-25T17:27:00+00:00",
+      "last_ok_at": "2026-11-25T17:27:00+00:00",
       "fail_streak": 0,
-      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-11-25T09:00:00+08:00 -> data/apims.json"
+      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-11-26T01:00:00+08:00 -> data/apims.json"
+    },
+    "aqforecast": {
+      "result": "ok",
+      "at": "2026-11-25T17:27:00+00:00",
+      "last_ok_at": "2026-11-25T17:27:00+00:00",
+      "fail_streak": 0,
+      "note": "[aq_forecast] run 20261124_12: 68/68 stations, 5 days, 180 maps -> data/aq_forecast.json"
     },
     "dalio": {
       "result": "ok",
-      "at": "2026-11-25T01:21:42+00:00",
-      "last_ok_at": "2026-11-25T01:21:42+00:00",
+      "at": "2026-11-25T17:27:00+00:00",
+      "last_ok_at": "2026-11-25T17:27:00+00:00",
       "fail_streak": 0,
-      "note": "[dalio] wrote /home/runner/work/personal-dashboard/personal-dashboard/data/dalio_lens.json - 35/35 series; quadrant=reflation -> reflation; debt stage=Deleveraging via nominal growth pressure=0.495"
+      "note": "[dalio] wrote /home/runner/work/personal-dashboard/personal-dashboard/data/dalio_lens.json - 35/35 series; quadrant=reflation -> reflation; debt stage=Deleveraging via nominal growth pressure=0.5"
     },
     "engine": {
       "result": "ok",
-      "at": "2026-11-24T17:57:12+00:00",
-      "last_ok_at": "2026-11-24T17:57:12+00:00",
+      "at": "2026-11-25T17:27:00+00:00",
+      "last_ok_at": "2026-11-25T17:27:00+00:00",
       "fail_streak": 0,
-      "note": "[ingest] 84/84 series OK, 25 new obs, 2031 revisions"
+      "note": "[ingest] 84/84 series OK, 64 new obs, 4954 revisions"
     },
     "hlb": {
       "result": "ok",
-      "at": "2026-11-24T17:57:12+00:00",
-      "last_ok_at": "2026-11-24T17:57:12+00:00",
+      "at": "2026-11-25T17:27:00+00:00",
+      "last_ok_at": "2026-11-25T17:27:00+00:00",
       "fail_streak": 0,
       "note": "[hlb] 7 card promos -> data/promos/hlb.draft.json. Next: python tools/merge_campaign.py"
     },
     "macro": {
       "result": "ok",
-      "at": "2026-11-25T01:21:42+00:00",
-      "last_ok_at": "2026-11-25T01:21:42+00:00",
+      "at": "2026-11-25T17:27:00+00:00",
+      "last_ok_at": "2026-11-25T17:27:00+00:00",
       "fail_streak": 0,
-      "note": "[fetch_macro] NYFED_SRF: 391 days (latest 2026-11-24, $0.002bn); alert=normal (peak $0.003bn on 2026-11-19)"
+      "note": "[fetch_macro] NYFED_SRF: 391 days (latest 2026-11-25, $0.0bn); alert=normal (peak $0.003bn on 2026-11-19)"
     },
     "pbb": {
       "result": "ok",
-      "at": "2026-11-24T17:57:12+00:00",
-      "last_ok_at": "2026-11-24T17:57:12+00:00",
+      "at": "2026-11-25T17:27:00+00:00",
+      "last_ok_at": "2026-11-25T17:27:00+00:00",
       "fail_streak": 0,
       "note": "[scrape] 149 cards listed; keeping 65 (top 15 of each listing + 30 already summarised further down), fetching detail pages…"
     },
     "summarize": {
       "result": "ok",
-      "at": "2026-11-24T17:57:12+00:00",
-      "last_ok_at": "2026-11-24T17:57:12+00:00",
+      "at": "2026-11-25T17:27:00+00:00",
+      "last_ok_at": "2026-11-25T17:27:00+00:00",
       "fail_streak": 0
     },
     "treasury": {
       "result": "ok",
-      "at": "2026-11-25T01:21:42+00:00",
-      "last_ok_at": "2026-11-25T01:21:42+00:00",
+      "at": "2026-11-25T17:27:00+00:00",
+      "last_ok_at": "2026-11-25T17:27:00+00:00",
       "fail_streak": 0,
       "note": "[fetch_treasury] upcoming auctions: 0"
     },
     "uob": {
       "result": "ok",
-      "at": "2026-11-24T17:57:12+00:00",
-      "last_ok_at": "2026-11-24T17:57:12+00:00",
+      "at": "2026-11-25T17:27:00+00:00",
+      "last_ok_at": "2026-11-25T17:27:00+00:00",
       "fail_streak": 0,
       "note": "[uob] 3 campaigns -> data/promos/uob.draft.json. Next: python tools/merge_campaign.py"
     },
     "uob-deals": {
       "result": "ok",
-      "at": "2026-11-24T17:57:12+00:00",
-      "last_ok_at": "2026-11-24T17:57:12+00:00",
+      "at": "2026-11-25T17:27:00+00:00",
+      "last_ok_at": "2026-11-25T17:27:00+00:00",
       "fail_streak": 0,
       "note": "[uob] 326 deals -> data/promos/uob-deals.draft.json. Next: python tools/merge_campaign.py"
     }
