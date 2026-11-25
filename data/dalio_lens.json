@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generated_at": "2026-11-24T17:57:11+00:00",
+  "generated_at": "2026-11-25T01:21:41+00:00",
   "as_of": "2026-09",
   "version": "dalio-lens-v1",
   "missing_series": [],
@@ -2430,7 +2430,7 @@
      "test_from": "2000-01"
     },
     "coefficients": [
-     -0.034,
+     -0.035,
      1.238,
      0.558
     ],
@@ -2817,7 +2817,7 @@
      },
      {
       "date": "2022-08",
-      "p": 0.557,
+      "p": 0.556,
       "actual": 0
      },
      {
@@ -3050,8 +3050,8 @@
      "sid": "T10Y3M",
      "label": "Yield curve (10Y-3M) level",
      "date": "2026-11",
-     "value": 0.7,
-     "z": -0.67,
+     "value": 0.69,
+     "z": -0.68,
      "pushing": "down"
     },
     {
@@ -3085,7 +3085,7 @@
      "label": "10Y breakeven, 6m change",
      "date": "2026-11",
      "value": -0.23,
-     "z": -0.62,
+     "z": -0.63,
      "pushing": "down"
     },
     {
@@ -3107,10 +3107,10 @@
     {
      "sid": "M2SL",
      "label": "M2 money supply, YoY",
-     "date": "2026-09",
-     "value": 5.71,
-     "z": -0.29,
-     "pushing": "down"
+     "date": "2026-10",
+     "value": 5.89,
+     "z": -0.24,
+     "pushing": "flat"
     }
    ],
    "note": "Each direction is a logistic regression on a leading-indicator score and the current 6-month momentum, refitted every January and tested only on months it had not seen. Where that model did worse out of sample than simple persistence (the last 6 months' direction continuing), persistence is used instead. Quadrant probabilities multiply the two, which assumes growth and inflation surprises are independent. Inputs are revised data, so real-time accuracy will be lower than the hit rates shown."
@@ -5380,7 +5380,7 @@
   "fed_funds": 3.88,
   "fed_funds_12m_change": -0.21,
   "real_rate": 0.76,
-  "ten_year": 4.99,
+  "ten_year": 4.98,
   "fed_balance_sheet_pct_gdp": 20.4,
   "median_cut": 5.75,
   "room_ratio": 0.67,
@@ -5673,8 +5673,8 @@
   "usd_as_of": "2026-11",
   "usd_12m": 0.75,
   "gold_as_of": "2026-11",
-  "gold_12m": -16.27,
-  "gold": 3562.0,
+  "gold_12m": -16.85,
+  "gold": 3538.0,
   "foreign_share": 23.9,
   "foreign_share_5y_change": -1.1,
   "read": "No external stress signal from the dollar, gold or foreign holdings."
@@ -5747,8 +5747,8 @@
   ],
   "watch": [
    "Core capital goods orders, YoY (+1.2σ, pushing growth up)",
-   "Yield curve (10Y-3M) level (-0.67σ, pushing growth down)",
-   "10Y breakeven, 6m change (-0.62σ, pushing inflation down)",
+   "Yield curve (10Y-3M) level (-0.68σ, pushing growth down)",
+   "10Y breakeven, 6m change (-0.63σ, pushing inflation down)",
    "WTI oil, 6m % change (-0.58σ, pushing inflation down)"
   ],
   "disclaimer": "Asset stances come from a fixed All-Weather-style map weighted by the quadrant probabilities, plus a debt-pressure overlay. They are illustrative, not investment advice and not a return forecast."

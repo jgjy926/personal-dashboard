@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-11-24T17:57:12+00:00",
+  "generated_at": "2026-11-25T01:21:42+00:00",
   "run": {
-    "trigger": "schedule",
-    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/45453612862"
+    "trigger": "push",
+    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/45525067736"
   },
   "sources": {
     "apims": {
       "result": "ok",
-      "at": "2026-11-24T17:57:12+00:00",
-      "last_ok_at": "2026-11-24T17:57:12+00:00",
+      "at": "2026-11-25T01:21:42+00:00",
+      "last_ok_at": "2026-11-25T01:21:42+00:00",
       "fail_streak": 0,
-      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-11-25T01:00:00+08:00 -> data/apims.json"
+      "note": "[fetch_apims] 68/68 stations reporting, as of 2026-11-25T09:00:00+08:00 -> data/apims.json"
     },
     "dalio": {
       "result": "ok",
-      "at": "2026-11-24T17:57:12+00:00",
-      "last_ok_at": "2026-11-24T17:57:12+00:00",
+      "at": "2026-11-25T01:21:42+00:00",
+      "last_ok_at": "2026-11-25T01:21:42+00:00",
       "fail_streak": 0,
       "note": "[dalio] wrote /home/runner/work/personal-dashboard/personal-dashboard/data/dalio_lens.json - 35/35 series; quadrant=reflation -> reflation; debt stage=Deleveraging via nominal growth pressure=0.495"
     },
@@ -35,10 +35,10 @@
     },
     "macro": {
       "result": "ok",
-      "at": "2026-11-24T17:57:12+00:00",
-      "last_ok_at": "2026-11-24T17:57:12+00:00",
+      "at": "2026-11-25T01:21:42+00:00",
+      "last_ok_at": "2026-11-25T01:21:42+00:00",
       "fail_streak": 0,
-      "note": "[fetch_macro] NYFED_SRF: 392 days (latest 2026-11-24, $0.001bn); alert=normal (peak $0.003bn on 2026-11-19)"
+      "note": "[fetch_macro] NYFED_SRF: 391 days (latest 2026-11-24, $0.002bn); alert=normal (peak $0.003bn on 2026-11-19)"
     },
     "pbb": {
       "result": "ok",
@@ -55,8 +55,8 @@
     },
     "treasury": {
       "result": "ok",
-      "at": "2026-11-24T17:57:12+00:00",
-      "last_ok_at": "2026-11-24T17:57:12+00:00",
+      "at": "2026-11-25T01:21:42+00:00",
+      "last_ok_at": "2026-11-25T01:21:42+00:00",
       "fail_streak": 0,
       "note": "[fetch_treasury] upcoming auctions: 0"
     },
