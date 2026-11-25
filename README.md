@@ -10,7 +10,7 @@ live independently without touching the UI.
 | 📈 **Macro** | `data/macro.json` | 🌱 seeded sample → Phase B backend |
 | 💳 **Card Promos** | `data/promos/*.json` (one per bank) | ✅ live — Public Bank, HLB, UOB · daily scrape + AI summary |
 | 📊 **KLSE Monitor** | `data/klse.json` | ✅ real export from your SQLite |
-| 🌫️ **Air Quality** | live Worker (`config.js → apimsApi`), `data/apims.json` fallback | ✅ live — DOE APIMS, ≤10 min behind |
+| 🌫️ **Air Quality** | live Worker (`config.js → apimsApi`), `data/apims.json` fallback | ✅ live — DOE APIMS, ≤10 min behind · 5-day MyCMAQ outlook (`data/aq_forecast.json`) |
 | 🌦️ **Weather** | live from `api.data.gov.my/weather` (`config.js → weatherApi`) | ✅ live — MET Malaysia 7-day forecast + warnings |
 
 ## Run it locally
@@ -196,6 +196,22 @@ fallback `data/apims.json` on each deploy (uncommitted, git-ignored;
 `tools/stage_site.sh` carries the live one forward on a failed fetch). The tab uses
 whichever of the Worker or that snapshot has the newer readings, and says which.
 
+**5-day outlook — `tools/fetch_aq_forecast.py` → `data/aq_forecast.json`.** MET Malaysia's
+[MyCMAQ](https://mycmaq.met.gov.my) (WRF-CMAQ, 9 km, hourly, 120 h, a new run every 12 h)
+publishes its forecast **only as PNG maps** (plus a per-run `manifest.json`), with no CORS.
+So the script reads the numbers back off the maps: every frame uses the same equirectangular
+frame and a 24-box colour bar, so it samples the pixels at each APIMS station, matches the
+colour to a bar box (band mid-point) and converts with the legend's own API breakpoints.
+A day is PM2.5/PM10 on their daily mean and O3 on its hourly peak, worst pollutant wins.
+It refuses to overwrite if a frame's axes or colour bar move (the plots changed). Needs
+Pillow, downloads ~180 maps (~45 MB, ~40 s), so it runs on the daily full path only and the
+feed is committed. The tab shows the station's next 5 days under its 24-hour bars, plus a
+"Next 5 days" column in the station table, and hides both once the forecast's days are past.
+
+```bash
+python tools/fetch_aq_forecast.py   # -> data/aq_forecast.json (pip install Pillow)
+```
+
 ### Weather — live, no backend (`config.js → weatherApi`)
 MET Malaysia's 7-day forecast and live weather warnings from the keyless
 [data.gov.my Weather API](https://developer.data.gov.my/realtime-api/weather). It answers
@@ -257,6 +273,20 @@ Needs attention / Down** and lists the reasons, worst first.
   without a summary → Card Promos → Console).
 - Checks run only when the tab is opened or ↻ is pressed. At page load only
   `status.json` is read, to put ⚠ / ⛔ on the tab when a CI source failed.
+
+### On-time refresh and the Worker refresh button (`worker/promo-sync`)
+GitHub starts the scheduled run about 5.7 hours late (median since September), while a
+`workflow_dispatch` starts straight away. So `promo-sync` dispatches `refresh.yml` itself:
+
+- **Daily, on time.** A Cron Trigger at 06:20 UTC (14:20 MYT). GitHub's own schedule stays
+  as the fallback, so on a normal day a second, harmless run lands hours later.
+- **On demand.** **Worker refresh** on the Status tab sends `POST /refresh` with the
+  Console's sync key, then follows the run with `GET /refresh?since=…`. ↻ beside it stays
+  a re-check of what is already published and fetches no new data.
+
+Neither starts a run while a full one is queued or active; a push run doesn't count, since
+that path refreshes no promos or engine. The Worker's `GITHUB_TOKEN` needs **Actions: read
+and write** as well as Contents.
 
 ### Macro — seed now (`tools/seed_macro.py`), backend later
 `python tools/seed_macro.py` regenerates the sample `data/macro.json`. The Phase-B
@@ -327,6 +357,9 @@ month, such as October 2025 CPI, which was never published, is interpolated.
 - **`apims.json`** — `meta{generated_at,readings_as_of,source_url,station_count,reporting,categories}`,
   `stations[]` (`{id,location,state,lat,lon,api,pollutant,category,at,history[{t,api}]}`); times are
   `+08:00`, `api: null` means no reading (never 0).
+- **`aq_forecast.json`** — `meta{generated_at,run,run_init,valid_from,valid_to,source_url,step_hours,method}`,
+  `stations{<APIMS id>: {location,state,days[{date,hours,api,pollutant,category,pm25,pm10,o3}]}}`;
+  `pm25`/`pm10` are daily means (µg/m³), `o3` the daily peak (ppb), all colour-band mid-points.
 - **`klse.json`** — `meta`, `funnel{run_date,stages[]}`, `conviction{run_date,rows[]}`,
   `signals{hit_rate,resolved,total,avg_fwd_ret_20,recent[]}`, `trades{count,win_rate,avg_alpha_pct,recent[]}`, `positions[]`.
 

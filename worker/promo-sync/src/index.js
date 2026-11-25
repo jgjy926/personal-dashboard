@@ -29,8 +29,15 @@
  * needs no SYNC_KEY (it only hands back public marketing images) and is locked
  * to POSTER_HOSTS so it can't be used as a general-purpose open proxy.
  *
+ * It also starts the daily refresh workflow on time. GitHub's own schedule runs
+ * hours late, but a workflow_dispatch starts straight away, so a Cron Trigger
+ * here dispatches it at the intended time and the Status tab's "Worker refresh"
+ * button dispatches it on demand (POST /refresh, then GET /refresh?since=… to
+ * follow the run). Both skip the dispatch while a full run is already active.
+ *
  * Bindings (see wrangler.jsonc):
- *   secret GITHUB_TOKEN     fine-grained PAT, contents:write, this repo only
+ *   secret GITHUB_TOKEN     fine-grained PAT, this repo only: contents:write to
+ *                           publish, actions:write to start the refresh
  *   secret SYNC_KEY         the passphrase the Console must present
  *   var    GITHUB_REPO      "owner/name"
  *   var    GITHUB_BRANCH    default "main"
@@ -41,6 +48,8 @@
  *                           is still required either way)
  *   var    POSTER_HOSTS     comma-separated hosts /poster may fetch from;
  *                           default DEFAULT_POSTER_HOSTS below
+ *   var    REFRESH_WORKFLOW workflow file /refresh and the cron dispatch;
+ *                           default DEFAULT_REFRESH_WORKFLOW below
  */
 
 const GH = "https://api.github.com";
@@ -226,8 +235,74 @@ function promoFiles(env) {
   return (env.PROMO_FILES || DEFAULT_PROMO_FILES).split(",").map((s) => s.trim()).filter(Boolean);
 }
 
+// ── the refresh workflow ───────────────────────────────────────────────────
+const DEFAULT_REFRESH_WORKFLOW = "refresh.yml";
+const ACTIVE_STATUSES = new Set(["queued", "in_progress", "waiting", "requested", "pending"]);
+// A dispatch returns no run id, so the page follows "the run created since I
+// pressed". The margin covers clock skew between this Worker and GitHub.
+const SINCE_MARGIN_MS = 10_000;
+
+async function listRuns(env) {
+  const file = env.REFRESH_WORKFLOW || DEFAULT_REFRESH_WORKFLOW;
+  const r = await fetch(`${GH}/repos/${env.GITHUB_REPO}/actions/workflows/${file}/runs?per_page=15`, { headers: ghHeaders(env) });
+  if (!r.ok) throw new Error(refreshError("read runs", r.status, await r.text()));
+  // A push run is the fast path: it refreshes no promos or engine, so it neither
+  // counts as "already refreshing" nor is the run a pressed button is waiting for.
+  return ((await r.json()).workflow_runs || [])
+    .filter((run) => run.event !== "push")
+    .map((run) => ({
+      id: run.id,
+      event: run.event,
+      status: run.status,
+      conclusion: run.conclusion,
+      created_at: run.created_at,
+      url: run.html_url,
+    }));
+}
+
+function refreshError(what, status, text) {
+  const hint = status === 401 || status === 403 || status === 404
+    ? " The Worker's GITHUB_TOKEN needs Actions: read and write on this repo."
+    : "";
+  return `GitHub ${what} ${status}: ${text.slice(0, 200)}${hint}`;
+}
+
+/** Dispatch the workflow, unless a full run is already active. */
+async function startRefresh(env) {
+  const active = (await listRuns(env)).find((run) => ACTIVE_STATUSES.has(run.status));
+  if (active) return { started: false, run: active };
+  const since = new Date().toISOString();
+  const file = env.REFRESH_WORKFLOW || DEFAULT_REFRESH_WORKFLOW;
+  const r = await fetch(`${GH}/repos/${env.GITHUB_REPO}/actions/workflows/${file}/dispatches`, {
+    method: "POST",
+    headers: { ...ghHeaders(env), "Content-Type": "application/json" },
+    body: JSON.stringify({ ref: env.GITHUB_BRANCH || "main" }),
+  });
+  if (!r.ok) throw new Error(refreshError("dispatch", r.status, await r.text()));
+  return { started: true, since };
+}
+
+/** The oldest full run created since `since`, else null (not visible yet). With
+ *  no `since`: the active run, else the newest. */
+async function refreshStatus(env, since) {
+  const runs = await listRuns(env);
+  const from = Date.parse(since || "");
+  if (Number.isNaN(from)) {
+    return { run: runs.find((run) => ACTIVE_STATUSES.has(run.status)) || runs[0] || null };
+  }
+  const fresh = runs.filter((run) => Date.parse(run.created_at) >= from - SINCE_MARGIN_MS);
+  return { run: fresh[fresh.length - 1] || null };
+}
+
 // ── handler ────────────────────────────────────────────────────────────────
 export default {
+  // Cron Trigger (wrangler.jsonc). Throwing marks the invocation failed in the
+  // Worker's logs; GitHub's own late schedule is still there as the fallback.
+  async scheduled(event, env) {
+    const out = await startRefresh(env);
+    console.log(out.started ? "refresh dispatched" : `refresh already active: run ${out.run.id}`);
+  },
+
   async fetch(request, env) {
     const cors = corsHeaders(request, env);
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
@@ -248,14 +323,26 @@ export default {
         return json({ error: String(err.message || err) }, 502, cors);
       }
     }
-    if (request.method !== "POST" || url.pathname !== "/publish") {
-      return json({ error: "POST /publish, or GET /poster?url=…" }, 404, cors);
+    const isRefresh = url.pathname === "/refresh" && (request.method === "POST" || request.method === "GET");
+    if (!isRefresh && (request.method !== "POST" || url.pathname !== "/publish")) {
+      return json({ error: "POST /publish, POST or GET /refresh, or GET /poster?url=…" }, 404, cors);
     }
     if (!env.GITHUB_TOKEN || !env.SYNC_KEY || !env.GITHUB_REPO) {
       return json({ error: "Worker is not configured (GITHUB_TOKEN / SYNC_KEY / GITHUB_REPO)." }, 500, cors);
     }
     if (!safeEqual(request.headers.get("X-Sync-Key"), env.SYNC_KEY)) {
       return json({ error: "Bad or missing sync key." }, 401, cors);
+    }
+
+    if (isRefresh) {
+      try {
+        const out = request.method === "POST"
+          ? await startRefresh(env)
+          : await refreshStatus(env, url.searchParams.get("since"));
+        return json(out, 200, cors);
+      } catch (err) {
+        return json({ error: String(err.message || err) }, 502, cors);
+      }
     }
 
     let body;

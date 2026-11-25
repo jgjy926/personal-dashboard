@@ -2,7 +2,7 @@
  * Offline tests for the promo-sync Worker — no deploy, no GitHub, no token.
  * `global.fetch` is stubbed with a tiny in-memory repo, so these exercise the
  * parts that are actually easy to get wrong: auth, CORS, the merge rule, the
- * UTF-8 base64 round-trip, and the stale-tab guarantee.
+ * UTF-8 base64 round-trip, the stale-tab guarantee, and the refresh dispatch.
  *
  *   node worker/promo-sync/test.mjs
  */
@@ -54,6 +54,12 @@ function b64(text) {
 // What the "bank" serves for a poster fetch (test 12 rewrites this).
 let posterUpstream = { status: 200, type: "image/jpeg", body: "\xff\xd8\xff-jpeg-bytes" };
 
+// The workflow runs GitHub lists (newest first, as its API does) and the
+// dispatches it received (test 14 sets these).
+let ghRuns = [];
+let dispatches = [];
+let ghActionsStatus = 200;
+
 global.fetch = async (url, init = {}) => {
   const method = init.method || "GET";
   if (!String(url).startsWith(GH_PREFIX)) {
@@ -62,6 +68,14 @@ global.fetch = async (url, init = {}) => {
       status: posterUpstream.status,
       headers: { "Content-Type": posterUpstream.type },
     });
+  }
+  if (String(url).includes("/actions/workflows/")) {
+    if (ghActionsStatus !== 200) return new Response('{"message":"Resource not accessible"}', { status: ghActionsStatus });
+    if (method === "POST") {
+      dispatches.push({ url: String(url), body: JSON.parse(init.body) });
+      return new Response(null, { status: 204 });
+    }
+    return new Response(JSON.stringify({ workflow_runs: ghRuns }), { status: 200 });
   }
   if (method === "GET") {
     const doc = repoFiles[pathOf(url)];
@@ -227,6 +241,80 @@ check("a mixed publish commits each bank's file once", JSON.stringify(writes.map
 check("...and still reports ids found in no feed", JSON.stringify(out.unknown) === '["zzz"]', out.unknown);
 r = await worker.fetch(new Request("https://promo-sync.workers.dev/health"), ENV);
 check("health lists the feeds", (await r.json()).files?.length === 3);
+
+// 14 — the refresh: starts the workflow once, never over a full run that is
+//      already active, and only for someone holding the key.
+const run = (id, event, status, created_at, conclusion = null) =>
+  ({ id, event, status, conclusion, created_at, html_url: `https://github.com/owner/repo/actions/runs/${id}`, extra: "dropped" });
+const resetRuns = (...runs) => { ghRuns = runs; dispatches = []; ghActionsStatus = 200; };
+const refresh = (opts = {}) => req({}, { path: "/refresh", ...opts });
+const refreshGet = (since, opts = {}) =>
+  req(null, { method: "GET", path: "/refresh" + (since ? "?since=" + encodeURIComponent(since) : ""), ...opts });
+
+resetRuns();
+r = await worker.fetch(refresh({ key: "guess" }), ENV);
+check("refresh rejects a bad sync key with 401", r.status === 401);
+check("...and starts nothing", dispatches.length === 0);
+r = await worker.fetch(refreshGet(null, { key: "guess" }), ENV);
+check("refresh status needs the key too", r.status === 401);
+
+resetRuns(run(1, "schedule", "completed", "2026-11-01T01:00:00Z", "success"));
+r = await worker.fetch(refresh(), ENV);
+out = await r.json();
+check("starts the workflow when nothing is running", r.status === 200 && out.started === true && !!out.since, out);
+check("...dispatching refresh.yml on the configured branch",
+  dispatches.length === 1 && dispatches[0].url.endsWith("/repos/owner/repo/actions/workflows/refresh.yml/dispatches") && dispatches[0].body.ref === "main", dispatches);
+check("...with CORS for the page", r.headers.get("Access-Control-Allow-Origin") === "https://example.github.io");
+
+resetRuns(run(2, "workflow_dispatch", "in_progress", "2026-11-01T02:00:00Z"));
+r = await worker.fetch(refresh(), ENV);
+out = await r.json();
+check("doesn't start a second full run", out.started === false && out.run?.id === 2 && dispatches.length === 0, out);
+resetRuns(run(3, "schedule", "queued", "2026-11-01T02:00:00Z"));
+out = await (await worker.fetch(refresh(), ENV)).json();
+check("...nor over a queued scheduled one", out.started === false && dispatches.length === 0, out);
+resetRuns(run(4, "push", "in_progress", "2026-11-01T02:00:00Z"));
+out = await (await worker.fetch(refresh(), ENV)).json();
+check("a fast-path push run doesn't block a full refresh", out.started === true && dispatches.length === 1, out);
+
+resetRuns(
+  run(7, "push", "in_progress", "2026-11-01T03:00:30Z"),
+  run(6, "workflow_dispatch", "in_progress", "2026-11-01T03:00:05Z"),
+  run(5, "schedule", "completed", "2026-11-01T01:00:00Z", "success"),
+);
+out = await (await worker.fetch(refreshGet("2026-11-01T03:00:00Z"), ENV)).json();
+check("status finds the full run created since the press", out.run?.id === 6 && out.run?.url?.endsWith("/6"), out);
+check("...sending the page only what it needs", out.run?.extra === undefined, out);
+out = await (await worker.fetch(refreshGet("2026-11-01T03:30:00Z"), ENV)).json();
+check("status says null until the run is visible", out.run === null, out);
+out = await (await worker.fetch(refreshGet(), ENV)).json();
+check("status without since gives the active run", out.run?.id === 6, out);
+
+resetRuns();
+ghActionsStatus = 403;
+r = await worker.fetch(refresh(), ENV);
+out = await r.json();
+check("a token without Actions access is explained", r.status === 502 && out.error.includes("Actions: read and write"), out);
+
+resetRuns(run(8, "schedule", "completed", "2026-11-01T01:00:00Z", "success"));
+await worker.scheduled({ cron: "20 6 * * *" }, ENV);
+check("the cron trigger dispatches the workflow", dispatches.length === 1);
+resetRuns(run(9, "workflow_dispatch", "in_progress", "2026-11-01T02:00:00Z"));
+await worker.scheduled({ cron: "20 6 * * *" }, ENV);
+check("...but not over an active run", dispatches.length === 0);
+resetRuns();
+ghActionsStatus = 403;
+let threw = false;
+try { await worker.scheduled({ cron: "20 6 * * *" }, ENV); } catch { threw = true; }
+check("...and a failed cron shows as failed", threw);
+ghActionsStatus = 200;
+
+// The existing routes are unchanged by all of the above.
+resetRepo();
+r = await worker.fetch(req({ summaries: { bbb: { tnc_summary: "still works" } } }), ENV);
+check("publish still commits", (await r.json()).committed === true);
+r = await worker.fetch(req(null, { method: "GET", path: "/nope" }), ENV);
+check("an unknown route is still a 404", r.status === 404);
 
 console.log(failures ? `\n${failures} FAILED` : "\nall passed");
 process.exit(failures ? 1 : 0);

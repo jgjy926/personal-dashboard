@@ -31,6 +31,7 @@ on:
   push:
     branches: [main]            # fast path
   schedule:
+    # Fallback: this starts hours late. worker/promo-sync dispatches the on-time run.
     - cron: "20 6 * * *"        # daily 06:20 UTC (after US markets settle), full path
 
 permissions:
@@ -73,7 +74,7 @@ jobs:
     runs-on: ubuntu-24.04
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url || steps.deploy_retry.outputs.page_url }}
     outputs:
       needs_retrain: ${{ steps.engine.outputs.needs_retrain }}
     steps:
@@ -124,11 +125,28 @@ jobs:
           python tools/fetch_apims.py 2>&1 | tee "$RUNNER_TEMP/log-apims.txt"
 
       # ── FULL path only: promo scrape + summariser ───────────────────────
+      # Best-effort like every source step: on 2026-11-11 an Azure apt-mirror DNS
+      # blip (exit 100 after 8 min) failed this step and, with it, skipped the
+      # commit and the deploy. The scrapers it feeds keep their prior feeds anyway.
       - name: Install scraper deps
         if: env.FULL == 'true'
+        continue-on-error: true
+        timeout-minutes: 6
         run: |
-          pip install -r tools/requirements-ci.txt
-          sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr
+          pip install --retries 3 -r tools/requirements-ci.txt
+          sudo apt-get -o Acquire::Retries=3 update -qq
+          sudo apt-get -o Acquire::Retries=3 install -y -qq tesseract-ocr
+
+      # MET Malaysia publishes its 5-day forecast only as maps; this reads them
+      # at each APIMS station (Pillow, ~180 maps). Daily is plenty for a 5-day
+      # outlook, and the committed feed carries it through push deploys.
+      - name: Fetch air-quality forecast (MET Malaysia MyCMAQ, keyless)
+        id: aqforecast
+        if: env.FULL == 'true'
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python tools/fetch_aq_forecast.py 2>&1 | tee "$RUNNER_TEMP/log-aqforecast.txt"
 
       - name: Scrape card promos (each bank best-effort; keep its prior feed on failure)
         if: env.FULL == 'true'
@@ -249,6 +267,7 @@ jobs:
             --step macro=${{ steps.macro.outcome }} \
             --step treasury=${{ steps.treasury.outcome }} \
             --step apims=${{ steps.apims.outcome }} \
+            --step aqforecast=${{ steps.aqforecast.outcome }} \
             --step summarize=${{ steps.summarize.outcome }} \
             --step engine=${{ steps.engine.outcome }} \
             --step dalio=${{ steps.dalio.outcome }} \
@@ -260,7 +279,8 @@ jobs:
         run: |
           bash tools/commit_feeds.sh "chore: refresh macro engine + campaign feeds" \
             data/macro.json data/promos data/treasury.json \
-            data/macro_engine.json data/backtest_result.json data/status.json data/dalio_lens.json
+            data/macro_engine.json data/backtest_result.json data/status.json \
+            data/aq_forecast.json data/dalio_lens.json
 
       # Copies the dashboard (not the workspace) and stamps the CODE version
       # (version.json + the page's build id). configure-pages runs first for the live URL, which the
@@ -272,7 +292,17 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ runner.temp }}/site   # index.html is at the repo root; klse.json is git-ignored
+      # deploy-pages looks the artifact up ~1s after upload and sometimes gets
+      # "No artifacts named github-pages were found" though the upload finalized
+      # (2026-11-19, 2026-11-24). It is an API lag, so wait and try once more.
       - id: deploy
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - name: Wait before retrying the Pages deploy
+        if: steps.deploy.outcome == 'failure'
+        run: sleep 45
+      - id: deploy_retry
+        if: steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@v4
 
   # The engine's monthly model refit, AFTER the site is live. Runs only when the
@@ -285,7 +315,7 @@ jobs:
     runs-on: ubuntu-24.04        # as build-and-deploy, for the same reason
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url || steps.deploy_retry.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -361,6 +391,15 @@ jobs:
           name: github-pages-retrain
           path: ${{ runner.temp }}/site   # index.html is at the repo root; klse.json is git-ignored
       - id: deploy
+        uses: actions/deploy-pages@v4
+        continue-on-error: true      # same artifact-lookup lag as build-and-deploy
+        with:
+          artifact_name: github-pages-retrain
+      - name: Wait before retrying the Pages deploy
+        if: steps.deploy.outcome == 'failure'
+        run: sleep 45
+      - id: deploy_retry
+        if: steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@v4
         with:
           artifact_name: github-pages-retrain

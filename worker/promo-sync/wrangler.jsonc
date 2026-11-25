@@ -1,7 +1,7 @@
 {
   // Deploy from this directory:
   //   cd worker/promo-sync
-  //   npx wrangler secret put GITHUB_TOKEN     # fine-grained PAT, contents:write, this repo only
+  //   npx wrangler secret put GITHUB_TOKEN     # fine-grained PAT, this repo only: contents:write + actions:write
   //   npx wrangler secret put SYNC_KEY         # any long passphrase you'll paste into the Console once
   //   npx wrangler deploy
   //
@@ -10,6 +10,9 @@
   "name": "promo-sync",
   "main": "src/index.js",
   "compatibility_date": "2026-09-01",
+  // Starts the daily refresh on time: 06:20 UTC = 14:20 MYT. GitHub's own cron in
+  // refresh.yml has the same time but starts hours late, so it is only the fallback.
+  "triggers": { "crons": ["20 6 * * *"] },
   "vars": {
     // ── EDIT THESE ────────────────────────────────────────────────────────
     "GITHUB_REPO": "jgjy926/personal-dashboard",

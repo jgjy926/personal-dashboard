@@ -1244,6 +1244,7 @@ MODS.air = function initAir() {
   const DEFAULT_STATION = 'CA15W';          // Batu Muda, Kuala Lumpur
   const STALE_MIN = 3 * 60;                 // newest reading this old = refresh is behind
   let data = null, byId = {}, stateFilter = '', sort = { key: 'api', dir: -1 }, via = '';
+  let fc = null;                            // data/aq_forecast.json (MyCMAQ), optional
   let mine = (() => { try { return localStorage.getItem(KEY); } catch { return null; } })() || DEFAULT_STATION;
 
   const chip = api => `<span class="aqi-chip aqi-${aqBand(api).cls}">${api == null ? '—' : api}</span>`;
@@ -1314,6 +1315,43 @@ MODS.air = function initAir() {
     return `<svg class="aq-spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true"><path d="${d}"/></svg>`;
   }
 
+  // The station's forecast days from today (MYT) on; [] when there's no
+  // forecast for it or the feed has aged past its last day.
+  const fcDays = id => {
+    const today = new Date(Date.now() + 8 * 36e5).toISOString().slice(0, 10);
+    return ((fc && fc.stations && fc.stations[id] && fc.stations[id].days) || []).filter(d => d.date >= today);
+  };
+  const fcDay = (date, short) => {
+    const today = new Date(Date.now() + 8 * 36e5).toISOString().slice(0, 10);
+    if (!short && date === today) return 'Today';
+    return new Date(`${date}T12:00:00+08:00`).toLocaleDateString('en-GB', {
+      timeZone: 'Asia/Kuala_Lumpur', weekday: 'short', ...(short ? {} : { day: 'numeric', month: 'short' }) });
+  };
+  const fcTip = d => `${d.date} — forecast API ${d.api} (${aqBand(d.api).name}), mainly ${d.pollutant}. `
+    + `PM2.5 ~${d.pm25 ?? '—'} µg/m³ (day mean) · PM10 ~${d.pm10 ?? '—'} µg/m³ · O3 peak ~${d.o3 ?? '—'} ppb`
+    + (d.hours < 24 ? ` · from ${d.hours}h of forecast` : '');
+
+  function outlook(id) {
+    const days = fcDays(id);
+    if (!days.length) return '';
+    const m = fc.meta || {};
+    return `
+        <h3 class="aq-sub">Next ${days.length} days <span class="muted">— MyCMAQ model forecast</span></h3>
+        <div class="aq-fc">${days.map(d => `<div class="aq-fc-day" title="${esc(fcTip(d))}">
+            <span class="wx-when">${esc(fcDay(d.date))}</span>
+            <span class="aq-fc-num aqi-${aqBand(d.api).cls}">${d.api}</span>
+            <span class="aq-fc-cat">${esc(aqBand(d.api).name)}</span>
+            <span class="muted">${esc(d.pollutant)}</span></div>`).join('')}</div>
+        <p class="muted small">Forecast run ${m.run_init ? esc(mytTime(m.run_init, true)) + ' MYT' : '—'} by
+          <a href="${esc(m.source_url)}" target="_blank" rel="noopener">MET Malaysia MyCMAQ</a>, read off its 9 km maps at this
+          station — a model estimate in coarse bands, not a DOE reading. Day value: PM2.5/PM10 daily mean, O3 hourly peak.</p>`;
+  }
+  const outlookChips = id => {
+    const days = fcDays(id).slice(0, 5);
+    return days.length ? `<span class="aq-fc-mini">${days.map(d =>
+      `<span class="aqi-${aqBand(d.api).cls}" title="${esc(fcTip(d))}">${d.api}</span>`).join('')}</span>` : '<span class="muted">—</span>';
+  };
+
   function fillPicker() {
     const groups = {};
     data.stations.forEach(s => (groups[s.state] = groups[s.state] || []).push(s));
@@ -1358,7 +1396,8 @@ MODS.air = function initAir() {
     });
     const th = (k, label, cls = 'l') =>
       `<th class="${cls} aq-sort" data-k="${k}" aria-sort="${sort.key === k ? (sort.dir < 0 ? 'descending' : 'ascending') : 'none'}">${label}${sort.key === k ? (sort.dir < 0 ? ' ↓' : ' ↑') : ''}</th>`;
-    const behind = x => lagging(x) ? ` <span class="chip warn" title="Last reading ${esc(mytTime(x.at, true))}">behind</span>` : '';
+    const hasFc = all.some(x => fcDays(x.id).length);
+    const behind = x => lagging(x) ?` <span class="chip warn" title="Last reading ${esc(mytTime(x.at, true))}">behind</span>` : '';
 
     body.innerHTML = `
       ${stale ? `<p class="status">⚠ The newest readings are ${m.readings_as_of ? esc(agoMin(m.readings_as_of)) : 'of unknown age'}. APIMS may not have published recently, or the live feed is down and this is the site's older snapshot — check <a href="${esc(m.source_url)}" target="_blank" rel="noopener">APIMS</a> for the current value.</p>` : ''}
@@ -1391,6 +1430,7 @@ MODS.air = function initAir() {
         </div>
         <h3 class="aq-sub">Last 24 hours</h3>
         ${bars(s.history)}
+        ${outlook(s.id)}
       </div>
 
       <div class="aq-split">
@@ -1418,7 +1458,8 @@ MODS.air = function initAir() {
         </div>
         <div class="table-scroll"><table class="data-table aq-table">
           <thead><tr>${th('location', 'Station')}${th('state', 'State')}${th('api', 'API', 'num')}
-            <th class="l">Pollutant</th><th class="num">vs 3h</th><th class="num">24h peak</th><th class="l">24h</th></tr></thead>
+            <th class="l">Pollutant</th><th class="num">vs 3h</th><th class="num">24h peak</th><th class="l">24h</th>
+            ${hasFc ? '<th class="l" title="MyCMAQ model forecast, daily API from today">Next 5 days</th>' : ''}</tr></thead>
           <tbody>${rows.map(x => `<tr data-id="${esc(x.id)}"${x.id === mine ? ' class="next-up"' : ''}>
             <td class="l"><b>${esc(x.location)}</b>${behind(x)}</td>
             <td class="l">${esc(x.state)}</td>
@@ -1426,7 +1467,8 @@ MODS.air = function initAir() {
             <td class="l">${esc(x.pollutant || '—')}</td>
             <td class="num">${delta(x)}</td>
             <td class="num">${peak(x) ?? '—'}</td>
-            <td class="l">${spark(x.history)}</td></tr>`).join('')}</tbody>
+            <td class="l">${spark(x.history)}</td>
+            ${hasFc ? `<td class="l">${outlookChips(x.id)}</td>` : ''}</tr>`).join('')}</tbody>
         </table></div>
       </div>
 
@@ -1469,7 +1511,9 @@ MODS.air = function initAir() {
 
   async function load(first) {
     let d;
-    try { d = await fetchFeed(); }
+    // The forecast is an extra: fetched alongside, never holding the readings up.
+    const fcLoad = fetchJSON(CFG.feeds.aqForecast).then(x => { fc = x; }, () => {});
+    try { d = await fetchFeed(); await fcLoad; }
     catch (e) {
       // A failed background refresh keeps the last good view on screen.
       if (first) body.innerHTML = `<div class="errbox">Couldn't load the air-quality feed (${esc(e.message)}). Expected at <code>${esc(CFG.feeds.apims)}</code> — generate it with <code>python tools/fetch_apims.py</code>, or see <a href="https://eqms.doe.gov.my/APIMS/main" target="_blank" rel="noopener">APIMS</a> directly.</div>`;
@@ -1788,6 +1832,112 @@ async function checkStatusFlag() {
   } catch { /* no record yet (local dev / first deploy): leave the tab unmarked */ }
 }
 
+/* "Worker refresh": asks the promo-sync Worker to start the full GitHub run, then
+ * follows it. Separate from ↻, which only re-reads what is already published. The
+ * key is the one Publish uses; the press survives a reload via localStorage. */
+function initWorkerRefresh(recheck) {
+  const btn = document.getElementById('st-worker-refresh');
+  const bar = document.getElementById('st-worker-status');
+  const base = (CFG.promoSyncApi || '').replace(/\/+$/, '');
+  const SINCE_KEY = 'worker_refresh_since';
+  const POLL_MS = 15000;
+  const NOT_SEEN_MS = 3 * 60000;    // a dispatch normally shows up within seconds
+  const GIVE_UP_MS = 30 * 60000;    // the engine step alone is capped at 20 min
+  const say = (html, kind = '') => {
+    bar.hidden = false;
+    bar.className = `st-worker-status ${kind}`;
+    bar.innerHTML = html;
+  };
+  const logLink = run => run && run.url ? ` <a href="${esc(run.url)}" target="_blank" rel="noopener">View the run</a>` : '';
+  const finish = () => { localStorage.removeItem(SINCE_KEY); btn.disabled = false; };
+
+  // Resolves to the Worker's JSON, or null once it has told the user what went wrong.
+  async function call(method, path) {
+    const res = await fetch(base + path, { method, cache: 'no-store', headers: { 'X-Sync-Key': localStorage.getItem('promo_sync_key') || '' } });
+    const out = await res.json().catch(() => ({}));
+    if (res.ok) return out;
+    if (res.status === 401) {
+      // As in Publish: a wrong key shouldn't be sticky, so the next press re-asks.
+      localStorage.removeItem('promo_sync_key');
+      say('Sync key rejected. Press Worker refresh again to re-enter it.', 'err');
+    } else if (res.status === 404) {
+      say('The promo-sync Worker has no refresh route yet. Deploy worker/promo-sync first.', 'err');
+    } else {
+      say(`Worker refresh failed: ${esc(out.error || `HTTP ${res.status}`)}`, 'err');
+    }
+    finish();
+    return null;
+  }
+
+  async function watch(since) {
+    const age = Date.now() - Date.parse(since);
+    if (age > GIVE_UP_MS) {
+      say('No result after 30 minutes, so this page stopped following the run. Check the Actions tab on GitHub.', 'err');
+      finish();
+      return;
+    }
+    let out;
+    try {
+      out = await call('GET', `/refresh?since=${encodeURIComponent(since)}`);
+      if (!out) return;
+    } catch {
+      // One failed poll says nothing about the run itself: keep following it.
+      setTimeout(() => watch(since), POLL_MS);
+      return;
+    }
+    const run = out.run;
+    if (run && run.status === 'completed') {
+      finish();
+      if (run.conclusion === 'success') {
+        say('Refresh finished: the new data is live. <button type="button" class="st-worker-reload">Reload page</button>', 'ok');
+        bar.querySelector('button').addEventListener('click', () => location.reload());
+        recheck();
+      } else if (run.conclusion === 'cancelled') {
+        say(`The refresh was cancelled on GitHub, usually because a newer push replaced it in the queue. Press Worker refresh to run it again.${logLink(run)}`, 'err');
+      } else {
+        say(`The refresh ended with “${esc(run.conclusion || 'unknown')}”.${logLink(run)}`, 'err');
+      }
+      return;
+    }
+    if (!run) {
+      say(age > NOT_SEEN_MS
+        ? 'GitHub accepted the request but the run has not appeared yet. Still waiting…'
+        : 'Waiting for GitHub to start the run…');
+    } else if (run.status === 'in_progress') {
+      const min = Math.floor((Date.now() - Date.parse(run.created_at)) / 60000);
+      say(`Running${min ? `: ${min} min so far` : ''}. It usually takes about 4 minutes.${logLink(run)}`);
+    } else {
+      say(`Queued on GitHub.${logLink(run)}`);
+    }
+    setTimeout(() => watch(since), POLL_MS);
+  }
+
+  btn.addEventListener('click', async () => {
+    if (!base) { say('No promoSyncApi configured, so this page cannot reach the Worker.', 'err'); return; }
+    if (!localStorage.getItem('promo_sync_key')) {
+      const key = window.prompt('Sync key for promo-sync (stored in this browser for next time):');
+      if (!key) return;
+      localStorage.setItem('promo_sync_key', key);
+    }
+    btn.disabled = true;
+    say('Asking GitHub to start the run…');
+    try {
+      const out = await call('POST', '/refresh');
+      if (!out) return;
+      // Already running: follow that run rather than starting another.
+      const since = out.started ? out.since : out.run.created_at;
+      localStorage.setItem(SINCE_KEY, since);
+      watch(since);
+    } catch (e) {
+      say(`Worker refresh failed: ${esc(e.message)}. Check the Worker URL and that this site is in ALLOWED_ORIGINS.`, 'err');
+      finish();
+    }
+  });
+
+  const pending = localStorage.getItem(SINCE_KEY);
+  if (pending && localStorage.getItem('promo_sync_key')) { btn.disabled = true; watch(pending); }
+}
+
 MODS.status = function initStatus() {
   const body = document.getElementById('st-body');
   const btn = document.getElementById('st-refresh');
@@ -1941,6 +2091,19 @@ MODS.status = function initStatus() {
       else if (h > 3) raise(r, 'warn', `Newest readings are ${Math.round(h)}h old (DOE publishes hourly).`);
       if (m.station_count && m.reporting < m.station_count * 0.8) raise(r, 'warn', `Only ${m.reporting} of ${m.station_count} stations reporting.`);
     } },
+    { key: 'aqforecast', name: 'Air-quality forecast (MyCMAQ)', tab: 'air', ci: 'aqforecast', via: 'tools/fetch_aq_forecast.py (daily run)', async grade(r, rec) {
+      gradeCI(r, rec);
+      const d = await fetchJSON(CFG.feeds.aqForecast);
+      const m = d.meta || {};
+      const ids = Object.keys(d.stations || {});
+      const today = new Date(Date.now() + 8 * 36e5).toISOString().slice(0, 10);
+      const ahead = Math.max(0, ...ids.map(id => d.stations[id].days.filter(x => x.date >= today).length));
+      r.facts.push(['Model run', when(m.run_init)]);
+      r.facts.push(['Stations', `${ids.length}`]);
+      r.facts.push(['Days ahead from today', String(ahead)]);
+      if (!ahead) raise(r, 'down', 'Every forecast day is in the past — the tab hides the outlook.');
+      else if (hours(m.run_init) > 48) raise(r, 'warn', `Model run is ${Math.round(hours(m.run_init))}h old (MyCMAQ runs every 12h).`);
+    } },
     { key: 'weather', name: 'Weather (MET Malaysia)', tab: 'weather', via: 'api.data.gov.my (live)', async grade(r) {
       const ymd = new Date(Date.now() + 8 * 36e5).toISOString().slice(0, 10);
       const rows = await timed(`${CFG.weatherApi}/forecast/?filter=${ymd}@date&limit=500`, 20000);
@@ -1995,6 +2158,7 @@ MODS.status = function initStatus() {
   }
   btn.addEventListener('click', load);
   load();
+  initWorkerRefresh(load);
 };
 
 // ── version badge ───────────────────────────────────────────────────────────

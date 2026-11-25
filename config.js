@@ -46,6 +46,10 @@ window.DASH_CONFIG = {
     ],
     // Malaysia Air Pollutant Index — the FALLBACK for apimsApi above. Written by
     // tools/fetch_apims.py on each deploy (refresh.yml), not committed.
-    apims: 'data/apims.json'
+    apims: 'data/apims.json',
+    // MET Malaysia's MyCMAQ 5-day forecast, read at each APIMS station. Written
+    // by tools/fetch_aq_forecast.py on the daily run and committed; the tab
+    // simply leaves the outlook out when this is missing or out of date.
+    aqForecast: 'data/aq_forecast.json'
   }
 };

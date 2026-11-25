@@ -153,9 +153,11 @@
              and whether anything is missing or waiting on you. Worst first.</p>
         </div>
         <div class="controls">
+          <button id="st-worker-refresh" class="st-worker-btn" title="Fetch all data again and republish (about 4 min)">Worker refresh</button>
           <button id="st-refresh" title="Check every source again" aria-label="Check again">↻</button>
         </div>
       </div>
+      <p id="st-worker-status" class="st-worker-status" role="status" hidden></p>
       <div id="st-body"><p class="muted loading">Checking every source…</p></div>
     </section>
 
