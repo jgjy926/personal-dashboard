@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generated_at": "2026-11-25T17:26:59+00:00",
+  "generated_at": "2026-11-26T17:06:40+00:00",
   "as_of": "2026-10",
   "version": "dalio-lens-v1",
   "missing_series": [],
@@ -3055,7 +3055,7 @@
      "sid": "T10Y3M",
      "label": "Yield curve (10Y-3M) level",
      "date": "2026-11",
-     "value": 0.69,
+     "value": 0.68,
      "z": -0.68,
      "pushing": "down"
     },
@@ -3079,26 +3079,26 @@
      "sid": "BAA10Y",
      "label": "Baa credit spread, 6m change (inverted)",
      "date": "2026-11",
-     "value": -0.09,
-     "z": 0.14,
+     "value": -0.08,
+     "z": 0.13,
      "pushing": "flat"
     }
    ],
    "inflation_components": [
     {
-     "sid": "T10YIE",
-     "label": "10Y breakeven, 6m change",
-     "date": "2026-11",
-     "value": -0.23,
-     "z": -0.63,
-     "pushing": "down"
-    },
-    {
      "sid": "DCOILWTICO",
      "label": "WTI oil, 6m % change",
      "date": "2026-11",
-     "value": -9.23,
-     "z": -0.58,
+     "value": -11.46,
+     "z": -0.67,
+     "pushing": "down"
+    },
+    {
+     "sid": "T10YIE",
+     "label": "10Y breakeven, 6m change",
+     "date": "2026-11",
+     "value": -0.24,
+     "z": -0.65,
      "pushing": "down"
     },
     {
@@ -5680,8 +5680,8 @@
   "usd_as_of": "2026-11",
   "usd_12m": 0.75,
   "gold_as_of": "2026-11",
-  "gold_12m": -17.08,
-  "gold": 3528.0,
+  "gold_12m": -15.43,
+  "gold": 3598.0,
   "foreign_share": 23.9,
   "foreign_share_5y_change": -1.1,
   "read": "No external stress signal from the dollar, gold or foreign holdings."
@@ -5755,14 +5755,14 @@
   "watch": [
    "Core capital goods orders, YoY (+1.31σ, pushing growth up)",
    "Yield curve (10Y-3M) level (-0.68σ, pushing growth down)",
-   "10Y breakeven, 6m change (-0.63σ, pushing inflation down)",
-   "WTI oil, 6m % change (-0.58σ, pushing inflation down)"
+   "WTI oil, 6m % change (-0.67σ, pushing inflation down)",
+   "10Y breakeven, 6m change (-0.65σ, pushing inflation down)"
   ],
   "disclaimer": "Asset stances come from a fixed All-Weather-style map weighted by the quadrant probabilities, plus a debt-pressure overlay. They are illustrative, not investment advice and not a return forecast."
  },
  "engine_compare": {
   "available": true,
-  "engine_as_of": "2026-11-25",
+  "engine_as_of": "2026-11-26",
   "rows": [
    {
     "topic": "Cycle position",
@@ -5772,7 +5772,7 @@
    },
    {
     "topic": "Growth direction",
-    "engine": "Sluggish · composite momentum -0.09",
+    "engine": "Sluggish · composite momentum -0.10",
     "dalio": "Flat now (+0.06σ over 6m) · 50% odds of rising in 6m",
     "agree": true
    },

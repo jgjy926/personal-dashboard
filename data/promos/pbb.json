@@ -4,10 +4,10 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-25T00:00:00+00:00",
-    "today": "2026-11-25",
-    "new_today": 0,
-    "count": 65,
+    "generated_at": "2026-11-26T00:00:00+00:00",
+    "today": "2026-11-26",
+    "new_today": 1,
+    "count": 66,
     "note": "Each promo's `image` is the bank's full campaign poster (offer, minimum spend and period are printed on it); tnc_summary/period are read from it and the T&C by summarize_campaign.py or the Console. tnc_link is the authoritative terms."
   },
   "promotions": [
@@ -54,18 +54,17 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "U Mobile’s 2026 Banking Prepaid Plan Campaign",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/u-mobile-s-2026-banking-prepaid-plan-campaign/",
-      "image": "https://www.pbebank.com/media/4pvhjbcu/umobile-prepaid_wb.jpg",
-      "id": "a873139e6e",
+      "title": "Kia Sportage Program",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/kia-sportage-program/",
+      "image": "https://www.pbebank.com/media/3wgh0clv/kia-sportage_wb.jpg",
+      "id": "ef45a00f67",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "Valid from 23 Nov 2026 – 28 Feb 2027",
-      "first_seen": "2026-11-23",
-      "tnc_link": "https://www.pbebank.com/media/k0ffbuo0/tc_umobile-prepaid-bm.pdf",
-      "tnc_summary": "Public Bank and U Mobile promo: subscribe to a U Mobile Prepaid Plan of RM35 and above via participating banks to enter. Prizes are 3 grand prizes of iPhone 18 Pro and 1,500 monthly prizes of RM50 petrol vouchers. Campaign runs 23 Nov 2026 to 28 Feb 2027. Terms and conditions apply.",
-      "summary_source": "",
-      "end_date": "2027-02-28"
+      "period": "",
+      "first_seen": "2026-11-26",
+      "tnc_link": "https://www.pbebank.com/media/yl0jzkxc/tc_kia-sportage-program.pdf",
+      "tnc_summary": "",
+      "end_date": ""
     },
     {
       "title": "Hairy Crab Autumn Culinary Delicacy with PB Visa Credit Card",
@@ -80,20 +79,6 @@
       "tnc_summary": "10% cash back on hairy crab dining with a PB Visa Credit Card. Minimum spend RM400 in a single receipt, capped at RM80. Valid at Dragon-i, JW Marriott KL (Shanghai Restaurant), IWC Aquastic and Grand Harbour Fahrenheit 88. Register via PBe (keyword PBBS) or SMS PBBS to 68333.",
       "summary_source": "",
       "end_date": "2026-11-30"
-    },
-    {
-      "title": "Turns Everyday Spending Into Extra Rewards (By Invitation Only)",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/turns-everyday-spending-into-extra-rewards-by-invitation-only-1/",
-      "image": "https://www.pbebank.com/media/uvwld0cp/visacard-activation_wb.jpg",
-      "id": "8942de91f2",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "15 November 2026 to 14 March 2027; 10 June to 31 December 2026; 15 October 2026 to 28 February 2027; 1 November 2026 to 31 January 2027",
-      "first_seen": "2026-11-18",
-      "tnc_link": "https://www.pbebank.com/media/fqeppwzw/tc_visacard-activation.pdf",
-      "tnc_summary": "Visa Signature, Quantum Visa, Platinum cardholders: RM50 cash back for 3x RM100 spend per transaction. 0% FlexiPay (min RM1,000) or 0% balance transfer (min RM3,000), both for 6 months. Up to RM8,888 ang pow or RM218 cash back with min RM38,000 monthly local spend. 30,000 Enrich Points or up to RM300 cash back with min RM30,000 monthly overseas spend.",
-      "summary_source": "",
-      "end_date": "2027-03-14"
     },
     {
       "title": "RM20 OFF at Tiktok Shop with PB Mastercard Credit and Debit Card",
@@ -124,6 +109,20 @@
       "end_date": "2026-12-31"
     },
     {
+      "title": "U Mobile’s 2026 Banking Prepaid Plan Campaign",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/u-mobile-s-2026-banking-prepaid-plan-campaign/",
+      "image": "https://www.pbebank.com/media/4pvhjbcu/umobile-prepaid_wb.jpg",
+      "id": "a873139e6e",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "Valid from 23 Nov 2026 – 28 Feb 2027",
+      "first_seen": "2026-11-23",
+      "tnc_link": "https://www.pbebank.com/media/k0ffbuo0/tc_umobile-prepaid-bm.pdf",
+      "tnc_summary": "Public Bank and U Mobile promo: subscribe to a U Mobile Prepaid Plan of RM35 and above via participating banks to enter. Prizes are 3 grand prizes of iPhone 18 Pro and 1,500 monthly prizes of RM50 petrol vouchers. Campaign runs 23 Nov 2026 to 28 Feb 2027. Terms and conditions apply.",
+      "summary_source": "",
+      "end_date": "2027-02-28"
+    },
+    {
       "title": "Lazada PayDay with PB Visa Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/lazada-payday-with-pb-visa-credit-card/",
       "image": "https://www.pbebank.com/media/zfef5zne/visa-lazada-payday_wb.jpg",
@@ -138,16 +137,16 @@
       "end_date": "2027-04-27"
     },
     {
-      "title": "Activate & Spend Today (By Invitation Only)",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/activate-spend-today-by-invitation-only-1/",
-      "image": "https://www.pbebank.com/media/qcaehf4f/mastercard-activation_wb.jpg",
-      "id": "219755bd0c",
+      "title": "Turns Everyday Spending Into Extra Rewards (By Invitation Only)",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/turns-everyday-spending-into-extra-rewards-by-invitation-only-1/",
+      "image": "https://www.pbebank.com/media/uvwld0cp/visacard-activation_wb.jpg",
+      "id": "8942de91f2",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "15 November 2026 to 14 March 2027; 15 October to 31 December 2026; 24 August to 23 November 2026",
+      "period": "15 November 2026 to 14 March 2027; 10 June to 31 December 2026; 15 October 2026 to 28 February 2027; 1 November 2026 to 31 January 2027",
       "first_seen": "2026-11-18",
-      "tnc_link": "https://www.pbebank.com/media/g41dauqz/tc_mastercard-activation.pdf",
-      "tnc_summary": "Quantum or Platinum Mastercard cardholders: RM50 cash back for 3x RM100 spend per transaction. 0% FlexiPay (min RM800) or 0% balance transfer (min RM2,000), both for 6 months. Buy 1 Get 1 Malaysia Airlines air ticket to China with min accumulative RM20,000 spend, ending 23 November 2026.",
+      "tnc_link": "https://www.pbebank.com/media/fqeppwzw/tc_visacard-activation.pdf",
+      "tnc_summary": "Visa Signature, Quantum Visa, Platinum cardholders: RM50 cash back for 3x RM100 spend per transaction. 0% FlexiPay (min RM1,000) or 0% balance transfer (min RM3,000), both for 6 months. Up to RM8,888 ang pow or RM218 cash back with min RM38,000 monthly local spend. 30,000 Enrich Points or up to RM300 cash back with min RM30,000 monthly overseas spend.",
       "summary_source": "",
       "end_date": "2027-03-14"
     },
@@ -194,18 +193,18 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "Apple Pay Launch Campaign",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/apple-pay-cashback-campaign/",
-      "image": "https://www.pbebank.com/media/zxoki5o2/apple-pay-cashback-wb1.jpg",
-      "id": "30ab3629f8",
+      "title": "Activate & Spend Today (By Invitation Only)",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/activate-spend-today-by-invitation-only-1/",
+      "image": "https://www.pbebank.com/media/qcaehf4f/mastercard-activation_wb.jpg",
+      "id": "219755bd0c",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "",
-      "first_seen": "2026-11-17",
-      "tnc_link": "https://www.pbebank.com/media/vsflsgqn/apple-pay-launch-campaign-tc.pdf",
-      "tnc_summary": "Get up to RM30 cashback by making 3 transactions of minimum RM50 each using a Public Bank credit card or -i card with Apple Pay. No campaign period is printed on the poster. Terms apply.",
+      "period": "15 November 2026 to 14 March 2027; 15 October to 31 December 2026; 24 August to 23 November 2026",
+      "first_seen": "2026-11-18",
+      "tnc_link": "https://www.pbebank.com/media/g41dauqz/tc_mastercard-activation.pdf",
+      "tnc_summary": "Quantum or Platinum Mastercard cardholders: RM50 cash back for 3x RM100 spend per transaction. 0% FlexiPay (min RM800) or 0% balance transfer (min RM2,000), both for 6 months. Buy 1 Get 1 Malaysia Airlines air ticket to China with min accumulative RM20,000 spend, ending 23 November 2026.",
       "summary_source": "",
-      "end_date": ""
+      "end_date": "2027-03-14"
     },
     {
       "title": "PB UnionPay Privileges: Shopee",
@@ -250,6 +249,20 @@
       "end_date": "2026-12-31"
     },
     {
+      "title": "Apple Pay Launch Campaign",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/apple-pay-cashback-campaign/",
+      "image": "https://www.pbebank.com/media/zxoki5o2/apple-pay-cashback-wb1.jpg",
+      "id": "30ab3629f8",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-11-17",
+      "tnc_link": "https://www.pbebank.com/media/vsflsgqn/apple-pay-launch-campaign-tc.pdf",
+      "tnc_summary": "Get up to RM30 cashback by making 3 transactions of minimum RM50 each using a Public Bank credit card or -i card with Apple Pay. No campaign period is printed on the poster. Terms apply.",
+      "summary_source": "",
+      "end_date": ""
+    },
+    {
       "title": "Cash Back on eWallet Top Up with PB Visa Credit Card",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/cash-back-on-ewallet-top-up-with-pb-visa-credit-card/",
       "image": "https://www.pbebank.com/media/0iybhwyd/visa-ewallet-cb40_wb.jpg",
@@ -278,20 +291,6 @@
       "end_date": "2027-06-30"
     },
     {
-      "title": "PB eFD via FPX Campaign",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-efd-via-fpx-campaign-13/",
-      "image": "https://www.pbebank.com/media/w40fqho5/pb-efd-1126_wb.jpg",
-      "id": "5d846a0bb4",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "Now till 31 December 2026",
-      "first_seen": "2026-11-18",
-      "tnc_link": "https://www.pbebank.com/media/4tgbyuu0/tc_pb-efdfpx-bm.pdf",
-      "tnc_summary": "Make an eFD placement via FPX fund transfer on PBe, selecting the PB eFD via FPX Campaign option. Rates: 3.50% (3-month), 3.80% (6-month), 3.85% (9-month), 3.90% (12-month), effective 26 October 2026 onwards. Placements earn Diamond Entries for a BMW i5 and more prizes.",
-      "summary_source": "",
-      "end_date": "2026-12-31"
-    },
-    {
       "title": "0% Balance Transfer with PB Visa Credit Cards",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/0-balance-transfer-with-pb-visa-credit-cards-3/",
       "image": "https://www.pbebank.com/media/izxp4ju0/visa-balance-transfer-0626_wb.jpg",
@@ -318,6 +317,20 @@
       "tnc_summary": "RM0 reload fees when using a PB Debit Card to top up eWallets such as Boost, Grab and Touch 'n Go. No campaign period is shown on the poster.",
       "summary_source": "",
       "end_date": ""
+    },
+    {
+      "title": "PB eFD via FPX Campaign",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-efd-via-fpx-campaign-13/",
+      "image": "https://www.pbebank.com/media/w40fqho5/pb-efd-1126_wb.jpg",
+      "id": "5d846a0bb4",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "Now till 31 December 2026",
+      "first_seen": "2026-11-18",
+      "tnc_link": "https://www.pbebank.com/media/4tgbyuu0/tc_pb-efdfpx-bm.pdf",
+      "tnc_summary": "Make an eFD placement via FPX fund transfer on PBe, selecting the PB eFD via FPX Campaign option. Rates: 3.50% (3-month), 3.80% (6-month), 3.85% (9-month), 3.90% (12-month), effective 26 October 2026 onwards. Placements earn Diamond Entries for a BMW i5 and more prizes.",
+      "summary_source": "",
+      "end_date": "2026-12-31"
     },
     {
       "title": "PB Privileges at Sun Gourmet TRX",
@@ -362,20 +375,6 @@
       "end_date": "2026-12-31"
     },
     {
-      "title": "Enrich Your Travels with PB Visa Credit Card",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/enrich-your-travels-with-pb-visa-credit-card/",
-      "image": "https://www.pbebank.com/media/zt3gxpx4/overseas-enrich-travel_wb.jpg",
-      "id": "2724949b74",
-      "bank": "pbb",
-      "category": "Travel",
-      "period": "1 November 2026 - 31 January 2027",
-      "first_seen": "2026-11-01",
-      "tnc_link": "https://www.pbebank.com/media/0hqjdnx5/tc_overseas-enrich-travel.pdf",
-      "tnc_summary": "PB Visa Credit Card overseas spend campaign; register via PBe (keyword PBTR) or SMS PBTR to 68333. Monthly cash back: RM100 for min RM5,000 accumulated overseas spend, RM300 for min RM10,000. Monthly prizes: 30 x 30,000 Enrich Points (min RM30,000 overseas spend) and 60 x 10,000 Enrich Points (min RM10,000).",
-      "summary_source": "",
-      "end_date": "2027-01-31"
-    },
-    {
       "title": "Spend & Be Rewarded at vivo",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/spend-be-rewarded-at-vivo-7/",
       "image": "https://www.pbebank.com/media/4tqmpgjw/vivo-x500-xfold6_wb.jpg",
@@ -390,18 +389,18 @@
       "end_date": "2027-02-28"
     },
     {
-      "title": "RM30 OFF at Lazada with PB Mastercard Credit Card",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/rm30-off-at-lazada-with-pb-mastercard-credit-card/",
-      "image": "https://www.pbebank.com/media/ag4d0u3c/rm30-lazada_wb.jpg",
-      "id": "ae0fc83ab4",
+      "title": "Enrich Your Travels with PB Visa Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/enrich-your-travels-with-pb-visa-credit-card/",
+      "image": "https://www.pbebank.com/media/zt3gxpx4/overseas-enrich-travel_wb.jpg",
+      "id": "2724949b74",
       "bank": "pbb",
-      "category": "Online",
-      "period": "1 November - 31 December 2026",
+      "category": "Travel",
+      "period": "1 November 2026 - 31 January 2027",
       "first_seen": "2026-11-01",
-      "tnc_link": "https://www.pbebank.com/media/4jviqsbb/tc_rm30-lazada.pdf",
-      "tnc_summary": "RM30 off with a minimum spend of RM200 in a single transaction, only with PB Mastercard Credit Card. Valid for Lazada mobile app purchases only.",
+      "tnc_link": "https://www.pbebank.com/media/0hqjdnx5/tc_overseas-enrich-travel.pdf",
+      "tnc_summary": "PB Visa Credit Card overseas spend campaign; register via PBe (keyword PBTR) or SMS PBTR to 68333. Monthly cash back: RM100 for min RM5,000 accumulated overseas spend, RM300 for min RM10,000. Monthly prizes: 30 x 30,000 Enrich Points (min RM30,000 overseas spend) and 60 x 10,000 Enrich Points (min RM10,000).",
       "summary_source": "",
-      "end_date": "2026-12-31"
+      "end_date": "2027-01-31"
     },
     {
       "title": "Tan Chong Ekspres Auto Servis",
@@ -418,6 +417,20 @@
       "end_date": "2027-03-31"
     },
     {
+      "title": "RM30 OFF at Lazada with PB Mastercard Credit Card",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/rm30-off-at-lazada-with-pb-mastercard-credit-card/",
+      "image": "https://www.pbebank.com/media/ag4d0u3c/rm30-lazada_wb.jpg",
+      "id": "ae0fc83ab4",
+      "bank": "pbb",
+      "category": "Online",
+      "period": "1 November - 31 December 2026",
+      "first_seen": "2026-11-01",
+      "tnc_link": "https://www.pbebank.com/media/4jviqsbb/tc_rm30-lazada.pdf",
+      "tnc_summary": "RM30 off with a minimum spend of RM200 in a single transaction, only with PB Mastercard Credit Card. Valid for Lazada mobile app purchases only.",
+      "summary_source": "",
+      "end_date": "2026-12-31"
+    },
+    {
       "title": "PB Privileges @ Advance Vision Eye Specialist Centre",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-advance-vision-eye-specialist-centre/",
       "image": "https://www.pbebank.com/media/52hhmnwq/advance-vision-eye-specialist_wb.jpg",
@@ -432,20 +445,6 @@
       "end_date": "2027-12-31"
     },
     {
-      "title": "RewardPLUS Campaign",
-      "link": "https://www.pbebank.com/en/promotions/latest-promotions/rewardplus-campaign/",
-      "image": "https://www.pbebank.com/media/c2je4ovs/reward-plus_wb.jpg",
-      "id": "f3c5659a12",
-      "bank": "pbb",
-      "category": "Credit Card",
-      "period": "1 November 2026 to 28 February 2027",
-      "first_seen": "2026-11-01",
-      "tnc_link": "https://www.pbebank.com/media/5qvp5wx0/tc_reward-plus-bm.pdf",
-      "tnc_summary": "PB PLUS Savings Account deposit campaign: earmark deposits for 6 months to receive a bonus gift — RM88,000 for La gourmet 6L pressure cooker, RM188,000 for Apple Watch Series 12 GPS 42mm, RM288,000 for Blueair 2-in-1 dehumidifier+purifier. Deposits also earn Diamond Entries to win a BMW i5 and more prizes.",
-      "summary_source": "",
-      "end_date": "2027-02-28"
-    },
-    {
       "title": "PB Privileges @ UTAR Hospital",
       "link": "https://www.pbebank.com/en/promotions/latest-promotions/pb-privileges-utar-hospital/",
       "image": "https://www.pbebank.com/media/qhjfny15/utar-hospital_wb.jpg",
@@ -458,6 +457,20 @@
       "tnc_summary": "20% off Preventive Health Screening and Restorative T&CM Wellness at UTAR Hospital, Kampar. PB Premium Wellness (PB Visa Infinite, World Mastercard, Visa Signature credit cards, Red Carpet Banking Mastercard Elite/Gold Debit): RM888 male, RM927 female. PB Signature Wellness (other PB cardmembers): RM468 male, RM488 female. Book via WhatsApp 012-968 3761 or contact@utarhospital.org.my.",
       "summary_source": "",
       "end_date": "2027-09-30"
+    },
+    {
+      "title": "RewardPLUS Campaign",
+      "link": "https://www.pbebank.com/en/promotions/latest-promotions/rewardplus-campaign/",
+      "image": "https://www.pbebank.com/media/c2je4ovs/reward-plus_wb.jpg",
+      "id": "f3c5659a12",
+      "bank": "pbb",
+      "category": "Credit Card",
+      "period": "1 November 2026 to 28 February 2027",
+      "first_seen": "2026-11-01",
+      "tnc_link": "https://www.pbebank.com/media/5qvp5wx0/tc_reward-plus-bm.pdf",
+      "tnc_summary": "PB PLUS Savings Account deposit campaign: earmark deposits for 6 months to receive a bonus gift — RM88,000 for La gourmet 6L pressure cooker, RM188,000 for Apple Watch Series 12 GPS 42mm, RM288,000 for Blueair 2-in-1 dehumidifier+purifier. Deposits also earn Diamond Entries to win a BMW i5 and more prizes.",
+      "summary_source": "",
+      "end_date": "2027-02-28"
     },
     {
       "title": "PB Privileges @ 100glasses",
