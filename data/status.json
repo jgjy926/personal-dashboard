@@ -1,86 +1,86 @@
 {
-  "generated_at": "2026-11-27T13:53:23+00:00",
+  "generated_at": "2026-11-27T16:51:10+00:00",
   "run": {
-    "trigger": "push",
-    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/46010900594"
+    "trigger": "schedule",
+    "url": "https://github.com/jgjy926/personal-dashboard/actions/runs/46036523473"
   },
   "sources": {
     "apims": {
       "result": "ok",
-      "at": "2026-11-27T13:53:23+00:00",
-      "last_ok_at": "2026-11-27T13:53:23+00:00",
+      "at": "2026-11-27T16:51:10+00:00",
+      "last_ok_at": "2026-11-27T16:51:10+00:00",
       "fail_streak": 0,
-      "note": "[fetch_apims] 66/68 stations reporting, as of 2026-11-27T21:00:00+08:00 -> data/apims.json"
+      "note": "[fetch_apims] 66/68 stations reporting, as of 2026-11-28T00:00:00+08:00 -> data/apims.json"
     },
     "aqforecast": {
-      "result": "ok",
-      "at": "2026-11-26T17:06:41+00:00",
+      "result": "fail",
+      "at": "2026-11-27T16:51:10+00:00",
       "last_ok_at": "2026-11-26T17:06:41+00:00",
-      "fail_streak": 0,
-      "note": "[aq_forecast] run 20261125_12: 68/68 stations, 5 days, 180 maps -> data/aq_forecast.json"
+      "fail_streak": 1,
+      "error": "[aq_forecast] failed: <urlopen error timed out>"
     },
     "dalio": {
       "result": "ok",
-      "at": "2026-11-27T13:53:23+00:00",
-      "last_ok_at": "2026-11-27T13:53:23+00:00",
+      "at": "2026-11-27T16:51:10+00:00",
+      "last_ok_at": "2026-11-27T16:51:10+00:00",
       "fail_streak": 0,
       "note": "[dalio] wrote /home/runner/work/personal-dashboard/personal-dashboard/data/dalio_lens.json - 35/35 series; quadrant=reflation -> reflation; debt stage=Deleveraging via nominal growth pressure=0.5"
     },
     "engine": {
       "result": "ok",
-      "at": "2026-11-26T17:06:41+00:00",
-      "last_ok_at": "2026-11-26T17:06:41+00:00",
+      "at": "2026-11-27T16:51:10+00:00",
+      "last_ok_at": "2026-11-27T16:51:10+00:00",
       "fail_streak": 0,
-      "note": "[ingest] 84/84 series OK, 20 new obs, 7 revisions"
+      "note": "[ingest] 84/84 series OK, 4 new obs, 0 revisions"
     },
     "hlb": {
       "result": "ok",
-      "at": "2026-11-26T17:06:41+00:00",
-      "last_ok_at": "2026-11-26T17:06:41+00:00",
+      "at": "2026-11-27T16:51:10+00:00",
+      "last_ok_at": "2026-11-27T16:51:10+00:00",
       "fail_streak": 0,
       "note": "[hlb] 7 card promos -> data/promos/hlb.draft.json. Next: python tools/merge_campaign.py"
     },
     "macro": {
       "result": "ok",
-      "at": "2026-11-27T13:53:23+00:00",
-      "last_ok_at": "2026-11-27T13:53:23+00:00",
+      "at": "2026-11-27T16:51:10+00:00",
+      "last_ok_at": "2026-11-27T16:51:10+00:00",
       "fail_streak": 0,
       "note": "[fetch_macro] NYFED_SRF: 390 days (latest 2026-11-27, $23.15bn); alert=normal (peak $23.15bn on 2026-11-27)"
     },
     "pbb": {
       "result": "ok",
-      "at": "2026-11-26T17:06:41+00:00",
-      "last_ok_at": "2026-11-26T17:06:41+00:00",
+      "at": "2026-11-27T16:51:10+00:00",
+      "last_ok_at": "2026-11-27T16:51:10+00:00",
       "fail_streak": 0,
-      "note": "[scrape] 150 cards listed; keeping 66 (top 15 of each listing + 30 already summarised further down), fetching detail pages…"
+      "note": "[scrape] 151 cards listed; keeping 67 (top 15 of each listing + 31 already summarised further down), fetching detail pages…"
     },
     "summarize": {
       "result": "ok",
-      "at": "2026-11-26T17:06:41+00:00",
-      "last_ok_at": "2026-11-26T17:06:41+00:00",
+      "at": "2026-11-27T16:51:10+00:00",
+      "last_ok_at": "2026-11-27T16:51:10+00:00",
       "fail_streak": 0,
-      "note": "[summarize] 1 promo(s) need a summary but no ANTHROPIC_API_KEY is set - skipping. Use the Card Promos Console, or --apply a summary map."
+      "note": "[summarize] 2 promo(s) need a summary but no ANTHROPIC_API_KEY is set - skipping. Use the Card Promos Console, or --apply a summary map."
     },
     "treasury": {
       "result": "ok",
-      "at": "2026-11-27T13:53:23+00:00",
-      "last_ok_at": "2026-11-27T13:53:23+00:00",
+      "at": "2026-11-27T16:51:10+00:00",
+      "last_ok_at": "2026-11-27T16:51:10+00:00",
       "fail_streak": 0,
       "note": "[fetch_treasury] upcoming auctions: 0"
     },
     "uob": {
       "result": "ok",
-      "at": "2026-11-26T17:06:41+00:00",
-      "last_ok_at": "2026-11-26T17:06:41+00:00",
+      "at": "2026-11-27T16:51:10+00:00",
+      "last_ok_at": "2026-11-27T16:51:10+00:00",
       "fail_streak": 0,
-      "note": "[uob] 3 campaigns -> data/promos/uob.draft.json. Next: python tools/merge_campaign.py"
+      "note": "[uob] 4 campaigns -> data/promos/uob.draft.json. Next: python tools/merge_campaign.py"
     },
     "uob-deals": {
-      "result": "ok",
-      "at": "2026-11-26T17:06:41+00:00",
+      "result": "fail",
+      "at": "2026-11-27T16:51:10+00:00",
       "last_ok_at": "2026-11-26T17:06:41+00:00",
-      "fail_streak": 0,
-      "note": "[uob] 326 deals -> data/promos/uob-deals.draft.json. Next: python tools/merge_campaign.py"
+      "fail_streak": 1,
+      "error": "[uob] no deals parsed — the deal pages' layout may have changed."
     }
   }
 }

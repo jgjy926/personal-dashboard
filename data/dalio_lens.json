@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generated_at": "2026-11-27T13:53:22+00:00",
+  "generated_at": "2026-11-27T16:51:10+00:00",
   "as_of": "2026-10",
   "version": "dalio-lens-v1",
   "missing_series": [],
@@ -5680,8 +5680,8 @@
   "usd_as_of": "2026-11",
   "usd_12m": 0.75,
   "gold_as_of": "2026-11",
-  "gold_12m": -13.74,
-  "gold": 3670.0,
+  "gold_12m": -14.11,
+  "gold": 3654.0,
   "foreign_share": 23.9,
   "foreign_share_5y_change": -1.1,
   "read": "No external stress signal from the dollar, gold or foreign holdings."
@@ -5762,7 +5762,7 @@
  },
  "engine_compare": {
   "available": true,
-  "engine_as_of": "2026-11-26",
+  "engine_as_of": "2026-11-27",
   "rows": [
    {
     "topic": "Cycle position",

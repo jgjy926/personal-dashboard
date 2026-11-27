@@ -4,10 +4,10 @@
     "bank_name": "UOB",
     "kind": "campaign",
     "source": "https://www.uob.com.my/personal/promotions/index.page",
-    "generated_at": "2026-11-26T00:00:00+00:00",
-    "today": "2026-11-26",
-    "new_today": 0,
-    "count": 3,
+    "generated_at": "2026-11-27T00:00:00+00:00",
+    "today": "2026-11-27",
+    "new_today": 1,
+    "count": 4,
     "note": "UOB's featured card campaigns. tnc_summary is written from the banner + T&C by summarize_campaign.py or the Console."
   },
   "promotions": [
@@ -39,6 +39,20 @@
       "tnc_link": "",
       "tnc_summary": "Poster is a banner image with no visible offer, minimum spend or campaign period, so no details are stated. Refer to the linked terms and conditions for the offer.",
       "summary_source": "",
+      "end_date": ""
+    },
+    {
+      "id": "5582f976b7",
+      "bank": "uob",
+      "title": "Unbox more memories with up to 35% off",
+      "desc": "",
+      "link": "https://www.uob.com.my/personal/promotions/thematic-2026.page",
+      "image": "https://www.uob.com.my/assets/web-resources/personal/promotions/thematic-2026/1920x600.jpg",
+      "category": "Credit Card",
+      "period": "",
+      "first_seen": "2026-11-27",
+      "tnc_link": "",
+      "tnc_summary": "",
       "end_date": ""
     },
     {
