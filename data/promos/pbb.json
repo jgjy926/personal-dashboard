@@ -4,7 +4,7 @@
     "bank_name": "Public Bank",
     "kind": "campaign",
     "source": "https://www.pbebank.com/en/promotions/credit-cards-promotions/",
-    "generated_at": "2026-11-26T00:00:00+00:00",
+    "generated_at": "2026-11-27T13:52:39.934Z",
     "today": "2026-11-26",
     "new_today": 1,
     "count": 66,
@@ -60,11 +60,11 @@
       "id": "ef45a00f67",
       "bank": "pbb",
       "category": "Credit Card",
-      "period": "",
+      "period": "Now till 31 December 2026",
       "first_seen": "2026-11-26",
       "tnc_link": "https://www.pbebank.com/media/yl0jzkxc/tc_kia-sportage-program.pdf",
-      "tnc_summary": "",
-      "end_date": ""
+      "tnc_summary": "Public Bank exclusive offer on the All-New Kia Sportage Turbo-Hybrid with a monthly instalment from as low as RM800. Promotion runs now till 31 December 2026. Terms and conditions apply. Contact or visit the nearest PB HP Centre or HP Hub for more information.",
+      "end_date": "2026-12-31"
     },
     {
       "title": "Hairy Crab Autumn Culinary Delicacy with PB Visa Credit Card",
